@@ -14,17 +14,15 @@ namespace Tests.AddUser
     [TestFixture]
     public class AddUserRequestHandlerTests
     {
-
-
-
         [Test]
-        public void Test_DoesntAlreadyExist()
+        public void Test_UserDoesntExist()
         {
-            ISession session = MockRepository.GenerateMock<ISession>();
-            UserExistsQuery query = MockRepository.GenerateMock<UserExistsQuery>();
-            Func<Guid> guidGenerator = MockRepository.GenerateMock<Func<Guid>>();
+            var session = MockRepository.GenerateMock<ISession>();
+            var sessionFunc = MockRepository.GenerateMock<Func<ISession>>();
+            var query = MockRepository.GenerateMock<UserExistsQuery>();
+            var guidGenerator = MockRepository.GenerateMock<Func<Guid>>();
 
-
+            var guid = Guid.NewGuid();
 
             var request = new AddUserRequest()
             {
@@ -32,9 +30,75 @@ namespace Tests.AddUser
                 UserName = "username",
             };
 
-            var expectedUser
+            var expectedUser = new User(guid, request.UserName, request.EmailAddress);
+
+            guidGenerator.Expect(g => g())
+                .Return(guid)
+                ;
+
+            query.Expect(q => q.CheckIfUserExists(request.MatchArg()))
+                .Return(false)
+                ;
+
+            sessionFunc.Expect(f => f())
+                .Return(session)
+                ;
+
+            session.Expect(s => s.Save(expectedUser.MatchArg()))
+                ;
+
+            var sut = new AddUserRequestHandler(sessionFunc, query, guidGenerator);
+
+            Guid? actualGuid = sut.HandleAddUserRequest(request);
+
+            actualGuid.ShouldEqual(guid);
+
+            guidGenerator.VerifyAllExpectations();
+            query.VerifyAllExpectations();
+            session.VerifyAllExpectations();
+            sessionFunc.VerifyAllExpectations();
 
         }
+
+        [Test]
+        public void Test_UserAlreadyExists()
+        {
+            var session = MockRepository.GenerateMock<ISession>();
+            var sessionFunc = MockRepository.GenerateMock<Func<ISession>>();
+            var query = MockRepository.GenerateMock<UserExistsQuery>();
+            var guidGenerator = MockRepository.GenerateMock<Func<Guid>>();
+
+            Guid? guid = null;
+
+            var request = new AddUserRequest()
+            {
+                EmailAddress = "email@example.org",
+                UserName = "username",
+            };
+
+            query.Expect(q => q.CheckIfUserExists(request.MatchArg()))
+                .Return(true)
+                ;
+
+            guidGenerator.AssertWasNotCalled(g => g());
+
+            sessionFunc.AssertWasNotCalled(f => f());
+
+            session.AssertWasNotCalled(s => s.Save(Arg<User>.Is.Anything));
+
+            var sut = new AddUserRequestHandler(sessionFunc, query, guidGenerator);
+
+            Guid? actualGuid = sut.HandleAddUserRequest(request);
+
+            actualGuid.ShouldEqual(guid);
+
+            guidGenerator.VerifyAllExpectations();
+            query.VerifyAllExpectations();
+            session.VerifyAllExpectations();
+            sessionFunc.VerifyAllExpectations();
+
+        }
+
     }
 
     public class AddUserRequestHandler
@@ -54,7 +118,7 @@ namespace Tests.AddUser
 
         protected AddUserRequestHandler() { }
 
-        public virtual Guid? Handle(AddUserRequest request)
+        public virtual Guid? HandleAddUserRequest(AddUserRequest request)
         {
             bool exists = userExistsQuery.CheckIfUserExists(request);
 
