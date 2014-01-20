@@ -100,46 +100,4 @@ namespace Tests.AddUser
         }
 
     }
-
-    public class AddUserRequestHandler
-    {
-        private readonly Func<ISession> getSession;
-        private readonly UserExistsQuery userExistsQuery;
-        private readonly Func<Guid> getGuid;
-
-        public AddUserRequestHandler(Func<ISession> sessionFunc,
-            UserExistsQuery userExistsQuery,
-            Func<Guid> guidFunc)
-        {
-            this.getSession = sessionFunc;
-            this.userExistsQuery = userExistsQuery;
-            this.getGuid = guidFunc;
-        }
-
-        protected AddUserRequestHandler() { }
-
-        public virtual Guid? HandleAddUserRequest(AddUserRequest request)
-        {
-            bool exists = userExistsQuery.CheckIfUserExists(request);
-
-            if (exists)
-                return null;
-
-            var user = new User(getGuid(), request.UserName, request.EmailAddress);
-
-            getSession().Save(user);
-
-            return user.Id;
-        }
-
-    }
-
-    public class UserExistsQuery
-    {
-        public virtual bool CheckIfUserExists(AddUserRequest request)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 }
