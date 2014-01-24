@@ -21,15 +21,18 @@ namespace Tests.AddUser
     {
 
         [Test]
-        public void Test_UserDoesntExist()
+        public void Test_Success()
         {
+            //Arrange
             var request = new AddUserRequest() {EmailAddress = "test@example.org", UserName = "username"};
+            AddUserResponse expectedResponse = new AddUserResponse() {Success = true};
 
+            //Act
             var sut = new AddUserRequestHandler(() => Session);
+            AddUserResponse actualResponse = sut.HandleAddUserRequest(request);
 
-            Guid? userId = sut.HandleAddUserRequest(request);
-
-            Assert.That(userId, Is.Not.Null);
+            //Assert
+            actualResponse.ShouldEqual(expectedResponse);
 
             var expectedUser = new User(request.UserName, request.EmailAddress);
 
@@ -40,24 +43,47 @@ namespace Tests.AddUser
                 .SingleOrDefault()
                 ;
 
-            userInDb.ShouldEqual(expectedUser, userId.Value);
+            userInDb.ShouldEqual(expectedUser);
         }
 
         [Test]
-        public void Test_UserAlreadyExists()
+        public void Test_Failed_UsernameTaken()
         {
-            var request = new AddUserRequest() { EmailAddress = "test@example.org", UserName = "username" };
+            //Arrange
+            var request = new AddUserRequest() { EmailAddress = "test@example.org", UserName = "username"};
+            AddUserResponse expectedResponse = new AddUserResponse() { Success = false, FailureDescription = AddUserResponse.UsernameTaken };
 
-            var existingUser = new User(request.UserName, request.EmailAddress);
+            var existingUser = new User(request.UserName, "new email address");
             Session.Save(existingUser);
 
             CommitTransactionAndOpenNew();
 
+            //Act
             var sut = new AddUserRequestHandler(() => Session);
+            AddUserResponse actualResponse = sut.HandleAddUserRequest(request);
 
-            Guid? userId = sut.HandleAddUserRequest(request);
+            //Assert
+            actualResponse.ShouldEqual(expectedResponse);
+        }
 
-            Assert.That(userId, Is.Null);
+        [Test]
+        public void Test_Failed_EmailAddressTaken()
+        {
+            //Arrange
+            var request = new AddUserRequest() { EmailAddress = "test@example.org", UserName = "username" };
+            AddUserResponse expectedResponse = new AddUserResponse() { Success = false, FailureDescription = AddUserResponse.EmailTaken };
+
+            var existingUser = new User("new user name", request.EmailAddress);
+            Session.Save(existingUser);
+
+            CommitTransactionAndOpenNew();
+
+            //Act
+            var sut = new AddUserRequestHandler(() => Session);
+            AddUserResponse actualResponse = sut.HandleAddUserRequest(request);
+
+            //Assert
+            actualResponse.ShouldEqual(expectedResponse);
         }
 
     }

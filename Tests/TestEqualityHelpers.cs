@@ -12,18 +12,17 @@ namespace Tests
 {
     public static class TestEqualityHelpers
     {
-        public static bool ShouldEqual(this User actual, User expected, Guid userId)
+        public static bool ShouldEqual(this User actual, User expected)
         {
-            Assert.That(actual.Id, Is.EqualTo(userId));
             Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
             Assert.That(actual.EmailAddress, Is.EqualTo(expected.EmailAddress));
 
             return true;
         }
 
-        public static User MatchArg(this User expected, Guid userId)
+        public static User MatchArg(this User expected)
         {
-            return Arg<User>.Matches(x => x.ShouldEqual(expected, userId));
+            return Arg<User>.Matches(x => x.ShouldEqual(expected));
         }
 
         
@@ -70,6 +69,21 @@ namespace Tests
         {
             return Arg<Guid?>.Matches(x => x.ShouldEqual(expected));
         }
+
+
+        public static bool ShouldEqual(this AddUserResponse actual, AddUserResponse expected)
+        {
+            Assert.That(actual.Success, Is.EqualTo(expected.Success));
+            Assert.That(actual.FailureDescription, Is.EqualTo(expected.FailureDescription));
+
+            return true;
+        }
+
+        public static AddUserResponse MatchArg(this AddUserResponse expected)
+        {
+            return Arg<AddUserResponse>.Matches(x => x.ShouldEqual(expected));
+        }
+			
 			
 			
     }

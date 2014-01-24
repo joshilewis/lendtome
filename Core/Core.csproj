@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="AddUser\AddUserRequest.cs" />
     <Compile Include="AddUser\AddUserRequestHandler.cs" />
+    <Compile Include="AddUser\AddUserResponse.cs" />
     <Compile Include="AddUser\UserExistsQuery.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\IBorrower.cs" />

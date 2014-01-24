@@ -15,24 +15,40 @@ namespace Core.AddUser
 
         protected AddUserRequestHandler() { }
 
-        public virtual Guid? HandleAddUserRequest(AddUserRequest request)
+        public virtual AddUserResponse HandleAddUserRequest(AddUserRequest request)
         {
             ISession session = getSession();
 
-            bool userExists = session
-                .QueryOver<User>()
-                .Where(u => u.UserName == request.UserName || u.EmailAddress == request.EmailAddress)
-                .RowCount() > 0
-                ;
+            if (UserWithUserNameExists(request))
+                return new AddUserResponse() {Success = false, FailureDescription = AddUserResponse.UsernameTaken};
 
-            if (userExists)
-                return null;
+            if (UserWithEmailExists(request))
+                return new AddUserResponse() { Success = false, FailureDescription = AddUserResponse.EmailTaken };
 
             var newUser = new User(request.UserName, request.EmailAddress);
 
             session.Save(newUser);
 
-            return newUser.Id;
+            return new AddUserResponse() {Success = true};
         }
+
+        private bool UserWithUserNameExists(AddUserRequest request)
+        {
+            return getSession()
+                .QueryOver<User>()
+                .Where(u => u.UserName == request.UserName)
+                .RowCount() > 0
+                ;
+        }
+
+        private bool UserWithEmailExists(AddUserRequest request)
+        {
+            return getSession()
+                .QueryOver<User>()
+                .Where(u => u.EmailAddress == request.EmailAddress)
+                .RowCount() > 0
+                ;
+        }
+
     }
 }
