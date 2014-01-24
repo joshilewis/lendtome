@@ -31,7 +31,7 @@ namespace Tests.ConnectRequestHandler
             //Act
 
             var sut = new Core.ConnectRequest.ConnectRequestHandler(() => Session);
-            ConnectResponse actualResponse = sut.HandleConnectRequest(request);
+            ConnectResponse actualResponse = sut.HandleRequest(request);
 
             //Assert
 
@@ -66,7 +66,7 @@ namespace Tests.ConnectRequestHandler
             //Act
 
             var sut = new Core.ConnectRequest.ConnectRequestHandler(() => Session);
-            ConnectResponse actualResponse = sut.HandleConnectRequest(request);
+            ConnectResponse actualResponse = sut.HandleRequest(request);
 
             //Assert
 
@@ -101,7 +101,7 @@ namespace Tests.ConnectRequestHandler
             //Act
 
             var sut = new Core.ConnectRequest.ConnectRequestHandler(() => Session);
-            ConnectResponse actualResponse = sut.HandleConnectRequest(request);
+            ConnectResponse actualResponse = sut.HandleRequest(request);
 
             //Assert
 

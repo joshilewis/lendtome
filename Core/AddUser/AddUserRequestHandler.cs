@@ -4,7 +4,7 @@ using NHibernate;
 
 namespace Core.AddUser
 {
-    public class AddUserRequestHandler
+    public class AddUserRequestHandler : IRequestHandler<AddUserRequest, AddUserResponse>
     {
         private readonly Func<ISession> getSession;
 
@@ -15,7 +15,7 @@ namespace Core.AddUser
 
         protected AddUserRequestHandler() { }
 
-        public virtual AddUserResponse HandleAddUserRequest(AddUserRequest request)
+        public virtual AddUserResponse HandleRequest(AddUserRequest request)
         {
             ISession session = getSession();
 

@@ -4,7 +4,7 @@ using NHibernate;
 
 namespace Core.ConnectRequest
 {
-    public class ConnectRequestHandler
+    public class ConnectRequestHandler : IRequestHandler<ConnectRequest, ConnectResponse>
     {
         private readonly Func<ISession> getSession;
 
@@ -15,7 +15,7 @@ namespace Core.ConnectRequest
 
         protected ConnectRequestHandler() { }
 
-        public virtual ConnectResponse HandleConnectRequest(ConnectRequest request)
+        public virtual ConnectResponse HandleRequest(ConnectRequest request)
         {
             ISession session = getSession();
 

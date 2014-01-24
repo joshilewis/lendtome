@@ -29,7 +29,7 @@ namespace Tests.AddUser
 
             //Act
             var sut = new AddUserRequestHandler(() => Session);
-            AddUserResponse actualResponse = sut.HandleAddUserRequest(request);
+            AddUserResponse actualResponse = sut.HandleRequest(request);
 
             //Assert
             actualResponse.ShouldEqual(expectedResponse);
@@ -60,7 +60,7 @@ namespace Tests.AddUser
 
             //Act
             var sut = new AddUserRequestHandler(() => Session);
-            AddUserResponse actualResponse = sut.HandleAddUserRequest(request);
+            AddUserResponse actualResponse = sut.HandleRequest(request);
 
             //Assert
             actualResponse.ShouldEqual(expectedResponse);
@@ -80,7 +80,7 @@ namespace Tests.AddUser
 
             //Act
             var sut = new AddUserRequestHandler(() => Session);
-            AddUserResponse actualResponse = sut.HandleAddUserRequest(request);
+            AddUserResponse actualResponse = sut.HandleRequest(request);
 
             //Assert
             actualResponse.ShouldEqual(expectedResponse);
