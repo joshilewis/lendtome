@@ -59,6 +59,7 @@
     <Compile Include="Model\Item.cs" />
     <Compile Include="Model\BorrowRequest.cs" />
     <Compile Include="Model\Maps\BaseMap.cs" />
+    <Compile Include="Model\Maps\ConnectionMap.cs" />
     <Compile Include="Model\Maps\UserMap.cs" />
     <Compile Include="Model\Organisation.cs" />
     <Compile Include="Model\OrganisationMembership.cs" />

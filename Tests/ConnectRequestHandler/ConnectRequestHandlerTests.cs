@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Model;
+using NHibernate;
 using NUnit.Framework;
 
 namespace Tests.ConnectRequestHandler
@@ -30,7 +31,7 @@ namespace Tests.ConnectRequestHandler
 
             //Act
 
-            var sut = new ConnectRequestHandler();
+            var sut = new ConnectRequestHandler(() => Session);
             ConnectResponse actualResponse = sut.HandleConnectRequest(request);
 
             //Assert
@@ -51,9 +52,32 @@ namespace Tests.ConnectRequestHandler
 
     public class ConnectRequestHandler
     {
+        private readonly Func<ISession> getSession;
+
+        public ConnectRequestHandler(Func<ISession> sessionFunc)
+        {
+            this.getSession = sessionFunc;
+        }
+
+        protected ConnectRequestHandler() { }
+
+
         public virtual ConnectResponse HandleConnectRequest(ConnectRequest request)
         {
-            return null;
+            ISession session = getSession();
+            User user1 = session
+                .Get<User>(request.FromUserId)
+                ;
+
+            User user2 = session
+                .Get<User>(request.ToUserId)
+                ;
+
+            var connection = new Connection(user1, user2);
+
+            session.Save(connection);
+
+            return new ConnectResponse();
         }
     }
 
