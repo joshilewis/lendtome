@@ -48,6 +48,42 @@ namespace Tests.ConnectRequestHandler
 
             actualConnection.ShouldEqual(expectedConnection);
         }
+
+        [Test]
+        public void Test_AlreadyConnected()
+        {
+            //Arrange
+            var fromUser = new User("from", "fromEmail");
+            var toUser = new User("to", "toEmail");
+            var existingConnection = new Connection(fromUser, toUser);
+            
+            Session.Save(fromUser);
+            Session.Save(toUser);
+            Session.Save(existingConnection);
+
+            CommitTransactionAndOpenNew();
+
+            var expectedResponse = new ConnectResponse(ConnectResponse.AlreadyConnected);
+            var request = new ConnectRequest() { FromUserId = fromUser.Id, ToUserId = toUser.Id };
+
+            //Act
+
+            var sut = new ConnectRequestHandler(() => Session);
+            ConnectResponse actualResponse = sut.HandleConnectRequest(request);
+
+            //Assert
+
+            actualResponse.ShouldEqual(expectedResponse);
+
+            //Check that the connection wasn't saved in the DB
+            int numberOfConnections = Session
+                .QueryOver<Connection>()
+                .RowCount()
+                ;
+
+            Assert.That(numberOfConnections, Is.EqualTo(1));
+        }
+
     }
 
     public class ConnectRequestHandler
@@ -89,6 +125,8 @@ namespace Tests.ConnectRequestHandler
 
     public class ConnectResponse
     {
+        public const string AlreadyConnected = "The Users are already connected.";
+
         public bool Success { get; set; }
         public string FailureDescription { get; set; }
 
