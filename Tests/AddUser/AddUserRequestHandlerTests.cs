@@ -22,7 +22,7 @@ namespace Tests.AddUser
         private Configuration configuration;
         private ISessionFactory sessionFactory;
         private ISession session;
-        private ITransaction transaction;
+        //private ITransaction transaction;
 
         [TestFixtureSetUp]
         public void FixtureSetUp()
@@ -53,16 +53,17 @@ namespace Tests.AddUser
                 .Execute(true, true, false);
 
             session = sessionFactory.OpenSession();
-            transaction = session.BeginTransaction();
+            session.BeginTransaction();
+            //transaction = session.BeginTransaction();
 
         }
 
         [TearDown]
         public void TearDown()
         {
-            transaction.Commit();
+            session.Transaction.Commit();
             session.Flush();
-            transaction.Dispose();
+            session.Transaction.Dispose();
             session.Dispose();
 
             //Tear down DB
@@ -84,13 +85,13 @@ namespace Tests.AddUser
 
             var expectedUser = new User(request.UserName, request.EmailAddress);
 
-            transaction.Commit();
+            session.Transaction.Commit();
             session.Flush();
-            transaction.Dispose();
+            session.Transaction.Dispose();
             session.Dispose();
 
             session = sessionFactory.OpenSession();
-            transaction = session.BeginTransaction();
+            session.BeginTransaction();
 
             User userInDb = session
                 .QueryOver<User>()
@@ -103,7 +104,24 @@ namespace Tests.AddUser
         [Test]
         public void Test_UserAlreadyExists()
         {
+            var request = new AddUserRequest() { EmailAddress = "test@example.org", UserName = "username" };
 
+            var existingUser = new User(request.UserName, request.EmailAddress);
+            session.Save(existingUser);
+            session.Transaction.Commit();
+            session.Flush();
+            session.Transaction.Dispose();
+            session.Dispose();
+
+            session = sessionFactory.OpenSession();
+            session.BeginTransaction();
+
+
+            var sut = new AddUserRequestHandler(() => session);
+
+            Guid? userId = sut.HandleAddUserRequest(request);
+
+            Assert.That(userId, Is.Null);
         }
 
     }
