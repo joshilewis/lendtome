@@ -49,6 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddItem\AddItemRequest.cs" />
+    <Compile Include="AddItem\AddItemRequestHandler.cs" />
+    <Compile Include="AddItem\AddOrganisationItemRequest.cs" />
+    <Compile Include="AddItem\AddUserItemRequest.cs" />
     <Compile Include="AddUser\AddUserRequest.cs" />
     <Compile Include="AddUser\AddUserRequestHandler.cs" />
     <Compile Include="AddUser\AddUserResponse.cs" />
@@ -78,9 +82,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AddItem\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
