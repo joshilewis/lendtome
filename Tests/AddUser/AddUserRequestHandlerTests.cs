@@ -76,7 +76,7 @@ namespace Tests.AddUser
         {
             var request = new AddUserRequest() {EmailAddress = "test@example.org", UserName = "username"};
 
-            var sut = new AddUserRequestHandler();
+            var sut = new AddUserRequestHandler(() => session);
 
             Guid? userId = sut.HandleAddUserRequest(request);
 
@@ -84,7 +84,13 @@ namespace Tests.AddUser
 
             var expectedUser = new User(request.UserName, request.EmailAddress);
 
+            transaction.Commit();
             session.Flush();
+            transaction.Dispose();
+            session.Dispose();
+
+            session = sessionFactory.OpenSession();
+            transaction = session.BeginTransaction();
 
             User userInDb = session
                 .QueryOver<User>()
@@ -104,9 +110,24 @@ namespace Tests.AddUser
 
     public class AddUserRequestHandler
     {
+        private readonly Func<ISession> getSession;
+
+        public AddUserRequestHandler(Func<ISession> sessionFunc)
+        {
+            this.getSession = sessionFunc;
+        }
+
+        protected AddUserRequestHandler() { }
+
         public virtual Guid? HandleAddUserRequest(AddUserRequest request)
         {
-            return null;
+            ISession session = getSession();
+
+            var newUser = new User(request.UserName, request.EmailAddress);
+
+            session.Save(newUser);
+
+            return newUser.Id;
         }
     }
 }
