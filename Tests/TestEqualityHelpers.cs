@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core;
 using Core.AddUser;
 using Core.ConnectRequest;
 using Core.Model;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.Mocks.Constraints;
+using Is = NUnit.Framework.Is;
 
 namespace Tests
 {
@@ -112,6 +115,78 @@ namespace Tests
         {
             return Arg<Connection>.Matches(x => x.ShouldEqual(expected));
         }
+
+        
+        public static bool ShouldEqual(this ResponseBase actual, ResponseBase expected)
+        {
+            Assert.That(actual.Success, Is.EqualTo(expected.Success));
+            Assert.That(actual.FailureDescription, Is.EqualTo(expected.FailureDescription));
+
+            return true;
+        }
+
+        public static ResponseBase MatchArg(this ResponseBase expected)
+        {
+            return Arg<ResponseBase>.Matches(x => x.ShouldEqual(expected));
+        }
+
+
+        public static bool ShouldEqual(this Item actual, Item expected)
+        {
+            Assert.That(actual.Title, Is.EqualTo(expected.Title));
+            Assert.That(actual.Creator, Is.EqualTo(expected.Creator));
+            Assert.That(actual.Edition, Is.EqualTo(expected.Edition));
+
+            return true;
+        }
+
+        public static Item MatchArg(this Item expected)
+        {
+            return Arg<Item>.Matches(x => x.ShouldEqual(expected));
+        }
+
+
+
+        public static bool ShouldEqual(this Ownership<User> actual, Ownership<User> expected)
+        {
+            actual.Item.ShouldEqual(expected.Item);
+            actual.Owner.ShouldEqual(expected.Owner);
+
+            return true;
+        }
+
+        public static Ownership<User> MatchArg(this Ownership<User> expected)
+        {
+            return Arg<Ownership<User>>.Matches(x => x.ShouldEqual(expected));
+        }
+
+
+        public static bool ShouldEqual(this Ownership<Organisation> actual, Ownership<Organisation> expected)
+        {
+            actual.Item.ShouldEqual(expected.Item);
+            actual.Owner.ShouldEqual(expected.Owner);
+
+            return true;
+        }
+
+        public static Ownership<Organisation> MatchArg(this Ownership<Organisation> expected)
+        {
+            return Arg<Ownership<Organisation>>.Matches(x => x.ShouldEqual(expected));
+        }
+
+
+        public static bool ShouldEqual(this Organisation actual, Organisation expected)
+        {
+            Assert.That(actual.Name, Is.EqualTo(expected.Name));
+
+            return true;
+        }
+
+        public static Organisation MatchArg(this Organisation expected)
+        {
+            return Arg<Organisation>.Matches(x => x.ShouldEqual(expected));
+        }
 			
+
     }
 }

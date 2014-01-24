@@ -10,5 +10,26 @@ namespace Core.Model
         public virtual string Edition { get; protected set; }
 
         protected Item() { }
+
+        public Item(string title, string creator, string edition)
+        {
+            Title = title;
+            Creator = creator;
+            Edition = edition;
+        }
+
+        public override bool Equals(object obj)
+        {
+
+            if (!(obj is Item))
+                return false;
+
+            return Id.Equals(((Item) obj).Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 }

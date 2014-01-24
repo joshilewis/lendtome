@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddItem\AddItemRequestHandlerTests.cs" />
     <Compile Include="AddUser\AddUserRequestHandlerTests.cs" />
     <Compile Include="ConnectRequestHandler\ConnectRequestHandlerTests.cs" />
     <Compile Include="DatabaseFixtureBase.cs" />

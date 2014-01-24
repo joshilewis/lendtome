@@ -2,7 +2,7 @@
 
 namespace Core.Model
 {
-    public class User : IOwner, IBorrower
+    public class User : IBorrower, IOwner
     {
         public virtual Guid Id { get; protected set; }
         public virtual string UserName { get; protected set; }
