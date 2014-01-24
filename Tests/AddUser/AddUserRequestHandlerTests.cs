@@ -25,7 +25,7 @@ namespace Tests.AddUser
         {
             //Arrange
             var request = new AddUserRequest() {EmailAddress = "test@example.org", UserName = "username"};
-            AddUserResponse expectedResponse = new AddUserResponse() {Success = true};
+            var expectedResponse = new AddUserResponse() {Success = true};
 
             //Act
             var sut = new AddUserRequestHandler(() => Session);
@@ -51,7 +51,7 @@ namespace Tests.AddUser
         {
             //Arrange
             var request = new AddUserRequest() { EmailAddress = "test@example.org", UserName = "username"};
-            AddUserResponse expectedResponse = new AddUserResponse() { Success = false, FailureDescription = AddUserResponse.UsernameTaken };
+            var expectedResponse = new AddUserResponse() { Success = false, FailureDescription = AddUserResponse.UsernameTaken };
 
             var existingUser = new User(request.UserName, "new email address");
             Session.Save(existingUser);
@@ -71,7 +71,7 @@ namespace Tests.AddUser
         {
             //Arrange
             var request = new AddUserRequest() { EmailAddress = "test@example.org", UserName = "username" };
-            AddUserResponse expectedResponse = new AddUserResponse() { Success = false, FailureDescription = AddUserResponse.EmailTaken };
+            var expectedResponse = new AddUserResponse() { Success = false, FailureDescription = AddUserResponse.EmailTaken };
 
             var existingUser = new User("new user name", request.EmailAddress);
             Session.Save(existingUser);
