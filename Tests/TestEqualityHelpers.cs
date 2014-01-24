@@ -15,7 +15,7 @@ namespace Tests
         public static bool ShouldEqual(this User actual, User expected, Guid userId)
         {
             Assert.That(actual.Id, Is.EqualTo(userId));
-            Assert.That(actual.Name, Is.EqualTo(expected.Name));
+            Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
             Assert.That(actual.EmailAddress, Is.EqualTo(expected.EmailAddress));
 
             return true;

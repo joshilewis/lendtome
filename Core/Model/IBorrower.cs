@@ -5,6 +5,6 @@ namespace Core.Model
     public interface IBorrower
     {
         Guid Id { get; }
-        string Name { get; }
+        string UserName { get; }
     }
 }

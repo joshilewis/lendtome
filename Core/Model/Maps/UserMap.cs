@@ -14,7 +14,7 @@ namespace Core.Model.Maps
             Id(x => x.Id)
                 .GeneratedBy.GuidComb();
 
-            Map(x => x.Name);
+            Map(x => x.UserName);
             Map(x => x.EmailAddress);
 
         }

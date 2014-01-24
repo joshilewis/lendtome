@@ -5,12 +5,12 @@ namespace Core.Model
     public class User : IOwner, IBorrower
     {
         public virtual Guid Id { get; protected set; }
-        public virtual string Name { get; protected set; }
+        public virtual string UserName { get; protected set; }
         public virtual string EmailAddress { get; protected set; }
 
-        public User(string name, string emailAddress)
+        public User(string userName, string emailAddress)
         {
-            Name = name;
+            UserName = userName;
             EmailAddress = emailAddress;
         }
 
