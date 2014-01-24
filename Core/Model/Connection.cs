@@ -12,6 +12,12 @@ namespace Core.Model
         public virtual User User1 { get; protected set; }
         public virtual User User2 { get; protected set; }
 
+        public Connection(User user1, User user2)
+        {
+            User1 = user1;
+            User2 = user2;
+        }
+
         protected Connection() { }
     }
 }

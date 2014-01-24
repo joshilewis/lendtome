@@ -7,6 +7,7 @@ using Core.AddUser;
 using Core.Model;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Tests.ConnectRequestHandler;
 
 namespace Tests
 {
@@ -83,8 +84,34 @@ namespace Tests
         {
             return Arg<AddUserResponse>.Matches(x => x.ShouldEqual(expected));
         }
-			
-			
+
+
+        public static bool ShouldEqual(this ConnectResponse actual, ConnectResponse expected)
+        {
+            Assert.That(actual.Success, Is.EqualTo(expected.Success));
+            Assert.That(actual.FailureDescription, Is.EqualTo(expected.FailureDescription));
+
+            return true;
+        }
+
+        public static ConnectResponse MatchArg(this ConnectResponse expected)
+        {
+            return Arg<ConnectResponse>.Matches(x => x.ShouldEqual(expected));
+        }
+
+
+        public static bool ShouldEqual(this Connection actual, Connection expected)
+        {
+            actual.User1.ShouldEqual(expected.User1);
+            actual.User2.ShouldEqual(expected.User2);
+
+            return true;
+        }
+
+        public static Connection MatchArg(this Connection expected)
+        {
+            return Arg<Connection>.Matches(x => x.ShouldEqual(expected));
+        }
 			
     }
 }
