@@ -20,8 +20,7 @@ namespace Tests.ConnectRequestHandler
             var fromUser = new User("from", "fromEmail");
             var toUser = new User("to", "toEmail");
 
-            Session.Save(fromUser);
-            Session.Save(toUser);
+            SaveEntities(new object[]{fromUser, toUser});
 
             CommitTransactionAndOpenNew();
 
@@ -57,9 +56,7 @@ namespace Tests.ConnectRequestHandler
             var toUser = new User("to", "toEmail");
             var existingConnection = new Connection(fromUser, toUser);
             
-            Session.Save(fromUser);
-            Session.Save(toUser);
-            Session.Save(existingConnection);
+            SaveEntities(new object[] {fromUser, toUser, existingConnection});
 
             CommitTransactionAndOpenNew();
 
@@ -93,10 +90,7 @@ namespace Tests.ConnectRequestHandler
             var otherUser = new User("other", "otherEmail");
             var existingConnection = new Connection(otherUser, toUser);
 
-            Session.Save(fromUser);
-            Session.Save(toUser);
-            Session.Save(otherUser);
-            Session.Save(existingConnection);
+            SaveEntities(new object[]{fromUser, toUser, otherUser, existingConnection});
 
             CommitTransactionAndOpenNew();
 

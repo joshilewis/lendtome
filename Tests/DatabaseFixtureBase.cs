@@ -74,6 +74,13 @@ namespace Tests
             Session.BeginTransaction();
 
         }
-   
+
+        protected void SaveEntities(params object[] entitiesToSave)
+        {
+            foreach (var entity in entitiesToSave)
+            {
+                Session.Save(entity);
+            }
+        }
     }
 }
