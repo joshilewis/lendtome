@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.AddUser;
+using Core.ConnectRequest;
 using Core.Model;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Tests.ConnectRequestHandler;
 
 namespace Tests
 {

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.ConnectRequest;
 using Core.Model;
-using NHibernate;
 using NHibernate.Criterion;
 using NUnit.Framework;
 
@@ -32,7 +31,7 @@ namespace Tests.ConnectRequestHandler
 
             //Act
 
-            var sut = new ConnectRequestHandler(() => Session);
+            var sut = new Core.ConnectRequest.ConnectRequestHandler(() => Session);
             ConnectResponse actualResponse = sut.HandleConnectRequest(request);
 
             //Assert
@@ -69,7 +68,7 @@ namespace Tests.ConnectRequestHandler
 
             //Act
 
-            var sut = new ConnectRequestHandler(() => Session);
+            var sut = new Core.ConnectRequest.ConnectRequestHandler(() => Session);
             ConnectResponse actualResponse = sut.HandleConnectRequest(request);
 
             //Assert
@@ -85,88 +84,5 @@ namespace Tests.ConnectRequestHandler
             Assert.That(numberOfConnections, Is.EqualTo(1));
         }
 
-    }
-
-    public class ConnectRequestHandler
-    {
-        private readonly Func<ISession> getSession;
-
-        public ConnectRequestHandler(Func<ISession> sessionFunc)
-        {
-            this.getSession = sessionFunc;
-        }
-
-        protected ConnectRequestHandler()
-        {
-        }
-
-
-        public virtual ConnectResponse HandleConnectRequest(ConnectRequest request)
-        {
-            ISession session = getSession();
-
-            if (ConnectionAlreadyExists(request))
-                return new ConnectResponse(ConnectResponse.AlreadyConnected);
-
-            User user1 = session
-                .Get<User>(request.FromUserId)
-                ;
-
-            User user2 = session
-                .Get<User>(request.ToUserId)
-                ;
-
-            var connection = new Connection(user1, user2);
-
-            session.Save(connection);
-
-            return new ConnectResponse();
-        }
-
-        private bool ConnectionAlreadyExists(ConnectRequest request)
-        {
-            ISession session = getSession();
-            Connection connectionAlias = null;
-            User user1Alias = null;
-            User user2Alias = null;
-
-            int numberOfExistingConnections = session
-                .QueryOver<Connection>(() => connectionAlias)
-                .JoinAlias(() => connectionAlias.User1, () => user1Alias)
-                .JoinAlias(() => connectionAlias.User2, () => user2Alias)
-                .Where(() =>
-                    (user1Alias.Id == request.FromUserId && user2Alias.Id == request.ToUserId) ||
-                    (user1Alias.Id == request.ToUserId && user2Alias.Id == request.FromUserId))
-                .RowCount()
-                ;
-
-            return numberOfExistingConnections > 0;
-        }
-    }
-
-
-    public class ConnectRequest
-    {
-        public Guid FromUserId { get; set; }
-        public Guid ToUserId { get; set; }
-    }
-
-    public class ConnectResponse
-    {
-        public const string AlreadyConnected = "The Users are already connected.";
-
-        public bool Success { get; set; }
-        public string FailureDescription { get; set; }
-
-        public ConnectResponse()
-        {
-            Success = true;
-            FailureDescription = null;
-        }
-
-        public ConnectResponse(string failureDescription)
-        {
-            FailureDescription = failureDescription;
-        }
     }
 }
