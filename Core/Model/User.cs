@@ -8,9 +8,8 @@ namespace Core.Model
         public virtual string Name { get; protected set; }
         public virtual string EmailAddress { get; protected set; }
 
-        public User(Guid id, string name, string emailAddress)
+        public User(string name, string emailAddress)
         {
-            this.Id = id;
             Name = name;
             EmailAddress = emailAddress;
         }
