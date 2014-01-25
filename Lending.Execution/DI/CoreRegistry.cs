@@ -49,7 +49,6 @@ namespace Lending.Execution.DI
             Scan(scanner =>
             {
                 scanner.AssemblyContainingType<Request>();
-                //scanner.AddAllTypesOf(typeof (RequestHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof (IRequestHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof (WebserviceBase<,>));
             });
