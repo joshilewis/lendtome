@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 
@@ -7,10 +8,13 @@ using FluentNHibernate.Mapping;
 
 namespace Core.Model.Maps
 {
-    public abstract class OwnershipMap<T> : BaseMap<Ownership<T>> where T : IOwner
+    public class OwnershipMap : BaseMap<Ownership>
     {
         public OwnershipMap()
         {
+            string schema = ConfigurationManager.AppSettings["lender_db_schema"];
+            Schema(schema);
+
             Id(x => x.Id)
                 .GeneratedBy.GuidComb();
 
@@ -22,25 +26,53 @@ namespace Core.Model.Maps
         }
     }
 
-    public class UserOwnershipMap : OwnershipMap<User>
+    public abstract class OwnershipMap<T> : SubclassMap<Ownership<T>> where T : IOwner
     {
-        public UserOwnershipMap()
+        public OwnershipMap()
         {
+            string schema = ConfigurationManager.AppSettings["lender_db_schema"];
+            Schema(schema);
+
+            KeyColumn("OwnershipId");
+
+            Table(TableName);
+
             References(x => x.Owner)
-                .Column("OwnerId")
+                .Column(OwnerTypeColumnName)
+                .LazyLoad()
                 .Cascade.None()
                 ;
+
+        }
+
+        protected abstract string TableName { get; }
+
+        protected abstract string OwnerTypeColumnName { get; }
+    }
+
+    public class UserOwnershipMap : OwnershipMap<User>
+    {
+        protected override string TableName
+        {
+            get { return "UserOwnership"; }
+        }
+
+        protected override string OwnerTypeColumnName
+        {
+            get { return "OwnerId"; }
         }
     }
 
     public class OrganisationOwnershipMap : OwnershipMap<Organisation>
     {
-        public OrganisationOwnershipMap()
+        protected override string TableName
         {
-            References(x => x.Owner)
-                .Column("OwnerId")
-                .Cascade.None()
-                ;
+            get { return "OrganisationOwnership"; }
+        }
+
+        protected override string OwnerTypeColumnName
+        {
+            get { return "OrganisationId"; }
         }
     }
 

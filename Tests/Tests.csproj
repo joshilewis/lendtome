@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="AddItem\AddItemRequestHandlerTests.cs" />
     <Compile Include="AddUser\AddUserRequestHandlerTests.cs" />
+    <Compile Include="BorrowItem\BorrowItemRequestHandlerTests.cs" />
     <Compile Include="Connect\ConnectRequestHandlerTests.cs" />
     <Compile Include="DatabaseFixtureBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,7 +7,7 @@ using FluentNHibernate.Mapping;
 
 namespace Core.Model.Maps
 {
-    public class OrganisationMap : ClassMap<Organisation>
+    public class OrganisationMap : BaseMap<Organisation>
     {
         public OrganisationMap()
         {

@@ -23,17 +23,17 @@ namespace Core
         }
     }
 
-    public class ResponseBase<T> : BaseResponse
+    public class BaseResponse<T> : BaseResponse
     {
         public T Payload { get; set; }
 
-        public ResponseBase(T payload)
+        public BaseResponse(T payload)
             : base()
         {
             Payload = payload;
         }
 
-        public ResponseBase(string failureDescription, T payload)
+        public BaseResponse(string failureDescription, T payload)
             : base(failureDescription)
         {
             Payload = payload;

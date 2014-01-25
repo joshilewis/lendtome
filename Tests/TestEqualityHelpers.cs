@@ -158,7 +158,36 @@ namespace Tests
         {
             return Arg<Organisation>.Matches(x => x.ShouldEqual(expected));
         }
-			
 
+
+        public static bool ShouldEqual(this Borrowing actual, Borrowing expected)
+        {
+            actual.Borrower.ShouldEqual(expected.Borrower);
+            actual.Ownership.ShouldEqual(expected.Ownership);
+            actual.Borrower.ShouldEqual(expected.Borrower);
+
+            return true;
+        }
+
+        public static Borrowing MatchArg(this Borrowing expected)
+        {
+            return Arg<Borrowing>.Matches(x => x.ShouldEqual(expected));
+        }
+
+
+
+        public static bool ShouldEqual(this Ownership actual, Ownership expected)
+        {
+            actual.Item.ShouldEqual(expected.Item);
+            Assert.That(actual.OwnerId, Is.EqualTo(expected.OwnerId));
+
+            return true;
+        }
+
+        public static Ownership MatchArg(this Ownership expected)
+        {
+            return Arg<Ownership>.Matches(x => x.ShouldEqual(expected));
+        }
+			
     }
 }

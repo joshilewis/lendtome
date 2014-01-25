@@ -14,6 +14,8 @@ namespace Core.Model
             Item = item;
         }
 
+        public abstract Guid OwnerId { get; }
+
         // override object.Equals
         public override bool Equals(object obj)
         {
@@ -37,6 +39,11 @@ namespace Core.Model
     public class Ownership<T> : Ownership where T : IOwner
     {
         public virtual T Owner { get; protected set; }
+
+        public override Guid OwnerId
+        {
+            get { return Owner.Id; }
+        }
 
         protected Ownership() { }
 

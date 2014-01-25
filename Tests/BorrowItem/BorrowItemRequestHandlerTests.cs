@@ -1,0 +1,93 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Core;
+using Core.Model;
+using NHibernate;
+using NUnit.Framework;
+
+namespace Tests.BorrowItem
+{
+    [TestFixture]
+    public class BorrowItemRequestHandlerTests : DatabaseFixtureBase
+    {
+
+        [Test]
+        public void Test_Success()
+        {
+            var requestor = new User("requestor", "requestor@email.org");
+            var owner = new User("owner", "owner@example.org");
+            var item = new Item("title", "creator", "edition");
+            var ownership = new Ownership<User>(item, owner);
+
+            SaveEntities(new object[]{requestor, owner, item, ownership});
+
+            CommitTransactionAndOpenNew();
+
+            var request = new BorrowItemRequest(){OwnershipId = ownership.Id, RequestorId = requestor.Id};
+            var expectedResponse = new BaseResponse();
+
+            var expectedBorrowing = new Borrowing(requestor, ownership);
+
+            var sut = new BorrowItemRequestHandler<User>(() => Session);
+            BaseResponse actualResponse = sut.HandleRequest(request);
+
+            actualResponse.ShouldEqual(expectedResponse);
+
+            //Check that the right Borrowing object is in the DB
+            Borrowing borrowingAlias = null;
+            User requestorAllias = null;
+            Ownership<User> ownershipAlias = null;
+
+            Borrowing borrowingInDb = Session
+                .QueryOver<Borrowing>(() => borrowingAlias)
+                .JoinAlias(() => borrowingAlias.Borrower, () => requestorAllias)
+                .JoinAlias(() => borrowingAlias.Ownership, () => ownershipAlias)
+                .Where(() => requestorAllias.Id == requestor.Id)
+                .And(() => ownershipAlias.Id == ownership.Id)
+                .SingleOrDefault()
+                ;
+
+            borrowingInDb.ShouldEqual(expectedBorrowing);
+
+        }
+    }
+
+    public class BorrowItemRequestHandler<T> : IRequestHandler<BorrowItemRequest, BaseResponse> where T : class, IOwner
+    {
+        private readonly Func<ISession> getSession;
+
+        public BorrowItemRequestHandler(Func<ISession> sessionFunc)
+        {
+            this.getSession = sessionFunc;
+        }
+
+        protected BorrowItemRequestHandler() { }
+
+        public virtual BaseResponse HandleRequest(BorrowItemRequest request)
+        {
+            ISession session = getSession();
+            User requestor = session
+                .Get<User>(request.RequestorId)
+                ;
+
+            Ownership<T> ownership = session
+                .Get<Ownership<T>>(request.OwnershipId)
+                ;
+
+            var borrowing = new Borrowing(requestor, ownership);
+
+            session.Save(borrowing);
+
+            return new BaseResponse();
+        }
+    }
+
+    public class BorrowItemRequest
+    {
+        public Guid RequestorId { get; set; }
+        public Guid OwnershipId { get; set; }
+    }
+}

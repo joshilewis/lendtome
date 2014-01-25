@@ -57,6 +57,7 @@
     <Compile Include="AddUser\AddUserRequestHandler.cs" />
     <Compile Include="AddUser\UserExistsQuery.cs" />
     <Compile Include="Model\IOwner.cs" />
+    <Compile Include="Model\Maps\BorrowingMap.cs" />
     <Compile Include="Model\Maps\ItemMapcs.cs" />
     <Compile Include="Model\Maps\OrganisationMap.cs" />
     <Compile Include="Model\Maps\OwnershipMap.cs" />
@@ -67,7 +68,7 @@
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\IBorrower.cs" />
     <Compile Include="Model\Item.cs" />
-    <Compile Include="Model\BorrowRequest.cs" />
+    <Compile Include="Model\Borrowing.cs" />
     <Compile Include="Model\Maps\BaseMap.cs" />
     <Compile Include="Model\Maps\ConnectionMap.cs" />
     <Compile Include="Model\Maps\UserMap.cs" />
