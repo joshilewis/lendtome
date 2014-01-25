@@ -1,14 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core;
-using Core.ConnectRequest;
-using Core.Model;
-using NHibernate.Criterion;
+﻿using Lending.Core;
+using Lending.Core.Connect;
+using Lending.Core.Model;
 using NUnit.Framework;
 
-namespace Tests.ConnectRequestHandler
+namespace Tests.Connect
 {
     [TestFixture]
     public class ConnectRequestHandlerTests : DatabaseFixtureBase
@@ -31,7 +26,7 @@ namespace Tests.ConnectRequestHandler
 
             //Act
 
-            var sut = new Core.ConnectRequest.ConnectRequestHandler(() => Session);
+            var sut = new ConnectRequestHandler(() => Session);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             //Assert
@@ -61,12 +56,12 @@ namespace Tests.ConnectRequestHandler
 
             CommitTransactionAndOpenNew();
 
-            var expectedResponse = new BaseResponse(Core.ConnectRequest.ConnectRequestHandler.AlreadyConnected);
+            var expectedResponse = new BaseResponse(ConnectRequestHandler.AlreadyConnected);
             var request = new ConnectRequest() { FromUserId = fromUser.Id, ToUserId = toUser.Id };
 
             //Act
 
-            var sut = new Core.ConnectRequest.ConnectRequestHandler(() => Session);
+            var sut = new ConnectRequestHandler(() => Session);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             //Assert
@@ -101,7 +96,7 @@ namespace Tests.ConnectRequestHandler
 
             //Act
 
-            var sut = new Core.ConnectRequest.ConnectRequestHandler(() => Session);
+            var sut = new ConnectRequestHandler(() => Session);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             //Assert

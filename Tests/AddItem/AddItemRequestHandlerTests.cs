@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core;
-using Core.AddItem;
-using Core.Model;
+using Lending.Core;
+using Lending.Core.AddItem;
+using Lending.Core.Model;
 using NUnit.Framework;
 
 namespace Tests.AddItem

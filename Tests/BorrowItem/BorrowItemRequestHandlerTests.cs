@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core;
-using Core.BorrowItem;
-using Core.Model;
+using Lending.Core;
+using Lending.Core.BorrowItem;
+using Lending.Core.Model;
 using NUnit.Framework;
 
 namespace Tests.BorrowItem
@@ -30,7 +30,7 @@ namespace Tests.BorrowItem
 
             var expectedBorrowing = new Borrowing(requestor, ownership);
 
-            var sut = new BorrowItemRequestHandler<User>(() => Session);
+            var sut = new BorrowItemRequestHandler(() => Session);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
@@ -38,7 +38,7 @@ namespace Tests.BorrowItem
             //Check that the right Borrowing object is in the DB
             Borrowing borrowingAlias = null;
             User requestorAllias = null;
-            Ownership<User> ownershipAlias = null;
+            Ownership ownershipAlias = null;
 
             Borrowing borrowingInDb = Session
                 .QueryOver<Borrowing>(() => borrowingAlias)
