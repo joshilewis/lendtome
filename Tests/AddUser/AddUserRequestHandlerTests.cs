@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core;
 using Core.AddUser;
 using Core.Model;
 using Core.Model.Maps;
@@ -25,14 +26,14 @@ namespace Tests.AddUser
         {
             //Arrange
             var request = new AddUserRequest() {EmailAddress = "test@example.org", UserName = "username"};
-            var expectedResponse = new AddUserResponse() {Success = true};
+            var expectedResponse = new BaseResponse() {Success = true};
 
             //Act
             var sut = new AddUserRequestHandler(() => Session);
-            AddUserResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponseBase = sut.HandleRequest(request);
 
             //Assert
-            actualResponse.ShouldEqual(expectedResponse);
+            actualResponseBase.ShouldEqual(expectedResponse);
 
             var expectedUser = new User(request.UserName, request.EmailAddress);
 
@@ -51,7 +52,7 @@ namespace Tests.AddUser
         {
             //Arrange
             var request = new AddUserRequest() { EmailAddress = "test@example.org", UserName = "username"};
-            var expectedResponse = new AddUserResponse() { Success = false, FailureDescription = AddUserResponse.UsernameTaken };
+            var expectedResponse = new BaseResponse() { Success = false, FailureDescription = AddUserRequestHandler.UsernameTaken };
 
             var existingUser = new User(request.UserName, "new email address");
             Session.Save(existingUser);
@@ -60,10 +61,10 @@ namespace Tests.AddUser
 
             //Act
             var sut = new AddUserRequestHandler(() => Session);
-            AddUserResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponseBase = sut.HandleRequest(request);
 
             //Assert
-            actualResponse.ShouldEqual(expectedResponse);
+            actualResponseBase.ShouldEqual(expectedResponse);
         }
 
         [Test]
@@ -71,7 +72,7 @@ namespace Tests.AddUser
         {
             //Arrange
             var request = new AddUserRequest() { EmailAddress = "test@example.org", UserName = "username" };
-            var expectedResponse = new AddUserResponse() { Success = false, FailureDescription = AddUserResponse.EmailTaken };
+            var expectedResponse = new BaseResponse() { Success = false, FailureDescription = AddUserRequestHandler.EmailTaken };
 
             var existingUser = new User("new user name", request.EmailAddress);
             Session.Save(existingUser);
@@ -80,10 +81,10 @@ namespace Tests.AddUser
 
             //Act
             var sut = new AddUserRequestHandler(() => Session);
-            AddUserResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponseBase = sut.HandleRequest(request);
 
             //Assert
-            actualResponse.ShouldEqual(expectedResponse);
+            actualResponseBase.ShouldEqual(expectedResponse);
         }
 
     }

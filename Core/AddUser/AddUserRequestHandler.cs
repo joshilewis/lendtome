@@ -4,8 +4,11 @@ using NHibernate;
 
 namespace Core.AddUser
 {
-    public class AddUserRequestHandler : IRequestHandler<AddUserRequest, AddUserResponse>
+    public class AddUserRequestHandler : IRequestHandler<AddUserRequest, BaseResponse>
     {
+        public const string UsernameTaken = "That user name is already in use.";
+        public const string EmailTaken = "That Email Address is already in use.";
+
         private readonly Func<ISession> getSession;
 
         public AddUserRequestHandler(Func<ISession> sessionFunc)
@@ -15,21 +18,21 @@ namespace Core.AddUser
 
         protected AddUserRequestHandler() { }
 
-        public virtual AddUserResponse HandleRequest(AddUserRequest request)
+        public virtual BaseResponse HandleRequest(AddUserRequest request)
         {
             ISession session = getSession();
 
             if (UserWithUserNameExists(request))
-                return new AddUserResponse() {Success = false, FailureDescription = AddUserResponse.UsernameTaken};
+                return new BaseResponse(UsernameTaken);
 
             if (UserWithEmailExists(request))
-                return new AddUserResponse() { Success = false, FailureDescription = AddUserResponse.EmailTaken };
+                return new BaseResponse(EmailTaken);
 
             var newUser = new User(request.UserName, request.EmailAddress);
 
             session.Save(newUser);
 
-            return new AddUserResponse() {Success = true};
+            return new BaseResponse();
         }
 
         private bool UserWithUserNameExists(AddUserRequest request)

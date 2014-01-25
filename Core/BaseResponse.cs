@@ -6,24 +6,24 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public class ResponseBase
+    public class BaseResponse
     {
         public bool Success { get; set; }
         public string FailureDescription { get; set; }
 
-        public ResponseBase()
+        public BaseResponse()
         {
             Success = true;
             FailureDescription = null;
         }
 
-        public ResponseBase(string failureDescription)
+        public BaseResponse(string failureDescription)
         {
             FailureDescription = failureDescription;
         }
     }
 
-    public class ResponseBase<T> : ResponseBase
+    public class ResponseBase<T> : BaseResponse
     {
         public T Payload { get; set; }
 

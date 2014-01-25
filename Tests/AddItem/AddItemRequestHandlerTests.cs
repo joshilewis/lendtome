@@ -29,12 +29,12 @@ namespace Tests.AddItem
                 Title = item.Title
             };
 
-            var expectedResponse = new ResponseBase();
+            var expectedResponse = new BaseResponse();
 
             var expectedOwnership = new Ownership<User>(item, user);
 
             var sut = new AddItemRequestHandler<User>(() => Session);
-            ResponseBase actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
 
@@ -67,12 +67,12 @@ namespace Tests.AddItem
                 Title = item.Title
             };
 
-            var expectedResponse = new ResponseBase();
+            var expectedResponse = new BaseResponse();
 
             var expectedOwnership = new Ownership<Organisation>(item, organisation);
 
             var sut = new AddItemRequestHandler<Organisation>(() => Session);
-            ResponseBase actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
 
@@ -105,12 +105,12 @@ namespace Tests.AddItem
                 Title = expectedItem.Title
             };
 
-            var expectedResponse = new ResponseBase();
+            var expectedResponse = new BaseResponse();
 
             var expectedOwnership = new Ownership<User>(expectedItem, user);
 
             var sut = new AddItemRequestHandler<User>(() => Session);
-            ResponseBase actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
 
@@ -154,10 +154,10 @@ namespace Tests.AddItem
                 Title = item.Title
             };
 
-            var expectedResponse = new ResponseBase(AddItemRequestHandler<User>.OwnershipAlreadyExists);
+            var expectedResponse = new BaseResponse(AddItemRequestHandler<User>.OwnershipAlreadyExists);
 
             var sut = new AddItemRequestHandler<User>(() => Session);
-            ResponseBase actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
 

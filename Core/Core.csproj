@@ -55,16 +55,14 @@
     <Compile Include="AddItem\AddUserItemRequest.cs" />
     <Compile Include="AddUser\AddUserRequest.cs" />
     <Compile Include="AddUser\AddUserRequestHandler.cs" />
-    <Compile Include="AddUser\AddUserResponse.cs" />
     <Compile Include="AddUser\UserExistsQuery.cs" />
     <Compile Include="Model\IOwner.cs" />
     <Compile Include="Model\Maps\ItemMapcs.cs" />
     <Compile Include="Model\Maps\OrganisationMap.cs" />
     <Compile Include="Model\Maps\OwnershipMap.cs" />
-    <Compile Include="ResponseBase.cs" />
+    <Compile Include="BaseResponse.cs" />
     <Compile Include="ConnectRequest\ConnectRequest.cs" />
     <Compile Include="ConnectRequest\ConnectRequestHandler.cs" />
-    <Compile Include="ConnectRequest\ConnectResponse.cs" />
     <Compile Include="IRequestHandler.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\IBorrower.cs" />

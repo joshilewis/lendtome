@@ -4,7 +4,7 @@ using NHibernate;
 
 namespace Core.AddItem
 {
-    public class AddItemRequestHandler<T> : IRequestHandler<AddItemRequest<T>, ResponseBase> where T : class, IOwner
+    public class AddItemRequestHandler<T> : IRequestHandler<AddItemRequest<T>, BaseResponse> where T : class, IOwner
     {
         public const string OwnershipAlreadyExists = "This owner already owns this item.";
 
@@ -17,12 +17,12 @@ namespace Core.AddItem
 
         protected AddItemRequestHandler() { }
 
-        public virtual ResponseBase HandleRequest(AddItemRequest<T> request)
+        public virtual BaseResponse HandleRequest(AddItemRequest<T> request)
         {
             Item item = GetItem(request);
 
             if (item != null && CheckIfItemAlreadyOwned<T>(item.Id, request.OwnerId))
-                return new ResponseBase(OwnershipAlreadyExists);
+                return new BaseResponse(OwnershipAlreadyExists);
 
             if (item == null)
                 item = CreateItem(request);
@@ -33,7 +33,7 @@ namespace Core.AddItem
 
             getSession().Save(ownership);
 
-            return new ResponseBase();
+            return new BaseResponse();
         }
 
         private bool CheckIfItemAlreadyOwned<T>(Guid itemId, Guid ownerId) where T : class, IOwner
@@ -86,5 +86,7 @@ namespace Core.AddItem
             return item;
         }
 
+        public const string UsernameTaken = "That user name is already in use.";
+        public const string EmailTaken = "That Email Address is already in use.";
     }
 }

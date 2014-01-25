@@ -4,8 +4,10 @@ using NHibernate;
 
 namespace Core.ConnectRequest
 {
-    public class ConnectRequestHandler : IRequestHandler<ConnectRequest, ConnectResponse>
+    public class ConnectRequestHandler : IRequestHandler<ConnectRequest, BaseResponse>
     {
+        public const string AlreadyConnected = "The Users are already connected.";
+
         private readonly Func<ISession> getSession;
 
         public ConnectRequestHandler(Func<ISession> sessionFunc)
@@ -15,12 +17,12 @@ namespace Core.ConnectRequest
 
         protected ConnectRequestHandler() { }
 
-        public virtual ConnectResponse HandleRequest(ConnectRequest request)
+        public virtual BaseResponse HandleRequest(ConnectRequest request)
         {
             ISession session = getSession();
 
             if (ConnectionAlreadyExists(request))
-                return new ConnectResponse(ConnectResponse.AlreadyConnected);
+                return new BaseResponse(AlreadyConnected);
 
             User user1 = session
                 .Get<User>(request.FromUserId)
@@ -34,7 +36,7 @@ namespace Core.ConnectRequest
 
             session.Save(connection);
 
-            return new ConnectResponse();
+            return new BaseResponse();
         }
 
         private bool ConnectionAlreadyExists(ConnectRequest request)
@@ -56,5 +58,6 @@ namespace Core.ConnectRequest
 
             return numberOfExistingConnections > 0;
         }
+
     }
 }

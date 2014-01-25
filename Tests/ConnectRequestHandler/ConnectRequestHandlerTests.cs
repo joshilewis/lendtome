@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core;
 using Core.ConnectRequest;
 using Core.Model;
 using NHibernate.Criterion;
@@ -25,13 +26,13 @@ namespace Tests.ConnectRequestHandler
             CommitTransactionAndOpenNew();
 
             var expectedConnection = new Connection(fromUser, toUser);
-            var expectedResponse = new ConnectResponse();
+            var expectedResponse = new BaseResponse();
             var request = new ConnectRequest() {FromUserId = fromUser.Id, ToUserId = toUser.Id};
 
             //Act
 
             var sut = new Core.ConnectRequest.ConnectRequestHandler(() => Session);
-            ConnectResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request);
 
             //Assert
 
@@ -60,13 +61,13 @@ namespace Tests.ConnectRequestHandler
 
             CommitTransactionAndOpenNew();
 
-            var expectedResponse = new ConnectResponse(ConnectResponse.AlreadyConnected);
+            var expectedResponse = new BaseResponse(Core.ConnectRequest.ConnectRequestHandler.AlreadyConnected);
             var request = new ConnectRequest() { FromUserId = fromUser.Id, ToUserId = toUser.Id };
 
             //Act
 
             var sut = new Core.ConnectRequest.ConnectRequestHandler(() => Session);
-            ConnectResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request);
 
             //Assert
 
@@ -96,12 +97,12 @@ namespace Tests.ConnectRequestHandler
 
             var expectedConnection = new Connection(fromUser, toUser);
             var request = new ConnectRequest() { FromUserId = fromUser.Id, ToUserId = toUser.Id };
-            var expectedResponse = new ConnectResponse();
+            var expectedResponse = new BaseResponse();
 
             //Act
 
             var sut = new Core.ConnectRequest.ConnectRequestHandler(() => Session);
-            ConnectResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request);
 
             //Assert
 

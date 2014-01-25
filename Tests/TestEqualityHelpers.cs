@@ -75,7 +75,7 @@ namespace Tests
         }
 
 
-        public static bool ShouldEqual(this AddUserResponse actual, AddUserResponse expected)
+        public static bool ShouldEqual(this BaseResponse actual, BaseResponse expected)
         {
             Assert.That(actual.Success, Is.EqualTo(expected.Success));
             Assert.That(actual.FailureDescription, Is.EqualTo(expected.FailureDescription));
@@ -83,23 +83,9 @@ namespace Tests
             return true;
         }
 
-        public static AddUserResponse MatchArg(this AddUserResponse expected)
+        public static BaseResponse MatchArg(this BaseResponse expected)
         {
-            return Arg<AddUserResponse>.Matches(x => x.ShouldEqual(expected));
-        }
-
-
-        public static bool ShouldEqual(this ConnectResponse actual, ConnectResponse expected)
-        {
-            Assert.That(actual.Success, Is.EqualTo(expected.Success));
-            Assert.That(actual.FailureDescription, Is.EqualTo(expected.FailureDescription));
-
-            return true;
-        }
-
-        public static ConnectResponse MatchArg(this ConnectResponse expected)
-        {
-            return Arg<ConnectResponse>.Matches(x => x.ShouldEqual(expected));
+            return Arg<BaseResponse>.Matches(x => x.ShouldEqual(expected));
         }
 
 
@@ -114,20 +100,6 @@ namespace Tests
         public static Connection MatchArg(this Connection expected)
         {
             return Arg<Connection>.Matches(x => x.ShouldEqual(expected));
-        }
-
-        
-        public static bool ShouldEqual(this ResponseBase actual, ResponseBase expected)
-        {
-            Assert.That(actual.Success, Is.EqualTo(expected.Success));
-            Assert.That(actual.FailureDescription, Is.EqualTo(expected.FailureDescription));
-
-            return true;
-        }
-
-        public static ResponseBase MatchArg(this ResponseBase expected)
-        {
-            return Arg<ResponseBase>.Matches(x => x.ShouldEqual(expected));
         }
 
 
