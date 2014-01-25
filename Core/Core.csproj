@@ -56,6 +56,8 @@
     <Compile Include="AddUser\AddUserRequest.cs" />
     <Compile Include="AddUser\AddUserRequestHandler.cs" />
     <Compile Include="AddUser\UserExistsQuery.cs" />
+    <Compile Include="BorrowItem\BorrowItemRequest.cs" />
+    <Compile Include="BorrowItem\BorrowItemRequestHandler.cs" />
     <Compile Include="Model\IOwner.cs" />
     <Compile Include="Model\Maps\BorrowingMap.cs" />
     <Compile Include="Model\Maps\ItemMapcs.cs" />
