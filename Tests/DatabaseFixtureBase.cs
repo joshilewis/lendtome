@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Core.Model.Maps;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using NCrunch.Framework;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
@@ -13,6 +14,8 @@ using NUnit.Framework;
 
 namespace Tests
 {
+    [ExclusivelyUses("Database")]
+    [NUnit.Framework.Category("Persistence")]
     [TestFixture]
     public abstract class DatabaseFixtureBase
     {
