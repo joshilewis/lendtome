@@ -1,14 +1,17 @@
 ﻿using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using Lending.Core;
+using Lending.Core.AddItem;
+using Lending.Core.Model;
 using Lending.Core.Model.Maps;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
+using Nancy;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
-using ServiceStack.ServiceInterface;
 using StructureMap.Configuration.DSL;
+using Request = Lending.Core.Request;
 
 namespace Lending.Execution.DI
 {
@@ -50,8 +53,16 @@ namespace Lending.Execution.DI
             {
                 scanner.AssemblyContainingType<Request>();
                 scanner.ConnectImplementationsToTypesClosing(typeof (IRequestHandler<,>));
-                scanner.ConnectImplementationsToTypesClosing(typeof (WebserviceBase<,>));
             });
+
+            For<IRequestHandler<AddUserItemRequest, BaseResponse>>()
+                .Use<AddItemRequestHandler<User>>()
+                ;
+
+            For<IRequestHandler<AddOrganisationItemRequest, BaseResponse>>()
+                .Use<AddItemRequestHandler<Organisation>>()
+                ;
+
         }
 
     }

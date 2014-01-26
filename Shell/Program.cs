@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Core;
 using Lending.Core.AddUser;
 using Lending.Execution.WebServices;
+using Nancy.Hosting.Self;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using StructureMap;
@@ -34,11 +36,19 @@ namespace Shell
             new SchemaUpdate(ObjectFactory.GetInstance<Configuration>())
                 .Execute(true, true);
 
-            var webService = ObjectFactory.GetInstance<WebserviceBase<AddUserRequest, BaseResponse>>();
+            //using (var host = new NancyHost(new Uri("http://localhost:8080")))
+            //{
+            //    host.Start();
+            //    Console.WriteLine("Nancy has started");
+            //    Console.ReadLine();
+            //} 
 
-            var response = webService.Execute(new AddUserRequest(){UserName = "joshilewis", EmailAddress = "emailaddress"});
 
-            
+            var host = new AppHost();
+            host.Init();
+            host.Start("http://localhost:8085/");
+            Console.WriteLine("Listening, GO!");
+            Console.ReadLine();
         }
     }
 }

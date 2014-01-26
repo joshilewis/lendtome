@@ -21,7 +21,7 @@ namespace Tests.BorrowItem
             var item = new Item("title", "creator", "edition");
             var ownership = new Ownership<User>(item, owner);
 
-            SaveEntities(new object[]{requestor, owner, item, ownership});
+            SaveEntities(requestor, owner, item, ownership);
 
             CommitTransactionAndOpenNew();
 

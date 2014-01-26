@@ -17,7 +17,7 @@ namespace Tests.AddItem
         {
             var user = new User("username", "emailAddress");
             var item = new Item("Title", "Creator", "Edition");
-            SaveEntities(new object[] { user, item});
+            SaveEntities(user, item);
 
             CommitTransactionAndOpenNew();
 
@@ -55,7 +55,7 @@ namespace Tests.AddItem
         {
             var organisation = new Organisation("organisation");
             var item = new Item("Title", "Creator", "Edition");
-            SaveEntities(new object[] { organisation, item });
+            SaveEntities(organisation, item);
 
             CommitTransactionAndOpenNew();
 
@@ -93,7 +93,7 @@ namespace Tests.AddItem
         {
             var user = new User("username", "emailAddress");
             var expectedItem = new Item("Title", "Creator", "Edition");
-            SaveEntities(new object[] { user });
+            SaveEntities(user);
 
             CommitTransactionAndOpenNew();
 
@@ -142,7 +142,7 @@ namespace Tests.AddItem
             var user = new User("username", "emailAddress");
             var item = new Item("Title", "Creator", "Edition");
             var expectedOwnership = new Ownership<User>(item, user);
-            SaveEntities(new object[] { user, item, expectedOwnership});
+            SaveEntities(user, item, expectedOwnership);
 
             CommitTransactionAndOpenNew();
 

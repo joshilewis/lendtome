@@ -1,11 +1,11 @@
 ﻿using System;
-using ServiceStack.Logging;
+//using ServiceStack.Logging;
 
 namespace Lending.Execution.UnitOfWork
 {
     public static class UnitOfWorkHelpers
     {
-        private readonly static ILog Log = LogManager.GetLogger(typeof(UnitOfWorkHelpers).FullName);
+        //private readonly static ILog Log = LogManager.GetLogger(typeof(UnitOfWorkHelpers).FullName);
 
         public static void DoInTransaction(this IUnitOfWork uow, Action action)
         {
@@ -17,8 +17,8 @@ namespace Lending.Execution.UnitOfWork
             }
             catch (Exception ex)
             {
-                Log.Error(string.Format("Exception thrown in transaction. Action method: {0}, action Target: {1}.",
-                    action.Method, action.Target), ex);
+                //Log.Error(string.Format("Exception thrown in transaction. Action method: {0}, action Target: {1}.",
+                //    action.Method, action.Target), ex);
                 uow.RollBack();
                 throw;
             }

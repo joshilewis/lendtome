@@ -8,7 +8,10 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Lending.Execution.WebServices
 {
-    public class WebserviceBase<TRequest, TResponse> : ServiceBase<TRequest>
+    public interface IWebserviceBase<TRequest, TResponse>
+    { }
+
+    public class WebserviceBase<TRequest, TResponse> : ServiceBase<TRequest>, IWebserviceBase<TRequest, TResponse>
     {
         private readonly static ILog Log = LogManager.GetLogger(typeof(WebserviceBase<TRequest, TResponse>).FullName);
 
@@ -21,8 +24,6 @@ namespace Lending.Execution.WebServices
             this.unitOfWork = unitOfWork;
             this.requestHandler = requestHandler;
         }
-
-        protected WebserviceBase() { }
 
         protected override object Run(TRequest request)
         {
@@ -44,5 +45,6 @@ namespace Lending.Execution.WebServices
 
             return response;
         }
+
     }
 }

@@ -16,7 +16,7 @@ namespace Tests.Connect
             var fromUser = new User("from", "fromEmail");
             var toUser = new User("to", "toEmail");
 
-            SaveEntities(new object[]{fromUser, toUser});
+            SaveEntities(fromUser, toUser);
 
             CommitTransactionAndOpenNew();
 
@@ -52,7 +52,7 @@ namespace Tests.Connect
             var toUser = new User("to", "toEmail");
             var existingConnection = new Connection(fromUser, toUser);
             
-            SaveEntities(new object[] {fromUser, toUser, existingConnection});
+            SaveEntities(fromUser, toUser, existingConnection);
 
             CommitTransactionAndOpenNew();
 
@@ -86,7 +86,7 @@ namespace Tests.Connect
             var otherUser = new User("other", "otherEmail");
             var existingConnection = new Connection(otherUser, toUser);
 
-            SaveEntities(new object[]{fromUser, toUser, otherUser, existingConnection});
+            SaveEntities(fromUser, toUser, otherUser, existingConnection);
 
             CommitTransactionAndOpenNew();
 
