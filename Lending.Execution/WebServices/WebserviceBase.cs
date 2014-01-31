@@ -11,7 +11,8 @@ namespace Lending.Execution.WebServices
     public interface IWebserviceBase<TRequest, TResponse>
     { }
 
-    public class WebserviceBase<TRequest, TResponse> : ServiceBase<TRequest>, IWebserviceBase<TRequest, TResponse>
+    [Authenticate]
+    public class WebserviceBase<TRequest, TResponse> : Service, IWebserviceBase<TRequest, TResponse>
     {
         private readonly static ILog Log = LogManager.GetLogger(typeof(WebserviceBase<TRequest, TResponse>).FullName);
 
@@ -25,7 +26,7 @@ namespace Lending.Execution.WebServices
             this.requestHandler = requestHandler;
         }
 
-        protected override object Run(TRequest request)
+        public virtual object Any(TRequest request)
         {
             Log.InfoFormat("Received a request of type {0}", typeof(TRequest));
             TResponse response = default(TResponse);

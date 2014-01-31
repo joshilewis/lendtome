@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lending.Execution", "Lendin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shell", "Shell\Shell.csproj", "{A135F3D2-1ADE-489F-A62E-3FE4C5917A1B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lending.Web", "Lending.Web\Lending.Web.csproj", "{98F1233F-6CA0-4609-AB11-E6047CF38E0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{A135F3D2-1ADE-489F-A62E-3FE4C5917A1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A135F3D2-1ADE-489F-A62E-3FE4C5917A1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A135F3D2-1ADE-489F-A62E-3FE4C5917A1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98F1233F-6CA0-4609-AB11-E6047CF38E0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98F1233F-6CA0-4609-AB11-E6047CF38E0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98F1233F-6CA0-4609-AB11-E6047CF38E0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98F1233F-6CA0-4609-AB11-E6047CF38E0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
