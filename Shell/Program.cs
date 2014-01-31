@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Core;
 using Lending.Core.AddUser;
 using Lending.Execution.WebServices;
-using Nancy.Hosting.Self;
+//using Nancy.Hosting.Self;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using StructureMap;
@@ -24,7 +25,8 @@ namespace Shell
                 {
                     y.WithDefaultConventions();
                     y.LookForRegistries();
-                    y.AssembliesFromPath(Environment.CurrentDirectory, a => a.FullName.StartsWith("Lending"));
+                    //y.AssembliesFromPath(Environment.CurrentDirectory, a => a.FullName.StartsWith("Lending"));
+                    y.AssembliesFromPath(Environment.CurrentDirectory, Blah);
                 });
 
 
@@ -49,6 +51,11 @@ namespace Shell
             host.Start("http://localhost:8085/");
             Console.WriteLine("Listening, GO!");
             Console.ReadLine();
+        }
+
+        private static bool Blah(Assembly assembly)
+        {
+            return assembly.FullName.StartsWith("Lending");
         }
     }
 }

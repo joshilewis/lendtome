@@ -28,20 +28,11 @@ namespace Lending.Execution.WebServices
         protected override object Run(TRequest request)
         {
             Log.InfoFormat("Received a request of type {0}", typeof(TRequest));
-            object response = null;
-            try
-            {
+            TResponse response = default(TResponse);
                 unitOfWork.DoInTransaction(() =>
                 {
                     response = requestHandler.HandleRequest(request);
                 });
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Exception thrown while executing webservice request", ex);
-                response = ResponseStatusTranslator.CreateErrorResponse(HttpStatusCode.InternalServerError.ToString(),
-                    "There was an internal server error. Please try again later.");
-            }
 
             return response;
         }

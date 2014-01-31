@@ -30,7 +30,7 @@ namespace Shell
                 .Add<AddUserItemRequest>("/user/{OwnerId}/items/add/", "GET,POST")
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
-                .Add<BorrowItemRequest>("borrow/{OwnershipId}/{RequestorId}/")
+                .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
                 ;
         }
     }
