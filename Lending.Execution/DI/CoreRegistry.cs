@@ -22,7 +22,7 @@ namespace Lending.Execution.DI
 
             var config = Fluently.Configure()
                 .Database(PostgreSQLConfiguration.PostgreSQL82
-                    .ConnectionString(c => c.FromConnectionStringWithKey("lender_db")))
+                    .ConnectionString(c => c.FromAppSetting("lender_db")))
                 .CurrentSessionContext<ThreadStaticSessionContext>()
                 .Mappings(m =>
                     m.FluentMappings

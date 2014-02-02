@@ -11,7 +11,7 @@ namespace Lending.Execution.WebServices
     public interface IWebserviceBase<TRequest, TResponse>
     { }
 
-    [Authenticate]
+    //[Authenticate]
     public class WebserviceBase<TRequest, TResponse> : Service, IWebserviceBase<TRequest, TResponse>
     {
         private readonly static ILog Log = LogManager.GetLogger(typeof(WebserviceBase<TRequest, TResponse>).FullName);

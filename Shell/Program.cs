@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lending.Core;
 using Lending.Core.AddUser;
+using Lending.Execution.Persistence;
 using Lending.Execution.WebServices;
 //using Nancy.Hosting.Self;
 using NHibernate.Cfg;
@@ -35,8 +36,7 @@ namespace Shell
             ObjectFactory.AssertConfigurationIsValid();
             string blah = ObjectFactory.WhatDoIHave();
 
-            new SchemaUpdate(ObjectFactory.GetInstance<Configuration>())
-                .Execute(true, true);
+            SchemaUpdater.UpdateSchema();
 
             //using (var host = new NancyHost(new Uri("http://localhost:8080")))
             //{

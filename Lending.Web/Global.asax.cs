@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Lending.Execution.Persistence;
 using Lending.Web.App_Start;
 using Lending.Web.DependencyResolution;
 using StructureMap;
@@ -27,8 +28,6 @@ namespace Lending.Web
             //WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-
-
         }
     }
 }
