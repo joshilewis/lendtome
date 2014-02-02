@@ -4,12 +4,15 @@ using Lending.Core;
 using Lending.Core.AddItem;
 using Lending.Core.Model;
 using Lending.Core.Model.Maps;
+using Lending.Execution.Auth;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
 //using Nancy;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
+using ServiceStack.Authentication.NHibernate;
+using ServiceStack.ServiceInterface.Auth;
 using StructureMap.Configuration.DSL;
 using Request = Lending.Core.Request;
 
@@ -26,7 +29,8 @@ namespace Lending.Execution.DI
                 .CurrentSessionContext<ThreadStaticSessionContext>()
                 .Mappings(m =>
                     m.FluentMappings
-                        .AddFromAssemblyOf<UserMap>())
+                        .AddFromAssemblyOf<UserMap>()
+                        .AddFromAssemblyOf<UserAuthPersistenceDto>())
                 .BuildConfiguration()
                 ;
 
@@ -63,6 +67,20 @@ namespace Lending.Execution.DI
                 .Use<AddItemRequestHandler<Organisation>>()
                 ;
 
+            For<IUserAuthRepository>()
+                .AlwaysUnique()
+                .Use<NHibernateUserAuthRepository>()
+                ;
+
+            For<IAuthProvider>()
+                .AlwaysUnique()
+                .Use<UnitOfWorkAuthProvider>()
+                ;
+
+            For<AuthService>()
+                .AlwaysUnique()
+                .Use<UnitOfWorkAuthService>()
+                ;
         }
 
     }

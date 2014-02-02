@@ -8,7 +8,9 @@ using Lending.Core.AddItem;
 using Lending.Core.AddUser;
 using Lending.Core.BorrowItem;
 using Lending.Core.Connect;
+using Lending.Execution.Auth;
 using Lending.Execution.DI;
+using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
 using ServiceStack.Authentication.OAuth2;
 using ServiceStack.Authentication.OpenId;
@@ -64,10 +66,6 @@ namespace Lending.Web.App_Start
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
                 ;
 
-	        //Uncomment to change the default ServiceStack configuration
-	        //SetConfig(new EndpointHostConfig {
-	        //});
-
 	        //Enable Authentication
 	        ConfigureAuth(container);
 
@@ -78,30 +76,22 @@ namespace Lending.Web.App_Start
             var appSettings = new AppSettings();
 
             //Default route: /auth/{provider}
-            Plugins.Add(new AuthFeature(
+            Plugins.Add( new AuthFeature(
                 () => new AuthUserSession(), //Use your own typed Custom UserSession type
                 new IAuthProvider[]
                 {
-                    //new GoogleOpenIdOAuthProvider(appSettings), //Sign-in with Google OpenId
+                    new GoogleOpenIdOAuthProvider(appSettings), //Sign-in with Google OpenId
                     //new YahooOpenIdOAuthProvider(appSettings), //Sign-in with Yahoo OpenId
                     //new OpenIdOAuthProvider(appSettings), //Sign-in with Custom OpenId
                     //new GoogleOAuth2Provider(appSettings), //Sign-in with Google OAuth2 Provider
                     //new LinkedInOAuth2Provider(appSettings), //Sign-in with LinkedIn OAuth2 Provider
+                    container.Adapter.Resolve<IAuthProvider>(),
+
                 }));
 
             //Default route: /register
             //Plugins.Add(new RegistrationFeature()); 
 
-            ////Requires ConnectionString configured in Web.Config
-            //var connectionString = ConfigurationManager.ConnectionStrings["AppDb"].ConnectionString;
-            //container.Register<IDbConnectionFactory>(c =>
-            //    new OrmLiteConnectionFactory(connectionString, SqlServerDialect.Provider));
-
-            //container.Register<IUserAuthRepository>(c =>
-            //    new OrmLiteAuthRepository(c.Resolve<IDbConnectionFactory>()));
-
-            //var authRepo = (OrmLiteAuthRepository)container.Resolve<IUserAuthRepository>();
-            //authRepo.CreateMissingTables();
         }
 
         public static void Start()
