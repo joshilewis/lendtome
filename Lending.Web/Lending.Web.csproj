@@ -190,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\test.pubxml" />
+    <Content Include="Views\_LayoutPage1.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
