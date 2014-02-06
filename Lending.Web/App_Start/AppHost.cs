@@ -79,16 +79,8 @@ namespace Lending.Web.App_Start
                 () => new AuthUserSession(), //Use your own typed Custom UserSession type
                 new IAuthProvider[]
                 {
-                    new GoogleOpenIdOAuthProvider(appSettings)
-                    {
-                        RedirectUrl = "http://localhost:61414/api/authed",
-                        CallbackUrl = "http://localhost:61414/api/auth/googleopenid",
-                    }, //Sign-in with Google OpenId
-                    new YahooOpenIdOAuthProvider(appSettings)
-                    {
-                        RedirectUrl = "http://localhost:61414/api/authed",
-                        CallbackUrl = "http://localhost:61414/api/auth/googleopenid",
-                    }, //Sign-in with Yahoo OpenId
+                    new GoogleOpenIdOAuthProvider(appSettings), //Sign-in with Google OpenId
+                    new YahooOpenIdOAuthProvider(appSettings), //Sign-in with Yahoo OpenId
                     //new OpenIdOAuthProvider(appSettings), //Sign-in with Custom OpenId
                     //new GoogleOAuth2Provider(appSettings), //Sign-in with Google OAuth2 Provider
                     //new LinkedInOAuth2Provider(appSettings), //Sign-in with LinkedIn OAuth2 Provider
