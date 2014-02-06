@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Core;
-using Lending.Core.AddUser;
 using Lending.Core.Model;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -29,19 +28,6 @@ namespace Tests
         }
 
         
-        public static bool ShouldEqual(this AddUserRequest actual, AddUserRequest expected)
-        {
-            Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
-            Assert.That(actual.EmailAddress, Is.EqualTo(expected.EmailAddress));
-
-            return true;
-        }
-
-        public static AddUserRequest MatchArg(this AddUserRequest expected)
-        {
-            return Arg<AddUserRequest>.Matches(x => x.ShouldEqual(expected));
-        }
-
         public static bool ShouldEqual(this Guid actual, Guid expected)
         {
             Assert.That(actual, Is.EqualTo(expected));

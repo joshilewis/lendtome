@@ -3,7 +3,7 @@ using FluentNHibernate.Mapping;
 
 namespace Lending.Core.Model.Maps
 {
-    public class OwnershipMap : BaseMap<Ownership>
+    public class OwnershipMap : ClassMap<Ownership>
     {
         public OwnershipMap()
         {
@@ -26,11 +26,10 @@ namespace Lending.Core.Model.Maps
         public OwnershipMap()
         {
             string schema = ConfigurationManager.AppSettings["lender_db_schema"];
-            Schema(schema);
 
             KeyColumn("OwnershipId");
 
-            Table(TableName);
+            //Table(TableName.ToLower());
 
             References(x => x.Owner)
                 .Column(OwnerTypeColumnName)

@@ -85,6 +85,7 @@
       <HintPath>..\packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -94,10 +95,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddItem\AddItemRequestHandlerTests.cs" />
-    <Compile Include="AddUser\AddUserRequestHandlerTests.cs" />
     <Compile Include="BorrowItem\BorrowItemRequestHandlerTests.cs" />
     <Compile Include="Connect\ConnectRequestHandlerTests.cs" />
     <Compile Include="DatabaseFixtureBase.cs" />
+    <Compile Include="DefaultTestData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestEqualityHelpers.cs" />
   </ItemGroup>
@@ -105,6 +106,10 @@
     <ProjectReference Include="..\Lending.Core\Lending.Core.csproj">
       <Project>{4fe3afd5-ff4c-4fa6-990a-c7f9cce9441f}</Project>
       <Name>Lending.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lending.Execution\Lending.Execution.csproj">
+      <Project>{488340DB-6745-4390-BB41-9D5F81A2005D}</Project>
+      <Name>Lending.Execution</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

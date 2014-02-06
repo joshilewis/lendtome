@@ -2,6 +2,6 @@
 {
     public abstract class RequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
     {
-        public abstract TResponse HandleRequest(TRequest request);
+        public abstract TResponse HandleRequest(TRequest userAuthIdString);
     }
 }

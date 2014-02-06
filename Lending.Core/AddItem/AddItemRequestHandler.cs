@@ -17,17 +17,17 @@ namespace Lending.Core.AddItem
 
         protected AddItemRequestHandler() { }
 
-        public virtual BaseResponse HandleRequest(AddItemRequest<T> request)
+        public virtual BaseResponse HandleRequest(AddItemRequest<T> userAuthIdString)
         {
-            Item item = GetItem(request);
+            Item item = GetItem(userAuthIdString);
 
-            if (item != null && CheckIfItemAlreadyOwned<T>(item.Id, request.OwnerId))
+            if (item != null && CheckIfItemAlreadyOwned<T>(item.Id, userAuthIdString.OwnerId))
                 return new BaseResponse(OwnershipAlreadyExists);
 
             if (item == null)
-                item = CreateItem(request);
+                item = CreateItem(userAuthIdString);
 
-            T owner = GetOwner(request);
+            T owner = GetOwner(userAuthIdString);
 
             var ownership = new Ownership<T>(item, owner);
 

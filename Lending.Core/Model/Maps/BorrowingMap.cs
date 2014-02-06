@@ -1,6 +1,8 @@
-﻿namespace Lending.Core.Model.Maps
+﻿using FluentNHibernate.Mapping;
+
+namespace Lending.Core.Model.Maps
 {
-    public class BorrowingMap : BaseMap<Borrowing>
+    public class BorrowingMap : ClassMap<Borrowing>
     {
         public BorrowingMap()
         {

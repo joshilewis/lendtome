@@ -15,7 +15,7 @@ namespace Tests.AddItem
         [Test]
         public void Test_UserOwner_ItemExists_Success()
         {
-            var user = new User("username", "emailAddress");
+            var user = DefaultTestData.ServiceStackUser1;
             var item = new Item("Title", "Creator", "Edition");
             SaveEntities(user, item);
 
@@ -91,7 +91,7 @@ namespace Tests.AddItem
         [Test]
         public void Test_UserOwner_NewItem_Success()
         {
-            var user = new User("username", "emailAddress");
+            var user = DefaultTestData.ServiceStackUser1;
             var expectedItem = new Item("Title", "Creator", "Edition");
             SaveEntities(user);
 
@@ -139,7 +139,7 @@ namespace Tests.AddItem
         [Test]
         public void Test_UserOwner_AlreadyOwned()
         {
-            var user = new User("username", "emailAddress");
+            var user = DefaultTestData.ServiceStackUser1;
             var item = new Item("Title", "Creator", "Edition");
             var expectedOwnership = new Ownership<User>(item, user);
             SaveEntities(user, item, expectedOwnership);

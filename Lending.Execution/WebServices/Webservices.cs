@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Lending.Core;
 using Lending.Core.AddItem;
-using Lending.Core.AddUser;
 using Lending.Core.BorrowItem;
 using Lending.Core.Connect;
 using Lending.Core.Model;
@@ -13,15 +12,6 @@ using Lending.Execution.UnitOfWork;
 
 namespace Lending.Execution.WebServices
 {
-    public class AddUserWebservice : WebserviceBase<AddUserRequest, BaseResponse>, IWebserviceBase<AddUserRequest, BaseResponse>
-    {
-        public AddUserWebservice(IUnitOfWork unitOfWork,
-            IRequestHandler<AddUserRequest, BaseResponse> requestHandler)
-            : base(unitOfWork, requestHandler)
-        { }
-
-    }
-
     public class AddUserItemWebservice : WebserviceBase<AddUserItemRequest, BaseResponse>, IWebserviceBase<AddUserItemRequest, BaseResponse>
     {
         public AddUserItemWebservice(IUnitOfWork unitOfWork,

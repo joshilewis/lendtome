@@ -1,5 +1,7 @@
-﻿using FluentNHibernate.Cfg;
+﻿using System.Configuration;
+using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using FluentNHibernate.Conventions.Helpers;
 using Lending.Core;
 using Lending.Core.AddItem;
 using Lending.Core.Model;
@@ -9,11 +11,11 @@ using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
 //using Nancy;
 using NHibernate;
-using NHibernate.Cfg;
 using NHibernate.Context;
 using ServiceStack.Authentication.NHibernate;
 using ServiceStack.ServiceInterface.Auth;
 using StructureMap.Configuration.DSL;
+using Configuration = NHibernate.Cfg.Configuration;
 using Request = Lending.Core.Request;
 
 namespace Lending.Execution.DI
@@ -25,12 +27,16 @@ namespace Lending.Execution.DI
 
             var config = Fluently.Configure()
                 .Database(PostgreSQLConfiguration.PostgreSQL82
-                    .ConnectionString(c => c.FromAppSetting("lender_db")))
+                    .ConnectionString(c => c.FromAppSetting("lender_db"))
+                    .DefaultSchema(ConfigurationManager.AppSettings["lender_db_schema"])
+                )
                 .CurrentSessionContext<ThreadStaticSessionContext>()
                 .Mappings(m =>
                     m.FluentMappings
                         .AddFromAssemblyOf<UserMap>()
-                        .AddFromAssemblyOf<UserAuthPersistenceDto>())
+                        .AddFromAssemblyOf<UserAuthPersistenceDto>()
+                        .AddFromAssemblyOf<ServiceStackUser>()
+                )
                 .BuildConfiguration()
                 ;
 
@@ -56,7 +62,8 @@ namespace Lending.Execution.DI
             Scan(scanner =>
             {
                 scanner.AssemblyContainingType<Request>();
-                scanner.ConnectImplementationsToTypesClosing(typeof (IRequestHandler<,>));
+                scanner.AssemblyContainingType<ServiceStackUser>();
+                scanner.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
             });
 
             For<IRequestHandler<AddUserItemRequest, BaseResponse>>()

@@ -15,15 +15,15 @@ namespace Lending.Core.BorrowItem
 
         protected BorrowItemRequestHandler() { }
 
-        public virtual BaseResponse HandleRequest(BorrowItemRequest request)
+        public virtual BaseResponse HandleRequest(BorrowItemRequest userAuthIdString)
         {
             ISession session = getSession();
             User requestor = session
-                .Get<User>(request.RequestorId)
+                .Get<User>(userAuthIdString.RequestorId)
                 ;
 
             Ownership ownership = session
-                .Get<Ownership>(request.OwnershipId)
+                .Get<Ownership>(userAuthIdString.OwnershipId)
                 ;
 
             var borrowing = new Borrowing(requestor, ownership);

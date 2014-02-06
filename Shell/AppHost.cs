@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Lending.Core;
 using Lending.Core.AddItem;
-using Lending.Core.AddUser;
 using Lending.Core.BorrowItem;
 using Lending.Core.Connect;
 using Lending.Core.Model;
@@ -44,7 +43,6 @@ namespace Shell
                 }));
 
             Routes
-                .Add<AddUserRequest>("/user/add")
                 .Add<AddUserItemRequest>("/user/{OwnerId}/items/add/", "GET,POST")
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")

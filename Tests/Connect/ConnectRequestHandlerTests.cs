@@ -13,8 +13,8 @@ namespace Tests.Connect
         public void Test_Success()
         {
             //Arrange
-            var fromUser = new User("from", "fromEmail");
-            var toUser = new User("to", "toEmail");
+            var fromUser = DefaultTestData.ServiceStackUser1; ;
+            var toUser = DefaultTestData.ServiceStackUser2;
 
             SaveEntities(fromUser, toUser);
 
@@ -48,8 +48,8 @@ namespace Tests.Connect
         public void Test_AlreadyConnected()
         {
             //Arrange
-            var fromUser = new User("from", "fromEmail");
-            var toUser = new User("to", "toEmail");
+            var fromUser = DefaultTestData.ServiceStackUser1;
+            var toUser = DefaultTestData.ServiceStackUser2;
             var existingConnection = new Connection(fromUser, toUser);
             
             SaveEntities(fromUser, toUser, existingConnection);
@@ -81,9 +81,9 @@ namespace Tests.Connect
         public void Test_SuccessWithExistingOtherConnection()
         {
             //Arrange
-            var fromUser = new User("from", "fromEmail");
-            var toUser = new User("to", "toEmail");
-            var otherUser = new User("other", "otherEmail");
+            var fromUser = DefaultTestData.ServiceStackUser1;
+            var toUser = DefaultTestData.ServiceStackUser2;
+            var otherUser = DefaultTestData.ServiceStackUser3;
             var existingConnection = new Connection(otherUser, toUser);
 
             SaveEntities(fromUser, toUser, otherUser, existingConnection);

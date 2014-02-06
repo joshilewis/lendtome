@@ -1,6 +1,8 @@
-﻿namespace Lending.Core.Model.Maps
+﻿using FluentNHibernate.Mapping;
+
+namespace Lending.Core.Model.Maps
 {
-    public class OrganisationMap : BaseMap<Organisation>
+    public class OrganisationMap : ClassMap<Organisation>
     {
         public OrganisationMap()
         {

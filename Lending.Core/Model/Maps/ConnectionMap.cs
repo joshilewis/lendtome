@@ -1,6 +1,8 @@
-﻿namespace Lending.Core.Model.Maps
+﻿using FluentNHibernate.Mapping;
+
+namespace Lending.Core.Model.Maps
 {
-    public class ConnectionMap : BaseMap<Connection>
+    public class ConnectionMap : ClassMap<Connection>
     {
         public ConnectionMap()
         {

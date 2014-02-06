@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using Lending.Core;
 using Lending.Core.AddItem;
-using Lending.Core.AddUser;
 using Lending.Core.BorrowItem;
 using Lending.Core.Connect;
 using Lending.Execution.Auth;
@@ -59,11 +58,11 @@ namespace Lending.Web.App_Start
 
 	        //Configure User Defined REST Paths
 	        Routes
-                .Add<AddUserRequest>("/user/add")
                 .Add<AddUserItemRequest>("/user/{OwnerId}/items/add/", "GET,POST")
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
+                //.Add(typeof(object), "/authed/", "GET,POST")
                 ;
 
 	        //Enable Authentication
@@ -80,8 +79,16 @@ namespace Lending.Web.App_Start
                 () => new AuthUserSession(), //Use your own typed Custom UserSession type
                 new IAuthProvider[]
                 {
-                    new GoogleOpenIdOAuthProvider(appSettings), //Sign-in with Google OpenId
-                    //new YahooOpenIdOAuthProvider(appSettings), //Sign-in with Yahoo OpenId
+                    new GoogleOpenIdOAuthProvider(appSettings)
+                    {
+                        RedirectUrl = "http://localhost:61414/api/authed",
+                        CallbackUrl = "http://localhost:61414/api/auth/googleopenid",
+                    }, //Sign-in with Google OpenId
+                    new YahooOpenIdOAuthProvider(appSettings)
+                    {
+                        RedirectUrl = "http://localhost:61414/api/authed",
+                        CallbackUrl = "http://localhost:61414/api/auth/googleopenid",
+                    }, //Sign-in with Yahoo OpenId
                     //new OpenIdOAuthProvider(appSettings), //Sign-in with Custom OpenId
                     //new GoogleOAuth2Provider(appSettings), //Sign-in with Google OAuth2 Provider
                     //new LinkedInOAuth2Provider(appSettings), //Sign-in with LinkedIn OAuth2 Provider

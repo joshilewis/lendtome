@@ -1,6 +1,8 @@
-﻿namespace Lending.Core.Model.Maps
+﻿using FluentNHibernate.Mapping;
+
+namespace Lending.Core.Model.Maps
 {
-    public class ItemMapcs : BaseMap<Item>
+    public class ItemMapcs : ClassMap<Item>
     {
         public ItemMapcs()
         {

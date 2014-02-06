@@ -16,8 +16,8 @@ namespace Tests.BorrowItem
         [Test]
         public void Test_Success()
         {
-            var requestor = new User("requestor", "requestor@email.org");
-            var owner = new User("owner", "owner@example.org");
+            var requestor = DefaultTestData.ServiceStackUser1;
+            var owner = DefaultTestData.ServiceStackUser2;
             var item = new Item("title", "creator", "edition");
             var ownership = new Ownership<User>(item, owner);
 

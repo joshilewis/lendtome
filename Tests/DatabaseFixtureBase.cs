@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using FluentNHibernate.Conventions.Helpers;
 using Lending.Core.Model.Maps;
+using Lending.Execution.Auth;
+using Lending.Execution.Persistence;
 using NCrunch.Framework;
 using NHibernate;
-using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using NUnit.Framework;
 using ServiceStack.Authentication.NHibernate;
+using Configuration = NHibernate.Cfg.Configuration;
 
 namespace Tests
 {
@@ -29,11 +33,15 @@ namespace Tests
             //Set up database
             Configuration = Fluently.Configure()
                 .Database(PostgreSQLConfiguration.PostgreSQL82
-                    .ConnectionString(c => c.FromConnectionStringWithKey("lender_db")))
+                    .ConnectionString(c => c.FromConnectionStringWithKey("lender_db"))
+                    .DefaultSchema(ConfigurationManager.AppSettings["lender_db_schema"])
+                    )
                 .Mappings(m =>
                     m.FluentMappings
                         .AddFromAssemblyOf<UserMap>()
-                        .AddFromAssemblyOf<UserAuthPersistenceDto>())
+                        .AddFromAssemblyOf<ServiceStackUser>()
+                        .AddFromAssemblyOf<UserAuthPersistenceDto>()
+                )
                 .BuildConfiguration();
 
             SessionFactory = Configuration.BuildSessionFactory();

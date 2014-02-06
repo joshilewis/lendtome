@@ -55,9 +55,6 @@
     <Compile Include="AddItem\AddItemRequestHandler.cs" />
     <Compile Include="AddItem\AddOrganisationItemRequest.cs" />
     <Compile Include="AddItem\AddUserItemRequest.cs" />
-    <Compile Include="AddUser\AddUserRequest.cs" />
-    <Compile Include="AddUser\AddUserRequestHandler.cs" />
-    <Compile Include="AddUser\UserExistsQuery.cs" />
     <Compile Include="BorrowItem\BorrowItemRequest.cs" />
     <Compile Include="BorrowItem\BorrowItemRequestHandler.cs" />
     <Compile Include="Model\IOwner.cs" />
@@ -73,7 +70,6 @@
     <Compile Include="Model\IBorrower.cs" />
     <Compile Include="Model\Item.cs" />
     <Compile Include="Model\Borrowing.cs" />
-    <Compile Include="Model\Maps\BaseMap.cs" />
     <Compile Include="Model\Maps\ConnectionMap.cs" />
     <Compile Include="Model\Maps\UserMap.cs" />
     <Compile Include="Model\Organisation.cs" />

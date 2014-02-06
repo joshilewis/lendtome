@@ -11,9 +11,14 @@ namespace Lending.Web.Controllers
         //
         // GET: /Home/
 
-        public ActionResult Index()
-        {
+        public ActionResult Index(dynamic request)
+            {
             return View();
+        }
+
+        public ActionResult Blah(dynamic request)
+        {
+            return null;
         }
 
     }
