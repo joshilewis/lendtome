@@ -8,7 +8,9 @@
     </PropertyGroup>
 
     <Target Name="Publish">
-        <MSBuild Projects="$(ProjectFile)"
+ <RemoveDir Directories="$(webDeployFolder)"
+       ContinueOnError="true" />
+	   <MSBuild Projects="$(ProjectFile)"
                  Properties="Configuration=$(BuildConfig);WebProjectOutputDir=$(PublishDir);OutDir=$(TempDir)\;BuildingProject=true"
                  Targets="ResolveReferences;_CopyWebApplication" />
     </Target>
