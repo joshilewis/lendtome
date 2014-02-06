@@ -11,6 +11,7 @@ using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using NUnit.Framework;
+using ServiceStack.Authentication.NHibernate;
 
 namespace Tests
 {
@@ -31,7 +32,8 @@ namespace Tests
                     .ConnectionString(c => c.FromConnectionStringWithKey("lender_db")))
                 .Mappings(m =>
                     m.FluentMappings
-                        .AddFromAssemblyOf<UserMap>())
+                        .AddFromAssemblyOf<UserMap>()
+                        .AddFromAssemblyOf<UserAuthPersistenceDto>())
                 .BuildConfiguration();
 
             SessionFactory = Configuration.BuildSessionFactory();
