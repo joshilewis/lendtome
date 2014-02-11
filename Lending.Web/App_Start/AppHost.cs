@@ -67,7 +67,7 @@ namespace Lending.Web.App_Start
 
 	        //Enable Authentication
 	        ConfigureAuth(container);
-
+            Plugins.Add(new SessionFeature());
 	    }
 
         private void ConfigureAuth(Funq.Container container)

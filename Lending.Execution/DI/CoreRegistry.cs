@@ -10,12 +10,15 @@ using Lending.Execution.Auth;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
 //using Nancy;
-using NHibernate;
 using NHibernate.Context;
 using ServiceStack.Authentication.NHibernate;
+using ServiceStack.CacheAccess;
+using ServiceStack.CacheAccess.Providers;
 using ServiceStack.ServiceInterface.Auth;
 using StructureMap.Configuration.DSL;
 using Configuration = NHibernate.Cfg.Configuration;
+using ISession = NHibernate.ISession;
+using ISessionFactory = NHibernate.ISessionFactory;
 using Request = Lending.Core.Request;
 
 namespace Lending.Execution.DI
@@ -87,6 +90,11 @@ namespace Lending.Execution.DI
             For<AuthService>()
                 .AlwaysUnique()
                 .Use<UnitOfWorkAuthService>()
+                ;
+
+            For<ICacheClient>()
+                .Singleton()
+                .Use<MemoryCacheClient>()
                 ;
         }
 
