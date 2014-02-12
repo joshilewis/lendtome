@@ -76,10 +76,13 @@ namespace Lending.Web.App_Start
             var appSettings = new AppSettings();
 
             //Default route: /auth/{provider}
-            Plugins.Add( new AuthFeature(
+            Plugins.Add(new AuthFeature(
                 () => new AuthUserSession(), //Use your own typed Custom UserSession type
                 new IAuthProvider[]
                 {
+                    new GoogleOAuth2Provider(appSettings),
+                    new FacebookAuthProvider(appSettings),
+                    new TwitterAuthProvider(appSettings),
                     new GoogleOpenIdOAuthProvider(appSettings), //Sign-in with Google OpenId
                     new YahooOpenIdOAuthProvider(appSettings), //Sign-in with Yahoo OpenId
                     //new OpenIdOAuthProvider(appSettings), //Sign-in with Custom OpenId
@@ -87,7 +90,8 @@ namespace Lending.Web.App_Start
                     //new LinkedInOAuth2Provider(appSettings), //Sign-in with LinkedIn OAuth2 Provider
                     container.Adapter.Resolve<IAuthProvider>(),
 
-                }, "/api/auth"));
+                }, 
+                "/api/auth"));
 
             //Default route: /register
             //Plugins.Add(new RegistrationFeature()); 
