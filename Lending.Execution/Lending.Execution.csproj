@@ -33,6 +33,9 @@
     <Reference Include="DotNetOpenAuth">
       <HintPath>..\packages\DotNetOpenAuth.Ultimate.4.3.4.13329\lib\net45-full\DotNetOpenAuth.dll</HintPath>
     </Reference>
+    <Reference Include="Enyim.Caching">
+      <HintPath>..\packages\EnyimMemcached.2.12\lib\net35\Enyim.Caching.dll</HintPath>
+    </Reference>
     <Reference Include="FluentNHibernate, Version=1.4.0.0, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
@@ -61,6 +64,9 @@
     </Reference>
     <Reference Include="ServiceStack.Authentication.OpenId">
       <HintPath>..\packages\ServiceStack.Authentication.OpenId.3.9.71\lib\net35\ServiceStack.Authentication.OpenId.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.CacheAccess.Memcached">
+      <HintPath>..\packages\ServiceStack.Caching.Memcached.3.9.71\lib\net35\ServiceStack.CacheAccess.Memcached.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Common, Version=3.8.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -126,6 +132,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

@@ -13,6 +13,7 @@ using Lending.Execution.WebServices;
 using NHibernate.Context;
 using ServiceStack.Authentication.NHibernate;
 using ServiceStack.CacheAccess;
+using ServiceStack.CacheAccess.Memcached;
 using ServiceStack.CacheAccess.Providers;
 using ServiceStack.ServiceInterface.Auth;
 using StructureMap.Configuration.DSL;
@@ -71,11 +72,11 @@ namespace Lending.Execution.DI
                 scanner.ConnectImplementationsToTypesClosing(typeof(BaseAuthenticatedRequestHandler<,>));
             });
 
-            For<IRequestHandler<AddUserItemRequest, BaseResponse>>()
-                .Use<AddItemRequestHandler<User>>()
+            For<IAuthenticatedRequestHandler<AddUserItemRequest, BaseResponse>>()
+                .Use<AddUserItemRequestHandler>()
                 ;
 
-            For<IRequestHandler<AddOrganisationItemRequest, BaseResponse>>()
+            For<IAuthenticatedRequestHandler<AddOrganisationItemRequest, BaseResponse>>()
                 .Use<AddItemRequestHandler<Organisation>>()
                 ;
 
@@ -97,6 +98,7 @@ namespace Lending.Execution.DI
             For<ICacheClient>()
                 .Singleton()
                 .Use<MemoryCacheClient>()
+                //.Use<MemcachedClientCache>()
                 ;
 
         }

@@ -8,6 +8,7 @@ using System.Web.Routing;
 using Lending.Execution.Persistence;
 using Lending.Web.App_Start;
 using Lending.Web.DependencyResolution;
+using log4net.Config;
 using StructureMap;
 
 namespace Lending.Web
@@ -18,8 +19,10 @@ namespace Lending.Web
     {
         protected void Application_Start()
         {
+            XmlConfigurator.Configure();
             var container = (IContainer) IoC.Initialize();
             DependencyResolver.SetResolver(new SmDependencyResolver(container));
+            ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
 
             AppHost.Start();
             

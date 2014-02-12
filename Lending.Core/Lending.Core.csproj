@@ -56,6 +56,7 @@
     <Compile Include="AddItem\AddItemRequestHandler.cs" />
     <Compile Include="AddItem\AddOrganisationItemRequest.cs" />
     <Compile Include="AddItem\AddUserItemRequest.cs" />
+    <Compile Include="AddItem\AddUserItemRequestHandler.cs" />
     <Compile Include="BaseAuthenticatedRequestHandler.cs" />
     <Compile Include="BorrowItem\BorrowItemRequest.cs" />
     <Compile Include="BorrowItem\BorrowItemRequestHandler.cs" />

@@ -34,7 +34,7 @@ namespace Tests.AddItem
             var expectedOwnership = new Ownership<User>(item, user);
 
             var sut = new AddItemRequestHandler<User>(() => Session);
-            BaseResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request, user.Id);
 
             actualResponse.ShouldEqual(expectedResponse);
 
@@ -53,9 +53,10 @@ namespace Tests.AddItem
         [Test]
         public void Test_OrgOwner_ItemExists_Success()
         {
+            var user = DefaultTestData.ServiceStackUser1;
             var organisation = new Organisation("organisation");
             var item = new Item("Title", "Creator", "Edition");
-            SaveEntities(organisation, item);
+            SaveEntities(user, organisation, item);
 
             CommitTransactionAndOpenNew();
 
@@ -72,7 +73,7 @@ namespace Tests.AddItem
             var expectedOwnership = new Ownership<Organisation>(item, organisation);
 
             var sut = new AddItemRequestHandler<Organisation>(() => Session);
-            BaseResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request, user.Id);
 
             actualResponse.ShouldEqual(expectedResponse);
 
@@ -110,7 +111,7 @@ namespace Tests.AddItem
             var expectedOwnership = new Ownership<User>(expectedItem, user);
 
             var sut = new AddItemRequestHandler<User>(() => Session);
-            BaseResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request, user.Id);
 
             actualResponse.ShouldEqual(expectedResponse);
 
@@ -157,7 +158,7 @@ namespace Tests.AddItem
             var expectedResponse = new BaseResponse(AddItemRequestHandler<User>.OwnershipAlreadyExists);
 
             var sut = new AddItemRequestHandler<User>(() => Session);
-            BaseResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request, user.Id);
 
             actualResponse.ShouldEqual(expectedResponse);
 

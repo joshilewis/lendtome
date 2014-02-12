@@ -14,19 +14,19 @@ using ServiceStack.ServiceInterface;
 
 namespace Lending.Execution.WebServices
 {
-    public class AddUserItemWebservice : WebserviceBase<AddUserItemRequest, BaseResponse>, IWebserviceBase<AddUserItemRequest, BaseResponse>
+    public class AddUserItemWebservice : AuthenticatedWebserviceBase<AddUserItemRequest, BaseResponse>, IWebserviceBase<AddUserItemRequest, BaseResponse>
     {
         public AddUserItemWebservice(IUnitOfWork unitOfWork,
-            IRequestHandler<AddUserItemRequest, BaseResponse> requestHandler)
+            IAuthenticatedRequestHandler<AddUserItemRequest, BaseResponse> requestHandler)
             : base(unitOfWork, requestHandler)
         { }
 
     }
 
-    public class AddOrgItemWebservice : WebserviceBase<AddOrganisationItemRequest, BaseResponse>, IWebserviceBase<AddOrganisationItemRequest, BaseResponse>
+    public class AddOrgItemWebservice : AuthenticatedWebserviceBase<AddOrganisationItemRequest, BaseResponse>, IWebserviceBase<AddOrganisationItemRequest, BaseResponse>
     {
         public AddOrgItemWebservice(IUnitOfWork unitOfWork,
-            IRequestHandler<AddOrganisationItemRequest, BaseResponse> requestHandler)
+            IAuthenticatedRequestHandler<AddOrganisationItemRequest, BaseResponse> requestHandler)
             : base(unitOfWork, requestHandler)
         { }
 
