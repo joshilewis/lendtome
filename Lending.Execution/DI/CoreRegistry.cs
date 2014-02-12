@@ -67,6 +67,8 @@ namespace Lending.Execution.DI
                 scanner.AssemblyContainingType<Request>();
                 scanner.AssemblyContainingType<ServiceStackUser>();
                 scanner.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedRequestHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(BaseAuthenticatedRequestHandler<,>));
             });
 
             For<IRequestHandler<AddUserItemRequest, BaseResponse>>()

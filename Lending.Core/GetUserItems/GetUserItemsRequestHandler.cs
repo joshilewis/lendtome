@@ -5,26 +5,20 @@ using NHibernate;
 
 namespace Lending.Core.GetUserItems
 {
-    public class GetUserItemsRequestHandler : IRequestHandler<GetUserItemsRequest, GetUserItemsRequestResponse>
+    public class GetUserItemsRequestHandler :  BaseAuthenticatedRequestHandler<GetUserItemsRequest, GetUserItemsRequestResponse>
     {
-        private readonly Func<ISession> getSession;
-
         public GetUserItemsRequestHandler(Func<ISession> sessionFunc)
-        {
-            this.getSession = sessionFunc;
-        }
+             :base(sessionFunc)
+        { }
 
         protected GetUserItemsRequestHandler() { }
 
-
-        public GetUserItemsRequestResponse HandleRequest(GetUserItemsRequest request)
+        public override GetUserItemsRequestResponse HandleRequest(GetUserItemsRequest request, int userId)
         {
-            ISession session = getSession();
-
-            Ownership[] ownerships = session
+            Ownership[] ownerships = Session
                 .QueryOver<Ownership<User>>()
                 .JoinQueryOver(x => x.Owner)
-                .Where(x => x.Id == request.UserId)
+                .Where(x => x.Id == userId)
                 .List<Ownership>()
                 .ToArray()
                 ;

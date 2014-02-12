@@ -59,8 +59,8 @@ namespace Lending.Web.App_Start
 
 	        //Configure User Defined REST Paths
 	        Routes
-                .Add<GetUserItemsRequest>("/user/{userid}/items/", "GET")
-                .Add<AddUserItemRequest>("/user/{OwnerId}/items/add/", "GET,POST")
+                .Add<GetUserItemsRequest>("/user/items/", "GET")
+                .Add<AddUserItemRequest>("/user/items/add/", "GET,POST")
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")

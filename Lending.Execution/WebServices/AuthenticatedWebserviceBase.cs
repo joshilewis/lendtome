@@ -8,31 +8,29 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Lending.Execution.WebServices
 {
-    public interface IWebserviceBase<TRequest, TResponse>
-    { }
-
-    //[Authenticate]
-    public class WebserviceBase<TRequest, TResponse> : Service, IWebserviceBase<TRequest, TResponse>
+    public class AuthenticatedWebserviceBase<TRequest, TResponse> : Service, IWebserviceBase<TRequest, TResponse>
     {
         private readonly static ILog Log = LogManager.GetLogger(typeof(WebserviceBase<TRequest, TResponse>).FullName);
 
         private readonly IUnitOfWork unitOfWork;
-        private readonly IRequestHandler<TRequest, TResponse> requestHandler;
+        private readonly IAuthenticatedRequestHandler<TRequest, TResponse> requestHandler;
 
-        public WebserviceBase(IUnitOfWork unitOfWork, 
-            IRequestHandler<TRequest, TResponse> requestHandler)
+        public AuthenticatedWebserviceBase(IUnitOfWork unitOfWork,
+            IAuthenticatedRequestHandler<TRequest, TResponse> requestHandler)
         {
             this.unitOfWork = unitOfWork;
             this.requestHandler = requestHandler;
         }
 
+        [Authenticate]
         public virtual object Any(TRequest request)
         {
             Log.InfoFormat("Received a request of type {0}", typeof(TRequest));
+            int userId = int.Parse(this.GetSession().Id);
             TResponse response = default(TResponse);
                 unitOfWork.DoInTransaction(() =>
                 {
-                    response = requestHandler.HandleRequest(request);
+                    response = requestHandler.HandleRequest(request, userId);
                 });
 
             return response;

@@ -115,6 +115,7 @@
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkHelpers.cs" />
+    <Compile Include="WebServices\AuthenticatedWebserviceBase.cs" />
     <Compile Include="WebServices\WebserviceBase.cs" />
     <Compile Include="WebServices\Webservices.cs" />
   </ItemGroup>
