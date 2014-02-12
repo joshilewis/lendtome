@@ -9,6 +9,7 @@ using Lending.Core.BorrowItem;
 using Lending.Core.Connect;
 using Lending.Execution.Auth;
 using Lending.Execution.DI;
+using Lending.Execution.GetUser;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
 using ServiceStack.Authentication.OAuth2;
@@ -62,6 +63,8 @@ namespace Lending.Web.App_Start
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
+                .Add<GetUserRequest>("/user/{userauthid}/", "GET")
+                .Add<Auth>("/login/")
                 //.Add(typeof(object), "/authed/", "GET,POST")
                 ;
 
@@ -86,7 +89,7 @@ namespace Lending.Web.App_Start
                     //new LinkedInOAuth2Provider(appSettings), //Sign-in with LinkedIn OAuth2 Provider
                     container.Adapter.Resolve<IAuthProvider>(),
 
-                }));
+                }, "/api/auth"));
 
             //Default route: /register
             //Plugins.Add(new RegistrationFeature()); 

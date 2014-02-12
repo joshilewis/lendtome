@@ -108,6 +108,9 @@
     <Compile Include="Auth\UnitOfWorkAuthService.cs" />
     <Compile Include="DI\CoreRegistry.cs" />
     <Compile Include="DI\StructureMapContainerAdapter.cs" />
+    <Compile Include="GetUser\GetUserRequest.cs" />
+    <Compile Include="GetUser\GetUserRequestHandler.cs" />
+    <Compile Include="GetUser\GetUserRequestResponse.cs" />
     <Compile Include="Persistence\SchemaUpdater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Auth\UnitOfWorkAuthProvider.cs" />

@@ -7,6 +7,7 @@ using Lending.Core.AddItem;
 using Lending.Core.Model;
 using Lending.Core.Model.Maps;
 using Lending.Execution.Auth;
+using Lending.Execution.GetUser;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
 //using Nancy;
@@ -96,6 +97,7 @@ namespace Lending.Execution.DI
                 .Singleton()
                 .Use<MemoryCacheClient>()
                 ;
+
         }
 
     }
