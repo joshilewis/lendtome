@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Lending.Execution.Persistence;
 using Lending.Web.App_Start;
 using Lending.Web.DependencyResolution;
 using log4net.Config;
+using ServiceStack.Logging;
 using StructureMap;
 
 namespace Lending.Web
@@ -20,7 +22,9 @@ namespace Lending.Web
         protected void Application_Start()
         {
             XmlConfigurator.Configure();
-            var container = (IContainer) IoC.Initialize();
+            LogManager.LogFactory = new ServiceStack.Logging.Log4Net.Log4NetFactory(true);
+
+            var container = (IContainer)IoC.Initialize();
             DependencyResolver.SetResolver(new SmDependencyResolver(container));
             ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
 

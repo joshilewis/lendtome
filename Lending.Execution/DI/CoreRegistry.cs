@@ -1,4 +1,8 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using Enyim.Caching;
+using Enyim.Caching.Configuration;
+using Enyim.Caching.Memcached;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
@@ -95,10 +99,12 @@ namespace Lending.Execution.DI
                 .Use<UnitOfWorkAuthService>()
                 ;
 
+            var cfg = ConfigurationManager.GetSection("enyim.com/memcached") as MemcachedClientSection;
+            var cache = new MemcachedClientCache(cfg);
+
             For<ICacheClient>()
                 .Singleton()
-                .Use<MemoryCacheClient>()
-                //.Use<MemcachedClientCache>()
+                .Use(cache)
                 ;
 
         }

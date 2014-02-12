@@ -47,7 +47,7 @@ namespace Lending.Web.App_Start
 		: AppHostBase
 	{		
 		public AppHost() //Tell ServiceStack the name and where to find your web services
-            : base("StarterTemplate ASP.NET Host", typeof(AppHost).Assembly, typeof(Request).Assembly, typeof(WebserviceBase<,>).Assembly) { }
+            : base("lend-to.me services host", typeof(AppHost).Assembly, typeof(Request).Assembly, typeof(WebserviceBase<,>).Assembly) { }
 
 	    public override void Configure(Funq.Container container)
 	    {
@@ -64,7 +64,6 @@ namespace Lending.Web.App_Start
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
-                //.Add(typeof(object), "/authed/", "GET,POST")
                 ;
 
 	        //Enable Authentication
