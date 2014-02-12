@@ -17,17 +17,17 @@ namespace Lending.Core.AddItem
 
         protected AddItemRequestHandler() { }
 
-        public virtual BaseResponse HandleRequest(AddItemRequest<T> userAuthIdString)
+        public virtual BaseResponse HandleRequest(AddItemRequest<T> request)
         {
-            Item item = GetItem(userAuthIdString);
+            Item item = GetItem(request);
 
-            if (item != null && CheckIfItemAlreadyOwned<T>(item.Id, userAuthIdString.OwnerId))
+            if (item != null && CheckIfItemAlreadyOwned<T>(item.Id, request.OwnerId))
                 return new BaseResponse(OwnershipAlreadyExists);
 
             if (item == null)
-                item = CreateItem(userAuthIdString);
+                item = CreateItem(request);
 
-            T owner = GetOwner(userAuthIdString);
+            T owner = GetOwner(request);
 
             var ownership = new Ownership<T>(item, owner);
 
@@ -36,7 +36,7 @@ namespace Lending.Core.AddItem
             return new BaseResponse();
         }
 
-        private bool CheckIfItemAlreadyOwned<T>(Guid itemId, Guid ownerId) where T : class, IOwner
+        private bool CheckIfItemAlreadyOwned<T>(Guid itemId, int ownerId) where T : class, IOwner
         {
             Ownership<T> ownershipAlias = null;
             Item itemAlis = null;

@@ -7,7 +7,7 @@ namespace Lending.Core.Model.Maps
         public UserMap()
         {
             Id(x => x.Id)
-                .GeneratedBy.GuidComb();
+                .GeneratedBy.Native();
 
         }
     }

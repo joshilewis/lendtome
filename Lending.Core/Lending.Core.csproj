@@ -44,6 +44,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,6 +58,9 @@
     <Compile Include="AddItem\AddUserItemRequest.cs" />
     <Compile Include="BorrowItem\BorrowItemRequest.cs" />
     <Compile Include="BorrowItem\BorrowItemRequestHandler.cs" />
+    <Compile Include="GetUserItems\GetUserItemsRequest.cs" />
+    <Compile Include="GetUserItems\GetUserItemsRequestHandler.cs" />
+    <Compile Include="GetUserItems\GetUserItemsRequestResponse.cs" />
     <Compile Include="Model\IOwner.cs" />
     <Compile Include="Model\Maps\BorrowingMap.cs" />
     <Compile Include="Model\Maps\ItemMapcs.cs" />

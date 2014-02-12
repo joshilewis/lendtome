@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Lending.Core.Model
 {
@@ -14,7 +15,7 @@ namespace Lending.Core.Model
             Item = item;
         }
 
-        public abstract Guid OwnerId { get; }
+        public abstract int OwnerId { get; }
 
         // override object.Equals
         public override bool Equals(object obj)
@@ -38,9 +39,10 @@ namespace Lending.Core.Model
 
     public class Ownership<T> : Ownership where T : IOwner
     {
+        [IgnoreDataMember]
         public virtual T Owner { get; protected set; }
 
-        public override Guid OwnerId
+        public override int OwnerId
         {
             get { return Owner.Id; }
         }

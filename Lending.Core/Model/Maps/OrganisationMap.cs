@@ -7,7 +7,7 @@ namespace Lending.Core.Model.Maps
         public OrganisationMap()
         {
             Id(x => x.Id)
-                .GeneratedBy.GuidComb();
+                .GeneratedBy.Native();
 
             Map(x => x.Name);
 

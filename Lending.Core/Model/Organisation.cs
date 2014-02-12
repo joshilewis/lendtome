@@ -5,7 +5,7 @@ namespace Lending.Core.Model
 {
     public class Organisation : IOwner
     {
-        public virtual Guid Id { get; protected set; }
+        public virtual int Id { get; protected set; }
         public virtual string Name { get; protected set; }
         public virtual ISet<User> Administrators { get; protected set; }
 

@@ -5,7 +5,7 @@ namespace Lending.Core.AddItem
 {
     public class AddOrganisationItemRequest : AddItemRequest<Organisation>
     {
-        public override Guid OwnerId { get; set; }
+        public override int OwnerId { get; set; }
 
     }
 }

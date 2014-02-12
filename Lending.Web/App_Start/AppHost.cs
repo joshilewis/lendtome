@@ -7,9 +7,9 @@ using Lending.Core;
 using Lending.Core.AddItem;
 using Lending.Core.BorrowItem;
 using Lending.Core.Connect;
+using Lending.Core.GetUserItems;
 using Lending.Execution.Auth;
 using Lending.Execution.DI;
-using Lending.Execution.GetUser;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
 using ServiceStack.Authentication.OAuth2;
@@ -59,12 +59,11 @@ namespace Lending.Web.App_Start
 
 	        //Configure User Defined REST Paths
 	        Routes
+                .Add<GetUserItemsRequest>("/user/{userid}/items/", "GET")
                 .Add<AddUserItemRequest>("/user/{OwnerId}/items/add/", "GET,POST")
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
-                .Add<GetUserRequest>("/user/{userauthid}/", "GET")
-                .Add<Auth>("/login/")
                 //.Add(typeof(object), "/authed/", "GET,POST")
                 ;
 

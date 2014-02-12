@@ -4,7 +4,7 @@ namespace Lending.Core.Model
 {
     public interface IBorrower
     {
-        Guid Id { get; }
+        int Id { get; }
         string UserName { get; }
     }
 }

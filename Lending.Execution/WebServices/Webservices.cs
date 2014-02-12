@@ -7,8 +7,8 @@ using Lending.Core;
 using Lending.Core.AddItem;
 using Lending.Core.BorrowItem;
 using Lending.Core.Connect;
+using Lending.Core.GetUserItems;
 using Lending.Core.Model;
-using Lending.Execution.GetUser;
 using Lending.Execution.UnitOfWork;
 using ServiceStack.ServiceInterface;
 
@@ -50,18 +50,13 @@ namespace Lending.Execution.WebServices
 
     }
 
-    public class GetUserWebservice : WebserviceBase<GetUserRequest, GetUserRequestResponse>, IWebserviceBase<GetUserRequest, GetUserRequestResponse>
+    public class GetUsersItemsWebservice : WebserviceBase<GetUserItemsRequest, GetUserItemsRequestResponse>, IWebserviceBase<GetUserItemsRequest, GetUserItemsRequestResponse>
     {
-        public GetUserWebservice(IUnitOfWork unitOfWork,
-            IRequestHandler<GetUserRequest, GetUserRequestResponse> requestHandler)
+        public GetUsersItemsWebservice(IUnitOfWork unitOfWork,
+            IRequestHandler<GetUserItemsRequest, GetUserItemsRequestResponse> requestHandler)
             : base(unitOfWork, requestHandler)
         { }
 
-        [Authenticate]
-        public override object Any(GetUserRequest request)
-        {
-            return base.Any(request);
-        }
     }
 
 }

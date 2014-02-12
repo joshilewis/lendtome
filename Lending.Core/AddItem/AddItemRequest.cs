@@ -8,6 +8,6 @@ namespace Lending.Core.AddItem
         public string Title { get; set; }
         public string Creator { get; set; }
         public string Edition { get; set; }
-        public abstract Guid OwnerId {get; set; }
+        public abstract int OwnerId {get; set; }
     }
 }

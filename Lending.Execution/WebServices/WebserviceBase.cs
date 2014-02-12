@@ -26,6 +26,7 @@ namespace Lending.Execution.WebServices
             this.requestHandler = requestHandler;
         }
 
+        [Authenticate]
         public virtual object Any(TRequest request)
         {
             Log.InfoFormat("Received a request of type {0}", typeof(TRequest));

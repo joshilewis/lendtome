@@ -4,7 +4,7 @@ namespace Lending.Core.Model
 {
     public abstract class User : IBorrower, IOwner
     {
-        public virtual Guid Id { get; protected set; }
+        public virtual int Id { get; protected set; }
         public abstract string UserName { get; }
         public abstract string EmailAddress { get; }
 

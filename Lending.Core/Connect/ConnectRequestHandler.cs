@@ -17,19 +17,19 @@ namespace Lending.Core.Connect
 
         protected ConnectRequestHandler() { }
 
-        public virtual BaseResponse HandleRequest(ConnectRequest userAuthIdString)
+        public virtual BaseResponse HandleRequest(ConnectRequest request)
         {
             ISession session = getSession();
 
-            if (ConnectionAlreadyExists(userAuthIdString))
+            if (ConnectionAlreadyExists(request))
                 return new BaseResponse(AlreadyConnected);
 
             User user1 = session
-                .Get<User>(userAuthIdString.FromUserId)
+                .Get<User>(request.FromUserId)
                 ;
 
             User user2 = session
-                .Get<User>(userAuthIdString.ToUserId)
+                .Get<User>(request.ToUserId)
                 ;
 
             var connection = new Connection(user1, user2);

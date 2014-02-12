@@ -21,9 +21,9 @@ namespace Lending.Execution.Auth
 
         protected NewUserRequestHandler() { }
 
-        public BaseResponse HandleRequest(string userAuthIdString)
+        public BaseResponse HandleRequest(string request)
         {
-            int userAuthId = int.Parse(userAuthIdString);
+            int userAuthId = int.Parse(request);
             ISession session = getSession();
 
             var user = session.QueryOver<ServiceStackUser>()
