@@ -64,8 +64,8 @@ namespace Lending.Web.App_Start
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
-                .Add<ItemRequest>("/item/{itemid}/", "GET")
-                .Add<ItemRequest>("/item/", "GET")
+                .Add<ItemRequest>("/items/{itemid}/", "GET")
+                .Add<ItemRequest>("/items/", "GET")
                 ;
 
 	        //Enable Authentication
