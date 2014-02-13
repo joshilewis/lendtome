@@ -1,6 +1,6 @@
 ﻿App.OwnershipListRoute = Ember.Route.extend({
     model: function () {
-        return this.store.find('item');
+        return this.store.find('item', 1);
     },
 });
 

@@ -1,6 +1,6 @@
 ﻿var attr = DS.attr;
 App.Item = DS.Model.extend({
-    id: attr('string'),
+    //id: attr('string'),
     title: attr('string'),
     creator: attr('string'),
     edition: attr('string'),

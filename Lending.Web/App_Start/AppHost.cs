@@ -64,6 +64,7 @@ namespace Lending.Web.App_Start
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
+                .Add<ItemRequest>("/item/{itemid}/", "GET")
                 .Add<ItemRequest>("/item/", "GET")
                 ;
 
@@ -81,14 +82,14 @@ namespace Lending.Web.App_Start
                 () => new AuthUserSession(), //Use your own typed Custom UserSession type
                 new IAuthProvider[]
                 {
-                    new GoogleOpenIdOAuthProvider(appSettings), 
-                    new LinkedInOAuth2Provider(appSettings), 
+                    new GoogleOpenIdOAuthProvider(appSettings) {RedirectUrl = "localhost:61414"},
+                    new LinkedInOAuth2Provider(appSettings),
                     new GoogleOAuth2Provider(appSettings),
                     new FacebookAuthProvider(appSettings),
                     new TwitterAuthProvider(appSettings),
                     container.Adapter.Resolve<IAuthProvider>(),
 
-                }, 
+                },
                 "/api/auth"));
 
             //Default route: /register
