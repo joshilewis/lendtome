@@ -64,6 +64,7 @@ namespace Lending.Web.App_Start
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
+                .Add<ItemRequest>("/item/", "GET")
                 ;
 
 	        //Enable Authentication
@@ -80,6 +81,7 @@ namespace Lending.Web.App_Start
                 () => new AuthUserSession(), //Use your own typed Custom UserSession type
                 new IAuthProvider[]
                 {
+                    new GoogleOpenIdOAuthProvider(appSettings), 
                     new LinkedInOAuth2Provider(appSettings), 
                     new GoogleOAuth2Provider(appSettings),
                     new FacebookAuthProvider(appSettings),

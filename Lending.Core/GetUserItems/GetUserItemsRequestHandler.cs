@@ -15,11 +15,11 @@ namespace Lending.Core.GetUserItems
 
         public override GetUserItemsRequestResponse HandleRequest(GetUserItemsRequest request, int userId)
         {
-            Ownership[] ownerships = Session
+            Ownership<User>[] ownerships = Session
                 .QueryOver<Ownership<User>>()
                 .JoinQueryOver(x => x.Owner)
                 .Where(x => x.Id == userId)
-                .List<Ownership>()
+                .List()
                 .ToArray()
                 ;
 

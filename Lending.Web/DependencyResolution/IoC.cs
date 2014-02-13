@@ -1,4 +1,5 @@
 using System;
+using Lending.Core;
 using StructureMap;
 
 namespace Lending.Web.DependencyResolution
@@ -17,6 +18,10 @@ namespace Lending.Web.DependencyResolution
                     //scan.TheCallingAssembly();
                 });
 
+                x.For<IRequestHandler<string, BaseResponse>>()
+                    .AlwaysUnique()
+                    .Use<FormsAuthNewUserRequestHandler>()
+                    ;
             });
 
             ObjectFactory.AssertConfigurationIsValid();

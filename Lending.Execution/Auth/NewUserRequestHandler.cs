@@ -21,7 +21,7 @@ namespace Lending.Execution.Auth
 
         protected NewUserRequestHandler() { }
 
-        public BaseResponse HandleRequest(string request)
+        public virtual BaseResponse HandleRequest(string request)
         {
             int userAuthId = int.Parse(request);
             ISession session = getSession();

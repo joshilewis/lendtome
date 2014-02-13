@@ -1,0 +1,45 @@
+﻿@{
+    Layout = null;
+}
+
+@functions{
+    public string GetAntiForgeryToken()
+    {
+        string cookieToken, formToken;
+        AntiForgery.GetTokens(null, out cookieToken, out formToken);
+        return cookieToken + ":" + formToken;                
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/themes/base/css")
+</head>
+<body>
+    <div id="userSettings">
+        @Html.Partial("_UserSettings")
+    </div>
+    <input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/ember")
+    @Scripts.Render("~/bundles/app")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @if (HttpContext.Current.IsDebuggingEnabled)
+    {
+        @Html.RenderEmber()
+    }
+    else
+    {
+        @Scripts.Render("~/bundles/templates")
+    }
+</body>
+</html>

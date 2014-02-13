@@ -13,28 +13,18 @@ using StructureMap;
 
 namespace Lending.Web.Controllers
 {
-    public class HomeController : ServiceStackController
+    public class HomeController : Controller
     {
-        public ActionResult Index(dynamic request)
+        public ActionResult Index(string returnUrl)
         {
-            bool authed = Request.IsAuthenticated;
-            var userSession = SessionFeature.GetOrCreateSession<AuthUserSession>(ObjectFactory.GetInstance<ICacheClient>());
-            if (userSession != null)
+            if (Request.IsAuthenticated)
             {
-                FormsAuthentication.SetAuthCookie(userSession.Id, true);
+                return View("App");
             }
+
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
-        [Authenticate]
-        public ActionResult Blah(dynamic request)
-        {
-            return null;
-        }
-
-        public override string LoginRedirectUrl
-        {
-            get { return "~/api/auth"; }
-        }
     }
 }

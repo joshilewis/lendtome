@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
 using Lending.Web.App_Start;
 using Lending.Web.DependencyResolution;
@@ -34,7 +35,13 @@ namespace Lending.Web
             //WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
+            if (!HttpContext.Current.IsDebuggingEnabled)
+            {
+                // required to precompile Handlebars templates into Ember.TEMPLATES
+                BundleTable.EnableOptimizations = true;
+            }
         }
     }
 }

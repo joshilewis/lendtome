@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Lending.Core.Model
 {
@@ -39,7 +38,6 @@ namespace Lending.Core.Model
 
     public class Ownership<T> : Ownership where T : IOwner
     {
-        [IgnoreDataMember]
         public virtual T Owner { get; protected set; }
 
         public override int OwnerId

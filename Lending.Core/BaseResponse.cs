@@ -1,4 +1,6 @@
-﻿namespace Lending.Core
+﻿using System.Runtime.Serialization;
+
+namespace Lending.Core
 {
     public class BaseResponse
     {
@@ -19,7 +21,7 @@
 
     public class BaseResponse<T> : BaseResponse
     {
-        public T Payload { get; set; }
+        public virtual T Payload { get; protected set; }
 
         public BaseResponse(T payload)
             : base()
