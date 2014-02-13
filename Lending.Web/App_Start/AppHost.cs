@@ -80,14 +80,10 @@ namespace Lending.Web.App_Start
                 () => new AuthUserSession(), //Use your own typed Custom UserSession type
                 new IAuthProvider[]
                 {
+                    new LinkedInOAuth2Provider(appSettings), 
                     new GoogleOAuth2Provider(appSettings),
                     new FacebookAuthProvider(appSettings),
                     new TwitterAuthProvider(appSettings),
-                    new GoogleOpenIdOAuthProvider(appSettings), //Sign-in with Google OpenId
-                    new YahooOpenIdOAuthProvider(appSettings), //Sign-in with Yahoo OpenId
-                    //new OpenIdOAuthProvider(appSettings), //Sign-in with Custom OpenId
-                    //new GoogleOAuth2Provider(appSettings), //Sign-in with Google OAuth2 Provider
-                    //new LinkedInOAuth2Provider(appSettings), //Sign-in with LinkedIn OAuth2 Provider
                     container.Adapter.Resolve<IAuthProvider>(),
 
                 }, 

@@ -17,7 +17,7 @@ namespace Lending.Execution.Auth
 
         public override string UserName
         {
-            get { return AuthenticatedUser.FullName ; }
+            get { return AuthenticatedUser.DisplayName ; }
         }
 
         public override string EmailAddress
