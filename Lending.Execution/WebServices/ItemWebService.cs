@@ -18,7 +18,8 @@ namespace Lending.Execution.WebServices
             this.unitOfWork = unitOfWork;
         }
 
-        public virtual object Any(ItemRequest request)
+
+        public virtual object Get(ItemRequest request)
         {
             var response = new ItemRequestResponse();
 
@@ -35,6 +36,12 @@ namespace Lending.Execution.WebServices
 
             return response;
         }
+
+        public virtual object Post(NewItemRequest request)
+        {
+            return null;
+        }
+
     }
 
     public class ItemRequest
@@ -46,4 +53,18 @@ namespace Lending.Execution.WebServices
     {
         public Item Item { get; set; }
     }
+
+    public class NewItemRequest
+    {
+        public NewItem Item { get; set; }
+
+        public class NewItem
+        {
+            public string Id { get; set; }
+            public string Creator { get; set; }
+            public string Title { get; set; }
+            public string Edition { get; set; }
+        }
+    }
+
 }

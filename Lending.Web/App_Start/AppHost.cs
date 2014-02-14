@@ -8,6 +8,7 @@ using Lending.Core.AddItem;
 using Lending.Core.BorrowItem;
 using Lending.Core.Connect;
 using Lending.Core.GetUserItems;
+//using Lending.Core.Model;
 using Lending.Execution.Auth;
 using Lending.Execution.DI;
 using Lending.Execution.UnitOfWork;
@@ -60,12 +61,14 @@ namespace Lending.Web.App_Start
 	        //Configure User Defined REST Paths
 	        Routes
                 .Add<GetUserItemsRequest>("/user/items/", "GET")
+                .Add<GetUserItemsRequest>("/userownerships/", "GET")
                 .Add<AddUserItemRequest>("/user/items/add/", "GET,POST")
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
                 .Add<ItemRequest>("/items/{itemid}/", "GET")
                 .Add<ItemRequest>("/items/", "GET")
+                .Add<NewItemRequest>("/items/", "POST")
                 ;
 
 	        //Enable Authentication

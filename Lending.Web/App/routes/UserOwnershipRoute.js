@@ -1,6 +1,6 @@
-﻿App.OwnershipListRoute = Ember.Route.extend({
+﻿App.UserOwnershipRoute = Ember.Route.extend({
     model: function () {
-        return this.store.find('userOwnershipList');
+        return this.store.find('userOwnership');
     },
 });
 

@@ -203,14 +203,14 @@
     <Content Include="App\ajaxlogin.js" />
     <Content Include="App\app.js" />
     <Content Include="App\controllers\ItemController.js" />
-    <Content Include="App\controllers\UserOwnershipListController.js" />
+    <Content Include="App\controllers\UserOwnershipController.js" />
     <Content Include="App\helpers.js" />
     <None Include="App\models\UserItemList.js.bak" />
     <Content Include="App\models\UserOwnership.js" />
     <Content Include="App\models\Item.js" />
     <Content Include="App\router.js" />
     <Content Include="App\routes\ItemRoute.js" />
-    <Content Include="App\routes\OwnershipListRoute.js" />
+    <Content Include="App\routes\UserOwnershipRoute.js" />
     <Content Include="App\views\ItemView.js" />
     <Content Include="App\views\UserOwnershipView.js" />
     <Content Include="App\views\UserItemListView.js" />
@@ -290,7 +290,7 @@
     <Content Include="Scripts\handlebars-1.1.2.js" />
     <Content Include="Scripts\handlebars.runtime-1.1.2.js" />
     <Content Include="App\templates\item.hbs" />
-    <Content Include="App\templates\Copy of userOwnershipList.hbs" />
+    <Content Include="App\templates\userOwnership.hbs" />
     <None Include="Scripts\jquery-2.0.2.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.2.js" />
     <Content Include="Scripts\jquery-2.0.2.min.js" />

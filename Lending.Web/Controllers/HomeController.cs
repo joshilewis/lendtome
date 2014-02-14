@@ -17,7 +17,7 @@ namespace Lending.Web.Controllers
     {
         public ActionResult Index(string returnUrl)
         {
-            //if (Request.IsAuthenticated)
+            if (Request.IsAuthenticated)
             {
                 return View("App");
             }
