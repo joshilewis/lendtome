@@ -85,7 +85,7 @@ namespace Lending.Web.App_Start
                 () => new AuthUserSession(), //Use your own typed Custom UserSession type
                 new IAuthProvider[]
                 {
-                    new GoogleOpenIdOAuthProvider(appSettings) {RedirectUrl = "localhost:61414"},
+                    new GoogleOpenIdOAuthProvider(appSettings),
                     new LinkedInOAuth2Provider(appSettings),
                     new GoogleOAuth2Provider(appSettings),
                     new FacebookAuthProvider(appSettings),

@@ -1,5 +1,6 @@
 using System;
 using Lending.Core;
+using ServiceStack.ServiceInterface.Auth;
 using StructureMap;
 
 namespace Lending.Web.DependencyResolution
@@ -18,7 +19,7 @@ namespace Lending.Web.DependencyResolution
                     //scan.TheCallingAssembly();
                 });
 
-                x.For<IRequestHandler<string, BaseResponse>>()
+                x.For<IRequestHandler<IAuthSession, BaseResponse>>()
                     .AlwaysUnique()
                     .Use<FormsAuthNewUserRequestHandler>()
                     ;

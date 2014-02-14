@@ -291,6 +291,7 @@
     <Content Include="Scripts\handlebars.runtime-1.1.2.js" />
     <Content Include="App\templates\item.hbs" />
     <Content Include="App\templates\userOwnership.hbs" />
+    <Content Include="App\templates\s.hbs" />
     <None Include="Scripts\jquery-2.0.2.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.2.js" />
     <Content Include="Scripts\jquery-2.0.2.min.js" />

@@ -10,7 +10,7 @@ using ServiceStack.ServiceInterface.Auth;
 
 namespace Lending.Execution.Auth
 {
-    public class NewUserRequestHandler : IRequestHandler<string, BaseResponse>
+    public class NewUserRequestHandler : IRequestHandler<IAuthSession, BaseResponse>
     {
         private readonly Func<ISession> getSession;
 
@@ -21,9 +21,9 @@ namespace Lending.Execution.Auth
 
         protected NewUserRequestHandler() { }
 
-        public virtual BaseResponse HandleRequest(string request)
+        public virtual BaseResponse HandleRequest(IAuthSession request)
         {
-            int userAuthId = int.Parse(request);
+            int userAuthId = int.Parse(request.UserAuthId);
             ISession session = getSession();
 
             var user = session.QueryOver<ServiceStackUser>()

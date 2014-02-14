@@ -10,6 +10,7 @@ using Lending.Core.Connect;
 using Lending.Core.GetUserItems;
 using Lending.Core.Model;
 using Lending.Execution.UnitOfWork;
+using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 
 namespace Lending.Execution.WebServices

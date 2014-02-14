@@ -6,6 +6,7 @@ using System.Web.Security;
 using Lending.Core;
 using Lending.Execution.Auth;
 using NHibernate;
+using ServiceStack.ServiceInterface.Auth;
 
 namespace Lending.Web
 {
@@ -15,9 +16,9 @@ namespace Lending.Web
             : base(sessionFunc)
         { }
 
-        public override BaseResponse HandleRequest(string request)
+        public override BaseResponse HandleRequest(IAuthSession request)
         {
-            FormsAuthentication.SetAuthCookie(request, true);
+            FormsAuthentication.SetAuthCookie(request.DisplayName, true);
 
             return base.HandleRequest(request);
         }

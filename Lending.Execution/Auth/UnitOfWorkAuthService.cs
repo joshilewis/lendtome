@@ -13,10 +13,10 @@ namespace Lending.Execution.Auth
     public class UnitOfWorkAuthService : AuthService
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IRequestHandler<string, BaseResponse> requestHandler;
+        private readonly IRequestHandler<IAuthSession, BaseResponse> requestHandler;
 
         public UnitOfWorkAuthService(IUnitOfWork unitOfWork,
-            IRequestHandler<string, BaseResponse> requestHandler)
+            IRequestHandler<IAuthSession, BaseResponse> requestHandler)
         {
             this.unitOfWork = unitOfWork;
             this.requestHandler = requestHandler;
@@ -33,7 +33,7 @@ namespace Lending.Execution.Auth
                 if (this.GetSession().IsAuthenticated && !authenticatedAtStart)
                     //User just authenticated, check if user exists
                 {
-                    requestHandler.HandleRequest(this.GetSession().UserAuthId);
+                    requestHandler.HandleRequest(this.GetSession());
                 }
             });
 
