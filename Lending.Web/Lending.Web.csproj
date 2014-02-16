@@ -20,7 +20,6 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
-    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,12 +39,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime">
-      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Ember.Handlebars">
-      <HintPath>..\packages\csharp-ember-handlebars-compiler.1.5.0-beta1\lib\net40\Ember.Handlebars.dll</HintPath>
-    </Reference>
     <Reference Include="DotNetOpenAuth">
       <HintPath>..\packages\DotNetOpenAuth.Ultimate.4.3.4.13329\lib\net45-full\DotNetOpenAuth.dll</HintPath>
     </Reference>
@@ -66,9 +59,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Security">
       <HintPath>..\packages\Npgsql.2.0.14.3\lib\net45\Mono.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -140,7 +130,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.1.1\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Optimization">
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.2\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -179,13 +170,9 @@
     <Reference Include="WebActivator">
       <HintPath>..\packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
     </Reference>
-    <Reference Include="WebGrease">
-      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\AppHost.cs" />
-    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="FormsAuthNewUserRequestHandler.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -200,22 +187,8 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Content Include="App\ajaxlogin.js" />
-    <Content Include="App\app.js" />
-    <Content Include="App\controllers\ItemController.js" />
-    <Content Include="App\controllers\UserOwnershipController.js" />
-    <Content Include="App\helpers.js" />
-    <Content Include="App\models\UserOwnership.js" />
-    <Content Include="App\models\Item.js" />
-    <Content Include="App\router.js" />
-    <Content Include="App\routes\ItemRoute.js" />
-    <Content Include="App\routes\UserOwnershipRoute.js" />
-    <Content Include="App\views\ItemView.js" />
-    <Content Include="App\views\UserOwnershipView.js" />
-    <Content Include="App\views\UserItemListView.js" />
     <Content Include="Content\js\ss-validation.js" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\TodoList.css" />
     <Content Include="Global.asax" />
     <Content Include="Views\Web.config" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
@@ -280,18 +253,6 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
-    <Content Include="Scripts\ember-1.3.0.debug.js" />
-    <Content Include="Scripts\ember-1.3.0.js" />
-    <Content Include="Scripts\ember-1.3.0.min.js" />
-    <Content Include="Scripts\ember-data-1.0.0-beta6.debug.js" />
-    <Content Include="Scripts\ember-data-1.0.0-beta6.js" />
-    <Content Include="Scripts\ember-data-1.0.0-beta6.min.js" />
-    <Content Include="Scripts\handlebars-1.1.2.js" />
-    <Content Include="Scripts\handlebars.runtime-1.1.2.js" />
-    <Content Include="App\templates\item.hbs" />
-    <Content Include="App\templates\userOwnership.hbs">
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="Scripts\jquery-2.0.2.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.2.js" />
     <Content Include="Scripts\jquery-2.0.2.min.js" />
@@ -306,38 +267,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\TodoList.css" />
-    <Content Include="Scripts\_references.js" />
-    <Content Include="App\controllers\TodoItemController.js" />
-    <Content Include="App\controllers\TodoListController.js" />
-    <Content Include="App\models\TodoItem.js" />
-    <Content Include="App\models\TodoList.js" />
-    <Content Include="App\templates\about.hbs" />
-    <Content Include="App\templates\application.hbs" />
-    <Content Include="App\templates\index.hbs" />
-    <Content Include="App\templates\todoList.hbs" />
-    <Content Include="App\templates\_navbar.hbs" />
-    <Content Include="App\views\TodoItemEditView.js" />
-    <Content Include="App\views\TodoItemView.js" />
-    <Content Include="App\views\TodoListEditView.js" />
-    <Content Include="App\views\TodoListNewView.js" />
-    <Content Include="App\views\TodoListView.js" />
-    <Content Include="Images\accent.png" />
-    <Content Include="Images\bullet.png" />
-    <Content Include="Images\heroAccent.png" />
-    <Content Include="Images\orderedList0.png" />
-    <Content Include="Images\orderedList1.png" />
-    <Content Include="Images\orderedList2.png" />
-    <Content Include="Images\orderedList3.png" />
-    <Content Include="Images\orderedList4.png" />
-    <Content Include="Images\orderedList5.png" />
-    <Content Include="Images\orderedList6.png" />
-    <Content Include="Images\orderedList7.png" />
-    <Content Include="Images\orderedList8.png" />
-    <Content Include="Images\orderedList9.png" />
     <Content Include="Scripts\jquery-2.0.2.min.map" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_UserSettings.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="packages.config" />

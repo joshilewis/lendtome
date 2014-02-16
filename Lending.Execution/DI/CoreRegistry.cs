@@ -104,8 +104,8 @@ namespace Lending.Execution.DI
 
             For<ICacheClient>()
                 .Singleton()
-                .Use(cache)
-                //.Use<MemoryCacheClient>()
+                //.Use(cache)
+                .Use<MemoryCacheClient>()
                 ;
 
             For<ItemWebService>()
