@@ -46,7 +46,7 @@ namespace Lending.Execution.WebServices
 
     public class ItemRequest
     {
-        public string ItemId { get; set; }
+        public Guid ItemId { get; set; }
     }
 
     public class ItemRequestResponse

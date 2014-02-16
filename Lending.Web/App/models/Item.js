@@ -5,6 +5,8 @@ App.Item = DS.Model.extend({
     creator: attr('string'),
     edition: attr('string'),
 
+    //userOwnership: DS.belongsTo('UserOwnership'),
+
     hasError: function () {
         var currentError = this.get("error");
         return !(currentError === '' || currentError == null);
