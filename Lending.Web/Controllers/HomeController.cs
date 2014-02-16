@@ -17,13 +17,13 @@ namespace Lending.Web.Controllers
     {
         public ActionResult Index(string returnUrl)
         {
-            if (Request.IsAuthenticated)
-            {
+            //if (Request.IsAuthenticated)
+            //{
                 return View("App");
-            }
+            //}
 
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
+            //ViewBag.ReturnUrl = returnUrl;
+            //return View();
         }
 
     }
