@@ -62,7 +62,7 @@ namespace Lending.Web.App_Start
 	        Routes
                 .Add<GetUserItemsRequest>("/user/items/", "GET")
                 .Add<GetUserItemsRequest>("/userownerships/", "GET")
-                .Add<AddUserItemRequest>("/user/items/add/", "GET,POST")
+                .Add<AddUserItemRequest>("/user/items/", "POST")
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")

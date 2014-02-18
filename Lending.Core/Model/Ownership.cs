@@ -1,13 +1,20 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Lending.Core.Model
 {
+    [DataContract]
     public abstract class Ownership
     {
+        [DataMember]
         public virtual Guid Id { get; protected set; }
+
+        [DataMember]
         public virtual Item Item { get; protected set; }
 
-        protected Ownership() { }
+        protected Ownership()
+        {
+        }
 
         public Ownership(Item item)
         {
@@ -36,8 +43,10 @@ namespace Lending.Core.Model
 
     }
 
+    [DataContract]
     public class Ownership<T> : Ownership where T : IOwner
     {
+        [DataMember]
         public virtual T Owner { get; protected set; }
 
         public override int OwnerId
@@ -45,14 +54,16 @@ namespace Lending.Core.Model
             get { return Owner.Id; }
         }
 
-        protected Ownership() { }
+        protected Ownership()
+        {
+        }
 
         public Ownership(Item item, T owner)
             : base(item)
         {
             Owner = owner;
         }
-        
+
     }
 
 }

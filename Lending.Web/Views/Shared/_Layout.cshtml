@@ -1,37 +1,70 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>@ViewBag.Title - lend-to.me</title>
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-    <meta name="viewport" content="width=device-width" />
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    @Styles.Render("~/Content/themes/base/css")
-</head>
-<body>
-    <header>
-        <div id="userSettings">
-            @Html.Partial("_UserSettings")
+﻿@using System.Web.Configuration
+<!DOCTYPE html>
+<html lang="en" ng-app="lendtome">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title ng-bind="title">@(PageData["title"] ?? "lend-to.me")</title>
+        <meta name="description" content="@PageData["description"]">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        @Styles.Render("~/content/css/app")
+    </head>
+    <body>
+        <!--[if lt IE 9]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <header class="navbar navbar-inverse" role="banner" ng-if=" !layout ">@* The 'layout' property is set inside the app.run(..) method on '$stateChangeSuccess' *@
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".spa-navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="~/" class="navbar-brand">lend-to.me</a>
+                </div>
+                <nav class="collapse navbar-collapse spa-navbar-collapse" role="navigation">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="~/myitems">My Items</a>
+                        </li>
+                        <li>
+                            <a href="./contacts">Contacts</a>
+                        </li>
+                    </ul>
+                    @Html.Partial("UserSettings")
+                </nav>
+            </div>
+        </header>
+
+        <div id="ui-view" class="container" ui-view data-tmpl-url="@Request.RequestContext.RouteData.DataTokens["templateUrl"]">
+            <div ng-view>
+                @RenderBody()
+            </div>
         </div>
-        <p>@ViewBag.Title</p>
-    </header>
 
-    <div id="body">
-        @RenderBody()
-    </div>
-
-    <footer>
-        <nav>
-            <ul id="menu">
-            </ul>
-        </nav> 
-        <p>&copy; @DateTime.Now.Year - lend-to.me</p>
-    </footer>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/ajaxlogin")
-    @RenderSection("scripts", required: false)
-</body>
+        @*<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js"></script>*@
+        @Scripts.Render("~/js/jquery")
+        @Scripts.Render("~/js/app")
+        @*
+        Google Analytics
+        ----------------
+        Google recommends that this script be placed at the top of the page. Factors to consider: if you place this
+        script at the top of the page, you'll be able to count users who don't fully load the page, and you'll incur
+        the max number of simultaneous connections of the browser.
+        https://developers.google.com/analytics/devguides/collection/analyticsjs/
+    *@
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+            ga('create', '@WebConfigurationManager.AppSettings["GoogleAnalytics:PropertyID"]', '@(Request.IsLocal ? "none" : "auto")');
+        </script>
+    </body>
 </html>

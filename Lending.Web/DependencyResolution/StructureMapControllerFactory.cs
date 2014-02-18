@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Lending.Web.Controllers;
 using StructureMap;
 
 namespace Lending.Web.DependencyResolution
@@ -17,6 +18,7 @@ namespace Lending.Web.DependencyResolution
                 return null;
 
             var controller = ObjectFactory.GetInstance(controllerType);
+
             return controller as Controller;
         }
     }

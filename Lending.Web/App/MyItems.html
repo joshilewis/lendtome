@@ -1,0 +1,32 @@
+﻿<h3>My Items</h3>
+<table>
+    <thead>
+        <th>
+            Title
+        </th>
+        <th>
+            Creator
+        </th>
+        <th>
+            Edition
+        </th>
+        <th></th>
+    </thead>
+    <tbody >
+        <tr ng-repeat="ownership in userItems.userOwnerships">
+            <td>
+                {{ownership.item.title}}
+            </td>
+            <td>
+                {{ownership.item.creator}}
+            </td>
+            <td>
+                {{ownership.item.edition}}
+            </td>
+            <td>
+                <a href="">Remove</a>
+            </td>
+        </tr>
+
+    </tbody>
+</table>
