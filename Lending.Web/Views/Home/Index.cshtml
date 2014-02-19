@@ -4,69 +4,72 @@
 @using System.Web.Mvc
 @using System.Web.Mvc.Ajax
 @using System.Web.Routing
+@inherits System.Web.Mvc.WebViewPage
 <!DOCTYPE html>
 <html lang="en" ng-app="lendtome">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title ng-bind="title">@(PageData["title"] ?? "lend-to.me")</title>
-    <meta name="description" content="@PageData["description"]">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    @Styles.Render("~/content/css/app")
-</head>
-<body>
-    <!--[if lt IE 9]>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title ng-bind="title">@(PageData["title"] ?? "lend-to.me")</title>
+        <meta name="description" content="@PageData["description"]">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        @Styles.Render("~/content/css/app")
+    </head>
+    <body>
+        <!--[if lt IE 9]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-    <header class="navbar navbar-inverse" role="banner" ng-if=" !layout ">@* The 'layout' property is set inside the app.run(..) method on '$stateChangeSuccess' *@
-        <div class="container">
-            <div class="navbar-header">
-                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".spa-navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="~/" class="navbar-brand">lend-to.me</a>
-            </div>
-            <nav class="collapse navbar-collapse spa-navbar-collapse" role="navigation">
-                <ul class="nav navbar-nav">
-                    @if (Request.IsAuthenticated)
-                    {
-                        <li>
-                            <a href="~/myitems">My Items</a>
-                        </li>
-                    }
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle btn navbar-btn" ng-init="navCollapsed = true"
+                            ng-click="navCollapsed = !navCollapsed">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="~/">lend-to.me</a>
+                </div>
+                <div collapse="navCollapsed" class="navbar-collapse collapse navbar-responsive-collapse">
+                    <ul class="nav navbar-nav">
                         @if (Request.IsAuthenticated)
                         {
-                            <a href="~/">
-                                @User.Identity.Name
-                            </a>
-                        }
-                        else
-                        {
-                            <a href="~/signin">Sign In</a>
-                        }
-                    </li>
-                </ul>
-            </nav>
+                            <li>
+                                <a href="~/myitems" ng-click="isCollapsed=true">My Items</a>
+                            </li>
+                        }            </ul>
+                    <div class="container navbar-form navbar-right">
+                        <ul class="nav navbar-nav ">
+                            <li>
+                                @if (Request.IsAuthenticated)
+                                {
+                                    <a href="~/">
+                                        @User.Identity.Name
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="~/signin" ng-click="isCollapsed=true">Sign In</a>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!--/.navbar-collapse -->
+            </div>
         </div>
-    </header>
-
-    <div id="ui-view" class="container" ui-view data-tmpl-url="@Request.RequestContext.RouteData.DataTokens["templateUrl"]">
-        <div ng-view>
+        <div id="ui-view" class="container" ui-view data-tmpl-url="@Request.RequestContext.RouteData.DataTokens["templateUrl"]">
+            <div ng-view>
+            </div>
         </div>
-    </div>
 
-    @*<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        @*<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js"></script>*@
-    @Scripts.Render("~/js/jquery")
-    @Scripts.Render("~/js/app")
-    @*
+        @Scripts.Render("~/js/jquery")
+        @Scripts.Render("~/js/app")
+        @*
         Google Analytics
         ----------------
         Google recommends that this script be placed at the top of the page. Factors to consider: if you place this
@@ -74,14 +77,14 @@
         the max number of simultaneous connections of the browser.
         https://developers.google.com/analytics/devguides/collection/analyticsjs/
     *@
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date(); a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-        ga('create', '@WebConfigurationManager.AppSettings["GoogleAnalytics:PropertyID"]', '@(Request.IsLocal ? "none" : "auto")');
-    </script>
-</body>
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+            ga('create', '@WebConfigurationManager.AppSettings["GoogleAnalytics:PropertyID"]', '@(Request.IsLocal ? "none" : "auto")');
+        </script>
+    </body>
 </html>
