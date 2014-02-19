@@ -19,19 +19,27 @@ angular.module('lendtome', [
 
     // Gets executed during the provider registrations and configuration phase. Only providers and constants can be
     // injected here. This is to prevent accidental instantiation of services before they have been fully configured.
-    .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+    .config(['$routeProvider', '$locationProvider', '$stateProvider', function ($routeProvider, $locationProvider, $stateProvider) {
 
         // UI States, URL Routing & Mapping. For more info see: https://github.com/angular-ui/ui-router
         // ------------------------------------------------------------------------------------------------------------
 
         $routeProvider
+            .when('/', {
+                templateUrl: 'app/home.html',
+            })
+            .when('/s=1', {
+                templateUrl: 'app/home.html',
+            })
+            .when('/#s=1', {
+                templateUrl: 'app/home.html',
+            })
             .when('/myitems', {
                 templateUrl: 'app/myitems.html',
                 controller: 'userItemsController'
             })
             .when('/signin', {
                 templateUrl: 'app/signin.html'
-                //controller: 'userItemsController'
             })
         ;
 

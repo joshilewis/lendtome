@@ -30,12 +30,15 @@ namespace Lending.Web
 
             AppHost.Start();
             
-            AreaRegistration.RegisterAllAreas();
+            //AreaRegistration.RegisterAllAreas();
 
             //WebApiConfig.Register(GlobalConfiguration.Configuration);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            //FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            //ViewEngines.Engines.Clear();
+            //ViewEngines.Engines.Add(new CustomViewEngine());
         }
     }
 }
