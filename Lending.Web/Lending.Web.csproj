@@ -209,6 +209,7 @@
     <Content Include="App\controllers.js" />
     <Content Include="App\MyItems.html" />
     <Content Include="App\services.js" />
+    <Content Include="App\Signin.html" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -666,7 +667,6 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\test.pubxml" />
     <Content Include="Views\Jasmine\SpecRunner.cshtml" />
-    <Content Include="Views\Shared\UserSettings.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -24,16 +24,27 @@ angular.module('lendtome', [
         // UI States, URL Routing & Mapping. For more info see: https://github.com/angular-ui/ui-router
         // ------------------------------------------------------------------------------------------------------------
 
-        $routeProvider.when('/myitems', {
-            templateUrl: 'app/myitems.html',
-            controller: 'userItemsController'
-        });
+        $routeProvider
+            .when('/myitems', {
+                templateUrl: 'app/myitems.html',
+                controller: 'userItemsController'
+            })
+            .when('/signin', {
+                templateUrl: 'app/signin.html'
+                //controller: 'userItemsController'
+            })
+        ;
 
         //$stateProvider
-        //    .state('userOwnerships', {
+        //    .state('/myitems', {
         //        url: '/myitems',
-        //        templateUrl: '/myitems.html',
-        //        controller: 'UserOwnershipsCtrl'
+        //        templateUrl: 'app/myitems.html',
+        //        controller: 'userItemsController'
+
+        //    })
+        //    .state('/signin', {
+        //        url: '/signin',
+        //        templateUrl: 'app/signin.html'
 
         //    })
         //    .state('otherwise', {
