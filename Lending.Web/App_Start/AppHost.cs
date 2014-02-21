@@ -9,6 +9,7 @@ using Lending.Core.BorrowItem;
 using Lending.Core.Connect;
 using Lending.Core.GetUserItems;
 //using Lending.Core.Model;
+using Lending.Core.RemoveItem;
 using Lending.Execution.Auth;
 using Lending.Execution.DI;
 using Lending.Execution.UnitOfWork;
@@ -69,6 +70,7 @@ namespace Lending.Web.App_Start
                 .Add<ItemRequest>("/items/{itemid}/", "GET")
                 .Add<ItemRequest>("/items/", "GET")
                 .Add<NewItemRequest>("/items/", "POST")
+                .Add<RemoveItemRequest>("/user/items/{OwnershipId}/", "DELETE")
                 ;
 
 	        //Enable Authentication

@@ -13,4 +13,9 @@ lendtomeControllers.controller('userItemsController', ['$scope', 'userItems', '$
           $route.reload();
       };
 
+      $scope.delete = function(userItem) {
+          userItems.delete({ ownershipId: userItem.id });
+          $route.reload();
+      };
+
   }]);

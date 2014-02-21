@@ -9,6 +9,7 @@ using Lending.Core.BorrowItem;
 using Lending.Core.Connect;
 using Lending.Core.GetUserItems;
 using Lending.Core.Model;
+using Lending.Core.RemoveItem;
 using Lending.Execution.UnitOfWork;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -55,6 +56,15 @@ namespace Lending.Execution.WebServices
     {
         public GetUsersItemsWebservice(IUnitOfWork unitOfWork,
             IAuthenticatedRequestHandler<GetUserItemsRequest, object> requestHandler)
+            : base(unitOfWork, requestHandler)
+        { }
+
+    }
+
+    public class RemoveItemWebservice : AuthenticatedWebserviceBase<RemoveItemRequest, object>, IWebserviceBase<RemoveItemRequest, object>
+    {
+        public RemoveItemWebservice(IUnitOfWork unitOfWork,
+            IAuthenticatedRequestHandler<RemoveItemRequest, object> requestHandler)
             : base(unitOfWork, requestHandler)
         { }
 
