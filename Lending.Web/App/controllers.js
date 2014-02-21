@@ -4,12 +4,12 @@
 
 var lendtomeControllers = angular.module('lendtomeControllers', []);
 
-lendtomeControllers.controller('userItemsController', ['$scope', 'userItemsService',
-  function ($scope, userItemsService) {
-      $scope.userItems = userItemsService.query();
+lendtomeControllers.controller('userItemsController', ['$scope', 'userItems',
+  function ($scope, userItems) {
+      $scope.userItems = userItems.query();
 
       $scope.addNew = function() {
-          userItemsService.save();
+          userItems.save($scope.newUserItem);
       };
 
   }]);

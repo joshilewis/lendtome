@@ -5,7 +5,7 @@ using NHibernate;
 
 namespace Lending.Core.GetUserItems
 {
-    public class GetUserItemsRequestHandler :  BaseAuthenticatedRequestHandler<GetUserItemsRequest, GetUserItemsRequestResponse>
+    public class GetUserItemsRequestHandler :  BaseAuthenticatedRequestHandler<GetUserItemsRequest, object>
     {
         public GetUserItemsRequestHandler(Func<ISession> sessionFunc)
              :base(sessionFunc)
@@ -13,7 +13,7 @@ namespace Lending.Core.GetUserItems
 
         protected GetUserItemsRequestHandler() { }
 
-        public override GetUserItemsRequestResponse HandleRequest(GetUserItemsRequest request, int userId)
+        public override object HandleRequest(GetUserItemsRequest request, int userId)
         {
             Ownership<User>[] ownerships = Session
                 .QueryOver<Ownership<User>>()
@@ -22,6 +22,12 @@ namespace Lending.Core.GetUserItems
                 .List()
                 .ToArray()
                 ;
+
+            return ownerships
+                .Select(x => new UserOwnership(x.Id, x.Item))
+                .ToArray()
+                ;
+
 
             return new GetUserItemsRequestResponse(ownerships);
         }

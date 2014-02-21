@@ -4,11 +4,11 @@
 
 var lendtomeServices = angular.module('lendtomeServices', ['ngResource']);
 
-lendtomeServices.factory('userItemsService', [
+lendtomeServices.factory('userItems', [
     '$resource',
     function($resource) {
         return $resource('api/user/items/', {}, {
-            query: { method: 'GET', params: {}, isArray: false }
+            query: { method: 'GET', params: {}, isArray: true }
         });
     }
 ]);

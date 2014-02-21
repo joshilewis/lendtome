@@ -51,10 +51,10 @@ namespace Lending.Execution.WebServices
 
     }
 
-    public class GetUsersItemsWebservice : AuthenticatedWebserviceBase<GetUserItemsRequest, GetUserItemsRequestResponse>, IWebserviceBase<GetUserItemsRequest, GetUserItemsRequestResponse>
+    public class GetUsersItemsWebservice : AuthenticatedWebserviceBase<GetUserItemsRequest, object>, IWebserviceBase<GetUserItemsRequest, object>
     {
         public GetUsersItemsWebservice(IUnitOfWork unitOfWork,
-            IAuthenticatedRequestHandler<GetUserItemsRequest, GetUserItemsRequestResponse> requestHandler)
+            IAuthenticatedRequestHandler<GetUserItemsRequest, object> requestHandler)
             : base(unitOfWork, requestHandler)
         { }
 

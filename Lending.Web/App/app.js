@@ -15,7 +15,9 @@ angular.module('lendtome', [
     'lendtomeServices',
     //'app.directives',
     'lendtomeControllers',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ui.bootstrap.collapse', 
+    'ui.bootstrap.dropdownToggle'
 ])
 
     // Gets executed during the provider registrations and configuration phase. Only providers and constants can be

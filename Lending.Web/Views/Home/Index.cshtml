@@ -32,12 +32,12 @@
                     </button>
                     <a class="navbar-brand" href="~/">lend-to.me</a>
                 </div>
-                <div collapse="navCollapsed" class="navbar-collapse collapse navbar-responsive-collapse">
+                <div collapse="navCollapsed" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         @if (Request.IsAuthenticated)
                         {
                             <li>
-                                <a href="~/myitems" ng-click="isCollapsed=true">My Items</a>
+                                <a href="~/myitems" >My Items</a>
                             </li>
                         }            </ul>
                     <div class="container navbar-form navbar-right">
@@ -51,7 +51,7 @@
                                 }
                                 else
                                 {
-                                    <a href="~/signin" ng-click="isCollapsed=true">Sign In</a>
+                                    <a href="~/signin" >Sign In</a>
                                 }
                             </li>
                         </ul>
