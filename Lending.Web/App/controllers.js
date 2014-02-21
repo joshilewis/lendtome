@@ -4,12 +4,13 @@
 
 var lendtomeControllers = angular.module('lendtomeControllers', []);
 
-lendtomeControllers.controller('userItemsController', ['$scope', 'userItems',
-  function ($scope, userItems) {
+lendtomeControllers.controller('userItemsController', ['$scope', 'userItems', '$route',
+  function ($scope, userItems, $route) {
       $scope.userItems = userItems.query();
 
       $scope.addNew = function() {
           userItems.save($scope.newUserItem);
+          $route.reload();
       };
 
   }]);
