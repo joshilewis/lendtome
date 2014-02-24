@@ -28,41 +28,21 @@ angular.module('lendtome', [
         // ------------------------------------------------------------------------------------------------------------
 
         $routeProvider
-            .when('/', {
-                templateUrl: 'app/home.html',
-            })
-            .when('/s=1', {
-                templateUrl: 'app/home.html',
-            })
-            .when('/#s=1', {
-                templateUrl: 'app/home.html',
-            })
             .when('/myitems', {
-                templateUrl: 'app/myitems.html',
+                templateUrl: '/app/myitems.html',
                 controller: 'userItemsController'
             })
-            .when('/signin', {
-                templateUrl: 'app/signin.html'
+            .when('/addisbn/:isbnnumber', {
+                templateUrl: '/app/addisbn.html',
+                controller: 'googleBooksController'
             })
-        ;
-
-        //$stateProvider
-        //    .state('/myitems', {
-        //        url: '/myitems',
-        //        templateUrl: 'app/myitems.html',
-        //        controller: 'userItemsController'
-
-        //    })
-        //    .state('/signin', {
-        //        url: '/signin',
-        //        templateUrl: 'app/signin.html'
-
-        //    })
-        //    .state('otherwise', {
-        //        url: '*path',
-        //        templateUrl: '/views/404',
-        //        controller: 'Error404Ctrl'
-        //    });
+            .when('/signin', {
+                templateUrl: '/app/signin.html'
+            })
+            .otherwise(
+            {
+                templateUrl: '/app/home.html',
+            });
 
         $locationProvider.html5Mode(true);
 

@@ -35,11 +35,9 @@
     </div>
     <br/>
     <div>
-        Add new: <br/>
-        Title: <input type="text" ng-model="newUserItem.title"/><br/>
-        Creator: <input type="text" ng-model="newUserItem.creator"/><br/>
-        Edition: <input type="text" ng-model="newUserItem.edition"/><br/>
-        <button type="submit" ng-click="addNew()">Add</button>
+        Add via ISBN: <br/>
+        ISBN: <input type="text" ng-model="isbnNumber"/>
+        <button type="submit" ng-click="addFromIsbn()">Add</button>
     </div>
 
 </div>
