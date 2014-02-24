@@ -39,15 +39,14 @@
                             <li>
                                 <a href="~/myitems" >My Items</a>
                             </li>
-                        }            </ul>
-                    <div class="container navbar-form navbar-right">
+                        }            
+                    </ul>
+                    <div  class=" navbar-right">
                         <ul class="nav navbar-nav ">
                             <li>
                                 @if (Request.IsAuthenticated)
                                 {
-                                    <a href="~/">
-                                        @User.Identity.Name
-                                    </a>
+                                    <a href="~/">@User.Identity.Name</a>
                                 }
                                 else
                                 {
