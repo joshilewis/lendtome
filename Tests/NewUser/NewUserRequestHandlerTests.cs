@@ -61,7 +61,7 @@ namespace Tests.NewUser
 
             var expectedUser = DefaultTestData.ServiceStackUser1;
             ExpectedEventEmitter eventEmitter = new ExpectedEventEmitter();
-            eventEmitter.ExpectEvent(new UserAddedEvent(authDto.Id, authDto.UserName, authDto.Email));
+            eventEmitter.ExpectEvent(new UserAddedEvent(authDto.Id, authDto.DisplayName, authDto.PrimaryEmail));
 
             var sut = new NewUserRequestHandler(() => Session, eventEmitter);
             BaseResponse actualResponse = sut.HandleRequest(request);
