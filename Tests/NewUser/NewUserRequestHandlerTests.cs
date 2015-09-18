@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using EventStore.ClientAPI;
+using EventStore.ClientAPI.Embedded;
 using Lending.Core;
 using Lending.Core.NewUser;
 using Lending.Execution.Auth;
 using NUnit.Framework;
-using ServiceStack.Authentication.NHibernate;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.Auth;
-
-namespace Lending.Core.NewUser
-{
-}
+using ServiceStack.Text;
 
 namespace Tests.NewUser
 {
@@ -58,16 +57,27 @@ namespace Tests.NewUser
 
             var request = new AuthSessionDouble();
             var expectedResponse = new BaseResponse();
-
             var expectedUser = DefaultTestData.ServiceStackUser1;
-            ExpectedEventEmitter eventEmitter = new ExpectedEventEmitter();
-            eventEmitter.ExpectEvent(new UserAdded(authDto.Id, authDto.DisplayName, authDto.PrimaryEmail));
+            var expectedEvent = new UserAdded(authDto.Id, authDto.DisplayName, authDto.PrimaryEmail);
+
+            var noIp = new IPEndPoint(IPAddress.None, 0);
+            var node = EmbeddedVNodeBuilder
+                .AsSingleNode()
+                .WithInternalTcpOn(noIp)
+                .WithInternalHttpOn(noIp)
+                .RunInMemory()
+                .Build();
+            node.Start();
+
+            IEventStoreConnection connection = EmbeddedEventStoreConnection.Create(node);
+
+            connection.ConnectAsync().Wait();
+            EventStoreEventEmitter eventEmitter = new EventStoreEventEmitter(connection);
 
             var sut = new NewUserRequestHandler(() => Session, eventEmitter);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
-            eventEmitter.VerifyExpectations();
 
             CommitTransactionAndOpenNew();
 
@@ -78,6 +88,16 @@ namespace Tests.NewUser
 
             userInDb.ShouldEqual(expectedUser);
 
+            StreamEventsSlice slice = connection.ReadStreamEventsBackwardAsync("User-" + authDto.Id, 0, 10, false).Result;
+            Assert.That(slice.Events.Count(), Is.EqualTo(1));
+
+            var value = Encoding.UTF8.GetString(slice.Events[0].Event.Data);
+            UserAdded actual = value.FromJson<UserAdded>();
+            actual.ShouldEqual(expectedEvent);
+            
+            connection.Close();
+            connection.Dispose();
+            node.Stop();
         }
 
         public class AuthSessionDouble : IAuthSession
@@ -169,6 +189,42 @@ namespace Tests.NewUser
             {
                 if (!called) Assert.Fail("No event emitted");
             }
+        }
+
+        public class EventStoreEventEmitter : IEventEmitter<UserAdded>
+        {
+            private readonly IEventStoreConnection eventStoreConnection;
+
+            public EventStoreEventEmitter(IEventStoreConnection eventStoreConnection)
+            {
+                this.eventStoreConnection = eventStoreConnection;
+            }
+
+            public void EmitEvent(UserAdded userAdded)
+            {
+                eventStoreConnection.AppendToStreamAsync("User-" + userAdded.Id, ExpectedVersion.Any, AsJson(userAdded)).Wait();
+            }
+
+            private static EventData AsJson(object value)
+            {
+                if (value == null) throw new ArgumentNullException("value");
+
+                var json = value.ToJson();
+                var data = Encoding.UTF8.GetBytes(json);
+                var eventName = value.GetType().Name;
+
+                return new EventData(Guid.NewGuid(), eventName, true, data, new byte[] {});
+            }
+
+            private static T ParseJson<T>(RecordedEvent data)
+            {
+                if (data == null) throw new ArgumentNullException("data");
+
+                var value = Encoding.UTF8.GetString(data.Data);
+
+                return value.FromJson<T>();
+            }
+
         }
     }
 }

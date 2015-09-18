@@ -52,7 +52,7 @@ namespace Tests
         {
             //Create DB
             new SchemaExport(Configuration)
-                .Execute(true, true, false);
+                .Execute(false, true, false);
 
             Session = SessionFactory.OpenSession();
             Session.BeginTransaction();
@@ -66,7 +66,7 @@ namespace Tests
 
             //Tear down DB
             new SchemaExport(Configuration)
-                .Execute(true, true, true);
+                .Execute(false, true, true);
 
         }
 
