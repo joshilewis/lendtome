@@ -61,7 +61,7 @@ namespace Tests.NewUser
 
             var expectedUser = DefaultTestData.ServiceStackUser1;
             ExpectedEventEmitter eventEmitter = new ExpectedEventEmitter();
-            eventEmitter.ExpectEvent(new UserAddedEvent(authDto.Id, authDto.DisplayName, authDto.PrimaryEmail));
+            eventEmitter.ExpectEvent(new UserAdded(authDto.Id, authDto.DisplayName, authDto.PrimaryEmail));
 
             var sut = new NewUserRequestHandler(() => Session, eventEmitter);
             BaseResponse actualResponse = sut.HandleRequest(request);
@@ -141,27 +141,27 @@ namespace Tests.NewUser
             public string Sequence { get; set; }
         }
 
-        public class UnexpectedEventEmitter : IEventEmitter<UserAddedEvent>
+        public class UnexpectedEventEmitter : IEventEmitter<UserAdded>
         {
-            public void EmitEvent(UserAddedEvent userAddedEvent)
+            public void EmitEvent(UserAdded userAdded)
             {
                 Assert.Fail("UserAddedEvent should not be emitted for existing user");
             }
         }
 
-        public class ExpectedEventEmitter : IEventEmitter<UserAddedEvent>
+        public class ExpectedEventEmitter : IEventEmitter<UserAdded>
         {
-            private UserAddedEvent expectedEvent;
+            private UserAdded expected;
 
-            public void ExpectEvent(UserAddedEvent expected)
+            public void ExpectEvent(UserAdded expected)
             {
-                expectedEvent = expected;
+                this.expected = expected;
             }
 
             private bool called = false;
-            public void EmitEvent(UserAddedEvent userAddedEvent)
+            public void EmitEvent(UserAdded userAdded)
             {
-                userAddedEvent.ShouldEqual(expectedEvent);
+                userAdded.ShouldEqual(expected);
                 called = true;
             }
 

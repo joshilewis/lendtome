@@ -84,7 +84,7 @@
     <Compile Include="Model\Organisation.cs" />
     <Compile Include="Model\OrganisationMembership.cs" />
     <Compile Include="Model\Ownership.cs" />
-    <Compile Include="NewUser\UserAddedEvent.cs" />
+    <Compile Include="NewUser\UserAdded.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="RemoveItem\RemoveItemRequest.cs" />

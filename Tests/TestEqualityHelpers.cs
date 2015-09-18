@@ -173,7 +173,7 @@ namespace Tests
             return Arg<Ownership>.Matches(x => x.ShouldEqual(expected));
         }
 
-        public static bool ShouldEqual(this UserAddedEvent actual, UserAddedEvent expected)
+        public static bool ShouldEqual(this UserAdded actual, UserAdded expected)
         {
             Assert.That(actual.Id, Is.EqualTo(expected.Id));
             Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
@@ -182,9 +182,9 @@ namespace Tests
             return true;
         }
 
-        public static UserAddedEvent MatchArg(this UserAddedEvent expected)
+        public static UserAdded MatchArg(this UserAdded expected)
         {
-            return Arg<UserAddedEvent>.Matches(x => x.ShouldEqual(expected));
+            return Arg<UserAdded>.Matches(x => x.ShouldEqual(expected));
         }
 
 			

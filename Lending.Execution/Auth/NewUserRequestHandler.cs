@@ -14,9 +14,9 @@ namespace Lending.Execution.Auth
     public class NewUserRequestHandler : IRequestHandler<IAuthSession, BaseResponse>
     {
         private readonly Func<ISession> getSession;
-        private readonly IEventEmitter<UserAddedEvent> eventEmitter;
+        private readonly IEventEmitter<UserAdded> eventEmitter;
 
-        public NewUserRequestHandler(Func<ISession> sessionFunc, IEventEmitter<UserAddedEvent> eventEmitter)
+        public NewUserRequestHandler(Func<ISession> sessionFunc, IEventEmitter<UserAdded> eventEmitter)
         {
             this.getSession = sessionFunc;
             this.eventEmitter = eventEmitter;
@@ -40,7 +40,7 @@ namespace Lending.Execution.Auth
                 UserAuthPersistenceDto auth = session.Get<UserAuthPersistenceDto>(userAuthId);
                 user = new ServiceStackUser(auth);
                 session.Save(user);
-                eventEmitter.EmitEvent(new UserAddedEvent(user.Id, user.UserName, user.EmailAddress));
+                eventEmitter.EmitEvent(new UserAdded(user.Id, user.UserName, user.EmailAddress));
             }
 
             return new BaseResponse();
