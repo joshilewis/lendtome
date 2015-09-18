@@ -49,7 +49,7 @@ namespace Tests.NewUser
         }
 
         [Test]
-        public void NewUserShouldBeCreated()
+        public void NewUserShouldBeCreatedAndEventEmitted()
         {
             var authDto = DefaultTestData.UserAuthPersistenceDto1;
             SaveEntities(authDto);//This is needed because ServiceStack will persist the AuthDto behind the scenes on sign-up
