@@ -165,29 +165,7 @@ namespace Tests.NewUser
         {
             public void EmitEvent(UserAdded userAdded)
             {
-                Assert.Fail("UserAddedEvent should not be emitted for existing user");
-            }
-        }
-
-        public class ExpectedEventEmitter : IEventEmitter<UserAdded>
-        {
-            private UserAdded expected;
-
-            public void ExpectEvent(UserAdded expected)
-            {
-                this.expected = expected;
-            }
-
-            private bool called = false;
-            public void EmitEvent(UserAdded userAdded)
-            {
-                userAdded.ShouldEqual(expected);
-                called = true;
-            }
-
-            public void VerifyExpectations()
-            {
-                if (!called) Assert.Fail("No event emitted");
+                Assert.Fail("UserAdded should not be emitted for existing user");
             }
         }
 
