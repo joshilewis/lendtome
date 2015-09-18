@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lending.Core;
 using Lending.Core.Model;
+using Lending.Core.NewUser;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
@@ -159,8 +160,6 @@ namespace Tests
             return Arg<Borrowing>.Matches(x => x.ShouldEqual(expected));
         }
 
-
-
         public static bool ShouldEqual(this Ownership actual, Ownership expected)
         {
             actual.Item.ShouldEqual(expected.Item);
@@ -173,6 +172,21 @@ namespace Tests
         {
             return Arg<Ownership>.Matches(x => x.ShouldEqual(expected));
         }
+
+        public static bool ShouldEqual(this UserAddedEvent actual, UserAddedEvent expected)
+        {
+            Assert.That(actual.Id, Is.EqualTo(expected.Id));
+            Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
+            Assert.That(actual.EmailAddress, Is.EqualTo(expected.EmailAddress));
+
+            return true;
+        }
+
+        public static UserAddedEvent MatchArg(this UserAddedEvent expected)
+        {
+            return Arg<UserAddedEvent>.Matches(x => x.ShouldEqual(expected));
+        }
+
 			
     }
 }

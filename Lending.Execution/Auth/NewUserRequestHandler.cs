@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Core;
+using Lending.Core.NewUser;
 using NHibernate;
 using ServiceStack.Authentication.NHibernate;
 using ServiceStack.ServiceInterface.Auth;
@@ -13,10 +14,12 @@ namespace Lending.Execution.Auth
     public class NewUserRequestHandler : IRequestHandler<IAuthSession, BaseResponse>
     {
         private readonly Func<ISession> getSession;
+        private readonly IEventEmitter<UserAddedEvent> eventEmitter;
 
-        public NewUserRequestHandler(Func<ISession> sessionFunc)
+        public NewUserRequestHandler(Func<ISession> sessionFunc, IEventEmitter<UserAddedEvent> eventEmitter)
         {
             this.getSession = sessionFunc;
+            this.eventEmitter = eventEmitter;
         }
 
         protected NewUserRequestHandler() { }

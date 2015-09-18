@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Core;
+using Lending.Core.NewUser;
 using Lending.Execution.Auth;
 using NUnit.Framework;
 using ServiceStack.Authentication.NHibernate;
@@ -11,12 +12,16 @@ using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.Auth;
 
+namespace Lending.Core.NewUser
+{
+}
+
 namespace Tests.NewUser
 {
     public class NewUserRequestHandlerTests : DatabaseFixtureBase
     {
         [Test]
-        public void ExistingUserShouldNotBeCreated()
+        public void ExistingUserShouldNotBeCreatedAndNoEventEmitted()
         {
             var existingUser = DefaultTestData.ServiceStackUser1;
             SaveEntities(existingUser);//This is needed because ServiceStack will persist the AuthDto behind the scenes on sign-up
@@ -28,7 +33,7 @@ namespace Tests.NewUser
 
             var expectedUser = DefaultTestData.ServiceStackUser1;
 
-            var sut = new NewUserRequestHandler(() => Session);
+            var sut = new NewUserRequestHandler(() => Session, new UnexpectedEventEmitter());
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
@@ -55,11 +60,14 @@ namespace Tests.NewUser
             var expectedResponse = new BaseResponse();
 
             var expectedUser = DefaultTestData.ServiceStackUser1;
+            ExpectedEventEmitter eventEmitter = new ExpectedEventEmitter();
+            eventEmitter.ExpectEvent(new UserAddedEvent(authDto.Id, authDto.UserName, authDto.Email));
 
-            var sut = new NewUserRequestHandler(() => Session);
+            var sut = new NewUserRequestHandler(() => Session, eventEmitter);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
+            eventEmitter.VerifyExpectations();
 
             CommitTransactionAndOpenNew();
 
@@ -131,6 +139,36 @@ namespace Tests.NewUser
             public List<string> Permissions { get; set; }
             public bool IsAuthenticated { get; set; }
             public string Sequence { get; set; }
+        }
+
+        public class UnexpectedEventEmitter : IEventEmitter<UserAddedEvent>
+        {
+            public void EmitEvent(UserAddedEvent userAddedEvent)
+            {
+                Assert.Fail("UserAddedEvent should not be emitted for existing user");
+            }
+        }
+
+        public class ExpectedEventEmitter : IEventEmitter<UserAddedEvent>
+        {
+            private UserAddedEvent expectedEvent;
+
+            public void ExpectEvent(UserAddedEvent expected)
+            {
+                expectedEvent = expected;
+            }
+
+            private bool called = false;
+            public void EmitEvent(UserAddedEvent userAddedEvent)
+            {
+                userAddedEvent.ShouldEqual(expectedEvent);
+                called = true;
+            }
+
+            public void VerifyExpectations()
+            {
+                if (!called) Assert.Fail("No event emitted");
+            }
         }
     }
 }

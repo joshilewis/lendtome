@@ -60,10 +60,12 @@
     <Compile Include="BaseAuthenticatedRequestHandler.cs" />
     <Compile Include="BorrowItem\BorrowItemRequest.cs" />
     <Compile Include="BorrowItem\BorrowItemRequestHandler.cs" />
+    <Compile Include="Event.cs" />
     <Compile Include="GetUserItems\GetUserItemsRequest.cs" />
     <Compile Include="GetUserItems\GetUserItemsRequestHandler.cs" />
     <Compile Include="GetUserItems\GetUserItemsRequestResponse.cs" />
     <Compile Include="IAuthenticatedRequestHandler.cs" />
+    <Compile Include="IEventEmitter.cs" />
     <Compile Include="Model\IOwner.cs" />
     <Compile Include="Model\Maps\BorrowingMap.cs" />
     <Compile Include="Model\Maps\ItemMapcs.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="Model\Organisation.cs" />
     <Compile Include="Model\OrganisationMembership.cs" />
     <Compile Include="Model\Ownership.cs" />
+    <Compile Include="NewUser\UserAddedEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="RemoveItem\RemoveItemRequest.cs" />
