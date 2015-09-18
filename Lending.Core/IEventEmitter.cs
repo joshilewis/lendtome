@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Lending.Core
 {
-    public interface IEventEmitter<in T> where T : Event
+    public interface IEventEmitter
     {
-        void EmitEvent(T t);
+        void EmitEvent(Event @event);
     }
 }

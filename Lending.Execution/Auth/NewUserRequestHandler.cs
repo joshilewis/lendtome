@@ -14,9 +14,9 @@ namespace Lending.Execution.Auth
     public class NewUserRequestHandler : IRequestHandler<IAuthSession, BaseResponse>
     {
         private readonly Func<ISession> getSession;
-        private readonly IEventEmitter<UserAdded> eventEmitter;
+        private readonly IEventEmitter eventEmitter;
 
-        public NewUserRequestHandler(Func<ISession> sessionFunc, IEventEmitter<UserAdded> eventEmitter)
+        public NewUserRequestHandler(Func<ISession> sessionFunc, IEventEmitter eventEmitter)
         {
             this.getSession = sessionFunc;
             this.eventEmitter = eventEmitter;

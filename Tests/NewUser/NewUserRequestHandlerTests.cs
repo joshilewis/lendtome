@@ -9,6 +9,7 @@ using EventStore.ClientAPI.Embedded;
 using Lending.Core;
 using Lending.Core.NewUser;
 using Lending.Execution.Auth;
+using Lending.Execution.EventStore;
 using NUnit.Framework;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
@@ -88,7 +89,7 @@ namespace Tests.NewUser
 
             userInDb.ShouldEqual(expectedUser);
 
-            StreamEventsSlice slice = connection.ReadStreamEventsBackwardAsync("User-" + authDto.Id, 0, 10, false).Result;
+            StreamEventsSlice slice = connection.ReadStreamEventsBackwardAsync("UserAdded-" + authDto.Id, 0, 10, false).Result;
             Assert.That(slice.Events.Count(), Is.EqualTo(1));
 
             var value = Encoding.UTF8.GetString(slice.Events[0].Event.Data);
@@ -161,48 +162,12 @@ namespace Tests.NewUser
             public string Sequence { get; set; }
         }
 
-        public class UnexpectedEventEmitter : IEventEmitter<UserAdded>
+        public class UnexpectedEventEmitter : IEventEmitter
         {
-            public void EmitEvent(UserAdded userAdded)
+            public void EmitEvent(Event @event)
             {
                 Assert.Fail("UserAdded should not be emitted for existing user");
             }
-        }
-
-        public class EventStoreEventEmitter : IEventEmitter<UserAdded>
-        {
-            private readonly IEventStoreConnection eventStoreConnection;
-
-            public EventStoreEventEmitter(IEventStoreConnection eventStoreConnection)
-            {
-                this.eventStoreConnection = eventStoreConnection;
-            }
-
-            public void EmitEvent(UserAdded userAdded)
-            {
-                eventStoreConnection.AppendToStreamAsync("User-" + userAdded.Id, ExpectedVersion.Any, AsJson(userAdded)).Wait();
-            }
-
-            private static EventData AsJson(object value)
-            {
-                if (value == null) throw new ArgumentNullException("value");
-
-                var json = value.ToJson();
-                var data = Encoding.UTF8.GetBytes(json);
-                var eventName = value.GetType().Name;
-
-                return new EventData(Guid.NewGuid(), eventName, true, data, new byte[] {});
-            }
-
-            private static T ParseJson<T>(RecordedEvent data)
-            {
-                if (data == null) throw new ArgumentNullException("data");
-
-                var value = Encoding.UTF8.GetString(data.Data);
-
-                return value.FromJson<T>();
-            }
-
         }
     }
 }

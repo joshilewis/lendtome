@@ -13,7 +13,7 @@ namespace Lending.Web
 {
     public class FormsAuthNewUserRequestHandler : NewUserRequestHandler
     {
-        public FormsAuthNewUserRequestHandler(Func<ISession> sessionFunc, IEventEmitter<UserAdded> eventEmitter)
+        public FormsAuthNewUserRequestHandler(Func<ISession> sessionFunc, IEventEmitter eventEmitter)
             : base(sessionFunc, eventEmitter)
         { }
 
