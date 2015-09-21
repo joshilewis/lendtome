@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using Lending.Core;
 using NHibernate;
 
 namespace Lending.Execution.UnitOfWork
@@ -10,5 +12,6 @@ namespace Lending.Execution.UnitOfWork
         void RollBack();
 
         ISession CurrentSession { get; }
+        ConcurrentQueue<Event> Queue { get; }
     }
 }

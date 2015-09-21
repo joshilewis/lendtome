@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -61,19 +62,7 @@ namespace Tests.NewUser
             var expectedUser = DefaultTestData.ServiceStackUser1;
             var expectedEvent = new UserAdded(authDto.Id, authDto.DisplayName, authDto.PrimaryEmail);
 
-            var noIp = new IPEndPoint(IPAddress.None, 0);
-            var node = EmbeddedVNodeBuilder
-                .AsSingleNode()
-                .WithInternalTcpOn(noIp)
-                .WithInternalHttpOn(noIp)
-                .RunInMemory()
-                .Build();
-            node.Start();
-
-            IEventStoreConnection connection = EmbeddedEventStoreConnection.Create(node);
-
-            connection.ConnectAsync().Wait();
-            EventStoreEventEmitter eventEmitter = new EventStoreEventEmitter(connection);
+            EventStoreEventEmitter eventEmitter = new EventStoreEventEmitter(new ConcurrentQueue<Event>());
 
             var sut = new NewUserRequestHandler(() => Session, eventEmitter);
             BaseResponse actualResponse = sut.HandleRequest(request);
@@ -89,16 +78,12 @@ namespace Tests.NewUser
 
             userInDb.ShouldEqual(expectedUser);
 
-            StreamEventsSlice slice = connection.ReadStreamEventsBackwardAsync("UserAdded-" + authDto.Id, 0, 10, false).Result;
-            Assert.That(slice.Events.Count(), Is.EqualTo(1));
+            ConcurrentQueue<Event> actualQueue = eventEmitter.Queue;
 
-            var value = Encoding.UTF8.GetString(slice.Events[0].Event.Data);
-            UserAdded actual = value.FromJson<UserAdded>();
-            actual.ShouldEqual(expectedEvent);
-            
-            connection.Close();
-            connection.Dispose();
-            node.Stop();
+            Assert.That(actualQueue.Count, Is.EqualTo(1));
+            UserAdded actualEvent = (UserAdded)actualQueue.First();
+            actualEvent.ShouldEqual(expectedEvent);
+
         }
 
         public class AuthSessionDouble : IAuthSession

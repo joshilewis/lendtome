@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Configuration;
 using Enyim.Caching;
 using Enyim.Caching.Configuration;
@@ -11,6 +12,7 @@ using Lending.Core.AddItem;
 using Lending.Core.Model;
 using Lending.Core.Model.Maps;
 using Lending.Execution.Auth;
+using Lending.Execution.EventStore;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
 //using Nancy;
@@ -61,6 +63,8 @@ namespace Lending.Execution.DI
             For<IUnitOfWork>()
                 .HybridHttpOrThreadLocalScoped()
                 .Use<UnitOfWork.UnitOfWork>()
+                .Ctor<string>()
+                .EqualToAppSetting("EventStore:IPAddress")
                 ;
 
             For<ISession>()
@@ -104,15 +108,25 @@ namespace Lending.Execution.DI
 
             For<ICacheClient>()
                 .Singleton()
-                .Use(cache)
-                //.Use<MemoryCacheClient>()
+                //.Use(cache)
+                .Use<MemoryCacheClient>()
                 ;
 
             For<ItemWebService>()
                 .AlwaysUnique()
                 .Use<ItemWebService>()
                 ;
+
+            For<ConcurrentQueue<Event>>()
+                .Use(c => c.GetInstance<IUnitOfWork>().Queue)
+                ;
+
+            For<IEventEmitter>()
+                .AlwaysUnique()
+                .Use<EventStoreEventEmitter>()
+                ;
         }
+
 
     }
 }

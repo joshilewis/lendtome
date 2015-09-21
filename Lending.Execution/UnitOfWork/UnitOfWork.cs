@@ -1,5 +1,15 @@
-﻿using NHibernate;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Linq;
+using System.Net;
+using System.Text;
+using EventStore.ClientAPI;
+using Lending.Core;
+using Lending.Core.NewUser;
+using Lending.Execution.EventStore;
+using NHibernate;
 using NHibernate.Context;
+using ServiceStack.Text;
 
 namespace Lending.Execution.UnitOfWork
 {
@@ -8,11 +18,15 @@ namespace Lending.Execution.UnitOfWork
         //private readonly static ILog Log = LogManager.GetLogger(typeof(UnitOfWork).FullName);
 
         private readonly ISessionFactory sessionFactory;
+        private readonly ConcurrentQueue<Event> eventQueue;
+        private readonly IPEndPoint eventStoreEndPoint;
 
-        public UnitOfWork(ISessionFactory sessionFactory)
+        public UnitOfWork(ISessionFactory sessionFactory, string eventStoreIpAddress)
         {
             //Log.DebugFormat("Creating unit of work {0}", GetHashCode());
             this.sessionFactory = sessionFactory;
+            this.eventStoreEndPoint = new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), 1113);
+            eventQueue = new ConcurrentQueue<Event>();
         }
 
         public void Begin()
@@ -25,6 +39,17 @@ namespace Lending.Execution.UnitOfWork
 
         public void Commit()
         {
+
+            IEventStoreConnection connection = EventStoreConnection.Create(eventStoreEndPoint);
+            connection.ConnectAsync().Wait();
+            foreach (Event @event in eventQueue)
+            {
+                string streamName = String.Format("{0}-{1}", @event.GetType().Name, @event.Id);
+                connection.AppendToStreamAsync(streamName, ExpectedVersion.Any, @event.AsJson()).Wait();
+            }
+            connection.Close();
+            connection.Dispose();
+
             //Log.DebugFormat("Committing unit of work {0}", GetHashCode());
             currentSession.Transaction.Commit();
             CurrentSessionContext.Unbind(sessionFactory);
@@ -51,6 +76,14 @@ namespace Lending.Execution.UnitOfWork
             {
                 //Log.DebugFormat("Retrieving current session of unit of work {0}", GetHashCode());
                 return currentSession;
+            }
+        }
+
+        public ConcurrentQueue<Event> Queue 
+        {
+            get
+            {
+                return eventQueue;
             }
         }
 
