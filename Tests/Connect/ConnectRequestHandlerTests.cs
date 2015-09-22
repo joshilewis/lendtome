@@ -16,31 +16,27 @@ namespace Tests.Connect
     [TestFixture]
     public class ConnectRequestHandlerTests : DatabaseAndEventStoreFixtureBase
     {
-        //[Test]
-        //public void ExistingConnectionRequestFrom1To2ShouldDisallowRequest()
-        //{
-        //    var user1Added = new UserAdded(1, "User 1", "email1");
-        //    var user2Added = new UserAdded(2, "User 2", "email2");
+        [Test]
+        public void ExistingConnectionRequestFrom1To2ShouldDisallowRequest()
+        {
+            var user1Added = new UserAdded(1L, "User 1", "email1");
+            var user2Added = new UserAdded(2L, "User 2", "email2");
 
-        //    var connectionRequested = new ConnectionRequested(1, 2);
+            var connectionRequested = new ConnectionRequested(Guid.NewGuid(), 1, 2);
 
-        //    WriteEvents(user1Added, user2Added, connectionRequested);
+            var request = new ConnectionRequest((long)user1Added.Id, (long)user2Added.Id);
+            var expectedResponse = new BaseResponse(ConnectionRequestHandler.ConnectionAlreadyRequested);
 
-        //    var request = new ConnectRequest(user1Added.Id, user2Added.Id);
-        //    var expectedResponse = new BaseResponse(ConnectRequestHandler.ConnectionAlreadyRequested);
+            EventStoreEventEmitter eventEmitter = new EventStoreEventEmitter(new ConcurrentQueue<StreamEventTuple>());
 
-        //    var sut = new ConnectRequestHandler();
-        //    BaseResponse actualResponse = sut.HandleRequest(request);
+            var sut = new ConnectionRequestHandler(eventEmitter);
+            BaseResponse actualResponse = sut.HandleRequest(request);
 
-        //    actualResponse.ShouldEqual(expectedResponse);
+            actualResponse.ShouldEqual(expectedResponse);
 
-        //    StreamEventsSlice slice = Connection.ReadStreamEventsBackwardAsync("UserAdded-" + authDto.Id, 0, 10, false).Result;
-        //    Assert.That(slice.Events.Count(), Is.EqualTo(1));
-
-        //    var value = Encoding.UTF8.GetString(slice.Events[0].Event.Data);
-        //    UserAdded actual = value.FromJson<UserAdded>();
-        //    actual.ShouldEqual(expectedEvent);
-        //}
+            ConcurrentQueue<StreamEventTuple> actualQueue = eventEmitter.Queue;
+            Assert.That(actualQueue, Is.Empty);
+        }
 
         [Test]
         public void NoExistingConnectionRequestShouldEmitEvent()
