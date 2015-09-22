@@ -10,18 +10,18 @@ namespace Lending.Execution.EventStore
 {
     public class EventStoreEventEmitter : IEventEmitter
     {
-        private readonly ConcurrentQueue<Event> eventQueue;
+        private readonly ConcurrentQueue<StreamEventTuple> eventQueue;
 
-        public EventStoreEventEmitter(ConcurrentQueue<Event> eventQueue)
+        public EventStoreEventEmitter(ConcurrentQueue<StreamEventTuple> eventQueue)
         {
             this.eventQueue = eventQueue;
         }
 
-        public ConcurrentQueue<Event> Queue { get { return eventQueue; } }
+        public ConcurrentQueue<StreamEventTuple> Queue { get { return eventQueue; } }
 
-        public void EmitEvent(Event @event)
+        public void EmitEvent(string stream, Event @event)
         {
-            eventQueue.Enqueue(@event);
+            eventQueue.Enqueue(new StreamEventTuple(stream, @event));
         }
 
     }

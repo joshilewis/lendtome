@@ -16,6 +16,7 @@ namespace Lending.Core
         public BaseResponse(string failureDescription)
         {
             FailureDescription = failureDescription;
+            Success = false;
         }
     }
 

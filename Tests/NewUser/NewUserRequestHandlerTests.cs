@@ -62,7 +62,7 @@ namespace Tests.NewUser
             var expectedUser = DefaultTestData.ServiceStackUser1;
             var expectedEvent = new UserAdded(authDto.Id, authDto.DisplayName, authDto.PrimaryEmail);
 
-            EventStoreEventEmitter eventEmitter = new EventStoreEventEmitter(new ConcurrentQueue<Event>());
+            EventStoreEventEmitter eventEmitter = new EventStoreEventEmitter(new ConcurrentQueue<StreamEventTuple>());
 
             var sut = new NewUserRequestHandler(() => Session, eventEmitter);
             BaseResponse actualResponse = sut.HandleRequest(request);
@@ -78,10 +78,10 @@ namespace Tests.NewUser
 
             userInDb.ShouldEqual(expectedUser);
 
-            ConcurrentQueue<Event> actualQueue = eventEmitter.Queue;
+            ConcurrentQueue<StreamEventTuple> actualQueue = eventEmitter.Queue;
 
             Assert.That(actualQueue.Count, Is.EqualTo(1));
-            UserAdded actualEvent = (UserAdded)actualQueue.First();
+            UserAdded actualEvent = (UserAdded)actualQueue.First().Event;
             actualEvent.ShouldEqual(expectedEvent);
 
         }
@@ -149,7 +149,7 @@ namespace Tests.NewUser
 
         public class UnexpectedEventEmitter : IEventEmitter
         {
-            public void EmitEvent(Event @event)
+            public void EmitEvent(string stream, Event @event)
             {
                 Assert.Fail("UserAdded should not be emitted for existing user");
             }

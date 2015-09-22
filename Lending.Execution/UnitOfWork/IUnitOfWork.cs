@@ -12,6 +12,6 @@ namespace Lending.Execution.UnitOfWork
         void RollBack();
 
         ISession CurrentSession { get; }
-        ConcurrentQueue<Event> Queue { get; }
+        ConcurrentQueue<StreamEventTuple> Queue { get; }
     }
 }

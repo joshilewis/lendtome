@@ -8,6 +8,6 @@ namespace Lending.Core
 {
     public interface IEventEmitter
     {
-        void EmitEvent(Event @event);
+        void EmitEvent(string stream, Event @event);
     }
 }

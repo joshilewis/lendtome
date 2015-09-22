@@ -117,7 +117,7 @@ namespace Lending.Execution.DI
                 .Use<ItemWebService>()
                 ;
 
-            For<ConcurrentQueue<Event>>()
+            For<ConcurrentQueue<StreamEventTuple>>()
                 .Use(c => c.GetInstance<IUnitOfWork>().Queue)
                 ;
 

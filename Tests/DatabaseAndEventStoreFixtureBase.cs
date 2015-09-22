@@ -37,15 +37,24 @@ namespace Tests
             Connection = EmbeddedEventStoreConnection.Create(Node);
             Connection.ConnectAsync().Wait();
 
-            Emitter = new EventStoreEventEmitter(new ConcurrentQueue<Event>());
+            Emitter = new EventStoreEventEmitter(new ConcurrentQueue<StreamEventTuple>());
         }
 
-        protected void WriteEvents()
+        protected void WriteEmittedEvents()
         {
-            foreach (Event @event in ((EventStoreEventEmitter) Emitter).Queue)
+            AppendEvents(((EventStoreEventEmitter)Emitter).Queue);
+        }
+
+        protected void WriteEvents(params StreamEventTuple[] eventsToWrite)
+        {
+            AppendEvents(eventsToWrite);
+        }
+
+        private void AppendEvents(IEnumerable<StreamEventTuple> eventsToWrite)
+        {
+            foreach (StreamEventTuple tuple in eventsToWrite)
             {
-                string streamName = String.Format("{0}-{1}", @event.GetType().Name, @event.Id);
-                Connection.AppendToStreamAsync(streamName, ExpectedVersion.Any, @event.AsJson()).Wait();
+                Connection.AppendToStreamAsync(tuple.Stream, ExpectedVersion.Any, tuple.Event.AsJson()).Wait();
             }
         }
 
