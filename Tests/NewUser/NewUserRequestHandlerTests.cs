@@ -61,6 +61,7 @@ namespace Tests.NewUser
             var expectedResponse = new BaseResponse();
             var expectedUser = DefaultTestData.ServiceStackUser1;
             var expectedEvent = new UserAdded(authDto.Id, authDto.DisplayName, authDto.PrimaryEmail);
+            var expectedStream = "User-" + authDto.Id;
 
             EventStoreEventEmitter eventEmitter = new EventStoreEventEmitter(new ConcurrentQueue<StreamEventTuple>());
 
@@ -81,8 +82,10 @@ namespace Tests.NewUser
             ConcurrentQueue<StreamEventTuple> actualQueue = eventEmitter.Queue;
 
             Assert.That(actualQueue.Count, Is.EqualTo(1));
-            UserAdded actualEvent = (UserAdded)actualQueue.First().Event;
-            actualEvent.ShouldEqual(expectedEvent);
+            StreamEventTuple tuple = actualQueue.First();
+            Assert.That(tuple.Stream, Is.EqualTo(expectedStream));
+            ((UserAdded)tuple.Event).ShouldEqual(expectedEvent);
+
 
         }
 

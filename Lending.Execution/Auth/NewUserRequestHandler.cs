@@ -40,7 +40,7 @@ namespace Lending.Execution.Auth
                 UserAuthPersistenceDto auth = session.Get<UserAuthPersistenceDto>(userAuthId);
                 user = new ServiceStackUser(auth);
                 session.Save(user);
-                eventEmitter.EmitEvent("User", new UserAdded(user.Id, user.UserName, user.EmailAddress));
+                eventEmitter.EmitEvent("User-" + user.Id, new UserAdded(user.Id, user.UserName, user.EmailAddress));
             }
 
             return new BaseResponse();
