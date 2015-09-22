@@ -16,8 +16,13 @@ namespace Tests.Connect
     [TestFixture]
     public class ConnectRequestHandlerTests : DatabaseAndEventStoreFixtureBase
     {
+        /// <summary>
+        /// GIVEN User1 exists AND User2 exists AND they are not connected AND there is an existing connection request from User1 to User2
+        ///WHEN User1 requests a connection to User2
+        ///THEN no request is created AND User1 is informed that the request failed because a connection request exists and is pending
+        /// </summary>
         [Test]
-        public void ExistingConnectionRequestFrom1To2ShouldDisallowRequest()
+        public void ExistingConnectionRequestFrom1To2ShouldBeRejected()
         {
             var user1Added = new UserAdded(1L, "User 1", "email1");
             var user2Added = new UserAdded(2L, "User 2", "email2");
@@ -38,6 +43,11 @@ namespace Tests.Connect
             Assert.That(actualQueue, Is.Empty);
         }
 
+        /// <summary>
+        /// GIVEN User1 exists AND User2 exists AND they are not connected AND there are no connection requests between them
+        ///WHEN User1 requests a connection to User2
+        ///THEN the request is created AND User2 is informed of the connection request
+        /// </summary>
         [Test]
         public void NoExistingConnectionRequestShouldEmitEvent()
         {
