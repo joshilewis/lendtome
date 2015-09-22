@@ -19,7 +19,7 @@ using ServiceStack.Text;
 
 namespace Tests.NewUser
 {
-    public class NewUserRequestHandlerTests : DatabaseFixtureBase
+    public class NewUserRequestHandlerTests : DatabaseAndEventStoreFixtureBase
     {
         [Test]
         public void ExistingUserShouldNotBeCreatedAndNoEventEmitted()
@@ -57,20 +57,19 @@ namespace Tests.NewUser
 
             CommitTransactionAndOpenNew();
 
+            var stream = "User-" + authDto.Id;
             var request = new AuthSessionDouble();
             var expectedResponse = new BaseResponse();
             var expectedUser = DefaultTestData.ServiceStackUser1;
-            var expectedEvent = new UserAdded(authDto.Id, authDto.DisplayName, authDto.PrimaryEmail);
-            var expectedStream = "User-" + authDto.Id;
+            var expectedEvent = new UserAdded(authDto.Id.ToString(), authDto.DisplayName, authDto.PrimaryEmail);
 
-            EventStoreEventEmitter eventEmitter = new EventStoreEventEmitter(new ConcurrentQueue<StreamEventTuple>());
-
-            var sut = new NewUserRequestHandler(() => Session, eventEmitter);
+            var sut = new NewUserRequestHandler(() => Session, Emitter);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
 
             CommitTransactionAndOpenNew();
+            WriteEmittedEvents();
 
             ServiceStackUser userInDb = Session
                 .QueryOver<ServiceStackUser>()
@@ -79,14 +78,12 @@ namespace Tests.NewUser
 
             userInDb.ShouldEqual(expectedUser);
 
-            ConcurrentQueue<StreamEventTuple> actualQueue = eventEmitter.Queue;
 
-            Assert.That(actualQueue.Count, Is.EqualTo(1));
-            StreamEventTuple tuple = actualQueue.First();
-            Assert.That(tuple.Stream, Is.EqualTo(expectedStream));
-            ((UserAdded)tuple.Event).ShouldEqual(expectedEvent);
-
-
+            StreamEventsSlice slice = Connection.ReadStreamEventsBackwardAsync(stream, 0, 10, false).Result;
+            Assert.That(slice.Events.Count(), Is.EqualTo(1));
+            var value = Encoding.UTF8.GetString(slice.Events[0].Event.Data);
+            UserAdded actual = value.FromJson<UserAdded>();
+            actual.ShouldEqual(expectedEvent);
         }
 
         public class AuthSessionDouble : IAuthSession

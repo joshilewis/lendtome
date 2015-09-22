@@ -5,7 +5,7 @@ namespace Lending.Core.NewUser
         public string UserName { get; set; }
         public string EmailAddress { get; set; }
 
-        public UserAdded(long id, string userName, string emailAddress)
+        public UserAdded(object id, string userName, string emailAddress)
             : base(id)
         {
             UserName = userName;

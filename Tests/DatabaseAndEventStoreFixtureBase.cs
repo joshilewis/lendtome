@@ -9,6 +9,7 @@ using EventStore.ClientAPI;
 using EventStore.ClientAPI.Embedded;
 using EventStore.Core;
 using Lending.Core;
+using Lending.Core.NewUser;
 using Lending.Execution.EventStore;
 using NUnit.Framework;
 
@@ -29,6 +30,7 @@ namespace Tests
                 .WithInternalHttpOn(noIp)
                 .RunInMemory()
                 .Build();
+            Node.Start();
         }
 
         public override void SetUp()

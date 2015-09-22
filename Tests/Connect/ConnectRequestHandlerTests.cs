@@ -54,33 +54,24 @@ namespace Tests.Connect
             var user1Added = new UserAdded(1, "User 1", "email1");
             var user2Added = new UserAdded(2, "User 2", "email2");
 
-            //WriteEvents(new StreamEventTuple("User-1", user1Added), new StreamEventTuple("User-2", user2Added));
+            var stream = "User-" + user1Added.Id;
+            WriteEvents(new StreamEventTuple(stream, user1Added), new StreamEventTuple("User-2", user2Added));
 
-            var request = new ConnectionRequest((long)user1Added.Id, (long)user2Added.Id);
+            var request = new ConnectionRequest(1, 2);
             var expectedResponse = new BaseResponse();
-            var expectedEvent = new ConnectionRequested(Guid.Empty, (long)user1Added.Id, (long)user2Added.Id);
-            var expectedStream = "User-" + user1Added.Id;
+            var expectedEvent = new ConnectionRequested(Guid.Empty, 1, 2);
 
-            EventStoreEventEmitter eventEmitter = new EventStoreEventEmitter(new ConcurrentQueue<StreamEventTuple>());
-
-            var sut = new ConnectionRequestHandler(eventEmitter);
+            var sut = new ConnectionRequestHandler(Emitter);
             BaseResponse actualResponse = sut.HandleRequest(request);
-
+            WriteEmittedEvents();
             actualResponse.ShouldEqual(expectedResponse);
 
-            ConcurrentQueue<StreamEventTuple> actualQueue = eventEmitter.Queue;
+            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync(stream, 0, 10, false).Result;
+            Assert.That(slice.Events.Count(), Is.EqualTo(2));
 
-            Assert.That(actualQueue.Count, Is.EqualTo(1));
-            StreamEventTuple tuple = actualQueue.First();
-            Assert.That(tuple.Stream, Is.EqualTo(expectedStream));
-            ((ConnectionRequested)tuple.Event).ShouldEqual(expectedEvent);
-
-            //StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync("User-1", 0, 10, false).Result;
-            //Assert.That(slice.Events.Count(), Is.EqualTo(3));
-
-            //var value = Encoding.UTF8.GetString(slice.Events[2].Event.Data);
-            //ConnectionRequested actual = value.FromJson<ConnectionRequested>();
-            //actual.ShouldEqual(expectedEvent);
+            var value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
+            ConnectionRequested actual = value.FromJson<ConnectionRequested>();
+            actual.ShouldEqual(expectedEvent);
         }
     }
 }
