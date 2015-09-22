@@ -11,9 +11,9 @@ namespace Lending.Core
     /// </summary>
     public abstract class Event
     {
-        public long Id { get; set; }
+        public object Id { get; set; }
 
-        protected Event(long id)
+        protected Event(object id)
         {
             Id = id;
         }

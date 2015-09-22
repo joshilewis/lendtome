@@ -1,126 +1,80 @@
-﻿using Lending.Core;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Linq;
+using System.Text;
+using EventStore.ClientAPI;
+using Lending.Core;
 using Lending.Core.Connect;
 using Lending.Core.Model;
+using Lending.Core.NewUser;
+using Lending.Execution.EventStore;
 using NUnit.Framework;
+using ServiceStack.Text;
 
 namespace Tests.Connect
 {
     [TestFixture]
-    public class ConnectRequestHandlerTests : DatabaseFixtureBase
+    public class ConnectRequestHandlerTests : DatabaseAndEventStoreFixtureBase
     {
+        //[Test]
+        //public void ExistingConnectionRequestFrom1To2ShouldDisallowRequest()
+        //{
+        //    var user1Added = new UserAdded(1, "User 1", "email1");
+        //    var user2Added = new UserAdded(2, "User 2", "email2");
+
+        //    var connectionRequested = new ConnectionRequested(1, 2);
+
+        //    WriteEvents(user1Added, user2Added, connectionRequested);
+
+        //    var request = new ConnectRequest(user1Added.Id, user2Added.Id);
+        //    var expectedResponse = new BaseResponse(ConnectRequestHandler.ConnectionAlreadyRequested);
+
+        //    var sut = new ConnectRequestHandler();
+        //    BaseResponse actualResponse = sut.HandleRequest(request);
+
+        //    actualResponse.ShouldEqual(expectedResponse);
+
+        //    StreamEventsSlice slice = Connection.ReadStreamEventsBackwardAsync("UserAdded-" + authDto.Id, 0, 10, false).Result;
+        //    Assert.That(slice.Events.Count(), Is.EqualTo(1));
+
+        //    var value = Encoding.UTF8.GetString(slice.Events[0].Event.Data);
+        //    UserAdded actual = value.FromJson<UserAdded>();
+        //    actual.ShouldEqual(expectedEvent);
+        //}
 
         [Test]
-        public void Test_Success()
+        public void NoExistingConnectionRequestShouldEmitEvent()
         {
-            //Arrange
-            var fromUser = DefaultTestData.ServiceStackUser1; ;
-            var toUser = DefaultTestData.ServiceStackUser2;
+            var user1Added = new UserAdded(1, "User 1", "email1");
+            var user2Added = new UserAdded(2, "User 2", "email2");
 
-            SaveEntities(fromUser, toUser);
+            //WriteEvents(new StreamEventTuple("User-1", user1Added), new StreamEventTuple("User-2", user2Added));
 
-            CommitTransactionAndOpenNew();
-
-            var expectedConnection = new Connection(fromUser, toUser);
+            var request = new ConnectRequest((long)user1Added.Id, (long)user2Added.Id);
             var expectedResponse = new BaseResponse();
-            var request = new ConnectRequest() {FromUserId = fromUser.Id, ToUserId = toUser.Id};
+            var expectedEvent = new ConnectionRequested(Guid.Empty, (long)user1Added.Id, (long)user2Added.Id);
+            var expectedStream = "User-" + user1Added.Id;
 
-            //Act
+            EventStoreEventEmitter eventEmitter = new EventStoreEventEmitter(new ConcurrentQueue<StreamEventTuple>());
 
-            var sut = new ConnectRequestHandler(() => Session);
+            var sut = new ConnectRequestHandler(eventEmitter);
             BaseResponse actualResponse = sut.HandleRequest(request);
-
-            //Assert
 
             actualResponse.ShouldEqual(expectedResponse);
 
-            //Check that the connection was saved in the DB
-            CommitTransactionAndOpenNew();
+            ConcurrentQueue<StreamEventTuple> actualQueue = eventEmitter.Queue;
 
-            Connection actualConnection = Session
-                .QueryOver<Connection>()
-                .SingleOrDefault()
-                ;
+            Assert.That(actualQueue.Count, Is.EqualTo(1));
+            StreamEventTuple tuple = actualQueue.First();
+            Assert.That(tuple.Stream, Is.EqualTo(expectedStream));
+            ((ConnectionRequested)tuple.Event).ShouldEqual(expectedEvent);
 
-            actualConnection.ShouldEqual(expectedConnection);
+            //StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync("User-1", 0, 10, false).Result;
+            //Assert.That(slice.Events.Count(), Is.EqualTo(3));
+
+            //var value = Encoding.UTF8.GetString(slice.Events[2].Event.Data);
+            //ConnectionRequested actual = value.FromJson<ConnectionRequested>();
+            //actual.ShouldEqual(expectedEvent);
         }
-
-        [Test]
-        public void Test_AlreadyConnected()
-        {
-            //Arrange
-            var fromUser = DefaultTestData.ServiceStackUser1;
-            var toUser = DefaultTestData.ServiceStackUser2;
-            var existingConnection = new Connection(fromUser, toUser);
-            
-            SaveEntities(fromUser, toUser, existingConnection);
-
-            CommitTransactionAndOpenNew();
-
-            var expectedResponse = new BaseResponse(ConnectRequestHandler.AlreadyConnected);
-            var request = new ConnectRequest() { FromUserId = fromUser.Id, ToUserId = toUser.Id };
-
-            //Act
-
-            var sut = new ConnectRequestHandler(() => Session);
-            BaseResponse actualResponse = sut.HandleRequest(request);
-
-            //Assert
-
-            actualResponse.ShouldEqual(expectedResponse);
-
-            //Check that the connection wasn't saved in the DB
-            int numberOfConnections = Session
-                .QueryOver<Connection>()
-                .RowCount()
-                ;
-
-            Assert.That(numberOfConnections, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void Test_SuccessWithExistingOtherConnection()
-        {
-            //Arrange
-            var fromUser = DefaultTestData.ServiceStackUser1;
-            var toUser = DefaultTestData.ServiceStackUser2;
-            var otherUser = DefaultTestData.ServiceStackUser3;
-            var existingConnection = new Connection(otherUser, toUser);
-
-            SaveEntities(fromUser, toUser, otherUser, existingConnection);
-
-            CommitTransactionAndOpenNew();
-
-            var expectedConnection = new Connection(fromUser, toUser);
-            var request = new ConnectRequest() { FromUserId = fromUser.Id, ToUserId = toUser.Id };
-            var expectedResponse = new BaseResponse();
-
-            //Act
-
-            var sut = new ConnectRequestHandler(() => Session);
-            BaseResponse actualResponse = sut.HandleRequest(request);
-
-            //Assert
-
-            actualResponse.ShouldEqual(expectedResponse);
-
-            //Check that the connection was saved in the DB
-            CommitTransactionAndOpenNew();
-
-            Connection connectionAlias = null;
-            User user1Alias = null;
-            User user2Alias = null;
-
-            Connection actualConnection = Session
-                .QueryOver<Connection>(() => connectionAlias)
-                .JoinAlias(() => connectionAlias.User1, () => user1Alias)
-                .JoinAlias(() => connectionAlias.User2, () => user2Alias)
-                .Where(() => (user1Alias.Id == request.FromUserId && user2Alias.Id == request.ToUserId) ||
-                             (user1Alias.Id == request.ToUserId && user2Alias.Id == request.FromUserId))
-                .SingleOrDefault()
-                ;
-
-            actualConnection.ShouldEqual(expectedConnection);
-        }
-
     }
 }

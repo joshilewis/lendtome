@@ -6,57 +6,19 @@ namespace Lending.Core.Connect
 {
     public class ConnectRequestHandler : IRequestHandler<ConnectRequest, BaseResponse>
     {
-        public const string AlreadyConnected = "The Users are already connected.";
+        public const string ConnectionAlreadyRequested = "A connection request for these users already exists";
 
-        private readonly Func<ISession> getSession;
+        private readonly IEventEmitter eventEmitter;
 
-        public ConnectRequestHandler(Func<ISession> sessionFunc)
+        public ConnectRequestHandler(IEventEmitter eventEmitter)
         {
-            this.getSession = sessionFunc;
+            this.eventEmitter = eventEmitter;
         }
-
-        protected ConnectRequestHandler() { }
 
         public virtual BaseResponse HandleRequest(ConnectRequest request)
         {
-            ISession session = getSession();
-
-            if (ConnectionAlreadyExists(request))
-                return new BaseResponse(AlreadyConnected);
-
-            User user1 = session
-                .Get<User>(request.FromUserId)
-                ;
-
-            User user2 = session
-                .Get<User>(request.ToUserId)
-                ;
-
-            var connection = new Connection(user1, user2);
-
-            session.Save(connection);
-
+            eventEmitter.EmitEvent("User-"+request.FromUserId, new ConnectionRequested(Guid.NewGuid(), request.FromUserId, request.ToUserId));
             return new BaseResponse();
-        }
-
-        private bool ConnectionAlreadyExists(ConnectRequest request)
-        {
-            ISession session = getSession();
-            Connection connectionAlias = null;
-            User user1Alias = null;
-            User user2Alias = null;
-
-            int numberOfExistingConnections = session
-                .QueryOver<Connection>(() => connectionAlias)
-                .JoinAlias(() => connectionAlias.User1, () => user1Alias)
-                .JoinAlias(() => connectionAlias.User2, () => user2Alias)
-                .Where(() =>
-                    (user1Alias.Id == request.FromUserId && user2Alias.Id == request.ToUserId) ||
-                    (user1Alias.Id == request.ToUserId && user2Alias.Id == request.FromUserId))
-                .RowCount()
-                ;
-
-            return numberOfExistingConnections > 0;
         }
 
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Core;
+using Lending.Core.Connect;
 using Lending.Core.Model;
 using Lending.Core.NewUser;
 using NUnit.Framework;
@@ -185,6 +186,13 @@ namespace Tests
         public static UserAdded MatchArg(this UserAdded expected)
         {
             return Arg<UserAdded>.Matches(x => x.ShouldEqual(expected));
+        }
+
+        public static bool ShouldEqual(this ConnectionRequested actual, ConnectionRequested expected)
+        {
+            Assert.That(actual.FromUserId, Is.EqualTo(expected.FromUserId));
+            Assert.That(actual.ToUserId, Is.EqualTo(expected.ToUserId));
+            return true;
         }
 
 			

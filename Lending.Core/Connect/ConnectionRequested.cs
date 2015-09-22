@@ -2,17 +2,13 @@ using System;
 
 namespace Lending.Core.Connect
 {
-    public class ConnectRequest
+    public class ConnectionRequested : Event
     {
         public long FromUserId { get; set; }
         public long ToUserId { get; set; }
 
-        public ConnectRequest()
-        {
-            
-        }
-
-        public ConnectRequest(long fromUserId, long toUserId)
+        public ConnectionRequested(Guid id, long fromUserId, long toUserId)
+            : base(id)
         {
             FromUserId = fromUserId;
             ToUserId = toUserId;
