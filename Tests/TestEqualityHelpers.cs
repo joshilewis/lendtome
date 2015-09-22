@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Core;
-using Lending.Core.Connect;
+using Lending.Core.ConnectionRequest;
 using Lending.Core.Model;
 using Lending.Core.NewUser;
 using NUnit.Framework;

@@ -1,6 +1,6 @@
 using System;
 
-namespace Lending.Core.Connect
+namespace Lending.Core.ConnectionRequest
 {
     public class ConnectionRequested : Event
     {

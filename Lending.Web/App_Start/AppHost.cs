@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Lending.Core;
 using Lending.Core.AddItem;
 using Lending.Core.BorrowItem;
-using Lending.Core.Connect;
+using Lending.Core.ConnectionRequest;
 using Lending.Core.GetUserItems;
 //using Lending.Core.Model;
 using Lending.Core.RemoveItem;
@@ -65,7 +65,7 @@ namespace Lending.Web.App_Start
                 .Add<GetUserItemsRequest>("/userownerships/", "GET")
                 .Add<AddUserItemRequest>("/user/items/", "POST")
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
-                .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
+                .Add<ConnectionRequest>("/connection/add/{FromUserId}/{ToUserId}/")
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
                 .Add<ItemRequest>("/items/{itemid}/", "GET")
                 .Add<ItemRequest>("/items/", "GET")

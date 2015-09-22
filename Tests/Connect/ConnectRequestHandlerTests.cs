@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using EventStore.ClientAPI;
 using Lending.Core;
-using Lending.Core.Connect;
+using Lending.Core.ConnectionRequest;
 using Lending.Core.Model;
 using Lending.Core.NewUser;
 using Lending.Execution.EventStore;
@@ -50,14 +50,14 @@ namespace Tests.Connect
 
             //WriteEvents(new StreamEventTuple("User-1", user1Added), new StreamEventTuple("User-2", user2Added));
 
-            var request = new ConnectRequest((long)user1Added.Id, (long)user2Added.Id);
+            var request = new ConnectionRequest((long)user1Added.Id, (long)user2Added.Id);
             var expectedResponse = new BaseResponse();
             var expectedEvent = new ConnectionRequested(Guid.Empty, (long)user1Added.Id, (long)user2Added.Id);
             var expectedStream = "User-" + user1Added.Id;
 
             EventStoreEventEmitter eventEmitter = new EventStoreEventEmitter(new ConcurrentQueue<StreamEventTuple>());
 
-            var sut = new ConnectRequestHandler(eventEmitter);
+            var sut = new ConnectionRequestHandler(eventEmitter);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);

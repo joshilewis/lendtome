@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Lending.Core;
 using Lending.Core.AddItem;
 using Lending.Core.BorrowItem;
-using Lending.Core.Connect;
+using Lending.Core.ConnectionRequest;
 using Lending.Core.GetUserItems;
 using Lending.Core.Model;
 using Lending.Core.RemoveItem;
@@ -34,10 +34,10 @@ namespace Lending.Execution.WebServices
 
     }
 
-    public class ConnectWebservice : WebserviceBase<ConnectRequest, BaseResponse>, IWebserviceBase<ConnectRequest, BaseResponse>
+    public class ConnectWebservice : WebserviceBase<ConnectionRequest, BaseResponse>, IWebserviceBase<ConnectionRequest, BaseResponse>
     {
         public ConnectWebservice(IUnitOfWork unitOfWork,
-            IRequestHandler<ConnectRequest, BaseResponse> requestHandler)
+            IRequestHandler<ConnectionRequest, BaseResponse> requestHandler)
             : base(unitOfWork, requestHandler)
         { }
 

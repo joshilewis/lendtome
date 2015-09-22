@@ -60,6 +60,7 @@
     <Compile Include="BaseAuthenticatedRequestHandler.cs" />
     <Compile Include="BorrowItem\BorrowItemRequest.cs" />
     <Compile Include="BorrowItem\BorrowItemRequestHandler.cs" />
+    <Compile Include="ConnectionRequest\ConnectionRequested.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="GetUserItems\GetUserItemsRequest.cs" />
     <Compile Include="GetUserItems\GetUserItemsRequestHandler.cs" />
@@ -72,8 +73,8 @@
     <Compile Include="Model\Maps\OrganisationMap.cs" />
     <Compile Include="Model\Maps\OwnershipMap.cs" />
     <Compile Include="BaseResponse.cs" />
-    <Compile Include="Connect\ConnectRequest.cs" />
-    <Compile Include="Connect\ConnectRequestHandler.cs" />
+    <Compile Include="ConnectionRequest\ConnectionRequest.cs" />
+    <Compile Include="ConnectionRequest\ConnectionRequestHandler.cs" />
     <Compile Include="IRequestHandler.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\IBorrower.cs" />

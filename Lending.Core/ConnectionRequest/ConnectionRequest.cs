@@ -1,18 +1,16 @@
-using System;
-
-namespace Lending.Core.Connect
+namespace Lending.Core.ConnectionRequest
 {
-    public class ConnectRequest
+    public class ConnectionRequest
     {
         public long FromUserId { get; set; }
         public long ToUserId { get; set; }
 
-        public ConnectRequest()
+        public ConnectionRequest()
         {
             
         }
 
-        public ConnectRequest(long fromUserId, long toUserId)
+        public ConnectionRequest(long fromUserId, long toUserId)
         {
             FromUserId = fromUserId;
             ToUserId = toUserId;

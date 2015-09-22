@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Lending.Core;
 using Lending.Core.AddItem;
 using Lending.Core.BorrowItem;
-using Lending.Core.Connect;
+using Lending.Core.ConnectionRequest;
 using Lending.Core.Model;
 using Lending.Execution.DI;
 using Lending.Execution.WebServices;
@@ -45,7 +45,7 @@ namespace Shell
             Routes
                 .Add<AddUserItemRequest>("/user/{OwnerId}/items/add/", "GET,POST")
                 .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
-                .Add<ConnectRequest>("/connection/add/{FromUserId}/{ToUserId}/")
+                .Add<ConnectionRequest>("/connection/add/{FromUserId}/{ToUserId}/")
                 .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
                 ;
         }
