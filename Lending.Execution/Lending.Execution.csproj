@@ -119,7 +119,7 @@
     <Compile Include="DI\CoreRegistry.cs" />
     <Compile Include="DI\StructureMapContainerAdapter.cs" />
     <Compile Include="EventStore\EventExtensions.cs" />
-    <Compile Include="EventStore\EventStoreEventEmitter.cs" />
+    <Compile Include="EventStore\EventStoreRepository.cs" />
     <Compile Include="Persistence\SchemaUpdater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Auth\UnitOfWorkAuthProvider.cs" />

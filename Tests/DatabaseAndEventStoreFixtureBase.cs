@@ -19,7 +19,7 @@ namespace Tests
     {
         protected static readonly ClusterVNode Node;
         protected IEventStoreConnection Connection;
-        protected IEventEmitter Emitter;
+        protected IRepository Emitter;
 
         static DatabaseAndEventStoreFixtureBase()
         {
@@ -39,12 +39,12 @@ namespace Tests
             Connection = EmbeddedEventStoreConnection.Create(Node);
             Connection.ConnectAsync().Wait();
 
-            Emitter = new EventStoreEventEmitter(new ConcurrentQueue<StreamEventTuple>());
+            Emitter = new EventStoreRepository(new ConcurrentQueue<StreamEventTuple>());
         }
 
         protected void WriteEmittedEvents()
         {
-            AppendEvents(((EventStoreEventEmitter)Emitter).Queue);
+            AppendEvents(((EventStoreRepository)Emitter).Queue);
         }
 
         protected void WriteEvents(params StreamEventTuple[] eventsToWrite)

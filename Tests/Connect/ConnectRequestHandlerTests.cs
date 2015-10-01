@@ -32,7 +32,7 @@ namespace Tests.Connect
             var request = new ConnectionRequest((long)user1Added.Id, (long)user2Added.Id);
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.ConnectionAlreadyRequested);
 
-            EventStoreEventEmitter eventEmitter = new EventStoreEventEmitter(new ConcurrentQueue<StreamEventTuple>());
+            EventStoreRepository eventEmitter = new EventStoreRepository(new ConcurrentQueue<StreamEventTuple>());
 
             var sut = new ConnectionRequestHandler(eventEmitter);
             BaseResponse actualResponse = sut.HandleRequest(request);

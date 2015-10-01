@@ -34,7 +34,7 @@ namespace Tests.NewUser
 
             var expectedUser = DefaultTestData.ServiceStackUser1;
 
-            var sut = new NewUserRequestHandler(() => Session, new UnexpectedEventEmitter());
+            var sut = new NewUserRequestHandler(() => Session, new UnexpectedRepository());
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
@@ -148,8 +148,23 @@ namespace Tests.NewUser
             public string Sequence { get; set; }
         }
 
-        public class UnexpectedEventEmitter : IEventEmitter
+        public class UnexpectedRepository : IRepository
         {
+            public TAggregate GetById<TAggregate>(Guid id) where TAggregate : Aggregate
+            {
+                throw new NotImplementedException();
+            }
+
+            public TAggregate GetById<TAggregate>(Guid id, int version) where TAggregate : Aggregate
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Save(Aggregate aggregate, Guid commitId, Action<IDictionary<string, object>> updateHeaders)
+            {
+                throw new NotImplementedException();
+            }
+
             public void EmitEvent(string stream, Event @event)
             {
                 Assert.Fail("UserAdded should not be emitted for existing user");

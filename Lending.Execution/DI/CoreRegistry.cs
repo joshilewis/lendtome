@@ -121,9 +121,9 @@ namespace Lending.Execution.DI
                 .Use(c => c.GetInstance<IUnitOfWork>().Queue)
                 ;
 
-            For<IEventEmitter>()
+            For<IRepository>()
                 .AlwaysUnique()
-                .Use<EventStoreEventEmitter>()
+                .Use<EventStoreRepository>()
                 ;
         }
 

@@ -6,16 +6,16 @@ namespace Lending.Core.ConnectionRequest
     {
         public const string ConnectionAlreadyRequested = "A connection request for these users already exists";
 
-        private readonly IEventEmitter eventEmitter;
+        private readonly IRepository repository;
 
-        public ConnectionRequestHandler(IEventEmitter eventEmitter)
+        public ConnectionRequestHandler(IRepository repository)
         {
-            this.eventEmitter = eventEmitter;
+            this.repository = repository;
         }
 
         public virtual BaseResponse HandleRequest(ConnectionRequest request)
         {
-            eventEmitter.EmitEvent("User-"+request.FromUserId, new ConnectionRequested(Guid.NewGuid(), request.FromUserId, request.ToUserId));
+            repository.EmitEvent("User-"+request.FromUserId, new ConnectionRequested(Guid.NewGuid(), request.FromUserId, request.ToUserId));
             return new BaseResponse();
         }
 
