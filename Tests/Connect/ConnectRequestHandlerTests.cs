@@ -67,7 +67,7 @@ namespace Tests.Connect
             actualResponse.ShouldEqual(expectedResponse);
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync(stream, 0, 10, false).Result;
-            Assert.That(slice.Events.Count(), Is.EqualTo(2));
+            Assert.That(slice.Events.Length, Is.EqualTo(2));
 
             var value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
             ConnectionRequested actual = value.FromJson<ConnectionRequested>();

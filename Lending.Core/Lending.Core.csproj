@@ -93,6 +93,7 @@
     <Compile Include="RemoveItem\RemoveItemRequestHandler.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="RequestHandler.cs" />
+    <Compile Include="SequentialGuid.cs" />
     <Compile Include="StreamEventTuple.cs" />
   </ItemGroup>
   <ItemGroup>
