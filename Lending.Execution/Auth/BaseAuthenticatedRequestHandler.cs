@@ -1,7 +1,8 @@
 ﻿using System;
+using Lending.Domain;
 using NHibernate;
 
-namespace Lending.Domain
+namespace Lending.Execution.Auth
 {
     public abstract class BaseAuthenticatedRequestHandler<TRequest, TResponse> : IAuthenticatedRequestHandler<TRequest, TResponse>
     {
