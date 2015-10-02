@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
-using Lending.Core.Model.Maps;
 using Lending.Execution.Auth;
 using Lending.Execution.Persistence;
 using NCrunch.Framework;
@@ -38,7 +37,6 @@ namespace Tests
                     )
                 .Mappings(m =>
                     m.FluentMappings
-                        .AddFromAssemblyOf<UserMap>()
                         .AddFromAssemblyOf<ServiceStackUser>()
                         .AddFromAssemblyOf<UserAuthPersistenceDto>()
                 )

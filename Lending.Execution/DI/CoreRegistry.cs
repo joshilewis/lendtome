@@ -8,8 +8,6 @@ using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using Lending.Core;
-using Lending.Core.Model;
-using Lending.Core.Model.Maps;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
 using Lending.Execution.UnitOfWork;
@@ -42,7 +40,6 @@ namespace Lending.Execution.DI
                 .CurrentSessionContext<ThreadStaticSessionContext>()
                 .Mappings(m =>
                     m.FluentMappings
-                        .AddFromAssemblyOf<UserMap>()
                         .AddFromAssemblyOf<UserAuthPersistenceDto>()
                         .AddFromAssemblyOf<ServiceStackUser>()
                 )

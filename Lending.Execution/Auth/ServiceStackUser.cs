@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Lending.Core;
 using Lending.Core.Model;
 using Lending.Core.NewUser;
@@ -7,33 +8,20 @@ using ServiceStack.ServiceInterface.Auth;
 
 namespace Lending.Execution.Auth
 {
-    public class ServiceStackUser : User
+    public class ServiceStackUser
     {
-        public virtual UserAuthPersistenceDto AuthenticatedUser { get; protected set; }
+        public virtual long AuthenticatedUserId { get; protected set; }
+        public virtual Guid UserId { get; protected set; }
 
-        private ServiceStackUser(UserAuthPersistenceDto userAuth)
-            : base(userAuth.DisplayName, userAuth.PrimaryEmail)
+        public ServiceStackUser(UserAuthPersistenceDto userAuth, Guid userId)
         {
-            AuthenticatedUser = userAuth;
+            AuthenticatedUserId = userAuth.Id;
+            UserId = userId;
         }
 
-        private ServiceStackUser()
+        protected ServiceStackUser()
         {
         }
 
-        public static ServiceStackUser Create(UserAuthPersistenceDto userAuth)
-        {
-            return new ServiceStackUser(userAuth);
-        }
-
-        public static ServiceStackUser FromEvents(IEnumerable<Event> events)
-        {
-            var serviceStackUser = new ServiceStackUser();
-            foreach (var @event in events)
-            {
-                serviceStackUser.When(@event);
-            }
-            return serviceStackUser;
-        }
     }
 }

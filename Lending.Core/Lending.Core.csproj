@@ -62,7 +62,6 @@
     <Compile Include="ConnectionRequest\ConnectionRequest.cs" />
     <Compile Include="ConnectionRequest\ConnectionRequestHandler.cs" />
     <Compile Include="IRequestHandler.cs" />
-    <Compile Include="Model\Maps\UserMap.cs" />
     <Compile Include="NewUser\UserAdded.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\User.cs" />

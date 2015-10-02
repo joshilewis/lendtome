@@ -7,6 +7,7 @@ using Lending.Core;
 using Lending.Core.ConnectionRequest;
 using Lending.Core.Model;
 using Lending.Core.NewUser;
+using Lending.Execution.Auth;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
@@ -97,6 +98,14 @@ namespace Tests
             return true;
         }
 
-			
+        public static bool ShouldEqual(this ServiceStackUser actual, ServiceStackUser expected)
+        {
+            Assert.That(actual.UserId, Is.EqualTo(expected.UserId));
+            Assert.That(actual.AuthenticatedUserId, Is.EqualTo(expected.AuthenticatedUserId));
+
+            return true;
+        }
+
+
     }
 }
