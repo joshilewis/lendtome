@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Lending.Core.NewUser;
+﻿using System.Collections.Generic;
+using Lending.Domain.NewUser;
 
-namespace Lending.Core.Model
+namespace Lending.Domain.Model
 {
     public class User : Aggregate
     {

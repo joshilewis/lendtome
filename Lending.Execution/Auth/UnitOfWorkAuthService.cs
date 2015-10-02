@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lending.Core;
+using Lending.Domain;
 using Lending.Execution.UnitOfWork;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.Auth;

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using Lending.Core;
+using Lending.Domain;
 using NHibernate;
 
 namespace Lending.Execution.UnitOfWork

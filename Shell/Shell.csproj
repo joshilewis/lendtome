@@ -114,9 +114,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lending.Core\Lending.Core.csproj">
+    <ProjectReference Include="..\Lending.Domain\Lending.Domain.csproj">
       <Project>{4fe3afd5-ff4c-4fa6-990a-c7f9cce9441f}</Project>
-      <Name>Lending.Core</Name>
+      <Name>Lending.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\Lending.Execution\Lending.Execution.csproj">
       <Project>{488340db-6745-4390-bb41-9d5f81a2005d}</Project>

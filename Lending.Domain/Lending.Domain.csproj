@@ -7,8 +7,8 @@
     <ProjectGuid>{4FE3AFD5-FF4C-4FA6-990A-C7F9CCE9441F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Lending.Core</RootNamespace>
-    <AssemblyName>Lending.Core</AssemblyName>
+    <RootNamespace>Lending.Domain</RootNamespace>
+    <AssemblyName>Lending.Domain</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

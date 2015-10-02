@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using EventStore.ClientAPI;
-using Lending.Core;
+using Lending.Domain;
 using ServiceStack.Text;
 
 namespace Lending.Execution.EventStore

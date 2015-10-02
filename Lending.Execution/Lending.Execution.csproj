@@ -132,9 +132,9 @@
     <Compile Include="WebServices\Webservices.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lending.Core\Lending.Core.csproj">
+    <ProjectReference Include="..\Lending.Domain\Lending.Domain.csproj">
       <Project>{4fe3afd5-ff4c-4fa6-990a-c7f9cce9441f}</Project>
-      <Name>Lending.Core</Name>
+      <Name>Lending.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

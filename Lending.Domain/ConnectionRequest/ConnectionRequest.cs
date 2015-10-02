@@ -1,6 +1,6 @@
 using System;
 
-namespace Lending.Core.ConnectionRequest
+namespace Lending.Domain.ConnectionRequest
 {
     public class ConnectionRequest
     {

@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Lending.Core
+﻿namespace Lending.Domain
 {
     public class BaseResponse
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Lending.Core.NewUser
+namespace Lending.Domain.NewUser
 {
     public class UserAdded : Event
     {

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Lending.Core;
-using Lending.Core.Model;
-using Lending.Core.NewUser;
 using ServiceStack.Authentication.NHibernate;
 using ServiceStack.ServiceInterface.Auth;
 

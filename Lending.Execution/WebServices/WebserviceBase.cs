@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net;
-using Lending.Core;
+using Lending.Domain;
 using Lending.Execution.UnitOfWork;
 using ServiceStack.Logging;
 using ServiceStack.ServiceInterface;

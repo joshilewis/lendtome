@@ -1,4 +1,4 @@
-﻿namespace Lending.Core
+﻿namespace Lending.Domain
 {
     /// <summary>
     /// Empty class used for DI registration

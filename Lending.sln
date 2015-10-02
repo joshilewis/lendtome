@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lending.Core", "Lending.Core\Lending.Core.csproj", "{4FE3AFD5-FF4C-4FA6-990A-C7F9CCE9441F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lending.Domain", "Lending.Domain\Lending.Domain.csproj", "{4FE3AFD5-FF4C-4FA6-990A-C7F9CCE9441F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{64F96744-8154-4C2A-9539-F5B0A1982935}"
 EndProject

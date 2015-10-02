@@ -7,7 +7,7 @@ using Enyim.Caching.Memcached;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
-using Lending.Core;
+using Lending.Domain;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
 using Lending.Execution.UnitOfWork;
@@ -23,7 +23,7 @@ using StructureMap.Configuration.DSL;
 using Configuration = NHibernate.Cfg.Configuration;
 using ISession = NHibernate.ISession;
 using ISessionFactory = NHibernate.ISessionFactory;
-using Request = Lending.Core.Request;
+using Request = Lending.Domain.Request;
 
 namespace Lending.Execution.DI
 {

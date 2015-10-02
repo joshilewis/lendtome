@@ -1,4 +1,4 @@
-﻿namespace Lending.Core
+﻿namespace Lending.Domain
 {
     public abstract class RequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
     {

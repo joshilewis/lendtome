@@ -1,5 +1,5 @@
 using System;
-using Lending.Core;
+using Lending.Domain;
 using ServiceStack.ServiceInterface.Auth;
 using StructureMap;
 
