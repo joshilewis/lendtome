@@ -102,8 +102,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddItem\AddItemRequestHandlerTests.cs" />
-    <Compile Include="BorrowItem\BorrowItemRequestHandlerTests.cs" />
     <Compile Include="Connect\ConnectRequestHandlerTests.cs" />
     <Compile Include="DatabaseAndEventStoreFixtureBase.cs" />
     <Compile Include="DatabaseFixtureBase.cs" />

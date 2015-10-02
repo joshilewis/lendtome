@@ -38,7 +38,7 @@ namespace Lending.Execution.Auth
             if (user == null) //user doesn't exist yet, first time registration
             {
                 UserAuthPersistenceDto auth = session.Get<UserAuthPersistenceDto>(userAuthId);
-                user = new ServiceStackUser(auth);
+                user = ServiceStackUser.Create(auth);
                 session.Save(user);
                 repository.EmitEvent("User-" + user.Id, new UserAdded(user.Id, user.UserName, user.EmailAddress));
             }

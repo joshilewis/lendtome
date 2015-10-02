@@ -11,7 +11,7 @@ namespace Lending.Core
     {
         private readonly List<object> changes;
 
-        public abstract Guid Id { get; protected set; }
+        public Guid Id { get; protected set; }
         public int Version { get; protected set; }
 
         protected Aggregate()
@@ -33,7 +33,10 @@ namespace Lending.Core
             Version++;
         }
 
-        protected abstract void When(object @event);
+        protected virtual void When(object @event)
+        {
+            //Default event handler, does nothing
+        }
 
         public void ClearUncommittedEvents()
         {

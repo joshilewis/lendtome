@@ -1,4 +1,7 @@
-﻿using Lending.Core.Model;
+﻿using System.Collections.Generic;
+using Lending.Core;
+using Lending.Core.Model;
+using Lending.Core.NewUser;
 using ServiceStack.Authentication.NHibernate;
 using ServiceStack.ServiceInterface.Auth;
 
@@ -8,21 +11,29 @@ namespace Lending.Execution.Auth
     {
         public virtual UserAuthPersistenceDto AuthenticatedUser { get; protected set; }
 
-        public ServiceStackUser(UserAuthPersistenceDto userAuth)
+        private ServiceStackUser(UserAuthPersistenceDto userAuth)
+            : base(userAuth.DisplayName, userAuth.PrimaryEmail)
         {
             AuthenticatedUser = userAuth;
         }
 
-        protected ServiceStackUser() { }
-
-        public override string UserName
+        private ServiceStackUser()
         {
-            get { return AuthenticatedUser.DisplayName ; }
         }
 
-        public override string EmailAddress
+        public static ServiceStackUser Create(UserAuthPersistenceDto userAuth)
         {
-            get { return AuthenticatedUser.PrimaryEmail; }
+            return new ServiceStackUser(userAuth);
+        }
+
+        public static ServiceStackUser FromEvents(IEnumerable<Event> events)
+        {
+            var serviceStackUser = new ServiceStackUser();
+            foreach (var @event in events)
+            {
+                serviceStackUser.When(@event);
+            }
+            return serviceStackUser;
         }
     }
 }

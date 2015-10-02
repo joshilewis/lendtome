@@ -61,8 +61,8 @@ namespace Tests.NewUser
             var request = new AuthSessionDouble();
             var expectedResponse = new BaseResponse();
             var expectedUser = DefaultTestData.ServiceStackUser1;
-            var expectedEvent = new UserAdded(authDto.Id, authDto.DisplayName, authDto.PrimaryEmail);
-            expectedEvent.Id = "1";
+            var expectedEvent = new UserAdded(Guid.NewGuid(), authDto.DisplayName, authDto.PrimaryEmail);
+            //expectedEvent.Id = "1";
 
             var sut = new NewUserRequestHandler(() => Session, Emitter);
             BaseResponse actualResponse = sut.HandleRequest(request);

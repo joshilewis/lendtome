@@ -1,25 +1,26 @@
 ﻿using System;
+using Lending.Core.NewUser;
 
 namespace Lending.Core.Model
 {
-    public abstract class User : IBorrower, IOwner
+    public abstract class User : Aggregate
     {
-        public virtual int Id { get; protected set; }
-        public abstract string UserName { get; }
-        public abstract string EmailAddress { get; }
+        public virtual string UserName { get; protected set; }
+        public virtual string EmailAddress { get; protected set; }
 
-        public override bool Equals(object obj)
+        protected User(string userName, string emailAddress)
         {
-            if (!(obj is User))
-                return false;
-
-            var other = (User) obj;
-            return this.Id.Equals(other.Id);
+            RaiseEvent(new UserAdded(SequentialGuid.NewGuid(), userName, emailAddress));
         }
 
-        public override int GetHashCode()
+        protected User()
         {
-            return this.Id.GetHashCode();
+        }
+
+        protected virtual void When(UserAdded @event)
+        {
+            UserName = @event.UserName;
+            EmailAddress = @event.EmailAddress;
         }
     }
 }

@@ -24,12 +24,12 @@ namespace Tests.Connect
         [Test]
         public void ExistingConnectionRequestFrom1To2ShouldBeRejected()
         {
-            var user1Added = new UserAdded(1L, "User 1", "email1");
-            var user2Added = new UserAdded(2L, "User 2", "email2");
+            var user1Added = new UserAdded(Guid.NewGuid(), "User 1", "email1");
+            var user2Added = new UserAdded(Guid.NewGuid(), "User 2", "email2");
 
-            var connectionRequested = new ConnectionRequested(Guid.NewGuid(), 1, 2);
+            var connectionRequested = new ConnectionRequested(Guid.NewGuid(), user1Added.Id, user2Added.Id);
 
-            var request = new ConnectionRequest((long)user1Added.Id, (long)user2Added.Id);
+            var request = new ConnectionRequest(user1Added.Id, user2Added.Id);
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.ConnectionAlreadyRequested);
 
             EventStoreRepository eventEmitter = new EventStoreRepository(new ConcurrentQueue<StreamEventTuple>());
@@ -51,15 +51,15 @@ namespace Tests.Connect
         [Test]
         public void NoExistingConnectionRequestShouldEmitEvent()
         {
-            var user1Added = new UserAdded(1, "User 1", "email1");
-            var user2Added = new UserAdded(2, "User 2", "email2");
+            var user1Added = new UserAdded(Guid.NewGuid(), "User 1", "email1");
+            var user2Added = new UserAdded(Guid.NewGuid(), "User 2", "email2");
 
             var stream = "User-" + user1Added.Id;
             WriteEvents(new StreamEventTuple(stream, user1Added), new StreamEventTuple("User-2", user2Added));
 
-            var request = new ConnectionRequest(1, 2);
+            var request = new ConnectionRequest(user1Added.Id, user2Added.Id);
             var expectedResponse = new BaseResponse();
-            var expectedEvent = new ConnectionRequested(Guid.Empty, 1, 2);
+            var expectedEvent = new ConnectionRequested(Guid.Empty, user1Added.Id, user2Added.Id);
 
             var sut = new ConnectionRequestHandler(Emitter);
             BaseResponse actualResponse = sut.HandleRequest(request);

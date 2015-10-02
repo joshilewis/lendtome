@@ -8,7 +8,6 @@ using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using Lending.Core;
-using Lending.Core.AddItem;
 using Lending.Core.Model;
 using Lending.Core.Model.Maps;
 using Lending.Execution.Auth;
@@ -80,14 +79,6 @@ namespace Lending.Execution.DI
                 scanner.ConnectImplementationsToTypesClosing(typeof(BaseAuthenticatedRequestHandler<,>));
             });
 
-            For<IAuthenticatedRequestHandler<AddUserItemRequest, BaseResponse>>()
-                .Use<AddUserItemRequestHandler>()
-                ;
-
-            For<IAuthenticatedRequestHandler<AddOrganisationItemRequest, BaseResponse>>()
-                .Use<AddItemRequestHandler<Organisation>>()
-                ;
-
             For<IUserAuthRepository>()
                 .AlwaysUnique()
                 .Use<NHibernateUserAuthRepository>()
@@ -110,11 +101,6 @@ namespace Lending.Execution.DI
                 .Singleton()
                 //.Use(cache)
                 .Use<MemoryCacheClient>()
-                ;
-
-            For<ItemWebService>()
-                .AlwaysUnique()
-                .Use<ItemWebService>()
                 ;
 
             For<ConcurrentQueue<StreamEventTuple>>()

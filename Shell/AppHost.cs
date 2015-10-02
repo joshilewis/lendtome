@@ -4,10 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Core;
-using Lending.Core.AddItem;
-using Lending.Core.BorrowItem;
 using Lending.Core.ConnectionRequest;
-using Lending.Core.Model;
 using Lending.Execution.DI;
 using Lending.Execution.WebServices;
 using Lending.Web;
@@ -43,10 +40,7 @@ namespace Shell
                 }));
 
             Routes
-                .Add<AddUserItemRequest>("/user/{OwnerId}/items/add/", "GET,POST")
-                .Add<AddOrganisationItemRequest>("/org/{OwnerId}/items/add/")
                 .Add<ConnectionRequest>("/connection/add/{FromUserId}/{ToUserId}/")
-                .Add<BorrowItemRequest>("/borrow/{OwnershipId}/{RequestorId}/")
                 ;
         }
     }
