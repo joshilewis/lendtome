@@ -50,8 +50,7 @@ namespace Tests
             {
                 foreach (var @event in aggregate.GetUncommittedEvents())
                 {
-                    string stream = $"{aggregate.GetType()}-{aggregate.Id}";
-                    AppendEvent(new StreamEventTuple(stream, @event));
+                    AppendEvent(new StreamEventTuple(aggregate.Stream, @event));
                 }
             }
         }

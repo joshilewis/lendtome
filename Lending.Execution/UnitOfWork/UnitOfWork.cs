@@ -17,15 +17,17 @@ namespace Lending.Execution.UnitOfWork
         //private readonly static ILog Log = LogManager.GetLogger(typeof(UnitOfWork).FullName);
 
         private readonly ISessionFactory sessionFactory;
-        private readonly ConcurrentQueue<StreamEventTuple> eventQueue;
-        private readonly IPEndPoint eventStoreEndPoint;
+        private readonly ConcurrentQueue<Aggregate> aggregateQueue;
+        private readonly IEventStoreConnection connection;
+        private readonly Guid transactionId;
 
         public UnitOfWork(ISessionFactory sessionFactory, string eventStoreIpAddress)
         {
             //Log.DebugFormat("Creating unit of work {0}", GetHashCode());
             this.sessionFactory = sessionFactory;
-            this.eventStoreEndPoint = new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), 1113);
-            eventQueue = new ConcurrentQueue<StreamEventTuple>();
+            aggregateQueue = new ConcurrentQueue<Aggregate>();
+            connection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), 1113));
+            transactionId = Guid.NewGuid();
         }
 
         public void Begin()
@@ -34,19 +36,19 @@ namespace Lending.Execution.UnitOfWork
             currentSession = sessionFactory.OpenSession();
             CurrentSessionContext.Bind(CurrentSession);
             CurrentSession.BeginTransaction();
+            connection.ConnectAsync().Wait();
         }
 
         public void Commit()
         {
-
-            IEventStoreConnection connection = EventStoreConnection.Create(eventStoreEndPoint);
-            connection.ConnectAsync().Wait();
-            foreach (StreamEventTuple tuple in eventQueue)
+            foreach (Aggregate aggregate in aggregateQueue)
             {
-                connection.AppendToStreamAsync(tuple.Stream, ExpectedVersion.Any, tuple.Event.AsJson()).Wait();
+                foreach (var uncommittedEvent in aggregate.GetUncommittedEvents())
+                {
+                    connection.AppendToStreamAsync(aggregate.Stream, ExpectedVersion.Any,
+                        uncommittedEvent.AsJson()).Wait();
+                }
             }
-            connection.Close();
-            connection.Dispose();
 
             //Log.DebugFormat("Committing unit of work {0}", GetHashCode());
             currentSession.Transaction.Commit();
@@ -63,27 +65,15 @@ namespace Lending.Execution.UnitOfWork
         public void Dispose()
         {
             //Log.DebugFormat("Disposing {0}", GetHashCode());
+            connection.Close();
+            connection.Dispose();
             currentSession.Transaction.Dispose();
             CurrentSession.Dispose();
         }
 
         private ISession currentSession;
-        public ISession CurrentSession 
-        {
-            get
-            {
-                //Log.DebugFormat("Retrieving current session of unit of work {0}", GetHashCode());
-                return currentSession;
-            }
-        }
+        public ISession CurrentSession => currentSession;
 
-        public ConcurrentQueue<StreamEventTuple> Queue 
-        {
-            get
-            {
-                return eventQueue;
-            }
-        }
-
+        public ConcurrentQueue<Aggregate> Queue => aggregateQueue;
     }
 }

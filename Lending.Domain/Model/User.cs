@@ -44,5 +44,7 @@ namespace Lending.Domain.Model
         {
             new EventRoute<UserAdded>(When, typeof(UserAdded)),
         };
+
+        protected override string Type => "User";
     }
 }

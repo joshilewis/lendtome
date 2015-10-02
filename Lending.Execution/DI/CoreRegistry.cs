@@ -100,7 +100,7 @@ namespace Lending.Execution.DI
                 .Use<MemoryCacheClient>()
                 ;
 
-            For<ConcurrentQueue<StreamEventTuple>>()
+            For<ConcurrentQueue<Aggregate>>()
                 .Use(c => c.GetInstance<IUnitOfWork>().Queue)
                 ;
 
@@ -108,6 +108,9 @@ namespace Lending.Execution.DI
                 .AlwaysUnique()
                 .Use<EventStoreRepository>()
                 ;
+
+            For<Func<Guid>>()
+                .Use(() => SequentialGuid.NewGuid());
         }
 
 

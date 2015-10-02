@@ -58,7 +58,7 @@ namespace Tests.NewUser
             CommitTransactionAndOpenNew();
 
             var userId = Guid.NewGuid();
-            var stream = $"{typeof (User)}-{userId}";
+            var stream = $"User-{userId}";
             var request = new AuthSessionDouble();
             var expectedResponse = new BaseResponse();
             var expectedUser = new ServiceStackUser(authDto.Id, userId);
