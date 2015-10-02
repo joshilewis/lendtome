@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Lending.Domain.NewUser;
 
 namespace Lending.Domain.Model
@@ -8,18 +9,18 @@ namespace Lending.Domain.Model
         public string UserName { get; protected set; }
         public string EmailAddress { get; protected set; }
 
-        protected User(string userName, string emailAddress)
+        protected User(Guid id, string userName, string emailAddress)
         {
-            RaiseEvent(new UserAdded(SequentialGuid.NewGuid(), userName, emailAddress));
+            RaiseEvent(new UserAdded(id, userName, emailAddress));
         }
 
         protected User()
         {
         }
 
-        public static User Create(string userName, string emailAddress)
+        public static User Create(Guid id, string userName, string emailAddress)
         {
-            return new User(userName, emailAddress);
+            return new User(id, userName, emailAddress);
         }
 
         public static User CreateFromEvents(IEnumerable<Event> events)
@@ -34,8 +35,14 @@ namespace Lending.Domain.Model
 
         protected virtual void When(UserAdded @event)
         {
+            Id = @event.Id;
             UserName = @event.UserName;
             EmailAddress = @event.EmailAddress;
         }
+
+        protected override List<IEventRoute> EventRoutes => new List<IEventRoute>()
+        {
+            new EventRoute<UserAdded>(When, typeof(UserAdded)),
+        };
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lending.Domain
 {
     public abstract class Aggregate
     {
-        private readonly List<object> changes;
+        private readonly List<Event> changes;
 
         public Guid Id { get; protected set; }
         public int Version { get; protected set; }
@@ -14,25 +15,35 @@ namespace Lending.Domain
         protected Aggregate()
         {
             Version = 0;
-            changes = new List<object>();
+            changes = new List<Event>();
         }
 
-        protected void ApplyEvent(object @event)
+        protected void ApplyEvent(Event @event)
         {
-            When(@event);
+            DispatchEvent(@event);
             Version++;
         }
 
         protected void RaiseEvent(Event @event)
         {
-            When(@event);
-            changes.Add(@event);
+            DispatchEvent(@event);
             Version++;
+            changes.Add(@event);
         }
 
-        protected virtual void When(object @event)
+        protected abstract List<IEventRoute> EventRoutes { get; }
+        private void DispatchEvent(Event @event)
         {
-            //Default event handler, does nothing
+            foreach (var handler in EventRoutes.Where(x => x.HandlerType == @event.GetType()))
+            {
+                handler.Handle(@event);
+            }
+            
+        }
+
+        protected virtual void When(Event @event)
+        {
+            //Default handler, do nothing
         }
 
         public void ClearUncommittedEvents()
@@ -40,7 +51,7 @@ namespace Lending.Domain
             changes.Clear();
         }
 
-        public ICollection GetUncommittedEvents()
+        public IList<Event> GetUncommittedEvents()
         {
             return changes;
         }

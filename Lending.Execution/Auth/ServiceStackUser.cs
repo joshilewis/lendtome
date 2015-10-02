@@ -10,9 +10,9 @@ namespace Lending.Execution.Auth
         public virtual long AuthenticatedUserId { get; protected set; }
         public virtual Guid UserId { get; protected set; }
 
-        public ServiceStackUser(UserAuthPersistenceDto userAuth, Guid userId)
+        public ServiceStackUser(long authenticatedUserId, Guid userId)
         {
-            AuthenticatedUserId = userAuth.Id;
+            AuthenticatedUserId = authenticatedUserId;
             UserId = userId;
         }
 

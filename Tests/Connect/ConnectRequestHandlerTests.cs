@@ -31,15 +31,11 @@ namespace Tests.Connect
             var request = new ConnectionRequest(user1Added.Id, user2Added.Id);
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.ConnectionAlreadyRequested);
 
-            EventStoreRepository eventEmitter = new EventStoreRepository(new ConcurrentQueue<StreamEventTuple>());
-
-            var sut = new ConnectionRequestHandler(eventEmitter);
+            var sut = new ConnectionRequestHandler(Repository);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
 
-            ConcurrentQueue<StreamEventTuple> actualQueue = eventEmitter.Queue;
-            Assert.That(actualQueue, Is.Empty);
         }
 
         /// <summary>
@@ -60,9 +56,9 @@ namespace Tests.Connect
             var expectedResponse = new BaseResponse();
             var expectedEvent = new ConnectionRequested(Guid.Empty, user1Added.Id, user2Added.Id);
 
-            var sut = new ConnectionRequestHandler(Emitter);
+            var sut = new ConnectionRequestHandler(Repository);
             BaseResponse actualResponse = sut.HandleRequest(request);
-            WriteEmittedEvents();
+            WriteAggregates();
             actualResponse.ShouldEqual(expectedResponse);
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync(stream, 0, 10, false).Result;

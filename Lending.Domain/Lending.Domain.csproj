@@ -45,11 +45,13 @@
     <Compile Include="ConnectionRequest\ConnectionRequested.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="IAuthenticatedRequestHandler.cs" />
+    <Compile Include="IEventRoute.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="BaseResponse.cs" />
     <Compile Include="ConnectionRequest\ConnectionRequest.cs" />
     <Compile Include="ConnectionRequest\ConnectionRequestHandler.cs" />
     <Compile Include="IRequestHandler.cs" />
+    <Compile Include="EventRoute.cs" />
     <Compile Include="NewUser\UserAdded.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\User.cs" />

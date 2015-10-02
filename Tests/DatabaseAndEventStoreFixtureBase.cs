@@ -18,7 +18,8 @@ namespace Tests
     {
         protected static readonly ClusterVNode Node;
         protected IEventStoreConnection Connection;
-        protected IRepository Emitter;
+        protected IRepository Repository;
+        private ConcurrentQueue<Aggregate> aggregateQueue;
 
         static DatabaseAndEventStoreFixtureBase()
         {
@@ -38,12 +39,21 @@ namespace Tests
             Connection = EmbeddedEventStoreConnection.Create(Node);
             Connection.ConnectAsync().Wait();
 
-            Emitter = new EventStoreRepository(new ConcurrentQueue<StreamEventTuple>());
+            aggregateQueue = new ConcurrentQueue<Aggregate>();
+
+            Repository = new EventStoreRepository(aggregateQueue);
         }
 
-        protected void WriteEmittedEvents()
+        protected void WriteAggregates()
         {
-            AppendEvents(((EventStoreRepository)Emitter).Queue);
+            foreach (var aggregate in aggregateQueue)
+            {
+                foreach (var @event in aggregate.GetUncommittedEvents())
+                {
+                    string stream = $"{aggregate.GetType()}-{aggregate.Id}";
+                    AppendEvent(new StreamEventTuple(stream, @event));
+                }
+            }
         }
 
         protected void WriteEvents(params StreamEventTuple[] eventsToWrite)
@@ -55,8 +65,13 @@ namespace Tests
         {
             foreach (StreamEventTuple tuple in eventsToWrite)
             {
-                Connection.AppendToStreamAsync(tuple.Stream, ExpectedVersion.Any, tuple.Event.AsJson()).Wait();
+                AppendEvent(tuple);
             }
+        }
+
+        private void AppendEvent(StreamEventTuple tuple)
+        {
+            Connection.AppendToStreamAsync(tuple.Stream, ExpectedVersion.Any, tuple.Event.AsJson()).Wait();
         }
 
         public override void TearDown()

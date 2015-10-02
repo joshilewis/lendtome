@@ -15,7 +15,7 @@ namespace Lending.Domain.ConnectionRequest
 
         public virtual BaseResponse HandleRequest(ConnectionRequest request)
         {
-            repository.EmitEvent("User-"+request.FromUserId, new ConnectionRequested(Guid.NewGuid(), request.FromUserId, request.ToUserId));
+            //repository.EmitEvent("User-"+request.FromUserId, new ConnectionRequested(Guid.NewGuid(), request.FromUserId, request.ToUserId));
             return new BaseResponse();
         }
 

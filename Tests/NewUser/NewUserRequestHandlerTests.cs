@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Embedded;
 using Lending.Domain;
+using Lending.Domain.Model;
 using Lending.Domain.NewUser;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
@@ -16,6 +17,7 @@ using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.Auth;
 using ServiceStack.Text;
+using Auth = ServiceStack.Common.ServiceClient.Web.Auth;
 
 namespace Tests.NewUser
 {
@@ -24,17 +26,15 @@ namespace Tests.NewUser
         [Test]
         public void ExistingUserShouldNotBeCreatedAndNoEventEmitted()
         {
-            var existingUser = DefaultTestData.ServiceStackUser1;
-            SaveEntities(existingUser);//This is needed because ServiceStack will persist the AuthDto behind the scenes on sign-up
+            ServiceStackUser existingUser = DefaultTestData.ServiceStackUser1;
+            SaveEntities(existingUser);
 
             CommitTransactionAndOpenNew();
 
             var request = new AuthSessionDouble();
             var expectedResponse = new BaseResponse();
 
-            var expectedUser = DefaultTestData.ServiceStackUser1;
-
-            var sut = new NewUserRequestHandler(() => Session, new UnexpectedRepository());
+            var sut = new NewUserRequestHandler(() => Session, new UnexpectedRepository(), () => Guid.Empty);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
@@ -57,20 +57,20 @@ namespace Tests.NewUser
 
             CommitTransactionAndOpenNew();
 
-            var stream = "User-" + authDto.Id;
+            var userId = Guid.NewGuid();
+            var stream = $"{typeof (User)}-{userId}";
             var request = new AuthSessionDouble();
             var expectedResponse = new BaseResponse();
-            var expectedUser = DefaultTestData.ServiceStackUser1;
-            var expectedEvent = new UserAdded(Guid.NewGuid(), authDto.DisplayName, authDto.PrimaryEmail);
-            //expectedEvent.Id = "1";
+            var expectedUser = new ServiceStackUser(authDto.Id, userId);
+            var expectedEvent = new UserAdded(userId, authDto.DisplayName, authDto.PrimaryEmail);
 
-            var sut = new NewUserRequestHandler(() => Session, Emitter);
+            var sut = new NewUserRequestHandler(() => Session, Repository, () => userId);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
 
             CommitTransactionAndOpenNew();
-            WriteEmittedEvents();
+            WriteAggregates();
 
             ServiceStackUser userInDb = Session
                 .QueryOver<ServiceStackUser>()
@@ -78,7 +78,6 @@ namespace Tests.NewUser
                 ;
 
             userInDb.ShouldEqual(expectedUser);
-
 
             StreamEventsSlice slice = Connection.ReadStreamEventsBackwardAsync(stream, 0, 10, false).Result;
             Assert.That(slice.Events.Count(), Is.EqualTo(1));
@@ -160,15 +159,11 @@ namespace Tests.NewUser
                 throw new NotImplementedException();
             }
 
-            public void Save(Aggregate aggregate, Guid commitId, Action<IDictionary<string, object>> updateHeaders)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void EmitEvent(string stream, Event @event)
+            public void Save(Aggregate aggregate)
             {
                 Assert.Fail("UserAdded should not be emitted for existing user");
             }
+
         }
     }
 }

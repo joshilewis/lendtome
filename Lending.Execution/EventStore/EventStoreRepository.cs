@@ -10,14 +10,12 @@ namespace Lending.Execution.EventStore
 {
     public class EventStoreRepository : IRepository
     {
-        private readonly ConcurrentQueue<StreamEventTuple> eventQueue;
-
-        public EventStoreRepository(ConcurrentQueue<StreamEventTuple> eventQueue)
+        public EventStoreRepository(ConcurrentQueue<Aggregate> aggregateQueue)
         {
-            this.eventQueue = eventQueue;
+            this.Queue = aggregateQueue;
         }
 
-        public ConcurrentQueue<StreamEventTuple> Queue { get { return eventQueue; } }
+        public ConcurrentQueue<Aggregate> Queue { get; }
 
         public TAggregate GetById<TAggregate>(Guid id) where TAggregate : Aggregate
         {
@@ -29,14 +27,9 @@ namespace Lending.Execution.EventStore
             throw new NotImplementedException();
         }
 
-        public void Save(Aggregate aggregate, Guid commitId, Action<IDictionary<string, object>> updateHeaders)
+        public void Save(Aggregate aggregate)
         {
-            throw new NotImplementedException();
-        }
-
-        public void EmitEvent(string stream, Event @event)
-        {
-            eventQueue.Enqueue(new StreamEventTuple(stream, @event));
+            Queue.Enqueue(aggregate);
         }
 
     }

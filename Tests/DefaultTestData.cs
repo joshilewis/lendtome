@@ -19,7 +19,7 @@ namespace Tests
 
         public static UserAuthPersistenceDto UserAuthPersistenceDto1 => new UserAuthPersistenceDto(UserAuth1);
 
-        public static ServiceStackUser ServiceStackUser1 => new ServiceStackUser(UserAuthPersistenceDto1, Guid.Empty);
+        public static ServiceStackUser ServiceStackUser1 => new ServiceStackUser(1, Guid.Empty);
 
         public static UserAuth UserAuth2 => new UserAuth()
         {
@@ -29,7 +29,7 @@ namespace Tests
 
         public static UserAuthPersistenceDto UserAuthPersistenceDto2 => new UserAuthPersistenceDto(UserAuth2);
 
-        public static ServiceStackUser ServiceStackUser2 => new ServiceStackUser(UserAuthPersistenceDto2, Guid.Empty);
+        public static ServiceStackUser ServiceStackUser2 => new ServiceStackUser(2, Guid.Empty);
 
         public static UserAuth UserAuth3 => new UserAuth()
         {
@@ -39,6 +39,6 @@ namespace Tests
 
         public static UserAuthPersistenceDto UserAuthPersistenceDto3 => new UserAuthPersistenceDto(UserAuth3);
 
-        public static ServiceStackUser ServiceStackUser3 => new ServiceStackUser(UserAuthPersistenceDto3, Guid.Empty);
+        public static ServiceStackUser ServiceStackUser3 => new ServiceStackUser(3, Guid.Empty);
     }
 }
