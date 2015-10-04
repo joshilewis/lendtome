@@ -2,9 +2,6 @@
 
 namespace Lending.Domain
 {
-    /// <summary>
-    /// Marker class used for type resolution
-    /// </summary>
     public abstract class Event
     {
         public Guid Id { get; set; }
