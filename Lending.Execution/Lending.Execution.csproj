@@ -123,6 +123,9 @@
     <Compile Include="Auth\UnitOfWorkAuthService.cs" />
     <Compile Include="DI\CoreRegistry.cs" />
     <Compile Include="DI\StructureMapContainerAdapter.cs" />
+    <Compile Include="EventStore\AggregateDeletedException.cs" />
+    <Compile Include="EventStore\AggregateNotFoundException.cs" />
+    <Compile Include="EventStore\AggregateVersionException.cs" />
     <Compile Include="EventStore\EventExtensions.cs" />
     <Compile Include="EventStore\EventStoreRepository.cs" />
     <Compile Include="Persistence\SchemaUpdater.cs" />

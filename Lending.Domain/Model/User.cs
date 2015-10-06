@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Lending.Domain.ConnectionRequest;
 using Lending.Domain.NewUser;
 
 namespace Lending.Domain.Model
@@ -9,6 +10,7 @@ namespace Lending.Domain.Model
         public string UserName { get; protected set; }
         public string EmailAddress { get; protected set; }
 
+        public List<Guid> CurrentConnectionRequests { get; set; }
         protected User(Guid id, string userName, string emailAddress)
         {
             RaiseEvent(new UserAdded(id, userName, emailAddress));
@@ -45,6 +47,14 @@ namespace Lending.Domain.Model
             new EventRoute<UserAdded>(When, typeof(UserAdded)),
         };
 
-        protected override string Type => "User";
+        public void RequestConnectionTo(Guid toUserId)
+        {
+            RaiseEvent(new ConnectionRequested(Guid.Empty, Id, toUserId));
+        }
+
+        protected virtual void When(ConnectionRequested @event)
+        {
+            CurrentConnectionRequests.Add(@event.ToUserId);
+        }
     }
 }

@@ -67,8 +67,5 @@ namespace Lending.Domain
             return Id.GetHashCode();
         }
 
-        protected abstract string Type { get; }
-
-        public string Stream => $"{Type}-{Id}";
     }
 }

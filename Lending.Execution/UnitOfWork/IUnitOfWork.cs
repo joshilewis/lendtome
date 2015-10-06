@@ -12,6 +12,6 @@ namespace Lending.Execution.UnitOfWork
         void RollBack();
 
         ISession CurrentSession { get; }
-        ConcurrentQueue<Aggregate> Queue { get; }
+        IRepository Repository { get; }
     }
 }

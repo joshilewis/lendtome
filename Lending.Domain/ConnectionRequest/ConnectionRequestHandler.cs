@@ -1,4 +1,5 @@
 using System;
+using Lending.Domain.Model;
 
 namespace Lending.Domain.ConnectionRequest
 {
@@ -15,7 +16,9 @@ namespace Lending.Domain.ConnectionRequest
 
         public virtual BaseResponse HandleRequest(ConnectionRequest request)
         {
-            //repository.EmitEvent("User-"+request.FromUserId, new ConnectionRequested(Guid.NewGuid(), request.FromUserId, request.ToUserId));
+            User user = User.CreateFromEvents(repository.GetEventsForAggregate<User>(request.FromUserId));
+            user.RequestConnectionTo(request.ToUserId);
+            repository.Save(user);
             return new BaseResponse();
         }
 

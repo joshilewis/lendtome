@@ -19,7 +19,6 @@ namespace Tests
         protected static readonly ClusterVNode Node;
         protected IEventStoreConnection Connection;
         protected IRepository Repository;
-        private ConcurrentQueue<Aggregate> aggregateQueue;
 
         static DatabaseAndEventStoreFixtureBase()
         {
@@ -39,38 +38,21 @@ namespace Tests
             Connection = EmbeddedEventStoreConnection.Create(Node);
             Connection.ConnectAsync().Wait();
 
-            aggregateQueue = new ConcurrentQueue<Aggregate>();
-
-            Repository = new EventStoreRepository(aggregateQueue);
+            Repository = new EventStoreRepository(Connection);
         }
 
-        protected void WriteAggregates()
+        protected void WriteRepository()
         {
-            foreach (var aggregate in aggregateQueue)
+            ((EventStoreRepository)Repository).Commit(Guid.NewGuid());
+        }
+
+        protected void SaveAggregates(params Aggregate[] aggregatesToSave)
+        {
+            foreach (var aggregate in aggregatesToSave)
             {
-                foreach (var @event in aggregate.GetUncommittedEvents())
-                {
-                    AppendEvent(new StreamEventTuple(aggregate.Stream, @event));
-                }
+                Repository.Save(aggregate);
             }
-        }
-
-        protected void WriteEvents(params StreamEventTuple[] eventsToWrite)
-        {
-            AppendEvents(eventsToWrite);
-        }
-
-        private void AppendEvents(IEnumerable<StreamEventTuple> eventsToWrite)
-        {
-            foreach (StreamEventTuple tuple in eventsToWrite)
-            {
-                AppendEvent(tuple);
-            }
-        }
-
-        private void AppendEvent(StreamEventTuple tuple)
-        {
-            Connection.AppendToStreamAsync(tuple.Stream, ExpectedVersion.Any, tuple.Event.AsJson()).Wait();
+            ((EventStoreRepository)Repository).Commit(Guid.NewGuid());
         }
 
         public override void TearDown()

@@ -70,7 +70,7 @@ namespace Tests.NewUser
             actualResponse.ShouldEqual(expectedResponse);
 
             CommitTransactionAndOpenNew();
-            WriteAggregates();
+            WriteRepository();
 
             ServiceStackUser userInDb = Session
                 .QueryOver<ServiceStackUser>()
@@ -149,12 +149,12 @@ namespace Tests.NewUser
 
         public class UnexpectedRepository : IRepository
         {
-            public TAggregate GetById<TAggregate>(Guid id) where TAggregate : Aggregate
+            public IEnumerable<Event> GetEventsForAggregate<TAggregate>(Guid id) where TAggregate : Aggregate
             {
                 throw new NotImplementedException();
             }
 
-            public TAggregate GetById<TAggregate>(Guid id, int version) where TAggregate : Aggregate
+            public IEnumerable<Event> GetEventsForAggregate<TAggregate>(Guid id, int version) where TAggregate : Aggregate
             {
                 throw new NotImplementedException();
             }

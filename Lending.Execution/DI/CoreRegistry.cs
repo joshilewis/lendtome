@@ -100,13 +100,9 @@ namespace Lending.Execution.DI
                 .Use<MemoryCacheClient>()
                 ;
 
-            For<ConcurrentQueue<Aggregate>>()
-                .Use(c => c.GetInstance<IUnitOfWork>().Queue)
-                ;
-
             For<IRepository>()
                 .AlwaysUnique()
-                .Use<EventStoreRepository>()
+                .Use(c => c.GetInstance<IUnitOfWork>().Repository)
                 ;
 
             For<Func<Guid>>()
