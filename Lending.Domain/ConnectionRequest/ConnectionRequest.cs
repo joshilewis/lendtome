@@ -4,18 +4,18 @@ namespace Lending.Domain.ConnectionRequest
 {
     public class ConnectionRequest
     {
-        public Guid FromUserId { get; set; }
-        public Guid ToUserId { get; set; }
+        public Guid SourceUserId { get; set; }
+        public Guid TargetUserId { get; set; }
 
         public ConnectionRequest()
         {
             
         }
 
-        public ConnectionRequest(Guid fromUserId, Guid toUserId)
+        public ConnectionRequest(Guid sourceUserId, Guid targetUserId)
         {
-            FromUserId = fromUserId;
-            ToUserId = toUserId;
+            SourceUserId = sourceUserId;
+            TargetUserId = targetUserId;
         }
     }
 }

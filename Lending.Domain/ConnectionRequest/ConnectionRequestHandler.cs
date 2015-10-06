@@ -6,6 +6,7 @@ namespace Lending.Domain.ConnectionRequest
     public class ConnectionRequestHandler : IRequestHandler<ConnectionRequest, BaseResponse>
     {
         public const string ConnectionAlreadyRequested = "A connection request for these users already exists";
+        public const string TargetUserDoesNotExist = "The target user does not exist";
 
         private readonly IRepository repository;
 
@@ -16,8 +17,8 @@ namespace Lending.Domain.ConnectionRequest
 
         public virtual BaseResponse HandleRequest(ConnectionRequest request)
         {
-            User user = User.CreateFromEvents(repository.GetEventsForAggregate<User>(request.FromUserId));
-            bool connectionRequestSuccessful = user.RequestConnectionTo(request.ToUserId);
+            User user = User.CreateFromEvents(repository.GetEventsForAggregate<User>(request.SourceUserId));
+            bool connectionRequestSuccessful = user.RequestConnectionTo(request.TargetUserId);
 
             if (!connectionRequestSuccessful)
                 return new BaseResponse(ConnectionAlreadyRequested);
