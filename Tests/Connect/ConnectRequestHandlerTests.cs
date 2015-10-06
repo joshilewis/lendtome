@@ -24,19 +24,24 @@ namespace Tests.Connect
         [Test]
         public void ExistingConnectionRequestFrom1To2ShouldBeRejected()
         {
-            var user1Added = new UserAdded(Guid.NewGuid(), "User 1", "email1");
-            var user2Added = new UserAdded(Guid.NewGuid(), "User 2", "email2");
+            var user1 = User.Create(Guid.NewGuid(), "User 1", "email1");
+            var user2 = User.Create(Guid.NewGuid(), "User 2", "email2");
+            user1.RequestConnectionTo(user2.Id);
+            SaveAggregates(user1, user2);
 
-            var connectionRequested = new ConnectionRequested(Guid.NewGuid(), user1Added.Id, user2Added.Id);
+            StreamEventsSlice slice1 = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
 
-            var request = new ConnectionRequest(user1Added.Id, user2Added.Id);
+            var request = new ConnectionRequest(user1.Id, user2.Id);
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.ConnectionAlreadyRequested);
 
             var sut = new ConnectionRequestHandler(Repository);
             BaseResponse actualResponse = sut.HandleRequest(request);
+            WriteRepository();
 
             actualResponse.ShouldEqual(expectedResponse);
 
+            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
+            Assert.That(slice.Events.Length, Is.EqualTo(2));
         }
 
         /// <summary>
@@ -51,8 +56,6 @@ namespace Tests.Connect
             var user2 = User.Create(Guid.NewGuid(), "User 2", "email2");
 
             SaveAggregates(user1, user2);
-
-            StreamEventsSlice slice1 = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
 
             var request = new ConnectionRequest(user1.Id, user2.Id);
             var expectedResponse = new BaseResponse();

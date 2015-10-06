@@ -11,13 +11,16 @@ namespace Lending.Domain.Model
         public string EmailAddress { get; protected set; }
 
         public List<Guid> CurrentConnectionRequests { get; set; }
+
         protected User(Guid id, string userName, string emailAddress)
+            : this()
         {
             RaiseEvent(new UserAdded(id, userName, emailAddress));
         }
 
         protected User()
         {
+            CurrentConnectionRequests = new List<Guid>();
         }
 
         public static User Create(Guid id, string userName, string emailAddress)
@@ -45,11 +48,15 @@ namespace Lending.Domain.Model
         protected override List<IEventRoute> EventRoutes => new List<IEventRoute>()
         {
             new EventRoute<UserAdded>(When, typeof(UserAdded)),
+            new EventRoute<ConnectionRequested>(When, typeof(ConnectionRequested)),
         };
 
-        public void RequestConnectionTo(Guid toUserId)
+        public bool RequestConnectionTo(Guid toUserId)
         {
+            if (CurrentConnectionRequests.Contains(toUserId)) return false;
+
             RaiseEvent(new ConnectionRequested(Guid.Empty, Id, toUserId));
+            return true;
         }
 
         protected virtual void When(ConnectionRequested @event)
