@@ -14,7 +14,7 @@ using ServiceStack.Text;
 namespace Tests.Connect
 {
     [TestFixture]
-    public class ConnectRequestHandlerTests : DatabaseAndEventStoreFixtureBase
+    public class ConnectionRequestHandlerTests : DatabaseAndEventStoreFixtureBase
     {
         /// <summary>
         /// GIVEN User1 exists AND User2 exists AND they are not connected AND there is an existing connection request from User1 to User2
@@ -72,6 +72,31 @@ namespace Tests.Connect
             var value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
             ConnectionRequested actual = value.FromJson<ConnectionRequested>();
             actual.ShouldEqual(expectedEvent);
+        }
+
+        /// <summary>
+        /// GIVEN User1 AND User2 does not exist
+        ///WHEN User1 requests a connection to User2
+        ///THEN no request is created AND User1 is notified that the request failed because there is no such user
+        /// </summary>
+        [Test]
+        public void ConnectionRequestToNonExistentTargetShouldBeRejected()
+        {
+            var user1 = User.Create(Guid.NewGuid(), "User 1", "email1");
+
+            SaveAggregates(user1);
+
+            var request = new ConnectionRequest(user1.Id, Guid.NewGuid());
+            var expectedResponse = new BaseResponse(ConnectionRequestHandler.TargetUserDoesNotExist);
+
+            var sut = new ConnectionRequestHandler(Repository);
+            BaseResponse actualResponse = sut.HandleRequest(request);
+            WriteRepository();
+            actualResponse.ShouldEqual(expectedResponse);
+
+            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
+            Assert.That(slice.Events.Length, Is.EqualTo(1));
+
         }
     }
 }

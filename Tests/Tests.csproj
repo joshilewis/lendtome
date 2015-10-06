@@ -102,7 +102,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connect\ConnectRequestHandlerTests.cs" />
+    <Compile Include="Connect\ConnectionRequestHandlerTests.cs" />
     <Compile Include="DatabaseAndEventStoreFixtureBase.cs" />
     <Compile Include="DatabaseFixtureBase.cs" />
     <Compile Include="DefaultTestData.cs" />
