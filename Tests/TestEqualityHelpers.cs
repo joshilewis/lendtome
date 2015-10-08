@@ -7,6 +7,7 @@ using Lending.Domain;
 using Lending.Domain.ConnectionRequest;
 using Lending.Domain.Model;
 using Lending.Domain.NewUser;
+using Lending.Domain.Persistence;
 using Lending.Execution.Auth;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -100,8 +101,17 @@ namespace Tests
 
         public static bool ShouldEqual(this ServiceStackUser actual, ServiceStackUser expected)
         {
-            Assert.That(actual.UserId, Is.EqualTo(expected.UserId));
+            Assert.That(actual.Id, Is.EqualTo(expected.Id));
             Assert.That(actual.AuthenticatedUserId, Is.EqualTo(expected.AuthenticatedUserId));
+            Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
+
+            return true;
+        }
+
+        public static bool ShouldEqual(this RegisteredUser actual, RegisteredUser expected)
+        {
+            Assert.That(actual.Id, Is.EqualTo(expected.Id));
+            Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
 
             return true;
         }

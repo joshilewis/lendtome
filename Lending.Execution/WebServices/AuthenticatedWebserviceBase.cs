@@ -37,7 +37,7 @@ namespace Lending.Execution.WebServices
             TResponse response = default(TResponse);
                 unitOfWork.DoInTransaction(() =>
                 {
-                    response = requestHandler.HandleRequest(request, user.UserId);
+                    response = requestHandler.HandleRequest(request, user.Id);
                 });
 
             return response;

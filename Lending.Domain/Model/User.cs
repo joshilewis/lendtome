@@ -28,7 +28,7 @@ namespace Lending.Domain.Model
             return new User(id, userName, emailAddress);
         }
 
-        public static User CreateFromEvents(IEnumerable<Event> events)
+        public static User CreateFromHistory(IEnumerable<Event> events)
         {
             var user = new User();
             foreach (var @event in events)

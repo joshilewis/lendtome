@@ -7,6 +7,8 @@ using Lending.Domain;
 using Lending.Domain.ConnectionRequest;
 using Lending.Domain.Model;
 using Lending.Domain.NewUser;
+using Lending.Domain.Persistence;
+using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
 using NUnit.Framework;
 using ServiceStack.Text;
@@ -29,12 +31,14 @@ namespace Tests.Connect
             user1.RequestConnectionTo(user2.Id);
             SaveAggregates(user1, user2);
 
-            StreamEventsSlice slice1 = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
+            var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
+            var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
+            SaveEntities(registeredUser1, registeredUser2);
 
             var request = new ConnectionRequest(user2.Id);
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.ConnectionAlreadyRequested);
 
-            var sut = new ConnectionRequestHandler(Repository);
+            var sut = new ConnectionRequestHandler(() => Session, Repository);
             BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
             WriteRepository();
 
@@ -57,11 +61,16 @@ namespace Tests.Connect
 
             SaveAggregates(user1, user2);
 
+            var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
+            var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
+            SaveEntities(registeredUser1, registeredUser2);
+            CommitTransactionAndOpenNew();
+
             var request = new ConnectionRequest(user2.Id);
             var expectedResponse = new BaseResponse();
             var expectedEvent = new ConnectionRequested(Guid.Empty, user1.Id, user2.Id);
 
-            var sut = new ConnectionRequestHandler(Repository);
+            var sut = new ConnectionRequestHandler(() => Session, Repository);
             BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
             WriteRepository();
             actualResponse.ShouldEqual(expectedResponse);
@@ -83,19 +92,19 @@ namespace Tests.Connect
         public void ConnectionRequestToNonExistentTargetShouldBeRejected()
         {
             var user1 = User.Create(Guid.NewGuid(), "User 1", "email1");
-
             SaveAggregates(user1);
 
             var request = new ConnectionRequest(Guid.NewGuid());
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.TargetUserDoesNotExist);
 
-            var sut = new ConnectionRequestHandler(Repository);
+            var sut = new ConnectionRequestHandler(() => Session, Repository);
             BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
             WriteRepository();
             actualResponse.ShouldEqual(expectedResponse);
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
             Assert.That(slice.Events.Length, Is.EqualTo(1));
+
 
         }
     }

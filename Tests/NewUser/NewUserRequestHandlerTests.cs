@@ -10,6 +10,7 @@ using EventStore.ClientAPI.Embedded;
 using Lending.Domain;
 using Lending.Domain.Model;
 using Lending.Domain.NewUser;
+using Lending.Domain.Persistence;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
 using NUnit.Framework;
@@ -47,6 +48,7 @@ namespace Tests.NewUser
                 ;
 
             Assert.That(numberOfUsersInDb, Is.EqualTo(1));
+
         }
 
         [Test]
@@ -61,7 +63,7 @@ namespace Tests.NewUser
             var stream = $"user-{userId}";
             var request = new AuthSessionDouble();
             var expectedResponse = new BaseResponse();
-            var expectedUser = new ServiceStackUser(authDto.Id, userId);
+            var expectedUser = new ServiceStackUser(authDto.Id, userId, authDto.DisplayName);
             var expectedEvent = new UserAdded(userId, authDto.DisplayName, authDto.PrimaryEmail);
 
             var sut = new NewUserRequestHandler(() => Session, Repository, () => userId);

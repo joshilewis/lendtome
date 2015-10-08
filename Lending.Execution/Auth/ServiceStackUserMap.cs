@@ -7,15 +7,12 @@ using FluentNHibernate.Mapping;
 
 namespace Lending.Execution.Auth
 {
-    public class ServiceStackUserMap : ClassMap<ServiceStackUser>
+    public class ServiceStackUserMap : SubclassMap<ServiceStackUser>
     {
         public ServiceStackUserMap()
         {
-            Id(x => x.AuthenticatedUserId)
-                .GeneratedBy.Assigned()
-                ;
-
-            Map(x => x.UserId);
+            Map(x => x.AuthenticatedUserId)
+                .Unique();
         }
     }
 }

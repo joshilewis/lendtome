@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
+using Lending.Domain.Persistence;
 using Lending.Execution.Auth;
 using Lending.Execution.Persistence;
 using NCrunch.Framework;
@@ -39,6 +40,7 @@ namespace Tests
                     m.FluentMappings
                         .AddFromAssemblyOf<ServiceStackUser>()
                         .AddFromAssemblyOf<UserAuthPersistenceDto>()
+                        .AddFromAssemblyOf<RegisteredUser>()
                 )
                 .BuildConfiguration();
 

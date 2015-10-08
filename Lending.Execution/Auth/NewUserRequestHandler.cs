@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lending.Domain;
 using Lending.Domain.Model;
+using Lending.Domain.Persistence;
 using NHibernate;
 using ServiceStack.Authentication.NHibernate;
 using ServiceStack.ServiceInterface.Auth;
@@ -38,11 +39,11 @@ namespace Lending.Execution.Auth
 
             if (serviceStackUser == null) //user doesn't exist yet, first time registration
             {
-                Guid newUserId = getNewGuid();
-                serviceStackUser = new ServiceStackUser(userAuthId, newUserId);
-                session.Save(serviceStackUser);
-
                 UserAuthPersistenceDto userAuth = session.Get<UserAuthPersistenceDto>(userAuthId);
+
+                Guid newUserId = getNewGuid();
+                serviceStackUser = new ServiceStackUser(userAuthId, newUserId, userAuth.DisplayName);
+                session.Save(serviceStackUser);
 
                 User user = User.Create(newUserId, userAuth.DisplayName, userAuth.PrimaryEmail);
                 repository.Save(user);
