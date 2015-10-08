@@ -15,11 +15,8 @@ namespace Lending.Execution.Auth
 
         protected BaseAuthenticatedRequestHandler() { }
 
-        protected ISession Session
-        {
-            get { return getSession(); }
-        }
+        protected ISession Session => getSession();
 
-        public abstract TResponse HandleRequest(TRequest request, int userId);
+        public abstract TResponse HandleRequest(TRequest request, Guid userId);
     }
 }

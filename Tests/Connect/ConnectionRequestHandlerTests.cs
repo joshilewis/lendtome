@@ -35,7 +35,7 @@ namespace Tests.Connect
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.ConnectionAlreadyRequested);
 
             var sut = new ConnectionRequestHandler(Repository);
-            BaseResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
             WriteRepository();
 
             actualResponse.ShouldEqual(expectedResponse);
@@ -62,7 +62,7 @@ namespace Tests.Connect
             var expectedEvent = new ConnectionRequested(Guid.Empty, user1.Id, user2.Id);
 
             var sut = new ConnectionRequestHandler(Repository);
-            BaseResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
             WriteRepository();
             actualResponse.ShouldEqual(expectedResponse);
 
@@ -90,7 +90,7 @@ namespace Tests.Connect
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.TargetUserDoesNotExist);
 
             var sut = new ConnectionRequestHandler(Repository);
-            BaseResponse actualResponse = sut.HandleRequest(request);
+            BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
             WriteRepository();
             actualResponse.ShouldEqual(expectedResponse);
 

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
 using Lending.Domain;
+using Lending.Execution.Auth;
 using Lending.Execution.UnitOfWork;
+using NHibernate;
 using ServiceStack.Logging;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -26,11 +28,16 @@ namespace Lending.Execution.WebServices
         public virtual object Any(TRequest request)
         {
             Log.InfoFormat("Received a request of type {0}", typeof(TRequest));
-            int userId = int.Parse(this.GetSession().Id);
+
+            ISession session = unitOfWork.CurrentSession;
+
+            int authUserId = int.Parse(this.GetSession().Id);
+            ServiceStackUser user = session.Get<ServiceStackUser>(authUserId);
+
             TResponse response = default(TResponse);
                 unitOfWork.DoInTransaction(() =>
                 {
-                    response = requestHandler.HandleRequest(request, userId);
+                    response = requestHandler.HandleRequest(request, user.UserId);
                 });
 
             return response;
