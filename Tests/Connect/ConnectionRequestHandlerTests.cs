@@ -31,7 +31,7 @@ namespace Tests.Connect
 
             StreamEventsSlice slice1 = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
 
-            var request = new ConnectionRequest(user1.Id, user2.Id);
+            var request = new ConnectionRequest(user2.Id);
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.ConnectionAlreadyRequested);
 
             var sut = new ConnectionRequestHandler(Repository);
@@ -57,7 +57,7 @@ namespace Tests.Connect
 
             SaveAggregates(user1, user2);
 
-            var request = new ConnectionRequest(user1.Id, user2.Id);
+            var request = new ConnectionRequest(user2.Id);
             var expectedResponse = new BaseResponse();
             var expectedEvent = new ConnectionRequested(Guid.Empty, user1.Id, user2.Id);
 
@@ -86,7 +86,7 @@ namespace Tests.Connect
 
             SaveAggregates(user1);
 
-            var request = new ConnectionRequest(user1.Id, Guid.NewGuid());
+            var request = new ConnectionRequest(Guid.NewGuid());
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.TargetUserDoesNotExist);
 
             var sut = new ConnectionRequestHandler(Repository);

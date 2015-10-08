@@ -17,7 +17,7 @@ namespace Lending.Domain.ConnectionRequest
 
         public virtual BaseResponse HandleRequest(ConnectionRequest request, Guid userId)
         {
-            User user = User.CreateFromEvents(repository.GetEventsForAggregate<User>(request.SourceUserId));
+            User user = User.CreateFromEvents(repository.GetEventsForAggregate<User>(userId));
             bool connectionRequestSuccessful = user.RequestConnectionTo(request.TargetUserId);
 
             if (!connectionRequestSuccessful)
