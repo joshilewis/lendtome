@@ -15,13 +15,13 @@ namespace Lending.Execution.Auth
     public class NewUserRequestHandler : IRequestHandler<IAuthSession, BaseResponse>
     {
         private readonly Func<ISession> getSession;
-        private readonly IRepository repository;
+        private readonly Func<IRepository> getRepository;
         private readonly Func<Guid> getNewGuid; 
 
-        public NewUserRequestHandler(Func<ISession> sessionFunc, IRepository repository, Func<Guid> guidFunc)
+        public NewUserRequestHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc, Func<Guid> guidFunc)
         {
             this.getSession = sessionFunc;
-            this.repository = repository;
+            this.getRepository = repositoryFunc;
             this.getNewGuid = guidFunc;
         }
 
@@ -46,7 +46,7 @@ namespace Lending.Execution.Auth
                 session.Save(serviceStackUser);
 
                 User user = User.Register(newUserId, userAuth.DisplayName, userAuth.PrimaryEmail);
-                repository.Save(user);
+                getRepository().Save(user);
             }
 
             return new BaseResponse();

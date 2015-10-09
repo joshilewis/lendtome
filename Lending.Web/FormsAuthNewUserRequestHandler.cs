@@ -12,8 +12,8 @@ namespace Lending.Web
 {
     public class FormsAuthNewUserRequestHandler : NewUserRequestHandler
     {
-        public FormsAuthNewUserRequestHandler(Func<ISession> sessionFunc, IRepository repository, Func<Guid> guidFunc)
-            : base(sessionFunc, repository, guidFunc)
+        public FormsAuthNewUserRequestHandler(Func<ISession> sessionFunc, Func<IRepository> getRepository, Func<Guid> guidFunc)
+            : base(sessionFunc, getRepository, guidFunc)
         { }
 
         public override BaseResponse HandleRequest(IAuthSession request)

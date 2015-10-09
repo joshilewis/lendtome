@@ -8,6 +8,7 @@ using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using Lending.Domain;
+using Lending.Domain.Persistence;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
 using Lending.Execution.UnitOfWork;
@@ -42,6 +43,7 @@ namespace Lending.Execution.DI
                     m.FluentMappings
                         .AddFromAssemblyOf<UserAuthPersistenceDto>()
                         .AddFromAssemblyOf<ServiceStackUser>()
+                        .AddFromAssemblyOf<RegisteredUser>()
                 )
                 .BuildConfiguration()
                 ;

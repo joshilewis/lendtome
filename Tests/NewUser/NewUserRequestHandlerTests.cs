@@ -35,7 +35,7 @@ namespace Tests.NewUser
             var request = new AuthSessionDouble();
             var expectedResponse = new BaseResponse();
 
-            var sut = new NewUserRequestHandler(() => Session, new UnexpectedRepository(), () => Guid.Empty);
+            var sut = new NewUserRequestHandler(() => Session, () => new UnexpectedRepository(), () => Guid.Empty);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
@@ -66,7 +66,7 @@ namespace Tests.NewUser
             var expectedUser = new ServiceStackUser(authDto.Id, userId, authDto.DisplayName);
             var expectedEvent = new UserRegistered(userId, authDto.DisplayName, authDto.PrimaryEmail);
 
-            var sut = new NewUserRequestHandler(() => Session, Repository, () => userId);
+            var sut = new NewUserRequestHandler(() => Session, () => Repository, () => userId);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
