@@ -16,11 +16,11 @@ namespace Tests
 {
     public class DatabaseAndEventStoreFixtureBase : DatabaseFixtureBase
     {
-        protected static readonly ClusterVNode Node;
+        protected ClusterVNode Node;
         protected IEventStoreConnection Connection;
         protected IRepository Repository;
 
-        static DatabaseAndEventStoreFixtureBase()
+        public override void SetUp()
         {
             var noIp = new IPEndPoint(IPAddress.None, 0);
             Node = EmbeddedVNodeBuilder
@@ -30,10 +30,7 @@ namespace Tests
                 .RunInMemory()
                 .Build();
             Node.Start();
-        }
 
-        public override void SetUp()
-        {
             base.SetUp();
             Connection = EmbeddedEventStoreConnection.Create(Node);
             Connection.ConnectAsync().Wait();
