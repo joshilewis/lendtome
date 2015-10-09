@@ -26,8 +26,8 @@ namespace Tests.Connect
         [Test]
         public void ExistingConnectionRequestFrom1To2ShouldBeRejected()
         {
-            var user1 = User.Create(Guid.NewGuid(), "User 1", "email1");
-            var user2 = User.Create(Guid.NewGuid(), "User 2", "email2");
+            var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
+            var user2 = User.Register(Guid.NewGuid(), "User 2", "email2");
             user1.RequestConnectionTo(user2.Id);
             SaveAggregates(user1, user2);
 
@@ -56,8 +56,8 @@ namespace Tests.Connect
         [Test]
         public void NoExistingConnectionRequestShouldEmitEvent()
         {
-            var user1 = User.Create(Guid.NewGuid(), "User 1", "email1");
-            var user2 = User.Create(Guid.NewGuid(), "User 2", "email2");
+            var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
+            var user2 = User.Register(Guid.NewGuid(), "User 2", "email2");
 
             SaveAggregates(user1, user2);
 
@@ -91,7 +91,7 @@ namespace Tests.Connect
         [Test]
         public void ConnectionRequestToNonExistentTargetShouldBeRejected()
         {
-            var user1 = User.Create(Guid.NewGuid(), "User 1", "email1");
+            var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
             SaveAggregates(user1);
 
             var request = new ConnectionRequest(Guid.NewGuid());
@@ -106,6 +106,36 @@ namespace Tests.Connect
             Assert.That(slice.Events.Length, Is.EqualTo(1));
 
 
+        }
+
+        /// <summary>
+        /// GIVEN User1 exists AND User2 exists AND they are not connected AND there is an existing connection request from User2 to User1
+        ///WHEN User1 requests a connection to User2
+        ///THEN no request is created AND User1 is informed that the request failed because a connection request exists AND is pending
+        /// </summary>
+        [Test]
+        public void ConnectionRequestForReverseExistingRequestShouldBeRejected()
+        {
+            var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
+            var user2 = User.Register(Guid.NewGuid(), "User 2", "email2");
+            user2.RequestConnectionTo(user1.Id);
+            SaveAggregates(user1, user2);
+
+            var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
+            var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
+            SaveEntities(registeredUser1, registeredUser2);
+
+            var request = new ConnectionRequest(user2.Id);
+            var expectedResponse = new BaseResponse(ConnectionRequestHandler.ConnectionAlreadyRequested);
+
+            var sut = new ConnectionRequestHandler(() => Session, Repository);
+            BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
+            WriteRepository();
+
+            actualResponse.ShouldEqual(expectedResponse);
+
+            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
+            Assert.That(slice.Events.Length, Is.EqualTo(2));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Lending.Domain.Model
         protected User(Guid id, string userName, string emailAddress)
             : this()
         {
-            RaiseEvent(new UserAdded(id, userName, emailAddress));
+            RaiseEvent(new UserRegistered(id, userName, emailAddress));
         }
 
         protected User()
@@ -23,7 +23,7 @@ namespace Lending.Domain.Model
             CurrentConnectionRequests = new List<Guid>();
         }
 
-        public static User Create(Guid id, string userName, string emailAddress)
+        public static User Register(Guid id, string userName, string emailAddress)
         {
             return new User(id, userName, emailAddress);
         }
@@ -38,7 +38,7 @@ namespace Lending.Domain.Model
             return user;
         }
 
-        protected virtual void When(UserAdded @event)
+        protected virtual void When(UserRegistered @event)
         {
             Id = @event.Id;
             UserName = @event.UserName;
@@ -47,7 +47,7 @@ namespace Lending.Domain.Model
 
         protected override List<IEventRoute> EventRoutes => new List<IEventRoute>()
         {
-            new EventRoute<UserAdded>(When, typeof(UserAdded)),
+            new EventRoute<UserRegistered>(When, typeof(UserRegistered)),
             new EventRoute<ConnectionRequested>(When, typeof(ConnectionRequested)),
         };
 

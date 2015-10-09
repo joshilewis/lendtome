@@ -78,7 +78,7 @@ namespace Tests
         }
 
 
-        public static bool ShouldEqual(this UserAdded actual, UserAdded expected)
+        public static bool ShouldEqual(this UserRegistered actual, UserRegistered expected)
         {
             Assert.That(actual.Id, Is.EqualTo(expected.Id));
             Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
@@ -87,9 +87,9 @@ namespace Tests
             return true;
         }
 
-        public static UserAdded MatchArg(this UserAdded expected)
+        public static UserRegistered MatchArg(this UserRegistered expected)
         {
-            return Arg<UserAdded>.Matches(x => x.ShouldEqual(expected));
+            return Arg<UserRegistered>.Matches(x => x.ShouldEqual(expected));
         }
 
         public static bool ShouldEqual(this ConnectionRequested actual, ConnectionRequested expected)

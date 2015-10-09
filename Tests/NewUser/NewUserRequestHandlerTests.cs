@@ -64,7 +64,7 @@ namespace Tests.NewUser
             var request = new AuthSessionDouble();
             var expectedResponse = new BaseResponse();
             var expectedUser = new ServiceStackUser(authDto.Id, userId, authDto.DisplayName);
-            var expectedEvent = new UserAdded(userId, authDto.DisplayName, authDto.PrimaryEmail);
+            var expectedEvent = new UserRegistered(userId, authDto.DisplayName, authDto.PrimaryEmail);
 
             var sut = new NewUserRequestHandler(() => Session, Repository, () => userId);
             BaseResponse actualResponse = sut.HandleRequest(request);
@@ -84,7 +84,7 @@ namespace Tests.NewUser
             StreamEventsSlice slice = Connection.ReadStreamEventsBackwardAsync(stream, 0, 10, false).Result;
             Assert.That(slice.Events.Count(), Is.EqualTo(1));
             var value = Encoding.UTF8.GetString(slice.Events[0].Event.Data);
-            UserAdded actual = value.FromJson<UserAdded>();
+            UserRegistered actual = value.FromJson<UserRegistered>();
             actual.ShouldEqual(expectedEvent);
         }
 
