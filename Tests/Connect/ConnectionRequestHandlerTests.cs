@@ -38,7 +38,7 @@ namespace Tests.Connect
             var request = new ConnectionRequest(user2.Id);
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.ConnectionAlreadyRequested);
 
-            var sut = new ConnectionRequestHandler(() => Session, Repository);
+            var sut = new ConnectionRequestHandler(() => Session, ()=> Repository);
             BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
             WriteRepository();
 
@@ -71,7 +71,7 @@ namespace Tests.Connect
             var expectedEvent = new ConnectionRequested(Guid.Empty, user1.Id, user2.Id);
             var expectedConnectionRequest = new PendingConnectionRequest(user1.Id, user2.Id);
 
-            var sut = new ConnectionRequestHandler(() => Session, Repository);
+            var sut = new ConnectionRequestHandler(() => Session, () => Repository);
             BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
             WriteRepository();
             actualResponse.ShouldEqual(expectedResponse);
@@ -101,7 +101,7 @@ namespace Tests.Connect
             var request = new ConnectionRequest(Guid.NewGuid());
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.TargetUserDoesNotExist);
 
-            var sut = new ConnectionRequestHandler(() => Session, Repository);
+            var sut = new ConnectionRequestHandler(() => Session, () => Repository);
             BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
             WriteRepository();
             actualResponse.ShouldEqual(expectedResponse);
@@ -132,7 +132,7 @@ namespace Tests.Connect
             var request = new ConnectionRequest(user2.Id);
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.ReverseConnectionAlreadyRequested);
 
-            var sut = new ConnectionRequestHandler(() => Session, Repository);
+            var sut = new ConnectionRequestHandler(() => Session, () => Repository);
             BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
             WriteRepository();
 
@@ -140,6 +140,17 @@ namespace Tests.Connect
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
             Assert.That(slice.Events.Length, Is.EqualTo(1));
+        }
+
+        /// <summary>
+        /// GIVEN User1 exists AND User2 exists AND they are already connected
+        ///WHEN User1 requests a connection to User2
+        ///THEN no request is created AND User1 is informed that the request failed because they are already connected
+        /// </summary>
+        [Test]
+        public void ConnectionRequestToConnectedUsersShouldBeRejected()
+        {
+            
         }
     }
 }

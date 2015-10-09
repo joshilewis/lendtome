@@ -11,8 +11,8 @@ namespace Lending.Domain.ConnectionRequest
         public const string TargetUserDoesNotExist = "The target user does not exist";
         public const string ReverseConnectionAlreadyRequested = "A reverse connection request for these users already exists";
 
-        public ConnectionRequestHandler(Func<ISession> sessionFunc, IRepository repository)
-            : base(sessionFunc, repository)
+        public ConnectionRequestHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc)
+            : base(sessionFunc, repositoryFunc)
         {
         }
 

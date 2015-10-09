@@ -10,16 +10,17 @@ namespace Lending.Domain
     public abstract class BaseAuthenticatedRequestHandler<TRequest, TResponse> : IAuthenticatedRequestHandler<TRequest, TResponse>
     {
         private readonly Func<ISession> getSession;
+        private readonly Func<IRepository> getRepository; 
 
-        protected BaseAuthenticatedRequestHandler(Func<ISession> sessionFunc, IRepository repository)
+        protected BaseAuthenticatedRequestHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc)
         {
             this.getSession = sessionFunc;
-            this.Repository = repository;
+            this.getRepository = repositoryFunc;
         }
 
         protected ISession Session => getSession();
 
-        protected IRepository Repository { get; }
+        protected IRepository Repository => getRepository();
 
         public abstract TResponse HandleRequest(TRequest request, Guid userId);
     }

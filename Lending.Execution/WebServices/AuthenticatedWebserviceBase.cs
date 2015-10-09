@@ -29,14 +29,16 @@ namespace Lending.Execution.WebServices
         {
             Log.InfoFormat("Received a request of type {0}", typeof(TRequest));
 
-            ISession session = unitOfWork.CurrentSession;
-
             int authUserId = int.Parse(this.GetSession().Id);
-            ServiceStackUser user = session.Get<ServiceStackUser>(authUserId);
 
             TResponse response = default(TResponse);
                 unitOfWork.DoInTransaction(() =>
                 {
+                    ISession session = unitOfWork.CurrentSession;
+                    ServiceStackUser user = session.QueryOver<ServiceStackUser>()
+                    .Where(x => x.AuthenticatedUserId == authUserId)
+                    .SingleOrDefault();
+
                     response = requestHandler.HandleRequest(request, user.Id);
                 });
 

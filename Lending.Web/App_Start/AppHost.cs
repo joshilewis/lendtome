@@ -56,7 +56,7 @@ namespace Lending.Web.App_Start
 
 	        //Configure User Defined REST Paths
 	        Routes
-                .Add<ConnectionRequest>("/connection/add/{FromUserId}/{ToUserId}/")
+                .Add<ConnectionRequest>("/connect/{TargetUserId}/")
                 ;
 
 	        //Enable Authentication
