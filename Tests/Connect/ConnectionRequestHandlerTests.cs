@@ -24,7 +24,7 @@ namespace Tests.Connect
         ///THEN no request is created AND User1 is informed that the request failed because a connection request exists and is pending
         /// </summary>
         [Test]
-        public void ExistingConnectionRequestFrom1To2ShouldBeRejected()
+        public void ExistingConnectionRequestFromSourceToTargetShouldBeRejected()
         {
             var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
             var user2 = User.Register(Guid.NewGuid(), "User 2", "email2");
@@ -69,6 +69,7 @@ namespace Tests.Connect
             var request = new ConnectionRequest(user2.Id);
             var expectedResponse = new BaseResponse();
             var expectedEvent = new ConnectionRequested(Guid.Empty, user1.Id, user2.Id);
+            var expectedConnectionRequest = new PendingConnectionRequest(user1.Id, user2.Id);
 
             var sut = new ConnectionRequestHandler(() => Session, Repository);
             BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
@@ -81,6 +82,9 @@ namespace Tests.Connect
             var value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
             ConnectionRequested actual = value.FromJson<ConnectionRequested>();
             actual.ShouldEqual(expectedEvent);
+
+            PendingConnectionRequest actualConnectionRequest = Session.Get<PendingConnectionRequest>(user1.Id);
+            actualConnectionRequest.ShouldEqual(expectedConnectionRequest);
         }
 
         /// <summary>
@@ -114,7 +118,7 @@ namespace Tests.Connect
         ///THEN no request is created AND User1 is informed that the request failed because a connection request exists AND is pending
         /// </summary>
         [Test]
-        public void ConnectionRequestForReverseExistingRequestShouldBeRejected()
+        public void ExistingConnectionRequestFromTargetToSourceShouldBeRejected()
         {
             var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
             var user2 = User.Register(Guid.NewGuid(), "User 2", "email2");
@@ -123,10 +127,10 @@ namespace Tests.Connect
 
             var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
             var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
-            SaveEntities(registeredUser1, registeredUser2);
+            SaveEntities(registeredUser1, registeredUser2, new PendingConnectionRequest(user2.Id, user1.Id));
 
             var request = new ConnectionRequest(user2.Id);
-            var expectedResponse = new BaseResponse(ConnectionRequestHandler.ConnectionAlreadyRequested);
+            var expectedResponse = new BaseResponse(ConnectionRequestHandler.ReverseConnectionAlreadyRequested);
 
             var sut = new ConnectionRequestHandler(() => Session, Repository);
             BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
@@ -135,7 +139,7 @@ namespace Tests.Connect
             actualResponse.ShouldEqual(expectedResponse);
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(2));
+            Assert.That(slice.Events.Length, Is.EqualTo(1));
         }
     }
 }

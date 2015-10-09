@@ -9,6 +9,7 @@ namespace Lending.Domain.ConnectionRequest
     {
         public const string ConnectionAlreadyRequested = "A connection request for these users already exists";
         public const string TargetUserDoesNotExist = "The target user does not exist";
+        public const string ReverseConnectionAlreadyRequested = "A reverse connection request for these users already exists";
 
         public ConnectionRequestHandler(Func<ISession> sessionFunc, IRepository repository)
             : base(sessionFunc, repository)
@@ -20,6 +21,9 @@ namespace Lending.Domain.ConnectionRequest
             RegisteredUser targetUser = Session.Get<RegisteredUser>(request.TargetUserId);
             if (targetUser == null) return new BaseResponse(TargetUserDoesNotExist);
 
+            PendingConnectionRequest reverseRequest = Session.Get<PendingConnectionRequest>(request.TargetUserId);
+            if (reverseRequest != null) return new BaseResponse(ReverseConnectionAlreadyRequested);
+
             User user = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(userId));
             bool connectionRequestSuccessful = user.RequestConnectionTo(request.TargetUserId);
 
@@ -27,6 +31,7 @@ namespace Lending.Domain.ConnectionRequest
                 return new BaseResponse(ConnectionAlreadyRequested);
 
             Repository.Save(user);
+            Session.Save(new PendingConnectionRequest(userId, request.TargetUserId));
 
             return new BaseResponse();
         }

@@ -116,6 +116,14 @@ namespace Tests
             return true;
         }
 
+        public static bool ShouldEqual(this PendingConnectionRequest actual, PendingConnectionRequest expected)
+        {
+            Assert.That(actual.SourceUserId, Is.EqualTo(expected.SourceUserId));
+            Assert.That(actual.TargetUserId, Is.EqualTo(expected.TargetUserId));
+
+            return true;
+        }
+
 
     }
 }

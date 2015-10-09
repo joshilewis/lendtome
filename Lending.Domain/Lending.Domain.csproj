@@ -60,6 +60,8 @@
     <Compile Include="IRequestHandler.cs" />
     <Compile Include="EventRoute.cs" />
     <Compile Include="NewUser\UserRegistered.cs" />
+    <Compile Include="Persistence\PendingConnectionRequest.cs" />
+    <Compile Include="Persistence\PendingConnectionRequestMap.cs" />
     <Compile Include="Persistence\RegisteredUser.cs" />
     <Compile Include="Persistence\RegisteredUserMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
