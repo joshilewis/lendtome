@@ -10,9 +10,9 @@ using ServiceStack.ServiceInterface.Auth;
 
 namespace Lending.Web
 {
-    public class FormsAuthNewUserRequestHandler : NewUserRequestHandler
+    public class FormsAuthUserRegistrationHandler : UserRegistrationHandler
     {
-        public FormsAuthNewUserRequestHandler(Func<ISession> sessionFunc, Func<IRepository> getRepository, Func<Guid> guidFunc)
+        public FormsAuthUserRegistrationHandler(Func<ISession> sessionFunc, Func<IRepository> getRepository, Func<Guid> guidFunc)
             : base(sessionFunc, getRepository, guidFunc)
         { }
 

@@ -1,6 +1,6 @@
 using System;
 
-namespace Lending.Domain.NewUser
+namespace Lending.Domain.UserRegistration
 {
     public class UserRegistered : Event
     {

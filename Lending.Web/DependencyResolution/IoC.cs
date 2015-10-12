@@ -21,7 +21,7 @@ namespace Lending.Web.DependencyResolution
 
                 x.For<IRequestHandler<IAuthSession, BaseResponse>>()
                     .AlwaysUnique()
-                    .Use<FormsAuthNewUserRequestHandler>()
+                    .Use<FormsAuthUserRegistrationHandler>()
                     ;
             });
 

@@ -1,28 +1,20 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using EventStore.ClientAPI;
-using EventStore.ClientAPI.Embedded;
 using Lending.Domain;
-using Lending.Domain.Model;
-using Lending.Domain.NewUser;
-using Lending.Domain.Persistence;
+using Lending.Domain.UserRegistration;
 using Lending.Execution.Auth;
-using Lending.Execution.EventStore;
 using NUnit.Framework;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.Auth;
 using ServiceStack.Text;
-using Auth = ServiceStack.Common.ServiceClient.Web.Auth;
 
-namespace Tests.NewUser
+namespace Tests.UserRegistration
 {
-    public class NewUserRequestHandlerTests : DatabaseAndEventStoreFixtureBase
+    public class UserRegistrationHandlerTests : DatabaseAndEventStoreFixtureBase
     {
         [Test]
         public void ExistingUserShouldNotBeCreatedAndNoEventEmitted()
@@ -35,7 +27,7 @@ namespace Tests.NewUser
             var request = new AuthSessionDouble();
             var expectedResponse = new BaseResponse();
 
-            var sut = new NewUserRequestHandler(() => Session, () => new UnexpectedRepository(), () => Guid.Empty);
+            var sut = new UserRegistrationHandler(() => Session, () => new UnexpectedRepository(), () => Guid.Empty);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);
@@ -66,7 +58,7 @@ namespace Tests.NewUser
             var expectedUser = new ServiceStackUser(authDto.Id, userId, authDto.DisplayName);
             var expectedEvent = new UserRegistered(userId, authDto.DisplayName, authDto.PrimaryEmail);
 
-            var sut = new NewUserRequestHandler(() => Session, () => Repository, () => userId);
+            var sut = new UserRegistrationHandler(() => Session, () => Repository, () => userId);
             BaseResponse actualResponse = sut.HandleRequest(request);
 
             actualResponse.ShouldEqual(expectedResponse);

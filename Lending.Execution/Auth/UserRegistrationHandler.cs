@@ -12,20 +12,20 @@ using ServiceStack.ServiceInterface.Auth;
 
 namespace Lending.Execution.Auth
 {
-    public class NewUserRequestHandler : IRequestHandler<IAuthSession, BaseResponse>
+    public class UserRegistrationHandler : IRequestHandler<IAuthSession, BaseResponse>
     {
         private readonly Func<ISession> getSession;
         private readonly Func<IRepository> getRepository;
         private readonly Func<Guid> getNewGuid; 
 
-        public NewUserRequestHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc, Func<Guid> guidFunc)
+        public UserRegistrationHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc, Func<Guid> guidFunc)
         {
             this.getSession = sessionFunc;
             this.getRepository = repositoryFunc;
             this.getNewGuid = guidFunc;
         }
 
-        protected NewUserRequestHandler() { }
+        protected UserRegistrationHandler() { }
 
         public virtual BaseResponse HandleRequest(IAuthSession request)
         {

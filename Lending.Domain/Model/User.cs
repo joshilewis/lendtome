@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Lending.Domain.ConnectionRequest;
-using Lending.Domain.NewUser;
+using Lending.Domain.UserRegistration;
 
 namespace Lending.Domain.Model
 {

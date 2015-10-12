@@ -46,7 +46,7 @@
                             <li>
                                 @if (Request.IsAuthenticated)
                                 {
-                                    <a href="~/">@User.Identity.Name</a>
+                                    <a href="~/api/auth/logout">@User.Identity.Name</a>
                                 }
                                 else
                                 {

@@ -6,7 +6,6 @@ using EventStore.ClientAPI;
 using Lending.Domain;
 using Lending.Domain.ConnectionRequest;
 using Lending.Domain.Model;
-using Lending.Domain.NewUser;
 using Lending.Domain.Persistence;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;

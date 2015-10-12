@@ -59,7 +59,7 @@
     <Compile Include="ConnectionRequest\ConnectionRequestHandler.cs" />
     <Compile Include="IRequestHandler.cs" />
     <Compile Include="EventRoute.cs" />
-    <Compile Include="NewUser\UserRegistered.cs" />
+    <Compile Include="UserRegistration\UserRegistered.cs" />
     <Compile Include="Persistence\PendingConnectionRequest.cs" />
     <Compile Include="Persistence\PendingConnectionRequestMap.cs" />
     <Compile Include="Persistence\RegisteredUser.cs" />
