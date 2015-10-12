@@ -152,6 +152,11 @@ namespace Tests.Connect
             
         }
 
+        /// <summary>
+        /// GIVEN User1 exists
+        ///WHEN User1 requests a connection to User1
+        ///THEN no request is created AND User1 is informed that the request failed because they can't connect to themselves
+        /// </summary>
         [Test]
         public void ConnectionRequestToSelfShouldBeRejected()
         {
