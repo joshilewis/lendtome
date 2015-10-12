@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="Aggregate.cs" />
     <Compile Include="AuthenticatedRequest.cs" />
-    <Compile Include="BaseAuthenticatedRequestHandler.cs" />
+    <Compile Include="AuthenticatedRequestHandler.cs" />
     <Compile Include="ConnectionRequest\ConnectionRequested.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="IAuthenticatedRequestHandler.cs" />
@@ -60,6 +60,7 @@
     <Compile Include="ConnectionRequest\ConnectionRequestHandler.cs" />
     <Compile Include="IRequestHandler.cs" />
     <Compile Include="EventRoute.cs" />
+    <Compile Include="RequestHandler.cs" />
     <Compile Include="UserRegistration\UserRegistered.cs" />
     <Compile Include="Persistence\PendingConnectionRequest.cs" />
     <Compile Include="Persistence\PendingConnectionRequestMap.cs" />

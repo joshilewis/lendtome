@@ -5,7 +5,7 @@ using NHibernate;
 
 namespace Lending.Domain.ConnectionRequest
 {
-    public class ConnectionRequestHandler : BaseAuthenticatedRequestHandler<ConnectionRequest, BaseResponse>
+    public class ConnectionRequestHandler : AuthenticatedRequestHandler<ConnectionRequest, BaseResponse>
     {
         public const string ConnectionAlreadyRequested = "A connection request for these users already exists";
         public const string TargetUserDoesNotExist = "The target user does not exist";

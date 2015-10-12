@@ -75,7 +75,7 @@ namespace Lending.Execution.DI
                 scanner.AssemblyContainingType<ServiceStackUser>();
                 scanner.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedRequestHandler<,>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(BaseAuthenticatedRequestHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedRequestHandler<,>));
             });
 
             For<IUserAuthRepository>()
