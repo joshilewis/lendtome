@@ -68,8 +68,6 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Request.cs" />
     <Compile Include="RequestHandler.cs" />
-    <Compile Include="SequentialGuid.cs" />
-    <Compile Include="StreamEventTuple.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
