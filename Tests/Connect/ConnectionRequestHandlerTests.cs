@@ -151,5 +151,27 @@ namespace Tests.Connect
         {
             
         }
+
+        [Test]
+        public void ConnectionRequestToSelfShouldBeRejected()
+        {
+            var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
+            SaveAggregates(user1);
+
+            var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
+            SaveEntities(registeredUser1);
+
+            var request = new ConnectionRequest(user1.Id, user1.Id);
+            var expectedResponse = new BaseResponse(ConnectionRequestHandler.CantConnectToSelf);
+
+            var sut = new ConnectionRequestHandler(() => Session, () => Repository);
+            BaseResponse actualResponse = sut.HandleRequest(request);
+            WriteRepository();
+
+            actualResponse.ShouldEqual(expectedResponse);
+
+            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
+            Assert.That(slice.Events.Length, Is.EqualTo(1));
+        }
     }
 }

@@ -10,14 +10,17 @@ namespace Lending.Domain.ConnectionRequest
         public const string ConnectionAlreadyRequested = "A connection request for these users already exists";
         public const string TargetUserDoesNotExist = "The target user does not exist";
         public const string ReverseConnectionAlreadyRequested = "A reverse connection request for these users already exists";
+        public const string CantConnectToSelf = "You can't connect to yourself";
 
-        public ConnectionRequestHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc)
+    public ConnectionRequestHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc)
             : base(sessionFunc, repositoryFunc)
         {
         }
 
         public override BaseResponse HandleRequest(ConnectionRequest request)
         {
+            if (request.TargetUserId == request.UserId) return new BaseResponse(CantConnectToSelf);
+
             RegisteredUser targetUser = Session.Get<RegisteredUser>(request.TargetUserId);
             if (targetUser == null) return new BaseResponse(TargetUserDoesNotExist);
 
