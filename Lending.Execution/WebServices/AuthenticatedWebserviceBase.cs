@@ -10,7 +10,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Lending.Execution.WebServices
 {
-    public class AuthenticatedWebserviceBase<TRequest, TResponse> : Service, IWebserviceBase<TRequest, TResponse>
+    public class AuthenticatedWebserviceBase<TRequest, TResponse> : Service, IWebserviceBase<TRequest, TResponse> where TRequest : AuthenticatedRequest
     {
         private readonly static ILog Log = LogManager.GetLogger(typeof(WebserviceBase<TRequest, TResponse>).FullName);
 
@@ -39,7 +39,7 @@ namespace Lending.Execution.WebServices
                     .Where(x => x.AuthenticatedUserId == authUserId)
                     .SingleOrDefault();
 
-                    response = requestHandler.HandleRequest(request, user.Id);
+                    response = requestHandler.HandleRequest(request);
                 });
 
             return response;

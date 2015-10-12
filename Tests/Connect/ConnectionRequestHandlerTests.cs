@@ -34,11 +34,11 @@ namespace Tests.Connect
             var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
             SaveEntities(registeredUser1, registeredUser2);
 
-            var request = new ConnectionRequest(user2.Id);
+            var request = new ConnectionRequest(user1.Id, user2.Id);
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.ConnectionAlreadyRequested);
 
             var sut = new ConnectionRequestHandler(() => Session, ()=> Repository);
-            BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
+            BaseResponse actualResponse = sut.HandleRequest(request);
             WriteRepository();
 
             actualResponse.ShouldEqual(expectedResponse);
@@ -65,13 +65,13 @@ namespace Tests.Connect
             SaveEntities(registeredUser1, registeredUser2);
             CommitTransactionAndOpenNew();
 
-            var request = new ConnectionRequest(user2.Id);
+            var request = new ConnectionRequest(user1.Id, user2.Id);
             var expectedResponse = new BaseResponse();
             var expectedEvent = new ConnectionRequested(Guid.Empty, user1.Id, user2.Id);
             var expectedConnectionRequest = new PendingConnectionRequest(user1.Id, user2.Id);
 
             var sut = new ConnectionRequestHandler(() => Session, () => Repository);
-            BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
+            BaseResponse actualResponse = sut.HandleRequest(request);
             WriteRepository();
             actualResponse.ShouldEqual(expectedResponse);
 
@@ -97,11 +97,11 @@ namespace Tests.Connect
             var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
             SaveAggregates(user1);
 
-            var request = new ConnectionRequest(Guid.NewGuid());
+            var request = new ConnectionRequest(user1.Id, Guid.NewGuid());
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.TargetUserDoesNotExist);
 
             var sut = new ConnectionRequestHandler(() => Session, () => Repository);
-            BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
+            BaseResponse actualResponse = sut.HandleRequest(request);
             WriteRepository();
             actualResponse.ShouldEqual(expectedResponse);
 
@@ -128,11 +128,11 @@ namespace Tests.Connect
             var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
             SaveEntities(registeredUser1, registeredUser2, new PendingConnectionRequest(user2.Id, user1.Id));
 
-            var request = new ConnectionRequest(user2.Id);
+            var request = new ConnectionRequest(user1.Id, user2.Id);
             var expectedResponse = new BaseResponse(ConnectionRequestHandler.ReverseConnectionAlreadyRequested);
 
             var sut = new ConnectionRequestHandler(() => Session, () => Repository);
-            BaseResponse actualResponse = sut.HandleRequest(request, user1.Id);
+            BaseResponse actualResponse = sut.HandleRequest(request);
             WriteRepository();
 
             actualResponse.ShouldEqual(expectedResponse);

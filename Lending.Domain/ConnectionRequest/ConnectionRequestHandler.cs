@@ -16,7 +16,7 @@ namespace Lending.Domain.ConnectionRequest
         {
         }
 
-        public override BaseResponse HandleRequest(ConnectionRequest request, Guid userId)
+        public override BaseResponse HandleRequest(ConnectionRequest request)
         {
             RegisteredUser targetUser = Session.Get<RegisteredUser>(request.TargetUserId);
             if (targetUser == null) return new BaseResponse(TargetUserDoesNotExist);
@@ -24,14 +24,14 @@ namespace Lending.Domain.ConnectionRequest
             PendingConnectionRequest reverseRequest = Session.Get<PendingConnectionRequest>(request.TargetUserId);
             if (reverseRequest != null) return new BaseResponse(ReverseConnectionAlreadyRequested);
 
-            User user = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(userId));
+            User user = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(request.UserId));
             bool connectionRequestSuccessful = user.RequestConnectionTo(request.TargetUserId);
 
             if (!connectionRequestSuccessful)
                 return new BaseResponse(ConnectionAlreadyRequested);
 
             Repository.Save(user);
-            Session.Save(new PendingConnectionRequest(userId, request.TargetUserId));
+            Session.Save(new PendingConnectionRequest(request.UserId, request.TargetUserId));
 
             return new BaseResponse();
         }

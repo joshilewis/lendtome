@@ -7,7 +7,7 @@ using NHibernate;
 
 namespace Lending.Domain
 {
-    public abstract class BaseAuthenticatedRequestHandler<TRequest, TResponse> : IAuthenticatedRequestHandler<TRequest, TResponse>
+    public abstract class BaseAuthenticatedRequestHandler<TRequest, TResponse> : IAuthenticatedRequestHandler<TRequest, TResponse> where TRequest : AuthenticatedRequest
     {
         private readonly Func<ISession> getSession;
         private readonly Func<IRepository> getRepository; 
@@ -22,6 +22,6 @@ namespace Lending.Domain
 
         protected IRepository Repository => getRepository();
 
-        public abstract TResponse HandleRequest(TRequest request, Guid userId);
+        public abstract TResponse HandleRequest(TRequest request);
     }
 }
