@@ -91,17 +91,19 @@ namespace Lending.Domain.Model
         {
             if (PendingConnectionRequests.Contains(desintationUserId)) return new Response(ConnectionAlreadyRequested);
             if (ReceivedConnectionRequests.Contains(desintationUserId)) return new Response(ReverseConnectionAlreadyRequested);
+            if(ConnectedUsers.Contains(desintationUserId)) return new Response(UsersAlreadyConnected);
 
             RaiseEvent(new ConnectionRequested(processId, Id, desintationUserId));
             return new Response();
         }
 
-        public bool ReceiveConnectionRequest(Guid processId, Guid sourceUserId)
+        public Response ReceiveConnectionRequest(Guid processId, Guid sourceUserId)
         {
-            if (ReceivedConnectionRequests.Contains(sourceUserId)) return false;
+            if (ReceivedConnectionRequests.Contains(sourceUserId)) return new Response(ReverseConnectionAlreadyRequested);
+            if (ConnectedUsers.Contains(sourceUserId)) return new Response(UsersAlreadyConnected);
 
             RaiseEvent(new ConnectionRequestReceived(processId, Id, sourceUserId));
-            return true;
+            return new Response();
         }
 
         public Response AcceptReceivedConnection(Guid processId, Guid requestingUserId)

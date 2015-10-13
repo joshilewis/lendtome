@@ -157,7 +157,34 @@ namespace Tests.RequestConnection
         [Test]
         public void ConnectionRequestToConnectedUsersShouldBeRejected()
         {
-            
+            var processId = Guid.NewGuid();
+            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
+            var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
+            user1.RequestConnectionTo(processId, user2.Id);
+            user2.ReceiveConnectionRequest(processId, user1.Id);
+            user2.AcceptReceivedConnection(processId, user1.Id);
+            user1.NotifyConnectionAccepted(processId, user2.Id);
+            SaveAggregates(user1, user2);
+
+            var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
+            var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
+            SaveEntities(registeredUser1, registeredUser2);
+
+            var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
+            var expectedResponse = new Response(User.UsersAlreadyConnected);
+
+            var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, new DummyRequestHandler()));
+            Response actualResponse = sut.HandleCommand(request);
+            WriteRepository();
+
+            actualResponse.ShouldEqual(expectedResponse);
+
+            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user2.Id}", 0, 10, false).Result;
+            Assert.That(slice.Events.Length, Is.EqualTo(3));
+
+            slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
+            Assert.That(slice.Events.Length, Is.EqualTo(3));
+
         }
 
         /// <summary>
