@@ -9,12 +9,11 @@ namespace Lending.Domain.RequestConnection
     public class ConnectionRequestReceived : Event
     {
         public Guid SourceUserId { get; set; }
-        public Guid TargetUserId { get; set; }
 
-        public ConnectionRequestReceived(Guid id, Guid sourceUserId, Guid targetUserId) : base(id)
+        public ConnectionRequestReceived(Guid processId, Guid aggregateId, Guid sourceUserId)
+            : base(processId, aggregateId)
         {
             SourceUserId = sourceUserId;
-            TargetUserId = targetUserId;
         }
     }
 }

@@ -4,14 +4,12 @@ namespace Lending.Domain.RequestConnection
 {
     public class ConnectionRequested : Event
     {
-        public Guid FromUserId { get; set; }
-        public Guid ToUserId { get; set; }
+        public Guid DesintationUserId { get; set; }
 
-        public ConnectionRequested(Guid id, Guid fromUserId, Guid toUserId)
-            : base(id)
+        public ConnectionRequested(Guid processId, Guid aggregateId, Guid desintationUserId)
+            : base(processId, aggregateId)
         {
-            FromUserId = fromUserId;
-            ToUserId = toUserId;
+            DesintationUserId = desintationUserId;
         }
     }
 }

@@ -77,12 +77,18 @@ namespace Tests
             return Arg<Response>.Matches(x => x.ShouldEqual(expected));
         }
 
+        public static bool ShouldEqual(this Event actual, Event expected)
+        {
+            Assert.That(actual.AggregateId, Is.EqualTo(expected.AggregateId));
+            Assert.That(actual.ProcessId, Is.EqualTo(expected.ProcessId));
+            return true;
+        }
 
         public static bool ShouldEqual(this UserRegistered actual, UserRegistered expected)
         {
-            Assert.That(actual.Id, Is.EqualTo(expected.Id));
             Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
             Assert.That(actual.EmailAddress, Is.EqualTo(expected.EmailAddress));
+            ((Event)actual).ShouldEqual(expected);
 
             return true;
         }
@@ -94,8 +100,8 @@ namespace Tests
 
         public static bool ShouldEqual(this ConnectionRequested actual, ConnectionRequested expected)
         {
-            Assert.That(actual.FromUserId, Is.EqualTo(expected.FromUserId));
-            Assert.That(actual.ToUserId, Is.EqualTo(expected.ToUserId));
+            Assert.That(actual.DesintationUserId, Is.EqualTo(expected.DesintationUserId));
+            ((Event) actual).ShouldEqual(expected);
             return true;
         }
 
@@ -116,18 +122,11 @@ namespace Tests
             return true;
         }
 
-        public static bool ShouldEqual(this PendingConnectionRequest actual, PendingConnectionRequest expected)
-        {
-            Assert.That(actual.SourceUserId, Is.EqualTo(expected.SourceUserId));
-            Assert.That(actual.TargetUserId, Is.EqualTo(expected.TargetUserId));
-
-            return true;
-        }
 
         public static bool ShouldEqual(this ConnectionRequestReceived actual, ConnectionRequestReceived expected)
         {
             Assert.That(actual.SourceUserId, Is.EqualTo(expected.SourceUserId));
-            Assert.That(actual.TargetUserId, Is.EqualTo(expected.TargetUserId));
+            ((Event)actual).ShouldEqual(expected);
 
             return true;
         }

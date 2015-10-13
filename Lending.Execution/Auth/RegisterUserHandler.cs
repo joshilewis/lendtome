@@ -45,7 +45,7 @@ namespace Lending.Execution.Auth
                 serviceStackUser = new ServiceStackUser(userAuthId, newUserId, userAuth.DisplayName);
                 session.Save(serviceStackUser);
 
-                User user = User.Register(newUserId, userAuth.DisplayName, userAuth.PrimaryEmail);
+                User user = User.Register(Guid.Empty, newUserId, userAuth.DisplayName, userAuth.PrimaryEmail);
                 getRepository().Save(user);
             }
 

@@ -17,14 +17,14 @@ namespace Lending.Domain.RequestConnection
 
         public override Response HandleCommand(RequestConnection command)
         {
-            if (command.TargetUserId == command.UserId) return new Response(CantConnectToSelf);
+            if (command.TargetUserId == command.AggregateId) return new Response(CantConnectToSelf);
 
             RegisteredUser targetUser = Session.Get<RegisteredUser>(command.TargetUserId);
             if (targetUser == null) return new Response(TargetUserDoesNotExist);
 
             User user = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.AggregateId));
 
-            Response  response = user.RequestConnectionTo(command.TargetUserId);
+            Response  response = user.RequestConnectionTo(command.ProcessId, command.TargetUserId);
 
             if (!response.Success) return response;
 

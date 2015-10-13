@@ -25,16 +25,17 @@ namespace Tests.Connect
         [Test]
         public void ExistingConnectionRequestFromSourceToTargetShouldBeRejected()
         {
-            var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
-            var user2 = User.Register(Guid.NewGuid(), "User 2", "email2");
-            user1.RequestConnectionTo(user2.Id);
+            Guid processId = Guid.NewGuid();
+            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
+            var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
+            user1.RequestConnectionTo(processId, user2.Id);
             SaveAggregates(user1, user2);
 
             var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
             var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
             SaveEntities(registeredUser1, registeredUser2);
 
-            var request = new RequestConnection(user1.Id, Guid.NewGuid(), user1.Id, user2.Id);
+            var request = new RequestConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Response(User.ConnectionAlreadyRequested);
 
             var sut = new RequestConnectionForSourceUser(() => Session, ()=> Repository, new DummyRequestHandler());
@@ -55,8 +56,9 @@ namespace Tests.Connect
         [Test]
         public void NoExistingConnectionRequestShouldEmitEvent()
         {
-            var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
-            var user2 = User.Register(Guid.NewGuid(), "User 2", "email2");
+            Guid processId = Guid.NewGuid();
+            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
+            var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
 
             SaveAggregates(user1, user2);
 
@@ -65,10 +67,10 @@ namespace Tests.Connect
             SaveEntities(registeredUser1, registeredUser2);
             CommitTransactionAndOpenNew();
 
-            var request = new RequestConnection(user1.Id, Guid.NewGuid(), user1.Id, user2.Id);
+            var request = new RequestConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Response();
-            var expectedConnectionRequestedEvent = new ConnectionRequested(Guid.Empty, user1.Id, user2.Id);
-            var expectedReceivedConnectionRequest = new ConnectionRequestReceived(Guid.Empty, user1.Id, user2.Id);
+            var expectedConnectionRequestedEvent = new ConnectionRequested(processId, user1.Id, user2.Id);
+            var expectedReceivedConnectionRequest = new ConnectionRequestReceived(processId, user2.Id, user1.Id);
 
             var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, new DummyRequestHandler()));
             Response actualResponse = sut.HandleCommand(request);
@@ -100,10 +102,10 @@ namespace Tests.Connect
         [Test]
         public void ConnectionRequestToNonExistentTargetShouldBeRejected()
         {
-            var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
+            var user1 = User.Register(Guid.NewGuid(), Guid.Empty, "User 1", "email1");
             SaveAggregates(user1);
 
-            var request = new RequestConnection(user1.Id, Guid.NewGuid(), user1.Id, Guid.NewGuid());
+            var request = new RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, Guid.NewGuid());
             var expectedResponse = new Response(RequestConnectionForSourceUser.TargetUserDoesNotExist);
 
             var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new DummyRequestHandler());
@@ -125,16 +127,17 @@ namespace Tests.Connect
         [Test]
         public void ExistingConnectionRequestFromTargetToSourceShouldBeRejected()
         {
-            var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
-            var user2 = User.Register(Guid.NewGuid(), "User 2", "email2");
-            user1.ReceiveConnectionRequest(user2.Id);
+            var processId = Guid.NewGuid();
+            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
+            var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
+            user1.ReceiveConnectionRequest(processId, user2.Id);
             SaveAggregates(user1, user2);
 
             var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
             var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
-            SaveEntities(registeredUser1, registeredUser2, new PendingConnectionRequest(user2.Id, user1.Id));
+            SaveEntities(registeredUser1, registeredUser2);
 
-            var request = new RequestConnection(user1.Id, Guid.NewGuid(), user1.Id, user2.Id);
+            var request = new RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Response(User.ReverseConnectionAlreadyRequested);
 
             var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, new DummyRequestHandler()));
@@ -166,13 +169,13 @@ namespace Tests.Connect
         [Test]
         public void ConnectionRequestToSelfShouldBeRejected()
         {
-            var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
+            var user1 = User.Register(Guid.NewGuid(), Guid.Empty, "User 1", "email1");
             SaveAggregates(user1);
 
             var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
             SaveEntities(registeredUser1);
 
-            var request = new RequestConnection(user1.Id, Guid.NewGuid(), user1.Id, user1.Id);
+            var request = new RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user1.Id);
             var expectedResponse = new Response(RequestConnectionForSourceUser.CantConnectToSelf);
 
             var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new DummyRequestHandler());

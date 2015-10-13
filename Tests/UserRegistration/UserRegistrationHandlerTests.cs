@@ -56,7 +56,7 @@ namespace Tests.UserRegistration
             var request = new AuthSessionDouble();
             var expectedResponse = new Response();
             var expectedUser = new ServiceStackUser(authDto.Id, userId, authDto.DisplayName);
-            var expectedEvent = new UserRegistered(userId, authDto.DisplayName, authDto.PrimaryEmail);
+            var expectedEvent = new UserRegistered(Guid.Empty, userId, authDto.DisplayName, authDto.PrimaryEmail);
 
             var sut = new RegisterUserHandler(() => Session, () => Repository, () => userId);
             Response actualResponse = sut.HandleCommand(request);

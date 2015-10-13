@@ -16,10 +16,10 @@ namespace Lending.Domain.Model
         public List<Guid> CurrentConnectionRequests { get; set; }
         public List<Guid> ReceivedConnectionRequests { get; set; }
 
-        protected User(Guid id, string userName, string emailAddress)
+        protected User(Guid processId, Guid id, string userName, string emailAddress)
             : this()
         {
-            RaiseEvent(new UserRegistered(id, userName, emailAddress));
+            RaiseEvent(new UserRegistered(processId, id, userName, emailAddress));
         }
 
         protected User()
@@ -28,9 +28,9 @@ namespace Lending.Domain.Model
             ReceivedConnectionRequests = new List<Guid>();
         }
 
-        public static User Register(Guid id, string userName, string emailAddress)
+        public static User Register(Guid processId, Guid id, string userName, string emailAddress)
         {
-            return new User(id, userName, emailAddress);
+            return new User(processId, id, userName, emailAddress);
         }
 
         public static User CreateFromHistory(IEnumerable<Event> events)
@@ -45,14 +45,14 @@ namespace Lending.Domain.Model
 
         protected virtual void When(UserRegistered @event)
         {
-            Id = @event.Id;
+            Id = @event.AggregateId;
             UserName = @event.UserName;
             EmailAddress = @event.EmailAddress;
         }
 
         protected virtual void When(ConnectionRequested @event)
         {
-            CurrentConnectionRequests.Add(@event.ToUserId);
+            CurrentConnectionRequests.Add(@event.DesintationUserId);
         }
 
         protected virtual void When(ConnectionRequestReceived @event)
@@ -67,20 +67,20 @@ namespace Lending.Domain.Model
             new EventRoute<ConnectionRequestReceived>(When, typeof(ConnectionRequestReceived)),
         };
 
-        public Response RequestConnectionTo(Guid toUserId)
+        public Response RequestConnectionTo(Guid processId, Guid desintationUserId)
         {
-            if (CurrentConnectionRequests.Contains(toUserId)) return new Response(ConnectionAlreadyRequested);
-            if (ReceivedConnectionRequests.Contains(toUserId)) return new Response(ReverseConnectionAlreadyRequested);
+            if (CurrentConnectionRequests.Contains(desintationUserId)) return new Response(ConnectionAlreadyRequested);
+            if (ReceivedConnectionRequests.Contains(desintationUserId)) return new Response(ReverseConnectionAlreadyRequested);
 
-            RaiseEvent(new ConnectionRequested(Guid.Empty, Id, toUserId));
+            RaiseEvent(new ConnectionRequested(processId, Id, desintationUserId));
             return new Response();
         }
 
-        public bool ReceiveConnectionRequest(Guid sourceUserId)
+        public bool ReceiveConnectionRequest(Guid processId, Guid sourceUserId)
         {
             if (ReceivedConnectionRequests.Contains(sourceUserId)) return false;
 
-            RaiseEvent(new ConnectionRequestReceived(Guid.NewGuid(), sourceUserId, Id));
+            RaiseEvent(new ConnectionRequestReceived(processId, Id, sourceUserId));
             return true;
         }
 

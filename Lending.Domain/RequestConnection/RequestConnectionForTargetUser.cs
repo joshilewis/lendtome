@@ -17,7 +17,7 @@ namespace Lending.Domain.RequestConnection
         public override Response HandleCommand(RequestConnection command)
         {
             User targetUser = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.TargetUserId));
-            bool requestReceiptSuccessful = targetUser.ReceiveConnectionRequest(command.AggregateId);
+            bool requestReceiptSuccessful = targetUser.ReceiveConnectionRequest(command.ProcessId, command.AggregateId);
 
             if (!requestReceiptSuccessful)
                 return new Response(User.ReverseConnectionAlreadyRequested);
