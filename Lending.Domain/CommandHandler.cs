@@ -20,7 +20,7 @@ namespace Lending.Domain
             this.NextHandler = nextHandler;
         }
 
-        public abstract TResponse HandleCommand(TRequest request);
+        public abstract TResponse HandleCommand(TRequest command);
 
         protected ISession Session => getSession();
 

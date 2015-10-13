@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Domain;
+using Lending.Domain.AcceptConnection;
 using Lending.Domain.Model;
 using Lending.Domain.Persistence;
 using Lending.Domain.RegisterUser;
@@ -122,10 +123,25 @@ namespace Tests
             return true;
         }
 
-
         public static bool ShouldEqual(this ConnectionRequestReceived actual, ConnectionRequestReceived expected)
         {
             Assert.That(actual.SourceUserId, Is.EqualTo(expected.SourceUserId));
+            ((Event)actual).ShouldEqual(expected);
+
+            return true;
+        }
+
+        public static bool ShouldEqual(this ReceivedConnectionAccepted actual, ReceivedConnectionAccepted expected)
+        {
+            Assert.That(actual.RequestingUserId, Is.EqualTo(expected.RequestingUserId));
+            ((Event)actual).ShouldEqual(expected);
+
+            return true;
+        }
+
+        public static bool ShouldEqual(this RequestedConnectionAccepted actual, RequestedConnectionAccepted expected)
+        {
+            Assert.That(actual.AcceptingUserId, Is.EqualTo(expected.AcceptingUserId));
             ((Event)actual).ShouldEqual(expected);
 
             return true;

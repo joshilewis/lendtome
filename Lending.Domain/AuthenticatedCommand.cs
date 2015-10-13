@@ -10,8 +10,8 @@ namespace Lending.Domain
     {
         public Guid UserId { get; set; }
 
-        protected AuthenticatedCommand(Guid aggregateId, Guid processId, Guid userId)
-            : base(aggregateId, processId)
+        protected AuthenticatedCommand(Guid processId, Guid aggregateId, Guid userId)
+            : base(processId, aggregateId)
         {
             UserId = userId;
         }

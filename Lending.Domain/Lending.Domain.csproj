@@ -47,6 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcceptConnection\AcceptConnection.cs" />
+    <Compile Include="AcceptConnection\AcceptConnectionForAcceptingUser.cs" />
+    <Compile Include="AcceptConnection\AcceptConnectionForRequestingUser.cs" />
+    <Compile Include="AcceptConnection\ReceivedConnectionAccepted.cs" />
+    <Compile Include="AcceptConnection\RequestedConnectionAccepted.cs" />
     <Compile Include="Aggregate.cs" />
     <Compile Include="AuthenticatedCommand.cs" />
     <Compile Include="AuthenticatedCommandHandler.cs" />
@@ -71,7 +76,6 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="RequestConnection\RequestConnectionForTargetUser.cs" />
-    <Compile Include="RequestConnection\RequestConnectionHandler.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

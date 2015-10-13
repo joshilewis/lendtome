@@ -27,9 +27,9 @@ namespace Lending.Execution.Auth
 
         protected RegisterUserHandler() { }
 
-        public virtual Response HandleCommand(IAuthSession request)
+        public virtual Response HandleCommand(IAuthSession command)
         {
-            int userAuthId = int.Parse(request.UserAuthId);
+            int userAuthId = int.Parse(command.UserAuthId);
             ISession session = getSession();
 
             ServiceStackUser serviceStackUser = session.QueryOver<ServiceStackUser>()

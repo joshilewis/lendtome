@@ -16,11 +16,11 @@ namespace Lending.Web
             : base(sessionFunc, getRepository, guidFunc)
         { }
 
-        public override Response HandleCommand(IAuthSession request)
+        public override Response HandleCommand(IAuthSession command)
         {
-            FormsAuthentication.SetAuthCookie(request.DisplayName, true);
+            FormsAuthentication.SetAuthCookie(command.DisplayName, true);
 
-            return base.HandleCommand(request);
+            return base.HandleCommand(command);
         }
     }
 }

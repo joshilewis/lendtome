@@ -10,8 +10,11 @@ using ServiceStack.Text;
 
 namespace Tests.RequestConnection
 {
+    /// <summary>
+    /// https://github.com/joshilewis/lending/issues/6
+    /// </summary>
     [TestFixture]
-    public class ConnectionRequestHandlerTests : DatabaseAndEventStoreFixtureBase
+    public class RequestConnectionHandlerTests : DatabaseAndEventStoreFixtureBase
     {
         /// <summary>
         /// GIVEN User1 exists AND User2 exists AND they are not connected AND there is an existing connection request from User1 to User2
@@ -186,7 +189,7 @@ namespace Tests.RequestConnection
 
         private class DummyRequestHandler : IAuthenticatedCommandHandler<Lending.Domain.RequestConnection.RequestConnection, Response>
         {
-            public Response HandleCommand(Lending.Domain.RequestConnection.RequestConnection request)
+            public Response HandleCommand(Lending.Domain.RequestConnection.RequestConnection command)
             {
                 return new Response();
             }

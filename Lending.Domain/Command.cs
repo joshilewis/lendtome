@@ -10,7 +10,7 @@ namespace Lending.Domain
         public Guid AggregateId { get; set; }
         public Guid ProcessId { get; set; }
 
-        protected Command(Guid aggregateId, Guid processId)
+        protected Command(Guid processId, Guid aggregateId)
         {
             AggregateId = aggregateId;
             ProcessId = processId;

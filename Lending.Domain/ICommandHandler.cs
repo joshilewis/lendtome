@@ -2,6 +2,6 @@
 {
     public interface ICommandHandler<in TCommand, out TResponse>
     {
-        TResponse HandleCommand(TCommand request);
+        TResponse HandleCommand(TCommand command);
     }
 }
