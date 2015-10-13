@@ -35,10 +35,10 @@ namespace Tests.Connect
             SaveEntities(registeredUser1, registeredUser2);
 
             var request = new RequestConnection(user1.Id, Guid.NewGuid(), user1.Id, user2.Id);
-            var expectedResponse = new BaseResponse(RequestConnectionHandler.ConnectionAlreadyRequested);
+            var expectedResponse = new Response(User.ConnectionAlreadyRequested);
 
-            var sut = new RequestConnectionHandler(() => Session, ()=> Repository);
-            BaseResponse actualResponse = sut.HandleCommand(request);
+            var sut = new RequestConnectionForSourceUser(() => Session, ()=> Repository, new DummyRequestHandler());
+            Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
 
             actualResponse.ShouldEqual(expectedResponse);
@@ -66,12 +66,12 @@ namespace Tests.Connect
             CommitTransactionAndOpenNew();
 
             var request = new RequestConnection(user1.Id, Guid.NewGuid(), user1.Id, user2.Id);
-            var expectedResponse = new BaseResponse();
-            var expectedEvent = new ConnectionRequested(Guid.Empty, user1.Id, user2.Id);
-            var expectedConnectionRequest = new PendingConnectionRequest(user1.Id, user2.Id);
+            var expectedResponse = new Response();
+            var expectedConnectionRequestedEvent = new ConnectionRequested(Guid.Empty, user1.Id, user2.Id);
+            var expectedReceivedConnectionRequest = new ConnectionRequestReceived(Guid.Empty, user1.Id, user2.Id);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository);
-            BaseResponse actualResponse = sut.HandleCommand(request);
+            var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, new DummyRequestHandler()));
+            Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
             actualResponse.ShouldEqual(expectedResponse);
 
@@ -80,10 +80,16 @@ namespace Tests.Connect
 
             var value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
             ConnectionRequested actual = value.FromJson<ConnectionRequested>();
-            actual.ShouldEqual(expectedEvent);
+            actual.ShouldEqual(expectedConnectionRequestedEvent);
 
-            PendingConnectionRequest actualConnectionRequest = Session.Get<PendingConnectionRequest>(user1.Id);
-            actualConnectionRequest.ShouldEqual(expectedConnectionRequest);
+            slice = Connection.ReadStreamEventsForwardAsync($"user-{user2.Id}", 0, 10, false).Result;
+            Assert.That(slice.Events.Length, Is.EqualTo(2));
+
+            value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
+            ConnectionRequestReceived actual1 = value.FromJson<ConnectionRequestReceived>();
+            actual1.ShouldEqual(expectedReceivedConnectionRequest);
+
+
         }
 
         /// <summary>
@@ -98,10 +104,10 @@ namespace Tests.Connect
             SaveAggregates(user1);
 
             var request = new RequestConnection(user1.Id, Guid.NewGuid(), user1.Id, Guid.NewGuid());
-            var expectedResponse = new BaseResponse(RequestConnectionHandler.TargetUserDoesNotExist);
+            var expectedResponse = new Response(RequestConnectionForSourceUser.TargetUserDoesNotExist);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository);
-            BaseResponse actualResponse = sut.HandleCommand(request);
+            var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new DummyRequestHandler());
+            Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
             actualResponse.ShouldEqual(expectedResponse);
 
@@ -121,7 +127,7 @@ namespace Tests.Connect
         {
             var user1 = User.Register(Guid.NewGuid(), "User 1", "email1");
             var user2 = User.Register(Guid.NewGuid(), "User 2", "email2");
-            user2.RequestConnectionTo(user1.Id);
+            user1.ReceiveConnectionRequest(user2.Id);
             SaveAggregates(user1, user2);
 
             var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
@@ -129,16 +135,16 @@ namespace Tests.Connect
             SaveEntities(registeredUser1, registeredUser2, new PendingConnectionRequest(user2.Id, user1.Id));
 
             var request = new RequestConnection(user1.Id, Guid.NewGuid(), user1.Id, user2.Id);
-            var expectedResponse = new BaseResponse(RequestConnectionHandler.ReverseConnectionAlreadyRequested);
+            var expectedResponse = new Response(User.ReverseConnectionAlreadyRequested);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository);
-            BaseResponse actualResponse = sut.HandleCommand(request);
+            var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, new DummyRequestHandler()));
+            Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
 
             actualResponse.ShouldEqual(expectedResponse);
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(1));
+            Assert.That(slice.Events.Length, Is.EqualTo(2));
         }
 
         /// <summary>
@@ -167,16 +173,24 @@ namespace Tests.Connect
             SaveEntities(registeredUser1);
 
             var request = new RequestConnection(user1.Id, Guid.NewGuid(), user1.Id, user1.Id);
-            var expectedResponse = new BaseResponse(RequestConnectionHandler.CantConnectToSelf);
+            var expectedResponse = new Response(RequestConnectionForSourceUser.CantConnectToSelf);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository);
-            BaseResponse actualResponse = sut.HandleCommand(request);
+            var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new DummyRequestHandler());
+            Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
 
             actualResponse.ShouldEqual(expectedResponse);
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
             Assert.That(slice.Events.Length, Is.EqualTo(1));
+        }
+
+        private class DummyRequestHandler : IAuthenticatedCommandHandler<RequestConnection, Response>
+        {
+            public Response HandleCommand(RequestConnection request)
+            {
+                return new Response();
+            }
         }
     }
 }

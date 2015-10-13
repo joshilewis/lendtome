@@ -1,34 +1,34 @@
 ﻿namespace Lending.Domain
 {
-    public class BaseResponse
+    public class Response
     {
         public bool Success { get; set; }
         public string FailureDescription { get; set; }
 
-        public BaseResponse()
+        public Response()
         {
             Success = true;
             FailureDescription = null;
         }
 
-        public BaseResponse(string failureDescription)
+        public Response(string failureDescription)
         {
             FailureDescription = failureDescription;
             Success = false;
         }
     }
 
-    public class BaseResponse<T> : BaseResponse
+    public class Response<T> : Response
     {
         public virtual T Payload { get; protected set; }
 
-        public BaseResponse(T payload)
+        public Response(T payload)
             : base()
         {
             Payload = payload;
         }
 
-        public BaseResponse(string failureDescription, T payload)
+        public Response(string failureDescription, T payload)
             : base(failureDescription)
         {
             Payload = payload;

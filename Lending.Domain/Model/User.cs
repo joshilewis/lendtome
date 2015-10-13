@@ -7,10 +7,14 @@ namespace Lending.Domain.Model
 {
     public class User : Aggregate
     {
+        public const string ConnectionAlreadyRequested = "A connection request for these users already exists";
+        public const string ReverseConnectionAlreadyRequested = "A reverse connection request for these users already exists";
+
         public string UserName { get; protected set; }
         public string EmailAddress { get; protected set; }
 
         public List<Guid> CurrentConnectionRequests { get; set; }
+        public List<Guid> ReceivedConnectionRequests { get; set; }
 
         protected User(Guid id, string userName, string emailAddress)
             : this()
@@ -21,6 +25,7 @@ namespace Lending.Domain.Model
         protected User()
         {
             CurrentConnectionRequests = new List<Guid>();
+            ReceivedConnectionRequests = new List<Guid>();
         }
 
         public static User Register(Guid id, string userName, string emailAddress)
@@ -45,23 +50,39 @@ namespace Lending.Domain.Model
             EmailAddress = @event.EmailAddress;
         }
 
-        protected override List<IEventRoute> EventRoutes => new List<IEventRoute>()
-        {
-            new EventRoute<UserRegistered>(When, typeof(UserRegistered)),
-            new EventRoute<ConnectionRequested>(When, typeof(ConnectionRequested)),
-        };
-
-        public bool RequestConnectionTo(Guid toUserId)
-        {
-            if (CurrentConnectionRequests.Contains(toUserId)) return false;
-
-            RaiseEvent(new ConnectionRequested(Guid.Empty, Id, toUserId));
-            return true;
-        }
-
         protected virtual void When(ConnectionRequested @event)
         {
             CurrentConnectionRequests.Add(@event.ToUserId);
         }
+
+        protected virtual void When(ConnectionRequestReceived @event)
+        {
+            ReceivedConnectionRequests.Add(@event.SourceUserId);
+        }
+
+        protected override List<IEventRoute> EventRoutes => new List<IEventRoute>()
+        {
+            new EventRoute<UserRegistered>(When, typeof(UserRegistered)),
+            new EventRoute<ConnectionRequested>(When, typeof(ConnectionRequested)),
+            new EventRoute<ConnectionRequestReceived>(When, typeof(ConnectionRequestReceived)),
+        };
+
+        public Response RequestConnectionTo(Guid toUserId)
+        {
+            if (CurrentConnectionRequests.Contains(toUserId)) return new Response(ConnectionAlreadyRequested);
+            if (ReceivedConnectionRequests.Contains(toUserId)) return new Response(ReverseConnectionAlreadyRequested);
+
+            RaiseEvent(new ConnectionRequested(Guid.Empty, Id, toUserId));
+            return new Response();
+        }
+
+        public bool ReceiveConnectionRequest(Guid sourceUserId)
+        {
+            if (ReceivedConnectionRequests.Contains(sourceUserId)) return false;
+
+            RaiseEvent(new ConnectionRequestReceived(Guid.NewGuid(), sourceUserId, Id));
+            return true;
+        }
+
     }
 }

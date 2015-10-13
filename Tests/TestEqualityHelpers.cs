@@ -64,7 +64,7 @@ namespace Tests
         }
 
 
-        public static bool ShouldEqual(this BaseResponse actual, BaseResponse expected)
+        public static bool ShouldEqual(this Response actual, Response expected)
         {
             Assert.That(actual.Success, Is.EqualTo(expected.Success));
             Assert.That(actual.FailureDescription, Is.EqualTo(expected.FailureDescription));
@@ -72,9 +72,9 @@ namespace Tests
             return true;
         }
 
-        public static BaseResponse MatchArg(this BaseResponse expected)
+        public static Response MatchArg(this Response expected)
         {
-            return Arg<BaseResponse>.Matches(x => x.ShouldEqual(expected));
+            return Arg<Response>.Matches(x => x.ShouldEqual(expected));
         }
 
 
@@ -117,6 +117,14 @@ namespace Tests
         }
 
         public static bool ShouldEqual(this PendingConnectionRequest actual, PendingConnectionRequest expected)
+        {
+            Assert.That(actual.SourceUserId, Is.EqualTo(expected.SourceUserId));
+            Assert.That(actual.TargetUserId, Is.EqualTo(expected.TargetUserId));
+
+            return true;
+        }
+
+        public static bool ShouldEqual(this ConnectionRequestReceived actual, ConnectionRequestReceived expected)
         {
             Assert.That(actual.SourceUserId, Is.EqualTo(expected.SourceUserId));
             Assert.That(actual.TargetUserId, Is.EqualTo(expected.TargetUserId));

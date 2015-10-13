@@ -11,10 +11,10 @@ using ServiceStack.ServiceInterface;
 
 namespace Lending.Execution.WebServices
 {
-    public class ConnectionRequestWebservice : AuthenticatedWebserviceBase<RequestConnection, BaseResponse>
+    public class ConnectionRequestWebservice : AuthenticatedWebserviceBase<RequestConnection, Response>
     {
         public ConnectionRequestWebservice(IUnitOfWork unitOfWork,
-            IAuthenticatedCommandHandler<RequestConnection, BaseResponse> commandHandler)
+            IAuthenticatedCommandHandler<RequestConnection, Response> commandHandler)
             : base(unitOfWork, commandHandler)
         { }
 

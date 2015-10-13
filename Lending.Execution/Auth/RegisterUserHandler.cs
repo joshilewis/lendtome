@@ -12,7 +12,7 @@ using ServiceStack.ServiceInterface.Auth;
 
 namespace Lending.Execution.Auth
 {
-    public class RegisterUserHandler : ICommandHandler<IAuthSession, BaseResponse>
+    public class RegisterUserHandler : ICommandHandler<IAuthSession, Response>
     {
         private readonly Func<ISession> getSession;
         private readonly Func<IRepository> getRepository;
@@ -27,7 +27,7 @@ namespace Lending.Execution.Auth
 
         protected RegisterUserHandler() { }
 
-        public virtual BaseResponse HandleCommand(IAuthSession request)
+        public virtual Response HandleCommand(IAuthSession request)
         {
             int userAuthId = int.Parse(request.UserAuthId);
             ISession session = getSession();
@@ -49,7 +49,7 @@ namespace Lending.Execution.Auth
                 getRepository().Save(user);
             }
 
-            return new BaseResponse();
+            return new Response();
         }
     }
 }

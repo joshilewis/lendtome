@@ -16,7 +16,7 @@ namespace Lending.Web
             : base(sessionFunc, getRepository, guidFunc)
         { }
 
-        public override BaseResponse HandleCommand(IAuthSession request)
+        public override Response HandleCommand(IAuthSession request)
         {
             FormsAuthentication.SetAuthCookie(request.DisplayName, true);
 
