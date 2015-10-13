@@ -44,7 +44,7 @@ namespace Tests.AcceptConnection
             var expectedReceivedConnectionAccepted = new ReceivedConnectionAccepted(processId, user2.Id, user1.Id);
             var expectedRequestedConnectionAccepted = new RequestedConnectionAccepted(processId, user1.Id, user2.Id);
 
-            var sut = new AcceptConnectionForAcceptingUser(() => Session, () => Repository, new AcceptConnectionForRequestingUser(() => Session, () => Repository, new DummyRequestHandler()));
+            var sut = new AcceptConnectionForAcceptingUser(() => Session, () => Repository, new AcceptConnectionForRequestingUser(() => Session, () => Repository, null));
             Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
 
@@ -84,7 +84,7 @@ namespace Tests.AcceptConnection
             var request = new Lending.Domain.AcceptConnection.AcceptConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Response(User.ConnectionRequestNotReceived);
 
-            var sut = new AcceptConnectionForAcceptingUser(() => Session, () => Repository, new DummyRequestHandler());
+            var sut = new AcceptConnectionForAcceptingUser(() => Session, () => Repository, null);
             Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
 
@@ -118,7 +118,8 @@ namespace Tests.AcceptConnection
             var request = new Lending.Domain.AcceptConnection.AcceptConnection(processId, user2.Id, user2.Id, user1.Id);
             var expectedResponse = new Response(User.UsersAlreadyConnected);
 
-            var sut = new AcceptConnectionForAcceptingUser(() => Session, () => Repository, new AcceptConnectionForRequestingUser(() => Session, () => Repository, new DummyRequestHandler()));
+            var sut = new AcceptConnectionForAcceptingUser(() => Session, () => Repository,
+                new AcceptConnectionForRequestingUser(() => Session, () => Repository, null));
             Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
 
@@ -132,12 +133,5 @@ namespace Tests.AcceptConnection
 
         }
 
-        private class DummyRequestHandler : IAuthenticatedCommandHandler<Lending.Domain.AcceptConnection.AcceptConnection, Response>
-        {
-            public Response HandleCommand(Lending.Domain.AcceptConnection.AcceptConnection command)
-            {
-                return new Response();
-            }
-        }
     }
 }

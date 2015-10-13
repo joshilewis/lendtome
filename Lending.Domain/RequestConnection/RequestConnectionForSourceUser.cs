@@ -30,6 +30,8 @@ namespace Lending.Domain.RequestConnection
 
             Repository.Save(user);
 
+            if (NextHandler == null) return response;
+
             return NextHandler.HandleCommand(command);
         }
 

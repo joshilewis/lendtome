@@ -8,7 +8,9 @@ using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using Lending.Domain;
+using Lending.Domain.AcceptConnection;
 using Lending.Domain.Persistence;
+using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
 using Lending.Execution.UnitOfWork;
@@ -27,9 +29,9 @@ using ISessionFactory = NHibernate.ISessionFactory;
 
 namespace Lending.Execution.DI
 {
-    public class CoreRegistry : Registry
+    public class DomainRegistry : Registry
     {
-        public CoreRegistry()
+        public DomainRegistry()
         {
 
             var config = Fluently.Configure()
@@ -108,6 +110,17 @@ namespace Lending.Execution.DI
 
             For<Func<Guid>>()
                 .Use(() => SequentialGuid.NewGuid());
+
+            For<ICommandHandler<RequestConnection, Response>>()
+                .AlwaysUnique()
+                .Use<RequestConnectionHandler>()
+                ;
+
+            For<ICommandHandler<AcceptConnection, Response>>()
+                .AlwaysUnique()
+                .Use<AcceptConnectionHandler>()
+                ;
+
         }
 
 

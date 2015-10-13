@@ -120,7 +120,7 @@
     <Compile Include="Auth\RegisterUserHandler.cs" />
     <Compile Include="Auth\ServiceStackUserMap.cs" />
     <Compile Include="Auth\UnitOfWorkAuthService.cs" />
-    <Compile Include="DI\CoreRegistry.cs" />
+    <Compile Include="DI\DomainRegistry.cs" />
     <Compile Include="DI\StructureMapContainerAdapter.cs" />
     <Compile Include="EventStore\AggregateDeletedException.cs" />
     <Compile Include="EventStore\AggregateNotFoundException.cs" />

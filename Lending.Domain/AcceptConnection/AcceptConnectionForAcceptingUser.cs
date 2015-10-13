@@ -21,6 +21,8 @@ namespace Lending.Domain.AcceptConnection
 
             Repository.Save(user);
 
+            if (NextHandler == null) return response;
+
             return NextHandler.HandleCommand(command);
         }
     }
