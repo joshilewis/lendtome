@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace Lending.Domain
 {
-    public abstract class AuthenticatedRequest : Request
+    public abstract class AuthenticatedCommand : Command
     {
         public Guid UserId { get; set; }
 
-        protected AuthenticatedRequest() { }
-
-        protected AuthenticatedRequest(Guid userId)
+        protected AuthenticatedCommand(Guid aggregateId, Guid processId, Guid userId)
+            : base(aggregateId, processId)
         {
             UserId = userId;
         }

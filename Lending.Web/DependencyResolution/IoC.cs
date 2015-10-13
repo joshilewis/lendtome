@@ -19,9 +19,9 @@ namespace Lending.Web.DependencyResolution
                     //scan.TheCallingAssembly();
                 });
 
-                x.For<IRequestHandler<IAuthSession, BaseResponse>>()
+                x.For<ICommandHandler<IAuthSession, BaseResponse>>()
                     .AlwaysUnique()
-                    .Use<FormsAuthUserRegistrationHandler>()
+                    .Use<FormsAuthRegisterUserHandler>()
                     ;
             });
 

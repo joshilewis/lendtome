@@ -17,13 +17,13 @@ namespace Lending.Execution.WebServices
         private readonly static ILog Log = LogManager.GetLogger(typeof(WebserviceBase<TRequest, TResponse>).FullName);
 
         private readonly IUnitOfWork unitOfWork;
-        private readonly IRequestHandler<TRequest, TResponse> requestHandler;
+        private readonly ICommandHandler<TRequest, TResponse> commandHandler;
 
         public WebserviceBase(IUnitOfWork unitOfWork, 
-            IRequestHandler<TRequest, TResponse> requestHandler)
+            ICommandHandler<TRequest, TResponse> commandHandler)
         {
             this.unitOfWork = unitOfWork;
-            this.requestHandler = requestHandler;
+            this.commandHandler = commandHandler;
         }
 
         public virtual object Any(TRequest request)
@@ -32,7 +32,7 @@ namespace Lending.Execution.WebServices
             TResponse response = default(TResponse);
                 unitOfWork.DoInTransaction(() =>
                 {
-                    response = requestHandler.HandleRequest(request);
+                    response = commandHandler.HandleCommand(request);
                 });
 
             return response;

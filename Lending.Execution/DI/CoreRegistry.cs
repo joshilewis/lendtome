@@ -24,7 +24,6 @@ using StructureMap.Configuration.DSL;
 using Configuration = NHibernate.Cfg.Configuration;
 using ISession = NHibernate.ISession;
 using ISessionFactory = NHibernate.ISessionFactory;
-using Request = Lending.Domain.Request;
 
 namespace Lending.Execution.DI
 {
@@ -71,11 +70,11 @@ namespace Lending.Execution.DI
 
             Scan(scanner =>
             {
-                scanner.AssemblyContainingType<Request>();
+                scanner.AssemblyContainingType<Command>();
                 scanner.AssemblyContainingType<ServiceStackUser>();
-                scanner.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedRequestHandler<,>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedRequestHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedCommandHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<,>));
             });
 
             For<IUserAuthRepository>()

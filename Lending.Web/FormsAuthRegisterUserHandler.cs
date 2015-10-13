@@ -10,17 +10,17 @@ using ServiceStack.ServiceInterface.Auth;
 
 namespace Lending.Web
 {
-    public class FormsAuthUserRegistrationHandler : UserRegistrationHandler
+    public class FormsAuthRegisterUserHandler : RegisterUserHandler
     {
-        public FormsAuthUserRegistrationHandler(Func<ISession> sessionFunc, Func<IRepository> getRepository, Func<Guid> guidFunc)
+        public FormsAuthRegisterUserHandler(Func<ISession> sessionFunc, Func<IRepository> getRepository, Func<Guid> guidFunc)
             : base(sessionFunc, getRepository, guidFunc)
         { }
 
-        public override BaseResponse HandleRequest(IAuthSession request)
+        public override BaseResponse HandleCommand(IAuthSession request)
         {
             FormsAuthentication.SetAuthCookie(request.DisplayName, true);
 
-            return base.HandleRequest(request);
+            return base.HandleCommand(request);
         }
     }
 }

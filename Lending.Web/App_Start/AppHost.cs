@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Lending.Domain;
-using Lending.Domain.ConnectionRequest;
+using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.Execution.DI;
 using Lending.Execution.UnitOfWork;
@@ -44,7 +44,7 @@ namespace Lending.Web.App_Start
 		: AppHostBase
 	{		
 		public AppHost() //Tell ServiceStack the name and where to find your web services
-            : base("lend-to.me services host", typeof(AppHost).Assembly, typeof(Request).Assembly, typeof(WebserviceBase<,>).Assembly) { }
+            : base("lend-to.me services host", typeof(AppHost).Assembly, typeof(Command).Assembly, typeof(WebserviceBase<,>).Assembly) { }
 
 	    public override void Configure(Funq.Container container)
 	    {
@@ -56,7 +56,7 @@ namespace Lending.Web.App_Start
 
 	        //Configure User Defined REST Paths
 	        Routes
-                .Add<ConnectionRequest>("/connections/request/{TargetUserId}/")
+                .Add<RequestConnection>("/connections/request/{TargetUserId}/")
                 ;
 
 	        //Enable Authentication

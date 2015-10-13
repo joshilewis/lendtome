@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Domain;
-using Lending.Domain.ConnectionRequest;
+using Lending.Domain.RequestConnection;
 using Lending.Execution.DI;
 using Lending.Execution.WebServices;
 using Lending.Web;
@@ -21,7 +21,7 @@ namespace Shell
     internal class AppHost : AppHostHttpListenerBase
     {
         public AppHost()
-            : base("HttpListener Self-Host", typeof(Request).Assembly, typeof(WebserviceBase<,>).Assembly) { }
+            : base("HttpListener Self-Host", typeof(Command).Assembly, typeof(WebserviceBase<,>).Assembly) { }
 
         public override void Configure(Funq.Container container)
         {
@@ -40,7 +40,7 @@ namespace Shell
                 }));
 
             Routes
-                .Add<ConnectionRequest>("/connection/add/{FromUserId}/{ToUserId}/")
+                .Add<RequestConnection>("/connection/add/{FromUserId}/{ToUserId}/")
                 ;
         }
     }

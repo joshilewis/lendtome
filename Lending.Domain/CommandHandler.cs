@@ -7,18 +7,18 @@ using NHibernate;
 
 namespace Lending.Domain
 {
-    public abstract class RequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
+    public abstract class CommandHandler<TRequest, TResponse> : ICommandHandler<TRequest, TResponse>
     {
         private readonly Func<ISession> getSession;
         private readonly Func<IRepository> getRepository;
 
-        protected RequestHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc)
+        protected CommandHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc)
         {
             this.getSession = sessionFunc;
             this.getRepository = repositoryFunc;
         }
 
-        public abstract TResponse HandleRequest(TRequest request);
+        public abstract TResponse HandleCommand(TRequest request);
 
         protected ISession Session => getSession();
 

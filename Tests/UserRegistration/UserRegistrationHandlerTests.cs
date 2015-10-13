@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using EventStore.ClientAPI;
 using Lending.Domain;
-using Lending.Domain.UserRegistration;
+using Lending.Domain.RegisterUser;
 using Lending.Execution.Auth;
 using NUnit.Framework;
 using ServiceStack.ServiceHost;
@@ -27,8 +27,8 @@ namespace Tests.UserRegistration
             var request = new AuthSessionDouble();
             var expectedResponse = new BaseResponse();
 
-            var sut = new UserRegistrationHandler(() => Session, () => new UnexpectedRepository(), () => Guid.Empty);
-            BaseResponse actualResponse = sut.HandleRequest(request);
+            var sut = new RegisterUserHandler(() => Session, () => new UnexpectedRepository(), () => Guid.Empty);
+            BaseResponse actualResponse = sut.HandleCommand(request);
 
             actualResponse.ShouldEqual(expectedResponse);
 
@@ -58,8 +58,8 @@ namespace Tests.UserRegistration
             var expectedUser = new ServiceStackUser(authDto.Id, userId, authDto.DisplayName);
             var expectedEvent = new UserRegistered(userId, authDto.DisplayName, authDto.PrimaryEmail);
 
-            var sut = new UserRegistrationHandler(() => Session, () => Repository, () => userId);
-            BaseResponse actualResponse = sut.HandleRequest(request);
+            var sut = new RegisterUserHandler(() => Session, () => Repository, () => userId);
+            BaseResponse actualResponse = sut.HandleCommand(request);
 
             actualResponse.ShouldEqual(expectedResponse);
 
