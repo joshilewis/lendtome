@@ -102,11 +102,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connect\ConnectionRequestHandlerTests.cs" />
+    <Compile Include="RequestConnection\ConnectionRequestHandlerTests.cs" />
     <Compile Include="DatabaseAndEventStoreFixtureBase.cs" />
     <Compile Include="DatabaseFixtureBase.cs" />
     <Compile Include="DefaultTestData.cs" />
-    <Compile Include="UserRegistration\UserRegistrationHandlerTests.cs" />
+    <Compile Include="RegisterUser\UserRegistrationHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestEqualityHelpers.cs" />
   </ItemGroup>

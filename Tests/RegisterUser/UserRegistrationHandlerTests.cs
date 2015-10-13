@@ -12,7 +12,7 @@ using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.Auth;
 using ServiceStack.Text;
 
-namespace Tests.UserRegistration
+namespace Tests.RegisterUser
 {
     public class UserRegistrationHandlerTests : DatabaseAndEventStoreFixtureBase
     {

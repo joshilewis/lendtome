@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Linq;
 using System.Text;
 using EventStore.ClientAPI;
 using Lending.Domain;
 using Lending.Domain.Model;
 using Lending.Domain.Persistence;
 using Lending.Domain.RequestConnection;
-using Lending.Execution.Auth;
-using Lending.Execution.EventStore;
 using NUnit.Framework;
 using ServiceStack.Text;
 
-namespace Tests.Connect
+namespace Tests.RequestConnection
 {
     [TestFixture]
     public class ConnectionRequestHandlerTests : DatabaseAndEventStoreFixtureBase
@@ -35,7 +31,7 @@ namespace Tests.Connect
             var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
             SaveEntities(registeredUser1, registeredUser2);
 
-            var request = new RequestConnection(processId, user1.Id, user1.Id, user2.Id);
+            var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Response(User.ConnectionAlreadyRequested);
 
             var sut = new RequestConnectionForSourceUser(() => Session, ()=> Repository, new DummyRequestHandler());
@@ -67,7 +63,7 @@ namespace Tests.Connect
             SaveEntities(registeredUser1, registeredUser2);
             CommitTransactionAndOpenNew();
 
-            var request = new RequestConnection(processId, user1.Id, user1.Id, user2.Id);
+            var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Response();
             var expectedConnectionRequestedEvent = new ConnectionRequested(processId, user1.Id, user2.Id);
             var expectedReceivedConnectionRequest = new ConnectionRequestReceived(processId, user2.Id, user1.Id);
@@ -105,7 +101,7 @@ namespace Tests.Connect
             var user1 = User.Register(Guid.NewGuid(), Guid.Empty, "User 1", "email1");
             SaveAggregates(user1);
 
-            var request = new RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, Guid.NewGuid());
+            var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, Guid.NewGuid());
             var expectedResponse = new Response(RequestConnectionForSourceUser.TargetUserDoesNotExist);
 
             var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new DummyRequestHandler());
@@ -137,7 +133,7 @@ namespace Tests.Connect
             var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
             SaveEntities(registeredUser1, registeredUser2);
 
-            var request = new RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user2.Id);
+            var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Response(User.ReverseConnectionAlreadyRequested);
 
             var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, new DummyRequestHandler()));
@@ -175,7 +171,7 @@ namespace Tests.Connect
             var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
             SaveEntities(registeredUser1);
 
-            var request = new RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user1.Id);
+            var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user1.Id);
             var expectedResponse = new Response(RequestConnectionForSourceUser.CantConnectToSelf);
 
             var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new DummyRequestHandler());
@@ -188,9 +184,9 @@ namespace Tests.Connect
             Assert.That(slice.Events.Length, Is.EqualTo(1));
         }
 
-        private class DummyRequestHandler : IAuthenticatedCommandHandler<RequestConnection, Response>
+        private class DummyRequestHandler : IAuthenticatedCommandHandler<Lending.Domain.RequestConnection.RequestConnection, Response>
         {
-            public Response HandleCommand(RequestConnection request)
+            public Response HandleCommand(Lending.Domain.RequestConnection.RequestConnection request)
             {
                 return new Response();
             }
