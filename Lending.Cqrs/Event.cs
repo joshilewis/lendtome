@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lending.Domain
+namespace Lending.Cqrs
 {
     public abstract class Event
     {

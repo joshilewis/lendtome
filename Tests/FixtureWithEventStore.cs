@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Embedded;
 using EventStore.Core;
+using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Execution.EventStore;
 using NUnit.Framework;

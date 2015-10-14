@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
+using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.Model;

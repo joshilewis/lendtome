@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Lending.Domain
+namespace Lending.Cqrs
 {
     public interface IRepository
     {

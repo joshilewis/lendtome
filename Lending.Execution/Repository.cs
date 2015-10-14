@@ -1,16 +1,19 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Lending.Cqrs;
 using Lending.Domain;
 
-namespace Lending.Execution.EventStore
+namespace Lending.Execution
 {
     public abstract class Repository : IRepository, IDisposable
     {
         public ConcurrentQueue<Aggregate> Queue { get; private set; }
+        private readonly IEventEmitter eventEmitter;
 
-        protected Repository()
+        protected Repository(IEventEmitter eventEmitter)
         {
+            this.eventEmitter = eventEmitter;
             this.Queue = new ConcurrentQueue<Aggregate>();
         }
 
@@ -20,6 +23,7 @@ namespace Lending.Execution.EventStore
         public virtual void Save(Aggregate aggregate)
         {
             Queue.Enqueue(aggregate);
+            eventEmitter.EmitEvents(aggregate.GetUncommittedEvents());
         }
 
         public void Commit(Guid transactionId)

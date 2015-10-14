@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using Lending.Cqrs;
 using Lending.Domain;
 using NHibernate;
 

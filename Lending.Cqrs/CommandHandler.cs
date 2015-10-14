@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NHibernate;
 
-namespace Lending.Domain
+namespace Lending.Cqrs
 {
     public abstract class CommandHandler<TRequest, TResponse> : ICommandHandler<TRequest, TResponse>
     {

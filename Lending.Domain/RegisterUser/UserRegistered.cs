@@ -1,4 +1,5 @@
 using System;
+using Lending.Cqrs;
 
 namespace Lending.Domain.RegisterUser
 {

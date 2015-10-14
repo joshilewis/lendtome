@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Lending.Cqrs;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;

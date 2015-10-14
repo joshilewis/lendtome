@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Execution.UnitOfWork;
 using ServiceStack.Logging;

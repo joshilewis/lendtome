@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using EventStore.ClientAPI;
+using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Domain.Model;
 using Lending.Domain.Persistence;

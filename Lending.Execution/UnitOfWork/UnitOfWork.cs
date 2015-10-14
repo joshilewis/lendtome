@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using EventStore.ClientAPI;
+using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Execution.EventStore;
 using Newtonsoft.Json;
@@ -19,15 +20,16 @@ namespace Lending.Execution.UnitOfWork
         //private readonly static ILog Log = LogManager.GetLogger(typeof(UnitOfWork).FullName);
 
         private readonly ISessionFactory sessionFactory;
-        //private readonly ConcurrentQueue<Aggregate> aggregateQueue;
         private readonly IEventStoreConnection connection;
         private readonly Guid transactionId;
+        private readonly IEventEmitter eventEmitter;
         private EventStoreRepository repository;
 
-        public UnitOfWork(ISessionFactory sessionFactory, string eventStoreIpAddress)
+        public UnitOfWork(ISessionFactory sessionFactory, string eventStoreIpAddress, IEventEmitter eventEmitter)
         {
             //Log.DebugFormat("Creating unit of work {0}", GetHashCode());
             this.sessionFactory = sessionFactory;
+            this.eventEmitter = eventEmitter;
             connection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), 1113));
             transactionId = Guid.NewGuid();
         }
@@ -39,7 +41,7 @@ namespace Lending.Execution.UnitOfWork
             CurrentSessionContext.Bind(CurrentSession);
             CurrentSession.BeginTransaction();
             connection.ConnectAsync().Wait();
-            repository = new EventStoreRepository(connection);
+            repository = new EventStoreRepository(eventEmitter, connection);
         }
 
         public void Commit()

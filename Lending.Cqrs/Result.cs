@@ -1,4 +1,4 @@
-﻿namespace Lending.Domain
+﻿namespace Lending.Cqrs
 {
     public class Result
     {

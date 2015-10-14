@@ -7,6 +7,7 @@ using Enyim.Caching.Memcached;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
+using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.Persistence;
@@ -121,6 +122,15 @@ namespace Lending.Execution.DI
                 .Use<AcceptConnectionHandler>()
                 ;
 
+            For<IEventEmitter>()
+                .AlwaysUnique()
+                .Use<InMemoryEventEmitter>()
+                ;
+
+            For<BlockingCollection<Event>>()
+                .Singleton()
+                .Use(new BlockingCollection<Event>())
+                ;
         }
 
 

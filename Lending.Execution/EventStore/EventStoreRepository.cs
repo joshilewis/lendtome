@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using EventStore.ClientAPI;
+using Lending.Cqrs;
 using Lending.Domain;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -21,7 +22,8 @@ namespace Lending.Execution.EventStore
 
         private readonly IEventStoreConnection connection;
 
-        public EventStoreRepository(IEventStoreConnection connection)
+        public EventStoreRepository(IEventEmitter eventEmitter, IEventStoreConnection connection) 
+            : base(eventEmitter)
         {
             this.connection = connection;
         }

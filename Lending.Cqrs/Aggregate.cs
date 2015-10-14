@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Lending.Domain
+namespace Lending.Cqrs
 {
     public abstract class Aggregate
     {

@@ -119,6 +119,10 @@
     <Compile Include="TestEqualityHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Lending.Cqrs\Lending.Cqrs.csproj">
+      <Project>{1b28c9a2-4759-4b29-a773-77fba448069b}</Project>
+      <Name>Lending.Cqrs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lending.Domain\Lending.Domain.csproj">
       <Project>{4fe3afd5-ff4c-4fa6-990a-c7f9cce9441f}</Project>
       <Name>Lending.Domain</Name>

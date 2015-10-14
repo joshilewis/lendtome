@@ -3,6 +3,7 @@ using System.Linq;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;

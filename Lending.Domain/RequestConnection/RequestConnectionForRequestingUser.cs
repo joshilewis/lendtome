@@ -1,4 +1,5 @@
 using System;
+using Lending.Cqrs;
 using Lending.Domain.Model;
 using Lending.Domain.Persistence;
 using NHibernate;

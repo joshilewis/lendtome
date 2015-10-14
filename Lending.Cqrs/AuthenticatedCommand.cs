@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Lending.Domain
+namespace Lending.Cqrs
 {
     public abstract class AuthenticatedCommand : Command
     {
