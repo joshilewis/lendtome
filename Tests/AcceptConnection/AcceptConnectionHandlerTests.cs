@@ -27,7 +27,7 @@ namespace Tests.AcceptConnection
         ///THEN User1 and User2 are connected
         /// </summary>
         [Test]
-        public void AcceptingExistingRequestWithNoConnectionShouldBeAccepted()
+        public void AcceptConnectionForUnconnectedUsersWithNoPendingRequestsShouldSucceed()
         {
             var processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
@@ -71,7 +71,7 @@ namespace Tests.AcceptConnection
         ///THEN No connection is made and User2 is informed that the acceptance failed because there is no Connection Request between them
         /// </summary>
         [Test]
-        public void AcceptingNonExistentRequestShouldBeRejected()
+        public void AcceptConnectionWithNoPendingRequestShouldFail()
         {
             var processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
@@ -101,7 +101,7 @@ namespace Tests.AcceptConnection
         ///THEN No connection is made and User2 is informed that the acceptance failed because they are already connected
         /// </summary>
         [Test]
-        public void AcceptingRequestForConnectedUsersShouldBeRejected()
+        public void AcceptConnectionForConnectedUsersShouldFail()
         {
             var processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");

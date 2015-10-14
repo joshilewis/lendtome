@@ -18,7 +18,7 @@ namespace Tests.RegisterUser
     public class UserRegistrationHandlerTests : FixtureWithEventStoreAndNHibernate
     {
         [Test]
-        public void ExistingUserShouldNotBeCreatedAndNoEventEmitted()
+        public void RegisterUserForExistingUserShouldFail()
         {
             ServiceStackUser existingUser = DefaultTestData.ServiceStackUser1;
             SaveEntities(existingUser);
@@ -45,7 +45,7 @@ namespace Tests.RegisterUser
         }
 
         [Test]
-        public void NewUserShouldBeCreatedAndEventEmitted()
+        public void RegisterUserForNewUserShouldSucceed()
         {
             var authDto = DefaultTestData.UserAuthPersistenceDto1;
             SaveEntities(authDto);//This is needed because ServiceStack will persist the AuthDto behind the scenes on sign-up
