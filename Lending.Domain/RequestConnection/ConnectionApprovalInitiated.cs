@@ -7,11 +7,11 @@ using Lending.Cqrs;
 
 namespace Lending.Domain.RequestConnection
 {
-    public class ConnectionRequestReceived : Event
+    public class ConnectionApprovalInitiated : Event
     {
         public Guid RequestingUserId { get; set; }
 
-        public ConnectionRequestReceived(Guid processId, Guid aggregateId, Guid requestingUserId)
+        public ConnectionApprovalInitiated(Guid processId, Guid aggregateId, Guid requestingUserId)
             : base(processId, aggregateId)
         {
             RequestingUserId = requestingUserId;

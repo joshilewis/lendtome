@@ -8,35 +8,31 @@ using System.Threading.Tasks;
 using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Execution.UnitOfWork;
+using NHibernate;
 
 namespace Lending.Execution
 {
     public class InMemoryEventConsumer
     {
-        private readonly BlockingCollection<Event> eventQueue;
-        private readonly IEnumerable<IEventHandler> eventHandlers;
-        private readonly IUnitOfWork unitOfWork;
+        private readonly Dictionary<Type, HashSet<IEventHandler>> eventHandlerMap;
 
-        public InMemoryEventConsumer(BlockingCollection<Event> eventQueue, IEnumerable<IEventHandler> eventHandlers,
-            IUnitOfWork unitOfWork)
+        public InMemoryEventConsumer()
         {
-            this.eventQueue = eventQueue;
-            this.eventHandlers = eventHandlers;
-            this.unitOfWork = unitOfWork;
+            eventHandlerMap = new Dictionary<Type, HashSet<IEventHandler>>();
         }
 
-        public void Start()
+        public void RegisterHandler<TEvent>(IEventHandler handler) where TEvent : Event
         {
-            while (true)
+            if (!eventHandlerMap.ContainsKey(typeof(TEvent))) eventHandlerMap.Add(typeof(TEvent), new HashSet<IEventHandler>());
+            eventHandlerMap[typeof (TEvent)].Add(handler);
+        }
+
+        public void ConsumeEvent(Event @event)
+        {
+            if (!eventHandlerMap.ContainsKey(@event.GetType())) return;
+            foreach (IEventHandler handler in eventHandlerMap[@event.GetType()])
             {
-                Event @event = eventQueue.Take();
-                IEnumerable<IEventHandler> matchingHandlers = eventHandlers.Where(x => x.GetType().GetInterfaces().Any(y => y.GetGenericArguments().Contains(@event.GetType())));
-
-                foreach (IEventHandler matchingHandler in matchingHandlers)
-                {
-                    unitOfWork.DoInTransaction(() => ((dynamic) matchingHandler).When(@event));
-                }
-
+                handler.When(@event);
             }
         }
     }

@@ -54,6 +54,7 @@
     <Compile Include="Command.cs" />
     <Compile Include="CommandHandler.cs" />
     <Compile Include="Event.cs" />
+    <Compile Include="EventHandler.cs" />
     <Compile Include="EventRoute.cs" />
     <Compile Include="IAuthenticatedCommandHandler.cs" />
     <Compile Include="ICommandHandler.cs" />

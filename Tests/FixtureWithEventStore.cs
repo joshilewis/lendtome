@@ -10,6 +10,7 @@ using EventStore.ClientAPI.Embedded;
 using EventStore.Core;
 using Lending.Cqrs;
 using Lending.Domain;
+using Lending.Execution;
 using Lending.Execution.EventStore;
 using NUnit.Framework;
 
@@ -20,10 +21,12 @@ namespace Tests
         protected ClusterVNode Node;
         protected IEventStoreConnection Connection;
         protected IRepository Repository;
+        protected InMemoryEventConsumer EventConsumer;
 
         public override void SetUp()
         {
             base.SetUp();
+            EventConsumer = new InMemoryEventConsumer();
             var noIp = new IPEndPoint(IPAddress.None, 0);
             Node = EmbeddedVNodeBuilder
                 .AsSingleNode()
@@ -35,8 +38,12 @@ namespace Tests
 
             Connection = EmbeddedEventStoreConnection.Create(Node);
             Connection.ConnectAsync().Wait();
+            Repository = new EventStoreRepository(new InMemoryEventEmitter(EventConsumer), Connection);
+        }
 
-            Repository = new EventStoreRepository(new DummyEventEmitter(), Connection);
+        protected void RegisterEventHandler<TEvent>(IEventHandler eventHandler) where TEvent : Event
+        {
+            EventConsumer.RegisterHandler<TEvent>(eventHandler);
         }
 
         protected void WriteRepository()

@@ -62,7 +62,7 @@ namespace Lending.Domain.Model
             PendingConnectionRequests.Add(@event.TargetUserId);
         }
 
-        protected virtual void When(ConnectionRequestReceived @event)
+        protected virtual void When(ConnectionApprovalInitiated @event)
         {
             ReceivedConnectionRequests.Add(@event.RequestingUserId);
         }
@@ -83,7 +83,7 @@ namespace Lending.Domain.Model
         {
             new EventRoute<UserRegistered>(When, typeof(UserRegistered)),
             new EventRoute<ConnectionRequested>(When, typeof(ConnectionRequested)),
-            new EventRoute<ConnectionRequestReceived>(When, typeof(ConnectionRequestReceived)),
+            new EventRoute<ConnectionApprovalInitiated>(When, typeof(ConnectionApprovalInitiated)),
             new EventRoute<ReceivedConnectionAccepted>(When, typeof(ReceivedConnectionAccepted)),
             new EventRoute<RequestedConnectionAccepted>(When, typeof(RequestedConnectionAccepted)),
         };
@@ -98,12 +98,12 @@ namespace Lending.Domain.Model
             return new Result();
         }
 
-        public Result ReceiveConnectionRequest(Guid processId, Guid sourceUserId)
+        public Result InitiateConnectionApproval(Guid processId, Guid sourceUserId)
         {
             if (ReceivedConnectionRequests.Contains(sourceUserId)) return Fail(ReverseConnectionAlreadyRequested);
             if (ConnectedUsers.Contains(sourceUserId)) return Fail(UsersAlreadyConnected);
 
-            RaiseEvent(new ConnectionRequestReceived(processId, Id, sourceUserId));
+            RaiseEvent(new ConnectionApprovalInitiated(processId, Id, sourceUserId));
             return Success();
         }
 
