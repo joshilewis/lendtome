@@ -22,7 +22,7 @@ namespace Tests.RequestConnection
         ///THEN no request is created AND User1 is informed that the request failed because a connection request exists and is pending
         /// </summary>
         [Test]
-        public void ExistingConnectionRequestFromSourceToTargetShouldBeRejected()
+        public void RequestConnectionFromUserWithPendingRequestShouldFail()
         {
             Guid processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
@@ -53,7 +53,7 @@ namespace Tests.RequestConnection
         ///THEN the request is created AND User2 is informed of the connection request
         /// </summary>
         [Test]
-        public void NoExistingConnectionRequestShouldEmitEvent()
+        public void RequestConnectionForUnconnectedUsersShouldSucceed()
         {
             Guid processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
@@ -99,7 +99,7 @@ namespace Tests.RequestConnection
         ///THEN no request is created AND User1 is notified that the request failed because there is no such user
         /// </summary>
         [Test]
-        public void ConnectionRequestToNonExistentTargetShouldBeRejected()
+        public void RequestConnectionToNonExistentUserShouldFail()
         {
             var user1 = User.Register(Guid.NewGuid(), Guid.Empty, "User 1", "email1");
             SaveAggregates(user1);
@@ -124,7 +124,7 @@ namespace Tests.RequestConnection
         ///THEN no request is created AND User1 is informed that the request failed because a connection request exists AND is pending
         /// </summary>
         [Test]
-        public void ExistingConnectionRequestFromTargetToSourceShouldBeRejected()
+        public void RequestConnectionToUserWithPendingRequestShouldFail()
         {
             var processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
@@ -155,7 +155,7 @@ namespace Tests.RequestConnection
         ///THEN no request is created AND User1 is informed that the request failed because they are already connected
         /// </summary>
         [Test]
-        public void ConnectionRequestToConnectedUsersShouldBeRejected()
+        public void RequestConnectionToConnectedUsersShouldFail()
         {
             var processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
@@ -193,7 +193,7 @@ namespace Tests.RequestConnection
         ///THEN no request is created AND User1 is informed that the request failed because they can't connect to themselves
         /// </summary>
         [Test]
-        public void ConnectionRequestToSelfShouldBeRejected()
+        public void RequestConnectionToSelfShouldFail()
         {
             var user1 = User.Register(Guid.NewGuid(), Guid.Empty, "User 1", "email1");
             SaveAggregates(user1);
