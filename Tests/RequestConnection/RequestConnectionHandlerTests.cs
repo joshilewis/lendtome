@@ -35,13 +35,13 @@ namespace Tests.RequestConnection
             SaveEntities(registeredUser1, registeredUser2);
 
             var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
-            var expectedResponse = new Response(User.ConnectionAlreadyRequested);
+            var expectedResponse = new Result(User.ConnectionAlreadyRequested);
 
             var sut = new RequestConnectionForRequestingUser(() => Session, ()=> Repository, null);
-            Response actualResponse = sut.HandleCommand(request);
+            Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
-            actualResponse.ShouldEqual(expectedResponse);
+            actualResult.ShouldEqual(expectedResponse);
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
             Assert.That(slice.Events.Length, Is.EqualTo(2));
@@ -67,14 +67,14 @@ namespace Tests.RequestConnection
             CommitTransactionAndOpenNew();
 
             var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
-            var expectedResponse = new Response();
+            var expectedResponse = new Result();
             var expectedConnectionRequestedEvent = new ConnectionRequested(processId, user1.Id, user2.Id);
             var expectedReceivedConnectionRequest = new ConnectionRequestReceived(processId, user2.Id, user1.Id);
 
             var sut = new RequestConnectionForRequestingUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, null));
-            Response actualResponse = sut.HandleCommand(request);
+            Result actualResult = sut.HandleCommand(request);
             WriteRepository();
-            actualResponse.ShouldEqual(expectedResponse);
+            actualResult.ShouldEqual(expectedResponse);
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
             Assert.That(slice.Events.Length, Is.EqualTo(2));
@@ -105,12 +105,12 @@ namespace Tests.RequestConnection
             SaveAggregates(user1);
 
             var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, Guid.NewGuid());
-            var expectedResponse = new Response(RequestConnectionForRequestingUser.TargetUserDoesNotExist);
+            var expectedResponse = new Result(RequestConnectionForRequestingUser.TargetUserDoesNotExist);
 
             var sut = new RequestConnectionForRequestingUser(() => Session, () => Repository, null);
-            Response actualResponse = sut.HandleCommand(request);
+            Result actualResult = sut.HandleCommand(request);
             WriteRepository();
-            actualResponse.ShouldEqual(expectedResponse);
+            actualResult.ShouldEqual(expectedResponse);
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
             Assert.That(slice.Events.Length, Is.EqualTo(1));
@@ -137,13 +137,13 @@ namespace Tests.RequestConnection
             SaveEntities(registeredUser1, registeredUser2);
 
             var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user2.Id);
-            var expectedResponse = new Response(User.ReverseConnectionAlreadyRequested);
+            var expectedResponse = new Result(User.ReverseConnectionAlreadyRequested);
 
             var sut = new RequestConnectionForRequestingUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, null));
-            Response actualResponse = sut.HandleCommand(request);
+            Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
-            actualResponse.ShouldEqual(expectedResponse);
+            actualResult.ShouldEqual(expectedResponse);
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
             Assert.That(slice.Events.Length, Is.EqualTo(2));
@@ -171,13 +171,13 @@ namespace Tests.RequestConnection
             SaveEntities(registeredUser1, registeredUser2);
 
             var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
-            var expectedResponse = new Response(User.UsersAlreadyConnected);
+            var expectedResponse = new Result(User.UsersAlreadyConnected);
 
             var sut = new RequestConnectionForRequestingUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, null));
-            Response actualResponse = sut.HandleCommand(request);
+            Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
-            actualResponse.ShouldEqual(expectedResponse);
+            actualResult.ShouldEqual(expectedResponse);
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user2.Id}", 0, 10, false).Result;
             Assert.That(slice.Events.Length, Is.EqualTo(3));
@@ -202,13 +202,13 @@ namespace Tests.RequestConnection
             SaveEntities(registeredUser1);
 
             var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user1.Id);
-            var expectedResponse = new Response(RequestConnectionForRequestingUser.CantConnectToSelf);
+            var expectedResponse = new Result(RequestConnectionForRequestingUser.CantConnectToSelf);
 
             var sut = new RequestConnectionForRequestingUser(() => Session, () => Repository, null);
-            Response actualResponse = sut.HandleCommand(request);
+            Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
-            actualResponse.ShouldEqual(expectedResponse);
+            actualResult.ShouldEqual(expectedResponse);
 
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
             Assert.That(slice.Events.Length, Is.EqualTo(1));

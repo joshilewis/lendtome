@@ -25,12 +25,12 @@ namespace Tests.RegisterUser
             CommitTransactionAndOpenNew();
 
             var request = new AuthSessionDouble();
-            var expectedResponse = new Response();
+            var expectedResponse = new Result();
 
             var sut = new RegisterUserHandler(() => Session, () => new UnexpectedRepository(), () => Guid.Empty);
-            Response actualResponse = sut.HandleCommand(request);
+            Result actualResult = sut.HandleCommand(request);
 
-            actualResponse.ShouldEqual(expectedResponse);
+            actualResult.ShouldEqual(expectedResponse);
 
             CommitTransactionAndOpenNew();
 
@@ -54,14 +54,14 @@ namespace Tests.RegisterUser
             var userId = Guid.NewGuid();
             var stream = $"user-{userId}";
             var request = new AuthSessionDouble();
-            var expectedResponse = new Response();
+            var expectedResponse = new Result();
             var expectedUser = new ServiceStackUser(authDto.Id, userId, authDto.DisplayName);
             var expectedEvent = new UserRegistered(Guid.Empty, userId, authDto.DisplayName, authDto.PrimaryEmail);
 
             var sut = new RegisterUserHandler(() => Session, () => Repository, () => userId);
-            Response actualResponse = sut.HandleCommand(request);
+            Result actualResult = sut.HandleCommand(request);
 
-            actualResponse.ShouldEqual(expectedResponse);
+            actualResult.ShouldEqual(expectedResponse);
 
             CommitTransactionAndOpenNew();
             WriteRepository();

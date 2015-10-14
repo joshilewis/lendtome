@@ -4,24 +4,24 @@ using NHibernate;
 
 namespace Lending.Domain.AcceptConnection
 {
-    public class AcceptConnectionForRequestingUser : AuthenticatedCommandHandler<AcceptConnection, Response>
+    public class AcceptConnectionForRequestingUser : AuthenticatedCommandHandler<AcceptConnection, Result>
     {
         public AcceptConnectionForRequestingUser(Func<ISession> getSession, Func<IRepository> getRepository,
-            ICommandHandler<AcceptConnection, Response> nextHandler) : base(getSession, getRepository, nextHandler)
+            ICommandHandler<AcceptConnection, Result> nextHandler) : base(getSession, getRepository, nextHandler)
         {
         }
 
-        public override Response HandleCommand(AcceptConnection command)
+        public override Result HandleCommand(AcceptConnection command)
         {
             User user = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.RequestingUserId));
 
-            Response response = user.NotifyConnectionAccepted(command.ProcessId, command.AggregateId);
+            Result result = user.NotifyConnectionAccepted(command.ProcessId, command.AggregateId);
 
-            if (!response.Success) return response;
+            if (!result.Success) return result;
 
             Repository.Save(user);
 
-            if (NextHandler == null) return response;
+            if (NextHandler == null) return result;
 
             return NextHandler.HandleCommand(command);
         }

@@ -13,10 +13,10 @@ namespace Lending.Execution.Auth
     public class UnitOfWorkAuthService : AuthService
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly ICommandHandler<IAuthSession, Response> commandHandler;
+        private readonly ICommandHandler<IAuthSession, Result> commandHandler;
 
         public UnitOfWorkAuthService(IUnitOfWork unitOfWork,
-            ICommandHandler<IAuthSession, Response> commandHandler)
+            ICommandHandler<IAuthSession, Result> commandHandler)
         {
             this.unitOfWork = unitOfWork;
             this.commandHandler = commandHandler;

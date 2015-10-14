@@ -5,32 +5,32 @@ using NHibernate;
 
 namespace Lending.Domain.RequestConnection
 {
-    public class RequestConnectionForRequestingUser : AuthenticatedCommandHandler<RequestConnection, Response>
+    public class RequestConnectionForRequestingUser : AuthenticatedCommandHandler<RequestConnection, Result>
     {
         public const string TargetUserDoesNotExist = "The target user does not exist";
         public const string CantConnectToSelf = "You can't connect to yourself";
 
         public RequestConnectionForRequestingUser(Func<ISession> getSession, Func<IRepository> getRepository,
-            ICommandHandler<RequestConnection, Response> nextHandler) : base(getSession, getRepository, nextHandler)
+            ICommandHandler<RequestConnection, Result> nextHandler) : base(getSession, getRepository, nextHandler)
         {
         }
 
-        public override Response HandleCommand(RequestConnection command)
+        public override Result HandleCommand(RequestConnection command)
         {
-            if (command.TargetUserId == command.AggregateId) return new Response(CantConnectToSelf);
+            if (command.TargetUserId == command.AggregateId) return new Result(CantConnectToSelf);
 
             RegisteredUser targetUser = Session.Get<RegisteredUser>(command.TargetUserId);
-            if (targetUser == null) return new Response(TargetUserDoesNotExist);
+            if (targetUser == null) return new Result(TargetUserDoesNotExist);
 
             User user = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.AggregateId));
 
-            Response  response = user.RequestConnectionTo(command.ProcessId, command.TargetUserId);
+            Result  result = user.RequestConnectionTo(command.ProcessId, command.TargetUserId);
 
-            if (!response.Success) return response;
+            if (!result.Success) return result;
 
             Repository.Save(user);
 
-            if (NextHandler == null) return response;
+            if (NextHandler == null) return result;
 
             return NextHandler.HandleCommand(command);
         }

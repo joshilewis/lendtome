@@ -7,14 +7,14 @@ using NHibernate;
 
 namespace Lending.Domain.RequestConnection
 {
-    public class RequestConnectionHandler : AuthenticatedCommandHandler<RequestConnection, Response>
+    public class RequestConnectionHandler : AuthenticatedCommandHandler<RequestConnection, Result>
     {
         public RequestConnectionHandler(Func<ISession> getSession, Func<IRepository> getRepository)
             : base(getSession, getRepository, null)
         {
         }
 
-        public override Response HandleCommand(RequestConnection command)
+        public override Result HandleCommand(RequestConnection command)
         {
             return new RequestConnectionForRequestingUser(() => Session, () => Repository,
                 new RequestConnectionForTargetUser(() => Session, () => Repository, null))

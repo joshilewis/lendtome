@@ -67,5 +67,15 @@ namespace Lending.Domain
             return Id.GetHashCode();
         }
 
+        protected virtual Result Success()
+        {
+            return new Result();
+        }
+
+        protected virtual Result Fail(string reason)
+        {
+            return new Result(reason);
+        }
+
     }
 }

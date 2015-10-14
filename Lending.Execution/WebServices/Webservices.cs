@@ -12,19 +12,19 @@ using ServiceStack.ServiceInterface;
 
 namespace Lending.Execution.WebServices
 {
-    public class RequestConnectionWebservice : AuthenticatedWebserviceBase<RequestConnection, Response>
+    public class RequestConnectionWebservice : AuthenticatedWebserviceBase<RequestConnection, Result>
     {
         public RequestConnectionWebservice(IUnitOfWork unitOfWork,
-            IAuthenticatedCommandHandler<RequestConnection, Response> commandHandler)
+            IAuthenticatedCommandHandler<RequestConnection, Result> commandHandler)
             : base(unitOfWork, commandHandler)
         { }
 
     }
 
-    public class AcceptConnectionWebservice : AuthenticatedWebserviceBase<AcceptConnection, Response>
+    public class AcceptConnectionWebservice : AuthenticatedWebserviceBase<AcceptConnection, Result>
     {
         public AcceptConnectionWebservice(IUnitOfWork unitOfWork,
-            IAuthenticatedCommandHandler<AcceptConnection, Response> commandHandler)
+            IAuthenticatedCommandHandler<AcceptConnection, Result> commandHandler)
             : base(unitOfWork, commandHandler)
         { }
 

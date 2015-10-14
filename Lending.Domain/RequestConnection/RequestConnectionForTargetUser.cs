@@ -8,22 +8,22 @@ using NHibernate;
 
 namespace Lending.Domain.RequestConnection
 {
-    public class RequestConnectionForTargetUser : AuthenticatedCommandHandler<RequestConnection, Response>
+    public class RequestConnectionForTargetUser : AuthenticatedCommandHandler<RequestConnection, Result>
     {
-        public RequestConnectionForTargetUser(Func<ISession> getSession, Func<IRepository> getRepository, ICommandHandler<RequestConnection, Response> nextHandler) : base(getSession, getRepository, nextHandler)
+        public RequestConnectionForTargetUser(Func<ISession> getSession, Func<IRepository> getRepository, ICommandHandler<RequestConnection, Result> nextHandler) : base(getSession, getRepository, nextHandler)
         {
         }
 
-        public override Response HandleCommand(RequestConnection command)
+        public override Result HandleCommand(RequestConnection command)
         {
             User targetUser = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.TargetUserId));
-            Response response = targetUser.ReceiveConnectionRequest(command.ProcessId, command.AggregateId);
+            Result result = targetUser.ReceiveConnectionRequest(command.ProcessId, command.AggregateId);
 
-            if (!response.Success) return response;
+            if (!result.Success) return result;
 
             Repository.Save(targetUser);
 
-            if (NextHandler == null) return response;
+            if (NextHandler == null) return result;
 
             return NextHandler.HandleCommand(command);
         }

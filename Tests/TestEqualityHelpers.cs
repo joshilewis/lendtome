@@ -65,17 +65,17 @@ namespace Tests
         }
 
 
-        public static bool ShouldEqual(this Response actual, Response expected)
+        public static bool ShouldEqual(this Result actual, Result expected)
         {
             Assert.That(actual.Success, Is.EqualTo(expected.Success));
-            Assert.That(actual.FailureDescription, Is.EqualTo(expected.FailureDescription));
+            Assert.That(actual.Reason, Is.EqualTo(expected.Reason));
 
             return true;
         }
 
-        public static Response MatchArg(this Response expected)
+        public static Result MatchArg(this Result expected)
         {
-            return Arg<Response>.Matches(x => x.ShouldEqual(expected));
+            return Arg<Result>.Matches(x => x.ShouldEqual(expected));
         }
 
         public static bool ShouldEqual(this Event actual, Event expected)

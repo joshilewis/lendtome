@@ -62,7 +62,7 @@
     <Compile Include="IEventRoute.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="RequestConnection\RequestConnectionHandler.cs" />
-    <Compile Include="Response.cs" />
+    <Compile Include="Result.cs" />
     <Compile Include="RequestConnection\ConnectionRequestReceived.cs" />
     <Compile Include="RequestConnection\RequestConnection.cs" />
     <Compile Include="RequestConnection\RequestConnectionForRequestingUser.cs" />

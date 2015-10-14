@@ -111,12 +111,12 @@ namespace Lending.Execution.DI
             For<Func<Guid>>()
                 .Use(() => SequentialGuid.NewGuid());
 
-            For<ICommandHandler<RequestConnection, Response>>()
+            For<ICommandHandler<RequestConnection, Result>>()
                 .AlwaysUnique()
                 .Use<RequestConnectionHandler>()
                 ;
 
-            For<ICommandHandler<AcceptConnection, Response>>()
+            For<ICommandHandler<AcceptConnection, Result>>()
                 .AlwaysUnique()
                 .Use<AcceptConnectionHandler>()
                 ;
