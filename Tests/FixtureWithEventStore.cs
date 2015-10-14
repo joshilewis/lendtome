@@ -14,7 +14,7 @@ using NUnit.Framework;
 
 namespace Tests
 {
-    public class DatabaseAndEventStoreFixtureBase : DatabaseFixtureBase
+    public class FixtureWithEventStore : Fixture
     {
         protected ClusterVNode Node;
         protected IEventStoreConnection Connection;
@@ -22,6 +22,7 @@ namespace Tests
 
         public override void SetUp()
         {
+            base.SetUp();
             var noIp = new IPEndPoint(IPAddress.None, 0);
             Node = EmbeddedVNodeBuilder
                 .AsSingleNode()
@@ -31,11 +32,10 @@ namespace Tests
                 .Build();
             Node.Start();
 
-            base.SetUp();
             Connection = EmbeddedEventStoreConnection.Create(Node);
             Connection.ConnectAsync().Wait();
 
-            Repository = new EventStoreRepository(Connection);
+            Repository = new EventStoreRepository(new DummyEventEmitter(), Connection);
         }
 
         protected void WriteRepository()

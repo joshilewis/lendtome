@@ -22,13 +22,13 @@ namespace Tests
     [ExclusivelyUses("Database")]
     [NUnit.Framework.Category("Persistence")]
     [TestFixture]
-    public abstract class DatabaseFixtureBase
+    public abstract class FixtureWithEventStoreAndNHibernate : FixtureWithEventStore
     {
         protected static readonly Configuration Configuration;
         protected static readonly ISessionFactory SessionFactory;
         protected ISession Session;
 
-        static DatabaseFixtureBase()
+        static FixtureWithEventStoreAndNHibernate()
         {
             //Set up database
             Configuration = Fluently.Configure()
@@ -48,8 +48,9 @@ namespace Tests
         }
 
         [SetUp]
-        public virtual void SetUp()
+        public override void SetUp()
         {
+            base.SetUp();
             //Create DB
             new SchemaExport(Configuration)
                 .Execute(true, true, false);
@@ -60,7 +61,7 @@ namespace Tests
         }
 
         [TearDown]
-        public virtual void TearDown()
+        public override void TearDown()
         {
             CommitTransaction();
 
@@ -68,6 +69,7 @@ namespace Tests
             new SchemaExport(Configuration)
                 .Execute(false, true, true);
 
+            base.TearDown();
         }
 
         protected void CommitTransaction()

@@ -14,7 +14,7 @@ using ServiceStack.Text;
 
 namespace Tests.RegisterUser
 {
-    public class UserRegistrationHandlerTests : DatabaseAndEventStoreFixtureBase
+    public class UserRegistrationHandlerTests : FixtureWithEventStoreAndNHibernate
     {
         [Test]
         public void ExistingUserShouldNotBeCreatedAndNoEventEmitted()

@@ -108,9 +108,11 @@
   <ItemGroup>
     <Compile Include="AcceptConnection\AcceptConnectionHandlerTests.cs" />
     <Compile Include="ContainerTests.cs" />
+    <Compile Include="DummyEventEmitter.cs" />
+    <Compile Include="Fixture.cs" />
     <Compile Include="RequestConnection\RequestConnectionHandlerTests.cs" />
-    <Compile Include="DatabaseAndEventStoreFixtureBase.cs" />
-    <Compile Include="DatabaseFixtureBase.cs" />
+    <Compile Include="FixtureWithEventStore.cs" />
+    <Compile Include="FixtureWithEventStoreAndNHibernate.cs" />
     <Compile Include="DefaultTestData.cs" />
     <Compile Include="RegisterUser\UserRegistrationHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

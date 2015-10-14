@@ -18,7 +18,7 @@ namespace Tests.AcceptConnection
     /// https://github.com/joshilewis/lending/issues/7
     /// </summary>
     [TestFixture]
-    public class AcceptConnectionHandlerTests : DatabaseAndEventStoreFixtureBase
+    public class AcceptConnectionHandlerTests : FixtureWithEventStoreAndNHibernate
     {
         /// <summary>
         /// GIVEN User1 exists AND User2 exists AND they are not connected AND User1 has requested to Connect to User2
