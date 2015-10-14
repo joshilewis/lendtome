@@ -65,7 +65,7 @@
     <Compile Include="Response.cs" />
     <Compile Include="RequestConnection\ConnectionRequestReceived.cs" />
     <Compile Include="RequestConnection\RequestConnection.cs" />
-    <Compile Include="RequestConnection\RequestConnectionForSourceUser.cs" />
+    <Compile Include="RequestConnection\RequestConnectionForRequestingUser.cs" />
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="EventRoute.cs" />
     <Compile Include="CommandHandler.cs" />

@@ -58,12 +58,12 @@ namespace Lending.Domain.Model
 
         protected virtual void When(ConnectionRequested @event)
         {
-            PendingConnectionRequests.Add(@event.DesintationUserId);
+            PendingConnectionRequests.Add(@event.TargetUserId);
         }
 
         protected virtual void When(ConnectionRequestReceived @event)
         {
-            ReceivedConnectionRequests.Add(@event.SourceUserId);
+            ReceivedConnectionRequests.Add(@event.RequestingUserId);
         }
 
         protected virtual void When(ReceivedConnectionAccepted @event)

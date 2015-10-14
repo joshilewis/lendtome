@@ -37,7 +37,7 @@ namespace Tests.RequestConnection
             var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Response(User.ConnectionAlreadyRequested);
 
-            var sut = new RequestConnectionForSourceUser(() => Session, ()=> Repository, null);
+            var sut = new RequestConnectionForRequestingUser(() => Session, ()=> Repository, null);
             Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
 
@@ -71,7 +71,7 @@ namespace Tests.RequestConnection
             var expectedConnectionRequestedEvent = new ConnectionRequested(processId, user1.Id, user2.Id);
             var expectedReceivedConnectionRequest = new ConnectionRequestReceived(processId, user2.Id, user1.Id);
 
-            var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, null));
+            var sut = new RequestConnectionForRequestingUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, null));
             Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
             actualResponse.ShouldEqual(expectedResponse);
@@ -105,9 +105,9 @@ namespace Tests.RequestConnection
             SaveAggregates(user1);
 
             var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, Guid.NewGuid());
-            var expectedResponse = new Response(RequestConnectionForSourceUser.TargetUserDoesNotExist);
+            var expectedResponse = new Response(RequestConnectionForRequestingUser.TargetUserDoesNotExist);
 
-            var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, null);
+            var sut = new RequestConnectionForRequestingUser(() => Session, () => Repository, null);
             Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
             actualResponse.ShouldEqual(expectedResponse);
@@ -139,7 +139,7 @@ namespace Tests.RequestConnection
             var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Response(User.ReverseConnectionAlreadyRequested);
 
-            var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, null));
+            var sut = new RequestConnectionForRequestingUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, null));
             Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
 
@@ -173,7 +173,7 @@ namespace Tests.RequestConnection
             var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Response(User.UsersAlreadyConnected);
 
-            var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, null));
+            var sut = new RequestConnectionForRequestingUser(() => Session, () => Repository, new RequestConnectionForTargetUser(() => Session, () => Repository, null));
             Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
 
@@ -202,9 +202,9 @@ namespace Tests.RequestConnection
             SaveEntities(registeredUser1);
 
             var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user1.Id);
-            var expectedResponse = new Response(RequestConnectionForSourceUser.CantConnectToSelf);
+            var expectedResponse = new Response(RequestConnectionForRequestingUser.CantConnectToSelf);
 
-            var sut = new RequestConnectionForSourceUser(() => Session, () => Repository, null);
+            var sut = new RequestConnectionForRequestingUser(() => Session, () => Repository, null);
             Response actualResponse = sut.HandleCommand(request);
             WriteRepository();
 

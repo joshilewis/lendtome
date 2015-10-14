@@ -8,12 +8,12 @@ namespace Lending.Domain.RequestConnection
 {
     public class ConnectionRequestReceived : Event
     {
-        public Guid SourceUserId { get; set; }
+        public Guid RequestingUserId { get; set; }
 
-        public ConnectionRequestReceived(Guid processId, Guid aggregateId, Guid sourceUserId)
+        public ConnectionRequestReceived(Guid processId, Guid aggregateId, Guid requestingUserId)
             : base(processId, aggregateId)
         {
-            SourceUserId = sourceUserId;
+            RequestingUserId = requestingUserId;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Lending.Domain.RequestConnection
 
         public override Response HandleCommand(RequestConnection command)
         {
-            return new RequestConnectionForSourceUser(() => Session, () => Repository,
+            return new RequestConnectionForRequestingUser(() => Session, () => Repository,
                 new RequestConnectionForTargetUser(() => Session, () => Repository, null))
                 .HandleCommand(command);
         }

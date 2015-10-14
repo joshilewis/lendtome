@@ -502,10 +502,6 @@
     <Content Include="Scripts\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
-    <Content Include="Scripts\jasmine-samples\Player.js" />
-    <Content Include="Scripts\jasmine-samples\PlayerSpec.js" />
-    <Content Include="Scripts\jasmine-samples\Song.js" />
-    <Content Include="Scripts\jasmine-samples\SpecHelper.js" />
     <Content Include="Scripts\jasmine\jasmine-html.js" />
     <Content Include="Scripts\jasmine\jasmine.js" />
     <Content Include="Scripts\less-1.5.1.js" />

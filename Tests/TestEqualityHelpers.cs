@@ -101,7 +101,7 @@ namespace Tests
 
         public static bool ShouldEqual(this ConnectionRequested actual, ConnectionRequested expected)
         {
-            Assert.That(actual.DesintationUserId, Is.EqualTo(expected.DesintationUserId));
+            Assert.That(actual.TargetUserId, Is.EqualTo(expected.TargetUserId));
             ((Event) actual).ShouldEqual(expected);
             return true;
         }
@@ -125,7 +125,7 @@ namespace Tests
 
         public static bool ShouldEqual(this ConnectionRequestReceived actual, ConnectionRequestReceived expected)
         {
-            Assert.That(actual.SourceUserId, Is.EqualTo(expected.SourceUserId));
+            Assert.That(actual.RequestingUserId, Is.EqualTo(expected.RequestingUserId));
             ((Event)actual).ShouldEqual(expected);
 
             return true;

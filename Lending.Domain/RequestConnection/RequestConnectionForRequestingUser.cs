@@ -5,12 +5,12 @@ using NHibernate;
 
 namespace Lending.Domain.RequestConnection
 {
-    public class RequestConnectionForSourceUser : AuthenticatedCommandHandler<RequestConnection, Response>
+    public class RequestConnectionForRequestingUser : AuthenticatedCommandHandler<RequestConnection, Response>
     {
         public const string TargetUserDoesNotExist = "The target user does not exist";
         public const string CantConnectToSelf = "You can't connect to yourself";
 
-        public RequestConnectionForSourceUser(Func<ISession> getSession, Func<IRepository> getRepository,
+        public RequestConnectionForRequestingUser(Func<ISession> getSession, Func<IRepository> getRepository,
             ICommandHandler<RequestConnection, Response> nextHandler) : base(getSession, getRepository, nextHandler)
         {
         }
