@@ -87,13 +87,13 @@ namespace Lending.Domain.Model
             new EventRoute<RequestedConnectionAccepted>(When, typeof(RequestedConnectionAccepted)),
         };
 
-        public Response RequestConnectionTo(Guid processId, Guid desintationUserId)
+        public Response RequestConnectionTo(Guid processId, Guid destinationUserId)
         {
-            if (PendingConnectionRequests.Contains(desintationUserId)) return new Response(ConnectionAlreadyRequested);
-            if (ReceivedConnectionRequests.Contains(desintationUserId)) return new Response(ReverseConnectionAlreadyRequested);
-            if(ConnectedUsers.Contains(desintationUserId)) return new Response(UsersAlreadyConnected);
+            if (PendingConnectionRequests.Contains(destinationUserId)) return new Response(ConnectionAlreadyRequested);
+            if (ReceivedConnectionRequests.Contains(destinationUserId)) return new Response(ReverseConnectionAlreadyRequested);
+            if(ConnectedUsers.Contains(destinationUserId)) return new Response(UsersAlreadyConnected);
 
-            RaiseEvent(new ConnectionRequested(processId, Id, desintationUserId));
+            RaiseEvent(new ConnectionRequested(processId, Id, destinationUserId));
             return new Response();
         }
 
