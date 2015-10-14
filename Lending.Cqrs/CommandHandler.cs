@@ -8,12 +8,10 @@ namespace Lending.Cqrs
         private readonly Func<ISession> getSession;
         private readonly Func<IRepository> getRepository;
 
-        protected CommandHandler(Func<ISession> getSession, Func<IRepository> getRepository,
-            ICommandHandler<TRequest, TResponse> nextHandler)
+        protected CommandHandler(Func<ISession> getSession, Func<IRepository> getRepository)
         {
             this.getSession = getSession;
             this.getRepository = getRepository;
-            this.NextHandler = nextHandler;
         }
 
         public abstract TResponse HandleCommand(TRequest command);
@@ -22,6 +20,5 @@ namespace Lending.Cqrs
 
         protected IRepository Repository => getRepository();
 
-        protected ICommandHandler<TRequest, TResponse> NextHandler { get; }
     }
 }

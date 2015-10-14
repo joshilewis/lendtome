@@ -132,7 +132,7 @@ namespace Tests
             return true;
         }
 
-        public static bool ShouldEqual(this ReceivedConnectionAccepted actual, ReceivedConnectionAccepted expected)
+        public static bool ShouldEqual(this ConnectionAccepted actual, ConnectionAccepted expected)
         {
             Assert.That(actual.RequestingUserId, Is.EqualTo(expected.RequestingUserId));
             ((Event)actual).ShouldEqual(expected);
@@ -140,7 +140,7 @@ namespace Tests
             return true;
         }
 
-        public static bool ShouldEqual(this RequestedConnectionAccepted actual, RequestedConnectionAccepted expected)
+        public static bool ShouldEqual(this ConnectionCompleted actual, ConnectionCompleted expected)
         {
             Assert.That(actual.AcceptingUserId, Is.EqualTo(expected.AcceptingUserId));
             ((Event)actual).ShouldEqual(expected);

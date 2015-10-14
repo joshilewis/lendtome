@@ -3,11 +3,11 @@ using Lending.Cqrs;
 
 namespace Lending.Domain.AcceptConnection
 {
-    public class RequestedConnectionAccepted : Event
+    public class ConnectionCompleted : Event
     {
         public Guid AcceptingUserId { get; set; }
 
-        public RequestedConnectionAccepted(Guid processId, Guid aggregateId, Guid acceptingUserId)
+        public ConnectionCompleted(Guid processId, Guid aggregateId, Guid acceptingUserId)
             : base(processId, aggregateId)
         {
             AcceptingUserId = acceptingUserId;

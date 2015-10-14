@@ -67,13 +67,13 @@ namespace Lending.Domain.Model
             ReceivedConnectionRequests.Add(@event.RequestingUserId);
         }
 
-        protected virtual void When(ReceivedConnectionAccepted @event)
+        protected virtual void When(ConnectionAccepted @event)
         {
             ReceivedConnectionRequests.Remove(@event.RequestingUserId);
             ConnectedUsers.Add(@event.RequestingUserId);
         }
 
-        protected virtual void When(RequestedConnectionAccepted @event)
+        protected virtual void When(ConnectionCompleted @event)
         {
             PendingConnectionRequests.Remove(@event.AcceptingUserId);
             ConnectedUsers.Add(@event.AcceptingUserId);
@@ -84,11 +84,11 @@ namespace Lending.Domain.Model
             new EventRoute<UserRegistered>(When, typeof(UserRegistered)),
             new EventRoute<ConnectionRequested>(When, typeof(ConnectionRequested)),
             new EventRoute<ConnectionAcceptanceInitiated>(When, typeof(ConnectionAcceptanceInitiated)),
-            new EventRoute<ReceivedConnectionAccepted>(When, typeof(ReceivedConnectionAccepted)),
-            new EventRoute<RequestedConnectionAccepted>(When, typeof(RequestedConnectionAccepted)),
+            new EventRoute<ConnectionAccepted>(When, typeof(ConnectionAccepted)),
+            new EventRoute<ConnectionCompleted>(When, typeof(ConnectionCompleted)),
         };
 
-        public Result RequestConnectionTo(Guid processId, Guid destinationUserId)
+        public Result RequestConnection(Guid processId, Guid destinationUserId)
         {
             if (PendingConnectionRequests.Contains(destinationUserId)) return new Result(ConnectionAlreadyRequested);
             if (ReceivedConnectionRequests.Contains(destinationUserId)) return new Result(ReverseConnectionAlreadyRequested);
@@ -107,22 +107,22 @@ namespace Lending.Domain.Model
             return Success();
         }
 
-        public Result AcceptReceivedConnection(Guid processId, Guid requestingUserId)
+        public Result AcceptConnection(Guid processId, Guid requestingUserId)
         {
             if (ConnectedUsers.Contains(requestingUserId)) return Fail(UsersAlreadyConnected);
             if (!ReceivedConnectionRequests.Contains(requestingUserId)) return new Result(ConnectionRequestNotReceived);
 
-            RaiseEvent(new ReceivedConnectionAccepted(processId, Id, requestingUserId));
+            RaiseEvent(new ConnectionAccepted(processId, Id, requestingUserId));
 
             return Success();
         }
 
-        public Result NotifyConnectionAccepted(Guid processId, Guid acceptingUserId)
+        public Result CompleteConnection(Guid processId, Guid acceptingUserId)
         {
             if (ConnectedUsers.Contains(acceptingUserId)) return Fail(UsersAlreadyConnected);
             if (!PendingConnectionRequests.Contains(acceptingUserId)) return Fail(ConnectionNotRequested);
 
-            RaiseEvent(new RequestedConnectionAccepted(processId, Id, acceptingUserId));
+            RaiseEvent(new ConnectionCompleted(processId, Id, acceptingUserId));
 
             return Success();
         }

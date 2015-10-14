@@ -2,18 +2,20 @@ using Lending.Cqrs;
 
 namespace Lending.Domain.RequestConnection
 {
-    public class ConnectionAcceptanceSaga : Lending.Cqrs.EventHandler<ConnectionRequested>
+    public class ConnectionAcceptanceSaga : EventHandler<ConnectionRequested>
     {
-        private readonly ICommandHandler<InitiateConnectionAcceptance, Result> commandHandler;
+        private readonly ICommandHandler<InitiateConnectionAcceptance, Result> initiateAcceptanceCommandHandler;
 
-        public ConnectionAcceptanceSaga(ICommandHandler<InitiateConnectionAcceptance, Result> commandHandler)
+        public ConnectionAcceptanceSaga(ICommandHandler<InitiateConnectionAcceptance, Result> initiateAcceptanceCommandHandler)
         {
-            this.commandHandler = commandHandler;
+            this.initiateAcceptanceCommandHandler = initiateAcceptanceCommandHandler;
         }
 
         public override void When(ConnectionRequested @event)
         {
-            commandHandler.HandleCommand(new InitiateConnectionAcceptance(@event.ProcessId, @event.TargetUserId, @event.AggregateId));
+            initiateAcceptanceCommandHandler.HandleCommand(new InitiateConnectionAcceptance(@event.ProcessId, @event.TargetUserId, @event.AggregateId));
         }
+
+
     }
 }

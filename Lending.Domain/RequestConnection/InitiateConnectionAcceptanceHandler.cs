@@ -11,8 +11,8 @@ namespace Lending.Domain.RequestConnection
 {
     public class InitiateConnectionAcceptanceHandler : CommandHandler<InitiateConnectionAcceptance, Result>
     {
-        public InitiateConnectionAcceptanceHandler(Func<ISession> getSession, Func<IRepository> getRepository,
-            ICommandHandler<InitiateConnectionAcceptance, Result> nextHandler) : base(getSession, getRepository, nextHandler)
+        public InitiateConnectionAcceptanceHandler(Func<ISession> getSession, Func<IRepository> getRepository) 
+            : base(getSession, getRepository)
         {
         }
 
@@ -25,9 +25,7 @@ namespace Lending.Domain.RequestConnection
 
             Repository.Save(targetUser);
 
-            if (NextHandler == null) return result;
-
-            return NextHandler.HandleCommand(command);
+            return result;
         }
 
     }

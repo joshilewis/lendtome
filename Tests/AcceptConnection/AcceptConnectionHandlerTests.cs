@@ -29,10 +29,13 @@ namespace Tests.AcceptConnection
         [Test]
         public void AcceptConnectionForUnconnectedUsersWithNoPendingRequestsShouldSucceed()
         {
+            RegisterEventHandler<ConnectionAccepted>(new ConnectionCompletionSaga(
+                new CompleteConnectionHandler(() => Session, () => Repository)));
+
             var processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
             var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
-            user1.RequestConnectionTo(processId, user2.Id);
+            user1.RequestConnection(processId, user2.Id);
             user2.InitiateConnectionAcceptance(processId, user1.Id);
             SaveAggregates(user1, user2);
 
@@ -42,10 +45,10 @@ namespace Tests.AcceptConnection
 
             var request = new Lending.Domain.AcceptConnection.AcceptConnection(processId, user2.Id, user2.Id, user1.Id);
             var expectedResponse = new Result();
-            var expectedReceivedConnectionAccepted = new ReceivedConnectionAccepted(processId, user2.Id, user1.Id);
-            var expectedRequestedConnectionAccepted = new RequestedConnectionAccepted(processId, user1.Id, user2.Id);
+            var expectedReceivedConnectionAccepted = new ConnectionAccepted(processId, user2.Id, user1.Id);
+            var expectedRequestedConnectionAccepted = new ConnectionCompleted(processId, user1.Id, user2.Id);
 
-            var sut = new AcceptConnectionForAcceptingUser(() => Session, () => Repository, new AcceptConnectionForRequestingUser(() => Session, () => Repository, null));
+            var sut = new AcceptConnectionHandler(() => Session, () => Repository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
@@ -54,13 +57,13 @@ namespace Tests.AcceptConnection
             StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user2.Id}", 0, 10, false).Result;
             Assert.That(slice.Events.Length, Is.EqualTo(3));
             var value = Encoding.UTF8.GetString(slice.Events[2].Event.Data);
-            ReceivedConnectionAccepted actual = value.FromJson<ReceivedConnectionAccepted>();
+            ConnectionAccepted actual = value.FromJson<ConnectionAccepted>();
             actual.ShouldEqual(expectedReceivedConnectionAccepted);
 
             slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
             Assert.That(slice.Events.Length, Is.EqualTo(3));
             value = Encoding.UTF8.GetString(slice.Events[2].Event.Data);
-            RequestedConnectionAccepted actual1 = value.FromJson<RequestedConnectionAccepted>();
+            ConnectionCompleted actual1 = value.FromJson<ConnectionCompleted>();
             actual1.ShouldEqual(expectedRequestedConnectionAccepted);
 
         }
@@ -85,7 +88,7 @@ namespace Tests.AcceptConnection
             var request = new Lending.Domain.AcceptConnection.AcceptConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Result(User.ConnectionRequestNotReceived);
 
-            var sut = new AcceptConnectionForAcceptingUser(() => Session, () => Repository, null);
+            var sut = new AcceptConnectionHandler(() => Session, () => Repository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
@@ -106,10 +109,10 @@ namespace Tests.AcceptConnection
             var processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
             var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
-            user1.RequestConnectionTo(processId, user2.Id);
+            user1.RequestConnection(processId, user2.Id);
             user2.InitiateConnectionAcceptance(processId, user1.Id);
-            user2.AcceptReceivedConnection(processId, user1.Id);
-            user1.NotifyConnectionAccepted(processId, user2.Id);
+            user2.AcceptConnection(processId, user1.Id);
+            user1.CompleteConnection(processId, user2.Id);
             SaveAggregates(user1, user2);
 
             var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
@@ -119,8 +122,7 @@ namespace Tests.AcceptConnection
             var request = new Lending.Domain.AcceptConnection.AcceptConnection(processId, user2.Id, user2.Id, user1.Id);
             var expectedResponse = new Result(User.UsersAlreadyConnected);
 
-            var sut = new AcceptConnectionForAcceptingUser(() => Session, () => Repository,
-                new AcceptConnectionForRequestingUser(() => Session, () => Repository, null));
+            var sut = new AcceptConnectionHandler(() => Session, () => Repository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 

@@ -32,7 +32,7 @@ namespace Tests.RequestConnection
             Guid processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
             var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
-            user1.RequestConnectionTo(processId, user2.Id);
+            user1.RequestConnection(processId, user2.Id);
             SaveAggregates(user1, user2);
 
             var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
@@ -42,7 +42,7 @@ namespace Tests.RequestConnection
             var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Result(User.ConnectionAlreadyRequested);
 
-            var sut = new RequestConnectionHandler(() => Session, ()=> Repository, null);
+            var sut = new RequestConnectionHandler(() => Session, ()=> Repository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
@@ -61,7 +61,7 @@ namespace Tests.RequestConnection
         public void RequestConnectionForUnconnectedUsersShouldSucceed()
         {
             RegisterEventHandler<ConnectionRequested>(
-                new ConnectionAcceptanceSaga(new InitiateConnectionAcceptanceHandler(() => Session, () => Repository, null)));
+                new ConnectionAcceptanceSaga(new InitiateConnectionAcceptanceHandler(() => Session, () => Repository)));
 
             Guid processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
@@ -79,7 +79,7 @@ namespace Tests.RequestConnection
             var expectedConnectionRequestedEvent = new ConnectionRequested(processId, user1.Id, user2.Id);
             var expectedReceivedConnectionRequest = new ConnectionAcceptanceInitiated(processId, user2.Id, user1.Id);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository, null);
+            var sut = new RequestConnectionHandler(() => Session, () => Repository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
             actualResult.ShouldEqual(expectedResponse);
@@ -115,7 +115,7 @@ namespace Tests.RequestConnection
             var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, Guid.NewGuid());
             var expectedResponse = new Result(RequestConnectionHandler.TargetUserDoesNotExist);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository, null);
+            var sut = new RequestConnectionHandler(() => Session, () => Repository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
             actualResult.ShouldEqual(expectedResponse);
@@ -147,7 +147,7 @@ namespace Tests.RequestConnection
             var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Result(User.ReverseConnectionAlreadyRequested);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository, null);
+            var sut = new RequestConnectionHandler(() => Session, () => Repository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
@@ -168,10 +168,10 @@ namespace Tests.RequestConnection
             var processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
             var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
-            user1.RequestConnectionTo(processId, user2.Id);
+            user1.RequestConnection(processId, user2.Id);
             user2.InitiateConnectionAcceptance(processId, user1.Id);
-            user2.AcceptReceivedConnection(processId, user1.Id);
-            user1.NotifyConnectionAccepted(processId, user2.Id);
+            user2.AcceptConnection(processId, user1.Id);
+            user1.CompleteConnection(processId, user2.Id);
             SaveAggregates(user1, user2);
 
             var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
@@ -181,7 +181,7 @@ namespace Tests.RequestConnection
             var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Result(User.UsersAlreadyConnected);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository, null);
+            var sut = new RequestConnectionHandler(() => Session, () => Repository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
@@ -212,7 +212,7 @@ namespace Tests.RequestConnection
             var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user1.Id);
             var expectedResponse = new Result(RequestConnectionHandler.CantConnectToSelf);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository, null);
+            var sut = new RequestConnectionHandler(() => Session, () => Repository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
