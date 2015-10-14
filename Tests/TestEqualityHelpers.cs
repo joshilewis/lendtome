@@ -124,7 +124,7 @@ namespace Tests
             return true;
         }
 
-        public static bool ShouldEqual(this ConnectionApprovalInitiated actual, ConnectionApprovalInitiated expected)
+        public static bool ShouldEqual(this ConnectionAcceptanceInitiated actual, ConnectionAcceptanceInitiated expected)
         {
             Assert.That(actual.RequestingUserId, Is.EqualTo(expected.RequestingUserId));
             ((Event)actual).ShouldEqual(expected);

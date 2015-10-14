@@ -33,7 +33,7 @@ namespace Tests.AcceptConnection
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
             var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
             user1.RequestConnectionTo(processId, user2.Id);
-            user2.InitiateConnectionApproval(processId, user1.Id);
+            user2.InitiateConnectionAcceptance(processId, user1.Id);
             SaveAggregates(user1, user2);
 
             var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
@@ -107,7 +107,7 @@ namespace Tests.AcceptConnection
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
             var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
             user1.RequestConnectionTo(processId, user2.Id);
-            user2.InitiateConnectionApproval(processId, user1.Id);
+            user2.InitiateConnectionAcceptance(processId, user1.Id);
             user2.AcceptReceivedConnection(processId, user1.Id);
             user1.NotifyConnectionAccepted(processId, user2.Id);
             SaveAggregates(user1, user2);

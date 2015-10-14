@@ -9,17 +9,17 @@ using NHibernate;
 
 namespace Lending.Domain.RequestConnection
 {
-    public class InitiateConnectionApprovalHandler : CommandHandler<InitiateConnectionApproval, Result>
+    public class InitiateConnectionAcceptanceHandler : CommandHandler<InitiateConnectionAcceptance, Result>
     {
-        public InitiateConnectionApprovalHandler(Func<ISession> getSession, Func<IRepository> getRepository,
-            ICommandHandler<InitiateConnectionApproval, Result> nextHandler) : base(getSession, getRepository, nextHandler)
+        public InitiateConnectionAcceptanceHandler(Func<ISession> getSession, Func<IRepository> getRepository,
+            ICommandHandler<InitiateConnectionAcceptance, Result> nextHandler) : base(getSession, getRepository, nextHandler)
         {
         }
 
-        public override Result HandleCommand(InitiateConnectionApproval command)
+        public override Result HandleCommand(InitiateConnectionAcceptance command)
         {
             User targetUser = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.AggregateId));
-            Result result = targetUser.InitiateConnectionApproval(command.ProcessId, command.RequestingUserId);
+            Result result = targetUser.InitiateConnectionAcceptance(command.ProcessId, command.RequestingUserId);
 
             if (!result.Success) return result;
 
