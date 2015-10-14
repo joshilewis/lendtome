@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -22,11 +21,13 @@ namespace Tests
         protected IEventStoreConnection Connection;
         protected IRepository Repository;
         protected InMemoryEventConsumer EventConsumer;
+        protected DummyEventHandlerProvider EventHandlerProvider;
 
         public override void SetUp()
         {
             base.SetUp();
-            EventConsumer = new InMemoryEventConsumer();
+            EventHandlerProvider = new DummyEventHandlerProvider();
+            EventConsumer = new InMemoryEventConsumer(EventHandlerProvider);
             var noIp = new IPEndPoint(IPAddress.None, 0);
             Node = EmbeddedVNodeBuilder
                 .AsSingleNode()
@@ -43,7 +44,7 @@ namespace Tests
 
         protected void RegisterEventHandler<TEvent>(IEventHandler eventHandler) where TEvent : Event
         {
-            EventConsumer.RegisterHandler<TEvent>(eventHandler);
+            EventHandlerProvider.RegisterHandler<TEvent>(eventHandler);
         }
 
         protected void WriteRepository()
@@ -68,5 +69,4 @@ namespace Tests
             base.TearDown();
         }
     }
-
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using Enyim.Caching;
 using Enyim.Caching.Configuration;
 using Enyim.Caching.Memcached;
@@ -126,6 +128,14 @@ namespace Lending.Execution.DI
                 .Singleton()
                 .Use(new BlockingCollection<Event>())
                 ;
+
+            For<Func<Type, IEnumerable<IEventHandler>>>()
+                .Use(c => eventType =>
+                {
+                    Type type = typeof (IEventHandler<>).MakeGenericType(eventType);
+                    return c.GetAllInstances(type)
+                    .Select(x => (IEventHandler)x);
+                });
         }
 
 

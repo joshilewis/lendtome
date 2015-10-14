@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,23 +12,17 @@ namespace Lending.Execution
 {
     public class InMemoryEventConsumer
     {
-        private readonly Dictionary<Type, HashSet<IEventHandler>> eventHandlerMap;
+        private readonly IEventHandlerProvider eventHandlerProvider;
 
-        public InMemoryEventConsumer()
+        public InMemoryEventConsumer(IEventHandlerProvider eventHandlerProvider)
         {
-            eventHandlerMap = new Dictionary<Type, HashSet<IEventHandler>>();
-        }
-
-        public void RegisterHandler<TEvent>(IEventHandler handler) where TEvent : Event
-        {
-            if (!eventHandlerMap.ContainsKey(typeof(TEvent))) eventHandlerMap.Add(typeof(TEvent), new HashSet<IEventHandler>());
-            eventHandlerMap[typeof (TEvent)].Add(handler);
+            this.eventHandlerProvider = eventHandlerProvider;
         }
 
         public void ConsumeEvent(Event @event)
         {
-            if (!eventHandlerMap.ContainsKey(@event.GetType())) return;
-            foreach (IEventHandler handler in eventHandlerMap[@event.GetType()])
+
+            foreach (IEventHandler handler in eventHandlerProvider.GetEventHandlers(@event.GetType()))
             {
                 handler.When(@event);
             }

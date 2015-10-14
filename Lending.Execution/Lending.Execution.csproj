@@ -122,12 +122,14 @@
     <Compile Include="Auth\UnitOfWorkAuthService.cs" />
     <Compile Include="DI\DomainRegistry.cs" />
     <Compile Include="DI\StructureMapContainerAdapter.cs" />
+    <Compile Include="EventHandlerProvider.cs" />
     <Compile Include="EventStore\AggregateDeletedException.cs" />
     <Compile Include="EventStore\AggregateNotFoundException.cs" />
     <Compile Include="EventStore\AggregateVersionException.cs" />
     <Compile Include="EventStore\EventExtensions.cs" />
     <Compile Include="EventStore\EventStoreRepository.cs" />
     <Compile Include="IEventEmitter.cs" />
+    <Compile Include="IEventHandlerProvider.cs" />
     <Compile Include="InMemoryEventConsumer.cs" />
     <Compile Include="InMemoryEventEmitter.cs" />
     <Compile Include="Persistence\SchemaUpdater.cs" />
