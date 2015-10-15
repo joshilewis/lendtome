@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/joshilewis/lending.png?label=ready&title=Ready)](https://waffle.io/joshilewis/lending)
 lender
 ======
 Once upon a time, you discovered a book you'd really like to read. Someone mentioned it in passing, or it was mentioned in one of your favourite books. The trouble was the book was then out of print. Or it wasn't available in your country, and it was prohibitively expensive to get it shipped. Fortunately you were able to ask your friends and colleagues if any of them owned the book. You managed to find someone with a copy, and who was willing to lend it to you. You reminded the owner to bring the book to your lunch date in 2 days' time. You read the book, and returned it to the owner within two weeks. The owner remembered who had borrowed his book and didn't panic that it was lost for all time. And they all lived happily ever after.
