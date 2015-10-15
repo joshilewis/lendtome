@@ -108,8 +108,9 @@
   <ItemGroup>
     <Compile Include="ContainerTests.cs" />
     <Compile Include="Domain\AcceptConnectionHandlerTests.cs" />
+    <Compile Include="Domain\AddItemToCollectionHandlerTests.cs" />
     <Compile Include="Domain\RequestConnectionHandlerTests.cs" />
-    <Compile Include="Domain\UserRegistrationHandlerTests.cs" />
+    <Compile Include="Domain\RegisterUserHandlerTests.cs" />
     <Compile Include="DummyEventHandlerProvider.cs" />
     <Compile Include="Fixture.cs" />
     <Compile Include="FixtureWithEventStore.cs" />
