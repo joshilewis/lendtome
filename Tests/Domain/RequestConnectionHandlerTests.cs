@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
-using Lending.Domain;
 using Lending.Domain.Model;
 using Lending.Domain.Persistence;
-using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;
-using Lending.Execution;
 using NUnit.Framework;
 using ServiceStack.Text;
 
-namespace Tests.RequestConnection
+namespace Tests.Domain
 {
     /// <summary>
     /// https://github.com/joshilewis/lending/issues/6

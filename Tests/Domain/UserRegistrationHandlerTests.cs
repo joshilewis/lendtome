@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
-using Lending.Domain;
 using Lending.Domain.RegisterUser;
 using Lending.Execution.Auth;
 using NUnit.Framework;
@@ -13,7 +12,7 @@ using ServiceStack.ServiceInterface;
 using ServiceStack.ServiceInterface.Auth;
 using ServiceStack.Text;
 
-namespace Tests.RegisterUser
+namespace Tests.Domain
 {
     public class UserRegistrationHandlerTests : FixtureWithEventStoreAndNHibernate
     {
