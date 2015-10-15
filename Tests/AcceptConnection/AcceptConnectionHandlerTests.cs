@@ -29,9 +29,6 @@ namespace Tests.AcceptConnection
         [Test]
         public void AcceptConnectionForUnconnectedUsersWithNoPendingRequestsShouldSucceed()
         {
-            RegisterEventHandler<ConnectionAccepted>(new ConnectionCompletionSaga(
-                new CompleteConnectionHandler(() => Session, () => Repository)));
-
             var processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
             var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");

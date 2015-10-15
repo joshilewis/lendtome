@@ -14,13 +14,19 @@ namespace Lending.Domain.AcceptConnection
 
         public override Result HandleCommand(AcceptConnection command)
         {
-            User user = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.AggregateId));
+            User acceptingUser = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.AggregateId));
 
-            Result result = user.AcceptConnection(command.ProcessId, command.RequestingUserId);
+            Result result = acceptingUser.AcceptConnection(command.ProcessId, command.RequestingUserId);
 
             if (!result.Success) return result;
 
-            Repository.Save(user);
+            User requestingUser = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.RequestingUserId));
+
+            result = requestingUser.CompleteConnection(command.ProcessId, command.AggregateId);
+            if (!result.Success) return result;
+
+            Repository.Save(acceptingUser);
+            Repository.Save(requestingUser);
 
             return result;
         }

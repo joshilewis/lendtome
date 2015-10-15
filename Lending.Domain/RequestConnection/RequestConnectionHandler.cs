@@ -20,16 +20,21 @@ namespace Lending.Domain.RequestConnection
         {
             if (command.TargetUserId == command.AggregateId) return new Result(CantConnectToSelf);
 
-            RegisteredUser targetUser = Session.Get<RegisteredUser>(command.TargetUserId);
-            if (targetUser == null) return new Result(TargetUserDoesNotExist);
+            RegisteredUser registeredTargetUser = Session.Get<RegisteredUser>(command.TargetUserId);
+            if (registeredTargetUser == null) return new Result(TargetUserDoesNotExist);
 
             User user = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.AggregateId));
-
             Result  result = user.RequestConnection(command.ProcessId, command.TargetUserId);
 
             if (!result.Success) return result;
 
+            User targetUser = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.TargetUserId));
+            result = targetUser.InitiateConnectionAcceptance(command.ProcessId, command.AggregateId);
+
+            if (!result.Success) return result;
+
             Repository.Save(user);
+            Repository.Save(targetUser);
 
             return result;
         }

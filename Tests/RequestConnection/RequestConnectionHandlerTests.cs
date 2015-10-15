@@ -60,8 +60,6 @@ namespace Tests.RequestConnection
         [Test]
         public void RequestConnectionForUnconnectedUsersShouldSucceed()
         {
-            RegisterEventHandler<ConnectionRequested>(
-                new ConnectionAcceptanceSaga(new InitiateConnectionAcceptanceHandler(() => Session, () => Repository)));
 
             Guid processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
@@ -77,7 +75,7 @@ namespace Tests.RequestConnection
             var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Result();
             var expectedConnectionRequestedEvent = new ConnectionRequested(processId, user1.Id, user2.Id);
-            var expectedReceivedConnectionRequest = new ConnectionAcceptanceInitiated(processId, user2.Id, user1.Id);
+            var expectedReceivedConnectionRequest = new ConnectionRequestReceived(processId, user2.Id, user1.Id);
 
             var sut = new RequestConnectionHandler(() => Session, () => Repository);
             Result actualResult = sut.HandleCommand(request);
@@ -95,7 +93,7 @@ namespace Tests.RequestConnection
             Assert.That(slice.Events.Length, Is.EqualTo(2));
 
             value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
-            ConnectionAcceptanceInitiated actual1 = value.FromJson<ConnectionAcceptanceInitiated>();
+            ConnectionRequestReceived actual1 = value.FromJson<ConnectionRequestReceived>();
             actual1.ShouldEqual(expectedReceivedConnectionRequest);
 
 
