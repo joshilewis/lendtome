@@ -14,3 +14,13 @@ To run the tests you need to be able to connect to a PostgreSql database. See th
 You can run them with another database, then you'll need to change the FluentNhibernate configuration in DatabaseFixtureBase class (see http://www.fluentnhibernate.org/).
 
 It is recommended that you enable Nuget package restore on the solution.
+
+Getting started
+===============
+
+1. Install **Postgres**. This can easily be done via the **[Postgres package](https://chocolatey.org/packages/postgresql)** using [**Chocolatey**](https://chocolatey.org/).
+
+2. Get **Lending.Web** to load in the solution. Otherwise the following error is displayed:
+`The Web Application Project Lending.Web is configured to use IIS.  The Web server 'http://lend-to.me' could not be found.`
+  - Configure **http://lend-to.me** in IIS
+  - Add a host entry for the domain to point to 127.0.0.1
