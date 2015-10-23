@@ -15,7 +15,7 @@ namespace Lending.Domain.Model
         public const string ConnectionAlreadyRequested = "A connection request for these users already exists";
         public const string ReverseConnectionAlreadyRequested = "A reverse connection request for these users already exists";
         public const string ConnectionNotRequested = "This user did not request a connection with the specified user";
-        public const string BookAlreadyInCollection = "The user already has that book in his collection";
+        public const string BookAlreadyInLibrary = "The user already has that book in his library";
 
         public string UserName { get; protected set; }
         public string EmailAddress { get; protected set; }
@@ -23,7 +23,7 @@ namespace Lending.Domain.Model
         public List<Guid> PendingConnectionRequests { get; set; }
         public List<Guid> ReceivedConnectionRequests { get; set; }
         public List<Guid> ConnectedUsers { get; set; }
-        public List<Guid> BooksInCollection { get; set; } 
+        public List<Book> Library { get; set; } 
 
         protected User(Guid processId, Guid id, string userName, string emailAddress)
             : this()
@@ -36,7 +36,7 @@ namespace Lending.Domain.Model
             PendingConnectionRequests = new List<Guid>();
             ReceivedConnectionRequests = new List<Guid>();
             ConnectedUsers = new List<Guid>();
-            BooksInCollection = new List<Guid>();
+            Library = new List<Book>();
         }
 
         public static User Register(Guid processId, Guid id, string userName, string emailAddress)
@@ -83,9 +83,9 @@ namespace Lending.Domain.Model
             ConnectedUsers.Add(@event.AcceptingUserId);
         }
 
-        protected virtual void When(BookAddedToCollection @event)
+        protected virtual void When(BookAddedToLibrary @event)
         {
-            BooksInCollection.Add(@event.BookId);
+            Library.Add(new Book(@event.Title, @event.Author, @event.Isbn));
         }
 
         protected override List<IEventRoute> EventRoutes => new List<IEventRoute>()
@@ -95,7 +95,7 @@ namespace Lending.Domain.Model
             new EventRoute<ConnectionRequestReceived>(When, typeof(ConnectionRequestReceived)),
             new EventRoute<ConnectionAccepted>(When, typeof(ConnectionAccepted)),
             new EventRoute<ConnectionCompleted>(When, typeof(ConnectionCompleted)),
-            new EventRoute<BookAddedToCollection>(When, typeof(BookAddedToCollection)),
+            new EventRoute<BookAddedToLibrary>(When, typeof(BookAddedToLibrary)),
         };
 
 
@@ -138,11 +138,41 @@ namespace Lending.Domain.Model
             return Success();
         }
 
-        public Result AddBookToCollection(Guid processId, Guid newBookId)
+        public Result AddBookToLibrary(Guid processId, string title, string author, string isbn)
         {
-            if (BooksInCollection.Contains(newBookId)) return Fail(BookAlreadyInCollection);
-            RaiseEvent(new BookAddedToCollection(processId, Id, newBookId));
+            if (Library.Contains(new Book(title, author, isbn))) return Fail(BookAlreadyInLibrary);
+            RaiseEvent(new BookAddedToLibrary(processId, Id, title, author, isbn));
             return Success();
+        }
+    }
+
+    public class Book
+    {
+        public string Title { get; protected set; }
+        public string Author { get; protected set; }
+        public string Isbn { get; protected set; }
+
+        public Book(string title, string author, string isbn)
+        {
+            Title = title;
+            Author = author;
+            Isbn = isbn;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Book)) return false;
+
+            Book other = (Book) obj;
+
+            return Title.Equals(other.Title) &&
+                   Author.Equals(other.Author) &&
+                   Isbn.Equals(other.Isbn);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

@@ -53,11 +53,7 @@
     <Compile Include="AcceptConnection\ConnectionCompleted.cs" />
     <Compile Include="AddBookToCollection\AddBookToCollection.cs" />
     <Compile Include="AddBookToCollection\AddBookToCollectionHandler.cs" />
-    <Compile Include="AddBookToCollection\BookAdded.cs" />
-    <Compile Include="AddBookToCollection\BookAddedToCollection.cs" />
-    <Compile Include="Model\Book.cs" />
-    <Compile Include="Persistence\AddedBook.cs" />
-    <Compile Include="Persistence\AddedBookMap.cs" />
+    <Compile Include="AddBookToCollection\BookAddedToLibrary.cs" />
     <Compile Include="RequestConnection\ConnectionRequested.cs" />
     <Compile Include="RequestConnection\ConnectionRequestReceived.cs" />
     <Compile Include="RequestConnection\RequestConnection.cs" />

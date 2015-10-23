@@ -150,26 +150,11 @@ namespace Tests
             return true;
         }
 
-        public static bool ShouldEqual(this AddedBook actual, AddedBook expected)
-        {
-            Assert.That(actual.Id, Is.EqualTo(expected.Id));
-
-            return true;
-        }
-
-        public static bool ShouldEqual(this BookAdded actual, BookAdded expected)
+        public static bool ShouldEqual(this BookAddedToLibrary actual, BookAddedToLibrary expected)
         {
             Assert.That(actual.Title, Is.EqualTo(expected.Title));
             Assert.That(actual.Author, Is.EqualTo(expected.Author));
             Assert.That(actual.Isbn, Is.EqualTo(expected.Isbn));
-            ((Event)actual).ShouldEqual(expected);
-
-            return true;
-        }
-
-        public static bool ShouldEqual(this BookAddedToCollection actual, BookAddedToCollection expected)
-        {
-            Assert.That(actual.BookId, Is.EqualTo(expected.BookId));
             ((Event)actual).ShouldEqual(expected);
 
             return true;

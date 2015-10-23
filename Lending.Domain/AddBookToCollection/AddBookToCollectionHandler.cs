@@ -8,33 +8,17 @@ namespace Lending.Domain.AddBookToCollection
 {
     public class AddBookToCollectionHandler : AuthenticatedCommandHandler<AddBookToCollection, Result>
     {
-        private readonly Func<Guid> getNextGuid;
-
-        public AddBookToCollectionHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc, Func<Guid> nextGuidFunc)
+ 
+        public AddBookToCollectionHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc)
             : base(sessionFunc, repositoryFunc)
         {
-            getNextGuid = nextGuidFunc;
         }
 
         public override Result HandleCommand(AddBookToCollection command)
         {
-            AddedBook addedBook = Session.QueryOver<AddedBook>()
-                .Where(x => x.Title == command.Title)
-                .Where(x => x.Author == command.Author)
-                .Where(x => x.Isbn == command.Isbn)
-                .SingleOrDefault();
-
-            if (addedBook == null)
-            {
-                Guid newBookId = getNextGuid();
-                Book book = Book.Add(command.ProcessId, newBookId, command.Title, command.Author, command.Isbn);
-                addedBook = new AddedBook(newBookId, command.Title, command.Author, command.Isbn);
-                Session.Save(addedBook);
-                Repository.Save(book);
-            }
 
             User user = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.AggregateId));
-            Result result = user.AddBookToCollection(command.ProcessId, addedBook.Id);
+            Result result = user.AddBookToLibrary(command.ProcessId, command.Title, command.Author, command.Isbn);
             if (!result.Success) return result;
 
             Repository.Save(user);
