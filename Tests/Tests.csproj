@@ -109,6 +109,7 @@
     <Compile Include="ContainerTests.cs" />
     <Compile Include="Domain\AcceptConnectionHandlerTests.cs" />
     <Compile Include="Domain\AddBookToCollectionHandlerTests.cs" />
+    <Compile Include="Domain\RemoveBookFromCollectionHandlerTests.cs" />
     <Compile Include="Domain\RequestConnectionHandlerTests.cs" />
     <Compile Include="Domain\RegisterUserHandlerTests.cs" />
     <Compile Include="DummyEventHandlerProvider.cs" />
