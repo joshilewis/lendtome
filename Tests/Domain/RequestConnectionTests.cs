@@ -37,7 +37,7 @@ namespace Tests.Domain
             var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Result(User.ConnectionAlreadyRequested);
 
-            var sut = new RequestConnectionHandler(() => Session, ()=> Repository);
+            var sut = new RequestConnectionHandler(() => Session, ()=> EventRepository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
@@ -72,7 +72,7 @@ namespace Tests.Domain
             var expectedConnectionRequestedEvent = new ConnectionRequested(processId, user1.Id, user2.Id);
             var expectedReceivedConnectionRequest = new ConnectionRequestReceived(processId, user2.Id, user1.Id);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository);
+            var sut = new RequestConnectionHandler(() => Session, () => EventRepository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
             actualResult.ShouldEqual(expectedResponse);
@@ -108,7 +108,7 @@ namespace Tests.Domain
             var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, Guid.NewGuid());
             var expectedResponse = new Result(RequestConnectionHandler.TargetUserDoesNotExist);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository);
+            var sut = new RequestConnectionHandler(() => Session, () => EventRepository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
             actualResult.ShouldEqual(expectedResponse);
@@ -140,7 +140,7 @@ namespace Tests.Domain
             var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Result(User.ReverseConnectionAlreadyRequested);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository);
+            var sut = new RequestConnectionHandler(() => Session, () => EventRepository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
@@ -174,7 +174,7 @@ namespace Tests.Domain
             var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Result(User.UsersAlreadyConnected);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository);
+            var sut = new RequestConnectionHandler(() => Session, () => EventRepository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
@@ -205,7 +205,7 @@ namespace Tests.Domain
             var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user1.Id);
             var expectedResponse = new Result(RequestConnectionHandler.CantConnectToSelf);
 
-            var sut = new RequestConnectionHandler(() => Session, () => Repository);
+            var sut = new RequestConnectionHandler(() => Session, () => EventRepository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 

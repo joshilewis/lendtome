@@ -13,7 +13,7 @@ namespace Lending.Web
 {
     public class FormsAuthRegisterUserHandler : RegisterUserHandler
     {
-        public FormsAuthRegisterUserHandler(Func<ISession> sessionFunc, Func<IRepository> getRepository, Func<Guid> guidFunc)
+        public FormsAuthRegisterUserHandler(Func<ISession> sessionFunc, Func<IEventRepository> getRepository, Func<Guid> guidFunc)
             : base(sessionFunc, getRepository, guidFunc)
         { }
 

@@ -23,7 +23,7 @@ namespace Lending.Execution.UnitOfWork
         private readonly IEventStoreConnection connection;
         private readonly Guid transactionId;
         private readonly IEventEmitter eventEmitter;
-        private EventStoreRepository repository;
+        private EventStoreEventRepository eventRepository;
 
         public UnitOfWork(ISessionFactory sessionFactory, string eventStoreIpAddress, IEventEmitter eventEmitter)
         {
@@ -41,12 +41,12 @@ namespace Lending.Execution.UnitOfWork
             CurrentSessionContext.Bind(CurrentSession);
             CurrentSession.BeginTransaction();
             connection.ConnectAsync().Wait();
-            repository = new EventStoreRepository(eventEmitter, connection);
+            eventRepository = new EventStoreEventRepository(eventEmitter, connection);
         }
 
         public void Commit()
         {
-            repository.Commit(transactionId);
+            eventRepository.Commit(transactionId);
 
             //Log.DebugFormat("Committing unit of work {0}", GetHashCode());
             currentSession.Transaction.Commit();
@@ -63,7 +63,7 @@ namespace Lending.Execution.UnitOfWork
         public void Dispose()
         {
             //Log.DebugFormat("Disposing {0}", GetHashCode());
-            repository.Dispose();
+            eventRepository.Dispose();
             connection.Close();
             connection.Dispose();
             currentSession.Transaction.Dispose();
@@ -73,6 +73,6 @@ namespace Lending.Execution.UnitOfWork
         private ISession currentSession;
         public ISession CurrentSession => currentSession;
 
-        public IRepository Repository => repository;
+        public IEventRepository EventRepository => eventRepository;
     }
 }

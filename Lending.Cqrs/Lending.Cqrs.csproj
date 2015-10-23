@@ -60,7 +60,7 @@
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="IEventHandler.cs" />
     <Compile Include="IEventRoute.cs" />
-    <Compile Include="IRepository.cs" />
+    <Compile Include="IEventRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
   </ItemGroup>

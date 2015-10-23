@@ -41,7 +41,7 @@ namespace Tests.Domain
             var expectedReceivedConnectionAccepted = new ConnectionAccepted(processId, user2.Id, user1.Id);
             var expectedRequestedConnectionAccepted = new ConnectionCompleted(processId, user1.Id, user2.Id);
 
-            var sut = new AcceptConnectionHandler(() => Session, () => Repository);
+            var sut = new AcceptConnectionHandler(() => Session, () => EventRepository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
@@ -81,7 +81,7 @@ namespace Tests.Domain
             var request = new Lending.Domain.AcceptConnection.AcceptConnection(processId, user1.Id, user1.Id, user2.Id);
             var expectedResponse = new Result(User.ConnectionRequestNotReceived);
 
-            var sut = new AcceptConnectionHandler(() => Session, () => Repository);
+            var sut = new AcceptConnectionHandler(() => Session, () => EventRepository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 
@@ -115,7 +115,7 @@ namespace Tests.Domain
             var request = new Lending.Domain.AcceptConnection.AcceptConnection(processId, user2.Id, user2.Id, user1.Id);
             var expectedResponse = new Result(User.UsersAlreadyConnected);
 
-            var sut = new AcceptConnectionHandler(() => Session, () => Repository);
+            var sut = new AcceptConnectionHandler(() => Session, () => EventRepository);
             Result actualResult = sut.HandleCommand(request);
             WriteRepository();
 

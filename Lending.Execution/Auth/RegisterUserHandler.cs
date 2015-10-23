@@ -16,10 +16,10 @@ namespace Lending.Execution.Auth
     public class RegisterUserHandler : ICommandHandler<IAuthSession, Result>
     {
         private readonly Func<ISession> getSession;
-        private readonly Func<IRepository> getRepository;
+        private readonly Func<IEventRepository> getRepository;
         private readonly Func<Guid> getNewGuid; 
 
-        public RegisterUserHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc, Func<Guid> guidFunc)
+        public RegisterUserHandler(Func<ISession> sessionFunc, Func<IEventRepository> repositoryFunc, Func<Guid> guidFunc)
         {
             this.getSession = sessionFunc;
             this.getRepository = repositoryFunc;

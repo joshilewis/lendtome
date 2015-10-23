@@ -106,9 +106,9 @@ namespace Lending.Execution.DI
                 .Use<MemoryCacheClient>()
                 ;
 
-            For<IRepository>()
+            For<IEventRepository>()
                 .AlwaysUnique()
-                .Use(c => c.GetInstance<IUnitOfWork>().Repository)
+                .Use(c => c.GetInstance<IUnitOfWork>().EventRepository)
                 ;
 
             For<Func<Guid>>()

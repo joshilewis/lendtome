@@ -6,9 +6,9 @@ namespace Lending.Cqrs
     public abstract class CommandHandler<TRequest, TResponse> : ICommandHandler<TRequest, TResponse>
     {
         private readonly Func<ISession> getSession;
-        private readonly Func<IRepository> getRepository;
+        private readonly Func<IEventRepository> getRepository;
 
-        protected CommandHandler(Func<ISession> getSession, Func<IRepository> getRepository)
+        protected CommandHandler(Func<ISession> getSession, Func<IEventRepository> getRepository)
         {
             this.getSession = getSession;
             this.getRepository = getRepository;
@@ -18,7 +18,7 @@ namespace Lending.Cqrs
 
         protected ISession Session => getSession();
 
-        protected IRepository Repository => getRepository();
+        protected IEventRepository EventRepository => getRepository();
 
         protected virtual Result Success()
         {

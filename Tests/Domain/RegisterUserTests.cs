@@ -27,7 +27,7 @@ namespace Tests.Domain
             var request = new AuthSessionDouble();
             var expectedResponse = new Result();
 
-            var sut = new RegisterUserHandler(() => Session, () => new UnexpectedRepository(), () => Guid.Empty);
+            var sut = new RegisterUserHandler(() => Session, () => new UnexpectedEventRepository(), () => Guid.Empty);
             Result actualResult = sut.HandleCommand(request);
 
             actualResult.ShouldEqual(expectedResponse);
@@ -58,7 +58,7 @@ namespace Tests.Domain
             var expectedUser = new ServiceStackUser(authDto.Id, userId, authDto.DisplayName);
             var expectedEvent = new UserRegistered(Guid.Empty, userId, authDto.DisplayName, authDto.PrimaryEmail);
 
-            var sut = new RegisterUserHandler(() => Session, () => Repository, () => userId);
+            var sut = new RegisterUserHandler(() => Session, () => EventRepository, () => userId);
             Result actualResult = sut.HandleCommand(request);
 
             actualResult.ShouldEqual(expectedResponse);
@@ -141,7 +141,7 @@ namespace Tests.Domain
             public string Sequence { get; set; }
         }
 
-        public class UnexpectedRepository : IRepository
+        public class UnexpectedEventRepository : IEventRepository
         {
             public IEnumerable<Event> GetEventsForAggregate<TAggregate>(Guid id) where TAggregate : Aggregate
             {

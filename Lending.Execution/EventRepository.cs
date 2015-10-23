@@ -6,12 +6,12 @@ using Lending.Domain;
 
 namespace Lending.Execution
 {
-    public abstract class Repository : IRepository, IDisposable
+    public abstract class EventRepository : IEventRepository, IDisposable
     {
         public ConcurrentQueue<Aggregate> Queue { get; private set; }
         private readonly IEventEmitter eventEmitter;
 
-        protected Repository(IEventEmitter eventEmitter)
+        protected EventRepository(IEventEmitter eventEmitter)
         {
             this.eventEmitter = eventEmitter;
             this.Queue = new ConcurrentQueue<Aggregate>();

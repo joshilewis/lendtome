@@ -11,7 +11,7 @@ namespace Lending.Domain.RequestConnection
         public const string TargetUserDoesNotExist = "The target user does not exist";
         public const string CantConnectToSelf = "You can't connect to yourself";
 
-        public RequestConnectionHandler(Func<ISession> getSession, Func<IRepository> getRepository)
+        public RequestConnectionHandler(Func<ISession> getSession, Func<IEventRepository> getRepository)
             : base(getSession, getRepository)
         {
         }
@@ -23,18 +23,18 @@ namespace Lending.Domain.RequestConnection
             RegisteredUser registeredTargetUser = Session.Get<RegisteredUser>(command.TargetUserId);
             if (registeredTargetUser == null) return new Result(TargetUserDoesNotExist);
 
-            User user = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.AggregateId));
+            User user = User.CreateFromHistory(EventRepository.GetEventsForAggregate<User>(command.AggregateId));
             Result  result = user.RequestConnection(command.ProcessId, command.TargetUserId);
 
             if (!result.Success) return result;
 
-            User targetUser = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.TargetUserId));
+            User targetUser = User.CreateFromHistory(EventRepository.GetEventsForAggregate<User>(command.TargetUserId));
             result = targetUser.InitiateConnectionAcceptance(command.ProcessId, command.AggregateId);
 
             if (!result.Success) return result;
 
-            Repository.Save(user);
-            Repository.Save(targetUser);
+            EventRepository.Save(user);
+            EventRepository.Save(targetUser);
 
             return Success();
         }

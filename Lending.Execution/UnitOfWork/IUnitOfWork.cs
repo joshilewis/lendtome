@@ -13,6 +13,6 @@ namespace Lending.Execution.UnitOfWork
         void RollBack();
 
         ISession CurrentSession { get; }
-        IRepository Repository { get; }
+        IEventRepository EventRepository { get; }
     }
 }

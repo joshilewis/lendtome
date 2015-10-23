@@ -127,7 +127,7 @@
     <Compile Include="EventStore\AggregateNotFoundException.cs" />
     <Compile Include="EventStore\AggregateVersionException.cs" />
     <Compile Include="EventStore\EventExtensions.cs" />
-    <Compile Include="EventStore\EventStoreRepository.cs" />
+    <Compile Include="EventStore\EventStoreEventRepository.cs" />
     <Compile Include="IEventEmitter.cs" />
     <Compile Include="IEventHandlerProvider.cs" />
     <Compile Include="InMemoryEventConsumer.cs" />
@@ -136,7 +136,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Auth\UnitOfWorkAuthProvider.cs" />
     <Compile Include="Auth\ServiceStackUser.cs" />
-    <Compile Include="Repository.cs" />
+    <Compile Include="EventRepository.cs" />
     <Compile Include="SequentialGuid.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWork.cs" />

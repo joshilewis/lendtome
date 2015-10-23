@@ -12,7 +12,7 @@ using ServiceStack.Text;
 
 namespace Lending.Execution.EventStore
 {
-    public class EventStoreRepository : Repository
+    public class EventStoreEventRepository : EventRepository
     {
         public const string EventClrTypeHeader = "EventClrTypeName";
         public const string AggregateClrTypeHeader = "AggregateClrTypeName";
@@ -22,7 +22,7 @@ namespace Lending.Execution.EventStore
 
         private readonly IEventStoreConnection connection;
 
-        public EventStoreRepository(IEventEmitter eventEmitter, IEventStoreConnection connection) 
+        public EventStoreEventRepository(IEventEmitter eventEmitter, IEventStoreConnection connection) 
             : base(eventEmitter)
         {
             this.connection = connection;

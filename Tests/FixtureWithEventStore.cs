@@ -19,7 +19,7 @@ namespace Tests
     {
         protected ClusterVNode Node;
         protected IEventStoreConnection Connection;
-        protected IRepository Repository;
+        protected IEventRepository EventRepository;
         protected InMemoryEventConsumer EventConsumer;
         protected DummyEventHandlerProvider EventHandlerProvider;
 
@@ -39,7 +39,7 @@ namespace Tests
 
             Connection = EmbeddedEventStoreConnection.Create(Node);
             Connection.ConnectAsync().Wait();
-            Repository = new EventStoreRepository(new InMemoryEventEmitter(EventConsumer), Connection);
+            EventRepository = new EventStoreEventRepository(new InMemoryEventEmitter(EventConsumer), Connection);
         }
 
         protected void RegisterEventHandler<TEvent>(IEventHandler eventHandler) where TEvent : Event
@@ -49,16 +49,16 @@ namespace Tests
 
         protected void WriteRepository()
         {
-            ((EventStoreRepository)Repository).Commit(Guid.NewGuid());
+            ((EventStoreEventRepository)EventRepository).Commit(Guid.NewGuid());
         }
 
         protected void SaveAggregates(params Aggregate[] aggregatesToSave)
         {
             foreach (var aggregate in aggregatesToSave)
             {
-                Repository.Save(aggregate);
+                EventRepository.Save(aggregate);
             }
-            ((EventStoreRepository)Repository).Commit(Guid.NewGuid());
+            ((EventStoreEventRepository)EventRepository).Commit(Guid.NewGuid());
         }
 
         public override void TearDown()
