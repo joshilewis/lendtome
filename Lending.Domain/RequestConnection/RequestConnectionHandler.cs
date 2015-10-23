@@ -36,7 +36,7 @@ namespace Lending.Domain.RequestConnection
             Repository.Save(user);
             Repository.Save(targetUser);
 
-            return result;
+            return Success();
         }
 
     }

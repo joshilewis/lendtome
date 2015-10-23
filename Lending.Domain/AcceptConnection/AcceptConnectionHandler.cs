@@ -28,7 +28,7 @@ namespace Lending.Domain.AcceptConnection
             Repository.Save(acceptingUser);
             Repository.Save(requestingUser);
 
-            return result;
+            return Success();
         }
     }
 }
