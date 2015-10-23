@@ -17,7 +17,7 @@ namespace Tests.Domain
     /// As a User I want to Remove Books from my Collection so that my Connections can see that I no longer own the book.
     /// </summary>
     [TestFixture]
-    public class RemoveBookFromLibraryHandlerTests : FixtureWithEventStoreAndNHibernate
+    public class RemoveBookFromLibraryTests : FixtureWithEventStoreAndNHibernate
     {
         /// <summary>
         /// GIVEN 'User1' is a Registered user AND Book1 is not in User1's Library

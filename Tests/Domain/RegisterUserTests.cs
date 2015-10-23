@@ -14,7 +14,7 @@ using ServiceStack.Text;
 
 namespace Tests.Domain
 {
-    public class RegisterUserHandlerTests : FixtureWithEventStoreAndNHibernate
+    public class RegisterUserTests : FixtureWithEventStoreAndNHibernate
     {
         [Test]
         public void RegisterUserForExistingUserShouldFail()

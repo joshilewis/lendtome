@@ -12,9 +12,10 @@ namespace Tests.Domain
 {
     /// <summary>
     /// https://github.com/joshilewis/lending/issues/7
+    /// As a User I want to Accept a Requested Connection from another User So that we can see each other's Library.
     /// </summary>
     [TestFixture]
-    public class AcceptConnectionHandlerTests : FixtureWithEventStoreAndNHibernate
+    public class AcceptConnectionTests : FixtureWithEventStoreAndNHibernate
     {
         /// <summary>
         /// GIVEN User1 exists AND User2 exists AND they are not connected AND User1 has requested to Connect to User2

@@ -19,7 +19,7 @@ namespace Tests.Domain
     /// https://github.com/joshilewis/lending/issues/9
     /// As a User I want to Add Books to my Library so that my Connections can see what Books I own.
     /// </summary>
-    public class AddBookToLibraryHandlerTests : FixtureWithEventStoreAndNHibernate
+    public class AddBookToLibraryTests : FixtureWithEventStoreAndNHibernate
     {
         /// <summary>
         /// GIVEN User1 is a Registered User

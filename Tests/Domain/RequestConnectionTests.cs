@@ -14,7 +14,7 @@ namespace Tests.Domain
     /// https://github.com/joshilewis/lending/issues/6
     /// </summary>
     [TestFixture]
-    public class RequestConnectionHandlerTests : FixtureWithEventStoreAndNHibernate
+    public class RequestConnectionTests : FixtureWithEventStoreAndNHibernate
     {
         /// <summary>
         /// GIVEN User1 exists AND User2 exists AND they are not connected AND there is an existing connection request from User1 to User2
