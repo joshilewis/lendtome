@@ -27,7 +27,7 @@ namespace Lending.Domain.AddBookToCollection
             if (addedBook == null)
             {
                 Guid newBookId = getNextGuid();
-                Book book = Book.AddBook(command.ProcessId, newBookId, command.Title, command.Author, command.Isbn);
+                Book book = Book.Add(command.ProcessId, newBookId, command.Title, command.Author, command.Isbn);
                 addedBook = new AddedBook(newBookId, command.Title, command.Author, command.Isbn);
                 Session.Save(addedBook);
                 Repository.Save(book);
@@ -35,6 +35,8 @@ namespace Lending.Domain.AddBookToCollection
 
             User user = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.AggregateId));
             Result result = user.AddBookToCollection(command.ProcessId, addedBook.Id);
+            if (!result.Success) return result;
+
             Repository.Save(user);
 
             return Success();

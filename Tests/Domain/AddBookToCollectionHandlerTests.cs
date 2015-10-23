@@ -60,7 +60,6 @@ namespace Tests.Domain
             BookAddedToCollection actualAddedToCollection = value.FromJson<BookAddedToCollection>();
             actualAddedToCollection.ShouldEqual(expectedBookAddedToCollection);
 
-
         }
 
         /// <summary>
@@ -71,8 +70,36 @@ namespace Tests.Domain
         [Test]
         public void AddingExistingBookToCollectionShouldAddToCollection()
         {
+            var processId = Guid.NewGuid();
+            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
+            var book1 = Book.Add(processId, Guid.NewGuid(), "title", "author", "isbn");
+            SaveAggregates(user1, book1);
 
-            Assert.Fail();
+            var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
+            var addedBook = new AddedBook(book1.Id, book1.Title, book1.Author, book1.Isbn);
+            SaveEntities(registeredUser1, addedBook);
+            CommitTransactionAndOpenNew();
+
+            var command = new AddBookToCollection(processId, user1.Id, user1.Id, book1.Title, book1.Author, book1.Isbn);
+            var expectedResult = new Result();
+            var expectedBookAddedToCollection = new BookAddedToCollection(processId, user1.Id, book1.Id);
+
+            var sut = new AddBookToCollectionHandler(() => Session, () => Repository, () => { throw new Exception(); });
+            Result actualResult = sut.HandleCommand(command);
+            CommitTransactionAndOpenNew();
+            WriteRepository();
+
+            actualResult.ShouldEqual(expectedResult);
+
+            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"book-{book1.Id}", 0, 10, false).Result;
+            Assert.That(slice.Events.Length, Is.EqualTo(1));
+
+            slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
+            Assert.That(slice.Events.Length, Is.EqualTo(2));
+            var value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
+            BookAddedToCollection actualAddedToCollection = value.FromJson<BookAddedToCollection>();
+            actualAddedToCollection.ShouldEqual(expectedBookAddedToCollection);
+
         }
 
         /// <summary>
@@ -83,8 +110,33 @@ namespace Tests.Domain
         [Test]
         public void AddingBookAlreadyInCollectionShouldFail()
         {
+            var processId = Guid.NewGuid();
+            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
+            var book1 = Book.Add(processId, Guid.NewGuid(), "title", "author", "isbn");
+            user1.AddBookToCollection(processId, book1.Id);
+            SaveAggregates(user1, book1);
 
-            Assert.Fail();
+            var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
+            var addedBook = new AddedBook(book1.Id, book1.Title, book1.Author, book1.Isbn);
+            SaveEntities(registeredUser1, addedBook);
+            CommitTransactionAndOpenNew();
+
+            var command = new AddBookToCollection(processId, user1.Id, user1.Id, book1.Title, book1.Author, book1.Isbn);
+            var expectedResult = new Result(User.BookAlreadyInCollection);
+
+            var sut = new AddBookToCollectionHandler(() => Session, () => Repository, () => { throw new Exception(); });
+            Result actualResult = sut.HandleCommand(command);
+            CommitTransactionAndOpenNew();
+            WriteRepository();
+
+            actualResult.ShouldEqual(expectedResult);
+
+            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"book-{book1.Id}", 0, 10, false).Result;
+            Assert.That(slice.Events.Length, Is.EqualTo(1));
+
+            slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
+            Assert.That(slice.Events.Length, Is.EqualTo(2));
+
         }
 
     }

@@ -22,7 +22,7 @@ namespace Lending.Domain.Model
 
         }
 
-        public static Book AddBook(Guid processId, Guid newBookId, string title, string author, string isbn)
+        public static Book Add(Guid processId, Guid newBookId, string title, string author, string isbn)
         {
             return new Book(processId, newBookId, title, author, isbn);
         }

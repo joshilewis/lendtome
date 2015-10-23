@@ -15,6 +15,7 @@ namespace Lending.Domain.Model
         public const string ConnectionAlreadyRequested = "A connection request for these users already exists";
         public const string ReverseConnectionAlreadyRequested = "A reverse connection request for these users already exists";
         public const string ConnectionNotRequested = "This user did not request a connection with the specified user";
+        public const string BookAlreadyInCollection = "The user already has that book in his collection";
 
         public string UserName { get; protected set; }
         public string EmailAddress { get; protected set; }
@@ -97,6 +98,7 @@ namespace Lending.Domain.Model
             new EventRoute<BookAddedToCollection>(When, typeof(BookAddedToCollection)),
         };
 
+
         public Result RequestConnection(Guid processId, Guid destinationUserId)
         {
             if (PendingConnectionRequests.Contains(destinationUserId)) return new Result(ConnectionAlreadyRequested);
@@ -138,6 +140,7 @@ namespace Lending.Domain.Model
 
         public Result AddBookToCollection(Guid processId, Guid newBookId)
         {
+            if (BooksInCollection.Contains(newBookId)) return Fail(BookAlreadyInCollection);
             RaiseEvent(new BookAddedToCollection(processId, Id, newBookId));
             return Success();
         }

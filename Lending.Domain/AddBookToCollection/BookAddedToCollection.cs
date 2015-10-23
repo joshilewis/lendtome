@@ -7,10 +7,10 @@ namespace Lending.Domain.AddBookToCollection
     {
         public Guid BookId { get; set; }
 
-        public BookAddedToCollection(Guid processId, Guid userId, Guid BookId)
+        public BookAddedToCollection(Guid processId, Guid userId, Guid bookId)
             : base(processId, userId)
         {
-            BookId = BookId;
+            BookId = bookId;
         }
 
     }
