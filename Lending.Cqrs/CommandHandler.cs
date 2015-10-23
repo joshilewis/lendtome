@@ -20,5 +20,15 @@ namespace Lending.Cqrs
 
         protected IRepository Repository => getRepository();
 
+        protected virtual Result Success()
+        {
+            return new Result();
+        }
+
+        protected virtual Result Fail(string reason)
+        {
+            return new Result(reason);
+        }
+
     }
 }

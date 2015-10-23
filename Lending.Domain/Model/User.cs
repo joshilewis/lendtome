@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Lending.Cqrs;
 using Lending.Domain.AcceptConnection;
+using Lending.Domain.AddBookToCollection;
 using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;
 
@@ -21,6 +22,7 @@ namespace Lending.Domain.Model
         public List<Guid> PendingConnectionRequests { get; set; }
         public List<Guid> ReceivedConnectionRequests { get; set; }
         public List<Guid> ConnectedUsers { get; set; }
+        public List<Guid> BooksInCollection { get; set; } 
 
         protected User(Guid processId, Guid id, string userName, string emailAddress)
             : this()
@@ -32,7 +34,8 @@ namespace Lending.Domain.Model
         {
             PendingConnectionRequests = new List<Guid>();
             ReceivedConnectionRequests = new List<Guid>();
-            ConnectedUsers=new List<Guid>();
+            ConnectedUsers = new List<Guid>();
+            BooksInCollection = new List<Guid>();
         }
 
         public static User Register(Guid processId, Guid id, string userName, string emailAddress)
@@ -79,6 +82,11 @@ namespace Lending.Domain.Model
             ConnectedUsers.Add(@event.AcceptingUserId);
         }
 
+        protected virtual void When(BookAddedToCollection @event)
+        {
+            BooksInCollection.Add(@event.BookId);
+        }
+
         protected override List<IEventRoute> EventRoutes => new List<IEventRoute>()
         {
             new EventRoute<UserRegistered>(When, typeof(UserRegistered)),
@@ -86,6 +94,7 @@ namespace Lending.Domain.Model
             new EventRoute<ConnectionRequestReceived>(When, typeof(ConnectionRequestReceived)),
             new EventRoute<ConnectionAccepted>(When, typeof(ConnectionAccepted)),
             new EventRoute<ConnectionCompleted>(When, typeof(ConnectionCompleted)),
+            new EventRoute<BookAddedToCollection>(When, typeof(BookAddedToCollection)),
         };
 
         public Result RequestConnection(Guid processId, Guid destinationUserId)
@@ -124,6 +133,12 @@ namespace Lending.Domain.Model
 
             RaiseEvent(new ConnectionCompleted(processId, Id, acceptingUserId));
 
+            return Success();
+        }
+
+        public Result AddBookToCollection(Guid processId, Guid newBookId)
+        {
+            RaiseEvent(new BookAddedToCollection(processId, Id, newBookId));
             return Success();
         }
     }

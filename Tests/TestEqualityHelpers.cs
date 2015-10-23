@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Domain.AcceptConnection;
+using Lending.Domain.AddBookToCollection;
 using Lending.Domain.Model;
 using Lending.Domain.Persistence;
 using Lending.Domain.RegisterUser;
@@ -14,6 +15,7 @@ using Lending.Execution.Auth;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
+using Tests.Domain;
 using Is = NUnit.Framework.Is;
 
 namespace Tests
@@ -143,6 +145,31 @@ namespace Tests
         public static bool ShouldEqual(this ConnectionCompleted actual, ConnectionCompleted expected)
         {
             Assert.That(actual.AcceptingUserId, Is.EqualTo(expected.AcceptingUserId));
+            ((Event)actual).ShouldEqual(expected);
+
+            return true;
+        }
+
+        public static bool ShouldEqual(this AddedBook actual, AddedBook expected)
+        {
+            Assert.That(actual.Id, Is.EqualTo(expected.Id));
+
+            return true;
+        }
+
+        public static bool ShouldEqual(this BookAdded actual, BookAdded expected)
+        {
+            Assert.That(actual.Title, Is.EqualTo(expected.Title));
+            Assert.That(actual.Author, Is.EqualTo(expected.Author));
+            Assert.That(actual.Isbn, Is.EqualTo(expected.Isbn));
+            ((Event)actual).ShouldEqual(expected);
+
+            return true;
+        }
+
+        public static bool ShouldEqual(this BookAddedToCollection actual, BookAddedToCollection expected)
+        {
+            Assert.That(actual.BookId, Is.EqualTo(expected.BookId));
             ((Event)actual).ShouldEqual(expected);
 
             return true;
