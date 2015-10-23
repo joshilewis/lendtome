@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
+using Lending.Cqrs;
 using Lending.Domain.Persistence;
 using Lending.Execution.Auth;
 using Lending.Execution.Persistence;
@@ -26,6 +27,7 @@ namespace Tests
     {
         protected static readonly Configuration Configuration;
         protected static readonly ISessionFactory SessionFactory;
+        protected IRepository Repository;
         protected ISession Session;
 
         static FixtureWithEventStoreAndNHibernate()
@@ -57,6 +59,7 @@ namespace Tests
 
             Session = SessionFactory.OpenSession();
             Session.BeginTransaction();
+            Repository = new NHibernateRepository(() => Session);
 
         }
 
@@ -94,7 +97,7 @@ namespace Tests
         {
             foreach (var entity in entitiesToSave)
             {
-                Session.Save(entity);
+                Repository.Save(entity);
             }
         }
     }

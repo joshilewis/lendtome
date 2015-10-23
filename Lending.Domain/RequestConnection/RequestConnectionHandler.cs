@@ -2,7 +2,6 @@ using System;
 using Lending.Cqrs;
 using Lending.Domain.Model;
 using Lending.Domain.Persistence;
-using NHibernate;
 
 namespace Lending.Domain.RequestConnection
 {
@@ -11,8 +10,8 @@ namespace Lending.Domain.RequestConnection
         public const string TargetUserDoesNotExist = "The target user does not exist";
         public const string CantConnectToSelf = "You can't connect to yourself";
 
-        public RequestConnectionHandler(Func<ISession> getSession, Func<IEventRepository> getRepository)
-            : base(getSession, getRepository)
+        public RequestConnectionHandler(Func<IRepository> repositoryFunc, Func<IEventRepository> eventRepositoryFunc)
+            : base(repositoryFunc, eventRepositoryFunc)
         {
         }
 

@@ -1,15 +1,14 @@
 using System;
 using Lending.Cqrs;
 using Lending.Domain.Model;
-using NHibernate;
 
 namespace Lending.Domain.AddBookToLibrary
 {
     public class AddBookToLibraryHandler : AuthenticatedCommandHandler<AddBookToLibrary, Result>
     {
  
-        public AddBookToLibraryHandler(Func<ISession> sessionFunc, Func<IEventRepository> repositoryFunc)
-            : base(sessionFunc, repositoryFunc)
+        public AddBookToLibraryHandler(Func<IRepository> sessionFunc, Func<IEventRepository> repositoryFuncFunc)
+            : base(sessionFunc, repositoryFuncFunc)
         {
         }
 

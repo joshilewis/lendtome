@@ -36,7 +36,7 @@ namespace Tests.Domain
             var expectedResult = new Result();
             var expectedEvent = new BookRemovedFromLibrary(processId, user1.Id, "Title", "Author", "Isbn");
 
-            var sut = new RemoveBookFromLibraryHandler(() => Session, () => EventRepository);
+            var sut = new RemoveBookFromLibraryHandler(() => Repository, () => EventRepository);
             Result actualResult = sut.HandleCommand(command);
             CommitTransactionAndOpenNew();
             WriteRepository();
@@ -66,7 +66,7 @@ namespace Tests.Domain
             var command = new RemoveBookFromLibrary(processId, user1.Id, user1.Id, "Title", "Author", "Isbn");
             var expectedResult = new Result(User.BookNotInLibrary);
 
-            var sut = new RemoveBookFromLibraryHandler(() => Session, () => EventRepository);
+            var sut = new RemoveBookFromLibraryHandler(() => Repository, () => EventRepository);
             Result actualResult = sut.HandleCommand(command);
             CommitTransactionAndOpenNew();
             WriteRepository();

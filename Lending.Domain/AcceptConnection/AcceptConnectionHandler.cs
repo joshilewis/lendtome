@@ -1,14 +1,13 @@
 using System;
 using Lending.Cqrs;
 using Lending.Domain.Model;
-using NHibernate;
 
 namespace Lending.Domain.AcceptConnection
 {
     public class AcceptConnectionHandler : AuthenticatedCommandHandler<AcceptConnection, Result>
     {
-        public AcceptConnectionHandler(Func<ISession> getSession, Func<IEventRepository> getRepository) 
-            : base(getSession, getRepository)
+        public AcceptConnectionHandler(Func<IRepository> repositoryFunc, Func<IEventRepository> eventRepositoryFunc) 
+            : base(repositoryFunc, eventRepositoryFunc)
         {
         }
 

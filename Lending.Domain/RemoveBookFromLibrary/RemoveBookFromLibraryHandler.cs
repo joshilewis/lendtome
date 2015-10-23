@@ -1,14 +1,13 @@
 using System;
 using Lending.Cqrs;
 using Lending.Domain.Model;
-using NHibernate;
 
 namespace Lending.Domain.RemoveBookFromLibrary
 {
     public class RemoveBookFromLibraryHandler : AuthenticatedCommandHandler<RemoveBookFromLibrary, Result>
     {
-        public RemoveBookFromLibraryHandler(Func<ISession> getSession, Func<IEventRepository> getRepository)
-            : base(getSession, getRepository)
+        public RemoveBookFromLibraryHandler(Func<IRepository> repositoryFunc, Func<IEventRepository> eventRepositoryFunc)
+            : base(repositoryFunc, eventRepositoryFunc)
         {
         }
 

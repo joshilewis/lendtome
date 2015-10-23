@@ -16,6 +16,7 @@ using Lending.Domain.Persistence;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
+using Lending.Execution.Persistence;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
 //using Nancy;
@@ -71,6 +72,11 @@ namespace Lending.Execution.DI
 
             For<ISession>()
                 .Use(c => c.GetInstance<IUnitOfWork>().CurrentSession)
+                ;
+
+            For<IRepository>()
+                .AlwaysUnique()
+                .Use<NHibernateRepository>()
                 ;
 
             Scan(scanner =>

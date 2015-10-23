@@ -37,7 +37,7 @@ namespace Tests.Domain
             var expectedResult = new Result();
             var expectedBookAddedToCollection = new BookAddedToLibrary(processId, user1.Id, command.Title, command.Author, command.Isbn);
 
-            var sut = new AddBookToLibraryHandler(() => Session, () => EventRepository);
+            var sut = new AddBookToLibraryHandler(() => Repository, () => EventRepository);
             Result actualResult = sut.HandleCommand(command);
             CommitTransactionAndOpenNew();
             WriteRepository();
@@ -68,7 +68,7 @@ namespace Tests.Domain
             var command = new AddBookToLibrary(processId, user1.Id, user1.Id, "Title", "Authority", "Isbn");
             var expectedResult = new Result(User.BookAlreadyInLibrary);
 
-            var sut = new AddBookToLibraryHandler(() => Session, () => EventRepository);
+            var sut = new AddBookToLibraryHandler(() => Repository, () => EventRepository);
             Result actualResult = sut.HandleCommand(command);
             CommitTransactionAndOpenNew();
             WriteRepository();
@@ -98,7 +98,7 @@ namespace Tests.Domain
             var expectedResult = new Result();
             var expectedBookAddedToCollection = new BookAddedToLibrary(processId, user1.Id, command.Title, command.Author, command.Isbn);
 
-            var sut = new AddBookToLibraryHandler(() => Session, () => EventRepository);
+            var sut = new AddBookToLibraryHandler(() => Repository, () => EventRepository);
             Result actualResult = sut.HandleCommand(command);
             CommitTransactionAndOpenNew();
             WriteRepository();
