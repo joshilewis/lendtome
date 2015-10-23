@@ -1,20 +1,19 @@
 using System;
 using Lending.Cqrs;
 using Lending.Domain.Model;
-using Lending.Domain.Persistence;
 using NHibernate;
 
-namespace Lending.Domain.AddBookToCollection
+namespace Lending.Domain.AddBookToLibrary
 {
-    public class AddBookToCollectionHandler : AuthenticatedCommandHandler<AddBookToCollection, Result>
+    public class AddBookToLibraryHandler : AuthenticatedCommandHandler<AddBookToLibrary, Result>
     {
  
-        public AddBookToCollectionHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc)
+        public AddBookToLibraryHandler(Func<ISession> sessionFunc, Func<IRepository> repositoryFunc)
             : base(sessionFunc, repositoryFunc)
         {
         }
 
-        public override Result HandleCommand(AddBookToCollection command)
+        public override Result HandleCommand(AddBookToLibrary command)
         {
 
             User user = User.CreateFromHistory(Repository.GetEventsForAggregate<User>(command.AggregateId));

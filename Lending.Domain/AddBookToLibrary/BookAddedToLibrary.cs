@@ -1,7 +1,7 @@
 using System;
 using Lending.Cqrs;
 
-namespace Lending.Domain.AddBookToCollection
+namespace Lending.Domain.AddBookToLibrary
 {
     public class BookAddedToLibrary : Event
     {

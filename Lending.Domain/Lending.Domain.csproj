@@ -51,9 +51,9 @@
     <Compile Include="AcceptConnection\AcceptConnectionHandler.cs" />
     <Compile Include="AcceptConnection\ConnectionAccepted.cs" />
     <Compile Include="AcceptConnection\ConnectionCompleted.cs" />
-    <Compile Include="AddBookToCollection\AddBookToCollection.cs" />
-    <Compile Include="AddBookToCollection\AddBookToCollectionHandler.cs" />
-    <Compile Include="AddBookToCollection\BookAddedToLibrary.cs" />
+    <Compile Include="AddBookToLibrary\AddBookToLibrary.cs" />
+    <Compile Include="AddBookToLibrary\AddBookToLibraryHandler.cs" />
+    <Compile Include="AddBookToLibrary\BookAddedToLibrary.cs" />
     <Compile Include="RequestConnection\ConnectionRequested.cs" />
     <Compile Include="RequestConnection\ConnectionRequestReceived.cs" />
     <Compile Include="RequestConnection\RequestConnection.cs" />
@@ -69,6 +69,9 @@
       <Project>{1b28c9a2-4759-4b29-a773-77fba448069b}</Project>
       <Name>Lending.Cqrs</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AddBookToCollection\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
 using Lending.Domain.AcceptConnection;
-using Lending.Domain.AddBookToCollection;
+using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
 using Lending.Domain.Persistence;
 using Mono.Security.Authenticode;
@@ -29,11 +29,11 @@ namespace Tests.Domain
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
             SaveAggregates(user1);
 
-            var command = new AddBookToCollection(processId, user1.Id, user1.Id, "Title", "Author", "Isbn");
+            var command = new AddBookToLibrary(processId, user1.Id, user1.Id, "Title", "Author", "Isbn");
             var expectedResult = new Result();
             var expectedBookAddedToCollection = new BookAddedToLibrary(processId, user1.Id, command.Title, command.Author, command.Isbn);
 
-            var sut = new AddBookToCollectionHandler(() => Session, () => Repository);
+            var sut = new AddBookToLibraryHandler(() => Session, () => Repository);
             Result actualResult = sut.HandleCommand(command);
             CommitTransactionAndOpenNew();
             WriteRepository();
@@ -61,10 +61,10 @@ namespace Tests.Domain
             user1.AddBookToLibrary(processId, "Title", "Authority", "Isbn");
             SaveAggregates(user1);
 
-            var command = new AddBookToCollection(processId, user1.Id, user1.Id, "Title", "Authority", "Isbn");
+            var command = new AddBookToLibrary(processId, user1.Id, user1.Id, "Title", "Authority", "Isbn");
             var expectedResult = new Result(User.BookAlreadyInLibrary);
 
-            var sut = new AddBookToCollectionHandler(() => Session, () => Repository);
+            var sut = new AddBookToLibraryHandler(() => Session, () => Repository);
             Result actualResult = sut.HandleCommand(command);
             CommitTransactionAndOpenNew();
             WriteRepository();
