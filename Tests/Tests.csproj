@@ -107,7 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContainerTests.cs" />
-    <Compile Include="Domain\AcceptConnectionHandlerTests.cs" />
+    <Compile Include="Domain\AcceptConnectionTests.cs" />
     <Compile Include="Domain\AddBookToLibraryTests.cs" />
     <Compile Include="Domain\RemoveBookFromLibraryTests.cs" />
     <Compile Include="Domain\RequestConnectionTests.cs" />
