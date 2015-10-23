@@ -7,6 +7,7 @@ using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
+using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.UnitOfWork;
 using ServiceStack.ServiceHost;
@@ -32,10 +33,19 @@ namespace Lending.Execution.WebServices
 
     }
 
-    public class AddBookToCollectionWebservice : AuthenticatedWebserviceBase<AddBookToLibrary, Result>
+    public class AddBookToLibraryWebservice : AuthenticatedWebserviceBase<AddBookToLibrary, Result>
     {
-        public AddBookToCollectionWebservice(IUnitOfWork unitOfWork,
+        public AddBookToLibraryWebservice(IUnitOfWork unitOfWork,
             IAuthenticatedCommandHandler<AddBookToLibrary, Result> commandHandler)
+            : base(unitOfWork, commandHandler)
+        { }
+
+    }
+
+    public class RemoveBookFromLibraryWebservice : AuthenticatedWebserviceBase<RemoveBookFromLibrary, Result>
+    {
+        public RemoveBookFromLibraryWebservice(IUnitOfWork unitOfWork,
+            IAuthenticatedCommandHandler<RemoveBookFromLibrary, Result> commandHandler)
             : base(unitOfWork, commandHandler)
         { }
 

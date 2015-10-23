@@ -54,6 +54,9 @@
     <Compile Include="AddBookToLibrary\AddBookToLibrary.cs" />
     <Compile Include="AddBookToLibrary\AddBookToLibraryHandler.cs" />
     <Compile Include="AddBookToLibrary\BookAddedToLibrary.cs" />
+    <Compile Include="RemoveBookFromLibrary\BookRemovedFromLibrary.cs" />
+    <Compile Include="RemoveBookFromLibrary\RemoveBookFromLibrary.cs" />
+    <Compile Include="RemoveBookFromLibrary\RemoveBookFromLibraryHandler.cs" />
     <Compile Include="RequestConnection\ConnectionRequested.cs" />
     <Compile Include="RequestConnection\ConnectionRequestReceived.cs" />
     <Compile Include="RequestConnection\RequestConnection.cs" />

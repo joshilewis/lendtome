@@ -4,6 +4,7 @@ using Lending.Cqrs;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RegisterUser;
+using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestConnection;
 
 namespace Lending.Domain.Model
@@ -16,6 +17,7 @@ namespace Lending.Domain.Model
         public const string ReverseConnectionAlreadyRequested = "A reverse connection request for these users already exists";
         public const string ConnectionNotRequested = "This user did not request a connection with the specified user";
         public const string BookAlreadyInLibrary = "The user already has that book in his library";
+        public const string BookNotInLibrary = "The user does not have that book in his library";
 
         public string UserName { get; protected set; }
         public string EmailAddress { get; protected set; }
@@ -88,6 +90,11 @@ namespace Lending.Domain.Model
             Library.Add(new Book(@event.Title, @event.Author, @event.Isbn));
         }
 
+        protected virtual void When(BookRemovedFromLibrary @event)
+        {
+            Library.Remove(new Book(@event.Title, @event.Author, @event.Isbn));
+        }
+
         protected override List<IEventRoute> EventRoutes => new List<IEventRoute>()
         {
             new EventRoute<UserRegistered>(When, typeof(UserRegistered)),
@@ -96,6 +103,7 @@ namespace Lending.Domain.Model
             new EventRoute<ConnectionAccepted>(When, typeof(ConnectionAccepted)),
             new EventRoute<ConnectionCompleted>(When, typeof(ConnectionCompleted)),
             new EventRoute<BookAddedToLibrary>(When, typeof(BookAddedToLibrary)),
+            new EventRoute<BookRemovedFromLibrary>(When, typeof(BookRemovedFromLibrary)),
         };
 
 
@@ -142,6 +150,14 @@ namespace Lending.Domain.Model
         {
             if (Library.Contains(new Book(title, author, isbn))) return Fail(BookAlreadyInLibrary);
             RaiseEvent(new BookAddedToLibrary(processId, Id, title, author, isbn));
+            return Success();
+        }
+
+        public Result RemoveBookFromLibrary(Guid processId, string title, string author, string isbn)
+        {
+            if (!Library.Contains(new Book(title, author, isbn))) return Fail(BookNotInLibrary);
+            RaiseEvent(new BookRemovedFromLibrary(processId, Id, title, author, isbn));
+
             return Success();
         }
     }

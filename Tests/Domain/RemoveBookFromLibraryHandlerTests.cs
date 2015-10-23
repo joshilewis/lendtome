@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
 using Lending.Domain.Model;
-using NHibernate;
+using Lending.Domain.RemoveBookFromLibrary;
 using NUnit.Framework;
 using ServiceStack.Text;
 
@@ -25,14 +25,14 @@ namespace Tests.Domain
         /// THEN User1 is notified that Book1 is not in her Library        
         /// </summary>
         [Test]
-        public void RemoveBookFromLibraryShouldSucceed()
+        public void RemoveBookInLibraryShouldSucceed()
         {
             var processId = Guid.NewGuid();
             var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
             user1.AddBookToLibrary(processId, "Title", "Author", "Isbn");
             SaveAggregates(user1);
 
-            var command = new RemoveBookFromCollection(processId, user1.Id, user1.Id, "Title", "Author", "Isbn");
+            var command = new RemoveBookFromLibrary(processId, user1.Id, user1.Id, "Title", "Author", "Isbn");
             var expectedResult = new Result();
             var expectedEvent = new BookRemovedFromLibrary(processId, user1.Id, "Title", "Author", "Isbn");
 
@@ -59,51 +59,24 @@ namespace Tests.Domain
         [Test]
         public void RemoveBookNotInLibraryShouldFail()
         {
-            Assert.Fail();
+            var processId = Guid.NewGuid();
+            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
+            SaveAggregates(user1);
+
+            var command = new RemoveBookFromLibrary(processId, user1.Id, user1.Id, "Title", "Author", "Isbn");
+            var expectedResult = new Result(User.BookNotInLibrary);
+
+            var sut = new RemoveBookFromLibraryHandler(() => Session, () => Repository);
+            Result actualResult = sut.HandleCommand(command);
+            CommitTransactionAndOpenNew();
+            WriteRepository();
+
+            actualResult.ShouldEqual(expectedResult);
+
+            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
+            Assert.That(slice.Events.Length, Is.EqualTo(1));
+
         }
 
-    }
-
-    public class RemoveBookFromLibraryHandler : AuthenticatedCommandHandler<RemoveBookFromCollection, Result>
-    {
-        public RemoveBookFromLibraryHandler(Func<ISession> getSession, Func<IRepository> getRepository)
-            : base(getSession, getRepository)
-        {
-        }
-
-        public override Result HandleCommand(RemoveBookFromCollection command)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class RemoveBookFromCollection : AuthenticatedCommand
-    {
-        public string Title { get; set; }
-        public string Author { get; set; }
-        public string Isbn { get; set; }
-
-        public RemoveBookFromCollection(Guid processId, Guid aggregateId, Guid userId, string title, string author,
-            string isbn) : base(processId, aggregateId, userId)
-        {
-            Title = title;
-            Author = author;
-            Isbn = isbn;
-        }
-    }
-
-    public class BookRemovedFromLibrary : Event
-    {
-        public string Title { get; set; }
-        public string Author { get; set; }
-        public string Isbn { get; set; }
-
-        public BookRemovedFromLibrary(Guid processId, Guid aggregateId, string title, string author, string isbn)
-            : base(processId, aggregateId)
-        {
-            Title = title;
-            Author = author;
-            Isbn = isbn;
-        }
     }
 }
