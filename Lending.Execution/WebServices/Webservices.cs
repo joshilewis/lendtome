@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Domain.AcceptConnection;
+using Lending.Domain.AddBookToCollection;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.UnitOfWork;
 using ServiceStack.ServiceHost;
@@ -26,6 +27,15 @@ namespace Lending.Execution.WebServices
     {
         public AcceptConnectionWebservice(IUnitOfWork unitOfWork,
             IAuthenticatedCommandHandler<AcceptConnection, Result> commandHandler)
+            : base(unitOfWork, commandHandler)
+        { }
+
+    }
+
+    public class AddBookToCollectionWebservice : AuthenticatedWebserviceBase<AddBookToCollection, Result>
+    {
+        public AddBookToCollectionWebservice(IUnitOfWork unitOfWork,
+            IAuthenticatedCommandHandler<AddBookToCollection, Result> commandHandler)
             : base(unitOfWork, commandHandler)
         { }
 
