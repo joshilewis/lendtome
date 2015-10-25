@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Domain.Model;
-using Lending.Domain.Persistence;
 using NHibernate;
 using ServiceStack.Authentication.NHibernate;
 using ServiceStack.ServiceInterface.Auth;

@@ -4,7 +4,7 @@ using EventStore.ClientAPI;
 using Lending.Cqrs;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.Model;
-using Lending.Domain.Persistence;
+using Lending.Domain.RegisterUser;
 using NUnit.Framework;
 using ServiceStack.Text;
 

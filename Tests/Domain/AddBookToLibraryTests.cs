@@ -8,7 +8,6 @@ using Lending.Cqrs;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
-using Lending.Domain.Persistence;
 using Mono.Security.Authenticode;
 using NUnit.Framework;
 using ServiceStack.Text;

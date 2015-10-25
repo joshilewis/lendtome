@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Lending.Domain.Persistence;
+using Lending.Domain.RegisterUser;
 using ServiceStack.Authentication.NHibernate;
 using ServiceStack.ServiceInterface.Auth;
 

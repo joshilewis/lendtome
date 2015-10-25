@@ -3,7 +3,7 @@ using System.Text;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
 using Lending.Domain.Model;
-using Lending.Domain.Persistence;
+using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;
 using NUnit.Framework;
 using ServiceStack.Text;

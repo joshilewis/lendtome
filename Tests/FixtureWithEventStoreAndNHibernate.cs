@@ -8,7 +8,7 @@ using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using Lending.Cqrs;
-using Lending.Domain.Persistence;
+using Lending.Domain.RegisterUser;
 using Lending.Execution.Auth;
 using Lending.Execution.Persistence;
 using NCrunch.Framework;

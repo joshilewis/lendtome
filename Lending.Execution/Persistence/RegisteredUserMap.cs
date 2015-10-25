@@ -1,5 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
-using Lending.Domain.Persistence;
+using Lending.Domain.RegisterUser;
 
 namespace Lending.Execution.Persistence
 {

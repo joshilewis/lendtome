@@ -8,7 +8,6 @@ using Lending.Domain;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
-using Lending.Domain.Persistence;
 using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;

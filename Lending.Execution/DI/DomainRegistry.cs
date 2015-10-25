@@ -12,7 +12,7 @@ using FluentNHibernate.Conventions.Helpers;
 using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Domain.AcceptConnection;
-using Lending.Domain.Persistence;
+using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
