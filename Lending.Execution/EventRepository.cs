@@ -2,7 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Lending.Cqrs;
-using Lending.Domain;
 
 namespace Lending.Execution
 {
@@ -23,7 +22,6 @@ namespace Lending.Execution
         public virtual void Save(Aggregate aggregate)
         {
             Queue.Enqueue(aggregate);
-            eventEmitter.EmitEvents(aggregate.GetUncommittedEvents());
         }
 
         public void Commit(Guid transactionId)
@@ -31,6 +29,7 @@ namespace Lending.Execution
             foreach (Aggregate aggregate in Queue)
             {
                 SaveAggregate(aggregate, transactionId);
+                eventEmitter.EmitEvents(aggregate.GetUncommittedEvents());
             }
             Queue = new ConcurrentQueue<Aggregate>(); //https://social.msdn.microsoft.com/Forums/en-US/accf4254-ee81-4059-9251-619bc6bbeadf/clear-a-concurrentqueue?forum=rx
         }

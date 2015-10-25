@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
-using FluentNHibernate.Conventions.Helpers;
 using Lending.Cqrs;
 using Lending.Domain.RegisterUser;
 using Lending.Execution.Auth;
@@ -33,18 +32,28 @@ namespace Tests
         static FixtureWithEventStoreAndNHibernate()
         {
             //Set up database
-            Configuration = Fluently.Configure()
-                .Database(PostgreSQLConfiguration.PostgreSQL82
-                    .ConnectionString(c => c.FromConnectionStringWithKey("lender_db"))
-                    .DefaultSchema(ConfigurationManager.AppSettings["lender_db_schema"])
+            try
+            {
+
+                Configuration = Fluently.Configure()
+                    .Database(PostgreSQLConfiguration.PostgreSQL82
+                        .ConnectionString(c => c.FromConnectionStringWithKey("lender_db"))
+                        .DefaultSchema(ConfigurationManager.AppSettings["lender_db_schema"])
                     )
-                .Mappings(m =>
-                    m.FluentMappings
-                        .AddFromAssemblyOf<ServiceStackUser>()
-                        .AddFromAssemblyOf<UserAuthPersistenceDto>()
-                        .AddFromAssemblyOf<RegisteredUser>()
-                )
-                .BuildConfiguration();
+                    .Mappings(m =>
+                        m.FluentMappings
+                            .AddFromAssemblyOf<ServiceStackUser>()
+                            .AddFromAssemblyOf<UserAuthPersistenceDto>()
+                            .AddFromAssemblyOf<RegisteredUser>()
+                    )
+                    .BuildConfiguration();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
 
             SessionFactory = Configuration.BuildSessionFactory();
         }
