@@ -1,6 +1,7 @@
 using System;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain.Model;
 using Lending.Domain.RegisterUser;
 
@@ -16,7 +17,7 @@ namespace Lending.Domain.RequestConnection
         {
         }
 
-        public override Result HandleCommand(RequestConnection command)
+        public override Result Handle(RequestConnection command)
         {
             if (command.TargetUserId == command.AggregateId) return new Result(CantConnectToSelf);
 

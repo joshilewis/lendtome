@@ -2,8 +2,8 @@ using Lending.Cqrs.Command;
 
 namespace Lending.Cqrs.Query
 {
-    public interface IQueryHandler<TQuery, TResultPayload>
+    public interface IQueryHandler<in TQuery, out TResult> : IMessageHandler<TQuery, TResult> where TQuery : Query
+        where TResult : Result
     {
-        Result<TResultPayload> HandleQuery(TQuery query);
     }
 }

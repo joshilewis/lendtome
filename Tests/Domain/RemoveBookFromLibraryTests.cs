@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain.Model;
 using Lending.Domain.RemoveBookFromLibrary;
 using NUnit.Framework;
@@ -38,7 +39,7 @@ namespace Tests.Domain
             var expectedEvent = new BookRemovedFromLibrary(processId, user1.Id, "Title", "Author", "Isbn");
 
             var sut = new RemoveBookFromLibraryHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(command);
+            Result actualResult = sut.Handle(command);
             CommitTransactionAndOpenNew();
             WriteRepository();
 
@@ -68,7 +69,7 @@ namespace Tests.Domain
             var expectedResult = new Result(User.BookNotInLibrary);
 
             var sut = new RemoveBookFromLibraryHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(command);
+            Result actualResult = sut.Handle(command);
             CommitTransactionAndOpenNew();
             WriteRepository();
 

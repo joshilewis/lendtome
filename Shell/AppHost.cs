@@ -23,7 +23,7 @@ namespace Shell
     internal class AppHost : AppHostHttpListenerBase
     {
         public AppHost()
-            : base("HttpListener Self-Host", typeof(Command).Assembly, typeof(WebserviceBase<,>).Assembly) { }
+            : base("HttpListener Self-Host", typeof(Command).Assembly, typeof(Webservice<,>).Assembly) { }
 
         public override void Configure(Funq.Container container)
         {

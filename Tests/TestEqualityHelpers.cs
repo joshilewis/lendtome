@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;

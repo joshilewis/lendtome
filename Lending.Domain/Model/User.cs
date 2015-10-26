@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RegisterUser;

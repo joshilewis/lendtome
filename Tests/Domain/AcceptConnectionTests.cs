@@ -3,6 +3,7 @@ using System.Text;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.Model;
 using Lending.Domain.RegisterUser;
@@ -43,7 +44,7 @@ namespace Tests.Domain
             var expectedRequestedConnectionAccepted = new ConnectionCompleted(processId, user1.Id, user2.Id);
 
             var sut = new AcceptConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(request);
+            Result actualResult = sut.Handle(request);
             WriteRepository();
 
             actualResult.ShouldEqual(expectedResponse);
@@ -83,7 +84,7 @@ namespace Tests.Domain
             var expectedResponse = new Result(User.ConnectionRequestNotReceived);
 
             var sut = new AcceptConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(request);
+            Result actualResult = sut.Handle(request);
             WriteRepository();
 
             actualResult.ShouldEqual(expectedResponse);
@@ -117,7 +118,7 @@ namespace Tests.Domain
             var expectedResponse = new Result(User.UsersAlreadyConnected);
 
             var sut = new AcceptConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(request);
+            Result actualResult = sut.Handle(request);
             WriteRepository();
 
             actualResult.ShouldEqual(expectedResponse);

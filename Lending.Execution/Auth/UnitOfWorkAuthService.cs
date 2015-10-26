@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain;
 using Lending.Execution.UnitOfWork;
 using ServiceStack.ServiceInterface;
@@ -15,10 +16,10 @@ namespace Lending.Execution.Auth
     public class UnitOfWorkAuthService : AuthService
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly ICommandHandler<IAuthSession, Result> commandHandler;
+        private readonly RegisterUserHandler commandHandler;
 
         public UnitOfWorkAuthService(IUnitOfWork unitOfWork,
-            ICommandHandler<IAuthSession, Result> commandHandler)
+            RegisterUserHandler commandHandler)
         {
             this.unitOfWork = unitOfWork;
             this.commandHandler = commandHandler;
@@ -35,7 +36,7 @@ namespace Lending.Execution.Auth
                 if (this.GetSession().IsAuthenticated && !authenticatedAtStart)
                     //User just authenticated, check if user exists
                 {
-                    commandHandler.HandleCommand(this.GetSession());
+                    commandHandler.Handle(this.GetSession());
                 }
             });
 

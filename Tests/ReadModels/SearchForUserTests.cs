@@ -1,5 +1,6 @@
 using System;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain.RegisterUser;
 using Lending.ReadModels.Relational.SearchForUser;
 using NUnit.Framework;
@@ -32,9 +33,9 @@ namespace Tests.ReadModels
             });
 
             var sut = new SearchForUserHandler(() => Session);
-            Result<RegisteredUser[]> actualResult = sut.HandleQuery(query);
+            Result actualResult = sut.Handle(query);
 
-            actualResult.ShouldEqual(expectedResult);
+            ((Result<RegisteredUser[]>)actualResult).ShouldEqual(expectedResult);
         }
 
         /// <summary>
@@ -60,9 +61,9 @@ namespace Tests.ReadModels
             });
 
             var sut = new SearchForUserHandler(() => Session);
-            Result<RegisteredUser[]> actualResult = sut.HandleQuery(query);
+            Result actualResult = sut.Handle(query);
 
-            actualResult.ShouldEqual(expectedResult);
+            ((Result<RegisteredUser[]>) actualResult).ShouldEqual(expectedResult);
         }
 
         /// <summary>
@@ -87,9 +88,9 @@ namespace Tests.ReadModels
             });
 
             var sut = new SearchForUserHandler(() => Session);
-            Result<RegisteredUser[]> actualResult = sut.HandleQuery(query);
+            Result actualResult = sut.Handle(query);
 
-            actualResult.ShouldEqual(expectedResult);
+            ((Result<RegisteredUser[]>)actualResult).ShouldEqual(expectedResult);
         }
 
         /// <summary>
@@ -116,9 +117,9 @@ namespace Tests.ReadModels
             });
 
             var sut = new SearchForUserHandler(() => Session);
-            Result<RegisteredUser[]> actualResult = sut.HandleQuery(query);
+            Result actualResult = sut.Handle(query);
 
-            actualResult.ShouldEqual(expectedResult);
+            ((Result<RegisteredUser[]>)actualResult).ShouldEqual(expectedResult);
         }
 
     }

@@ -2,7 +2,7 @@
 
 namespace Lending.Cqrs.Command
 {
-    public abstract class AuthenticatedCommand : Command
+    public abstract class AuthenticatedCommand : Command, IAuthenticated
     {
         public Guid UserId { get; set; }
 

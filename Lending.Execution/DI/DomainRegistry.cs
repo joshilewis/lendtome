@@ -11,6 +11,7 @@ using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.RegisterUser;
@@ -20,6 +21,7 @@ using Lending.Execution.EventStore;
 using Lending.Execution.Persistence;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
+using Lending.ReadModels.Relational.SearchForUser;
 //using Nancy;
 using NHibernate.Context;
 using ServiceStack.Authentication.NHibernate;
@@ -84,7 +86,11 @@ namespace Lending.Execution.DI
             {
                 scanner.AssemblyContainingType<Command>();
                 scanner.AssemblyContainingType<ServiceStackUser>();
+                scanner.AssemblyContainingType<SearchForUser>();
                 scanner.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IQueryHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IMessageHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedCommandHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<,>));
             });
@@ -120,12 +126,7 @@ namespace Lending.Execution.DI
 
             For<Func<Guid>>()
                 .Use(() => SequentialGuid.NewGuid());
-
-            For<ICommandHandler<AcceptConnection, Result>>()
-                .AlwaysUnique()
-                .Use<AcceptConnectionHandler>()
-                ;
-
+            
             For<IEventEmitter>()
                 .AlwaysUnique()
                 .Use<InMemoryEventEmitter>()

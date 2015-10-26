@@ -1,6 +1,7 @@
 using System;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain;
 using ServiceStack.ServiceInterface.Auth;
 using StructureMap;
@@ -21,10 +22,10 @@ namespace Lending.Web.DependencyResolution
                     //scan.TheCallingAssembly();
                 });
 
-                x.For<ICommandHandler<IAuthSession, Result>>()
-                    .AlwaysUnique()
-                    .Use<FormsAuthRegisterUserHandler>()
-                    ;
+                //x.For<ICommandHandler<IAuthSession, Result>>()
+                //    .AlwaysUnique()
+                //    .Use<FormsAuthRegisterUserHandler>()
+                //    ;
             });
 
             ObjectFactory.AssertConfigurationIsValid();

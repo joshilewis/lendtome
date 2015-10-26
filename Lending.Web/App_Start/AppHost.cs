@@ -6,11 +6,15 @@ using System.Web.Mvc;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Domain;
+using Lending.Domain.AcceptConnection;
+using Lending.Domain.AddBookToLibrary;
+using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.Execution.DI;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
+using Lending.ReadModels.Relational.SearchForUser;
 using ServiceStack.Authentication.OAuth2;
 using ServiceStack.Authentication.OpenId;
 using ServiceStack.Configuration;
@@ -46,7 +50,7 @@ namespace Lending.Web.App_Start
 		: AppHostBase
 	{		
 		public AppHost() //Tell ServiceStack the name and where to find your web services
-            : base("lend-to.me services host", typeof(AppHost).Assembly, typeof(Command).Assembly, typeof(WebserviceBase<,>).Assembly) { }
+            : base("lend-to.me services host", typeof(AppHost).Assembly, typeof(Command).Assembly, typeof(Webservice<,>).Assembly) { }
 
 	    public override void Configure(Funq.Container container)
 	    {
@@ -59,10 +63,14 @@ namespace Lending.Web.App_Start
 	        //Configure User Defined REST Paths
 	        Routes
                 .Add<RequestConnection>("/connections/request/{TargetUserId}/")
+                .Add<AcceptConnection>("/connections/accept/{TargetUserId}/")
+                .Add<AddBookToLibrary>("/books/add/")
+                .Add<RemoveBookFromLibrary>("/books/remove/")
+                .Add<SearchForUser>("/users/{SearchString}")
                 ;
 
-	        //Enable Authentication
-	        ConfigureAuth(container);
+            //Enable Authentication
+            ConfigureAuth(container);
             Plugins.Add(new SessionFeature());
 	    }
 

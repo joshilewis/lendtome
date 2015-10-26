@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain;
 using Lending.Domain.Model;
 using NHibernate;
@@ -13,7 +14,7 @@ using ServiceStack.ServiceInterface.Auth;
 
 namespace Lending.Execution.Auth
 {
-    public class RegisterUserHandler : ICommandHandler<IAuthSession, Result>
+    public class RegisterUserHandler
     {
         private readonly Func<ISession> getSession;
         private readonly Func<IEventRepository> getRepository;
@@ -28,7 +29,7 @@ namespace Lending.Execution.Auth
 
         protected RegisterUserHandler() { }
 
-        public virtual Result HandleCommand(IAuthSession command)
+        public virtual Result Handle(IAuthSession command)
         {
             int userAuthId = int.Parse(command.UserAuthId);
             ISession session = getSession();

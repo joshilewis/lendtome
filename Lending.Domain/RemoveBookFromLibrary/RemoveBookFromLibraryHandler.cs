@@ -1,6 +1,7 @@
 using System;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain.Model;
 
 namespace Lending.Domain.RemoveBookFromLibrary
@@ -12,7 +13,7 @@ namespace Lending.Domain.RemoveBookFromLibrary
         {
         }
 
-        public override Result HandleCommand(RemoveBookFromLibrary command)
+        public override Result Handle(RemoveBookFromLibrary command)
         {
             User user = User.CreateFromHistory(EventRepository.GetEventsForAggregate<User>(command.AggregateId));
             Result result = user.RemoveBookFromLibrary(command.ProcessId, command.Title, command.Author, command.Isbn);

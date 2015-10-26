@@ -5,6 +5,7 @@ using System.Text;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain.RegisterUser;
 using Lending.Execution.Auth;
 using NUnit.Framework;
@@ -29,7 +30,7 @@ namespace Tests.Domain
             var expectedResponse = new Result();
 
             var sut = new RegisterUserHandler(() => Session, () => new UnexpectedEventRepository(), () => Guid.Empty);
-            Result actualResult = sut.HandleCommand(request);
+            Result actualResult = sut.Handle(request);
 
             actualResult.ShouldEqual(expectedResponse);
 
@@ -60,7 +61,7 @@ namespace Tests.Domain
             var expectedEvent = new UserRegistered(Guid.Empty, userId, authDto.DisplayName, authDto.PrimaryEmail);
 
             var sut = new RegisterUserHandler(() => Session, () => EventRepository, () => userId);
-            Result actualResult = sut.HandleCommand(request);
+            Result actualResult = sut.Handle(request);
 
             actualResult.ShouldEqual(expectedResponse);
 

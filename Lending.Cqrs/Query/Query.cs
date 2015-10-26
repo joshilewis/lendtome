@@ -1,6 +1,6 @@
 namespace Lending.Cqrs.Query
 {
-    public class Query
+    public class Query : Message
     {
     }
 }

@@ -7,7 +7,7 @@ using NHibernate;
 
 namespace Lending.ReadModels.Relational.SearchForUser
 {
-    public class SearchForUserHandler : IQueryHandler<SearchForUser, RegisteredUser[]>
+    public class SearchForUserHandler : IQueryHandler<SearchForUser, Result>
     {
         private readonly Func<ISession> getSession;
 
@@ -16,7 +16,7 @@ namespace Lending.ReadModels.Relational.SearchForUser
             this.getSession = sessionFunc;
         }
 
-        public Result<RegisteredUser[]> HandleQuery(SearchForUser query)
+        public Result Handle(SearchForUser query)
         {
             RegisteredUser[] users = getSession().QueryOver<RegisteredUser>()
                 .WhereRestrictionOn(x => x.UserName).IsInsensitiveLike("%" + query.SearchString.ToLower() + "%")

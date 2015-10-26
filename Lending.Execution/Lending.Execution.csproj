@@ -144,8 +144,10 @@
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkHelpers.cs" />
-    <Compile Include="WebServices\AuthenticatedWebserviceBase.cs" />
-    <Compile Include="WebServices\WebserviceBase.cs" />
+    <Compile Include="WebServices\AuthenticatedWebservice.cs" />
+    <Compile Include="WebServices\IAuthenticatedWebservice.cs" />
+    <Compile Include="WebServices\IWebservice.cs" />
+    <Compile Include="WebServices\Webservice.cs" />
     <Compile Include="WebServices\Webservices.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +158,10 @@
     <ProjectReference Include="..\Lending.Domain\Lending.Domain.csproj">
       <Project>{4fe3afd5-ff4c-4fa6-990a-c7f9cce9441f}</Project>
       <Name>Lending.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lending.ReadModels\Lending.ReadModels.csproj">
+      <Project>{1c5e7e03-e256-42a2-a3e5-039d56692dbd}</Project>
+      <Name>Lending.ReadModels</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

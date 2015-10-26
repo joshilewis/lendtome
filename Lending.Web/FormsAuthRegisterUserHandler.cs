@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Security;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain;
 using Lending.Execution.Auth;
 using NHibernate;
@@ -18,11 +19,11 @@ namespace Lending.Web
             : base(sessionFunc, getRepository, guidFunc)
         { }
 
-        public override Result HandleCommand(IAuthSession command)
+        public override Result Handle(IAuthSession command)
         {
             FormsAuthentication.SetAuthCookie(command.DisplayName, true);
 
-            return base.HandleCommand(command);
+            return base.Handle(command);
         }
     }
 }

@@ -41,23 +41,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregate.cs" />
+    <Compile Include="AuthenticatedMessage.cs" />
     <Compile Include="Command\AuthenticatedCommand.cs" />
     <Compile Include="Command\AuthenticatedCommandHandler.cs" />
     <Compile Include="Command\Command.cs" />
     <Compile Include="Command\CommandHandler.cs" />
     <Compile Include="Command\IAuthenticatedCommandHandler.cs" />
     <Compile Include="Command\ICommandHandler.cs" />
-    <Compile Include="Command\Result.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="EventHandler.cs" />
     <Compile Include="EventRoute.cs" />
+    <Compile Include="IAuthenticated.cs" />
+    <Compile Include="IAuthenticatedMessageHandler.cs" />
     <Compile Include="IEventHandler.cs" />
     <Compile Include="IEventRoute.cs" />
     <Compile Include="IEventRepository.cs" />
+    <Compile Include="IMessageHandler.cs" />
     <Compile Include="IRepository.cs" />
+    <Compile Include="Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\IAuthenticatedQueryHandler.cs" />
     <Compile Include="Query\IQueryHandler.cs" />
     <Compile Include="Query\Query.cs" />
+    <Compile Include="Query\Result.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

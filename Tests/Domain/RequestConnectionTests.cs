@@ -3,6 +3,7 @@ using System.Text;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain.Model;
 using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;
@@ -39,7 +40,7 @@ namespace Tests.Domain
             var expectedResponse = new Result(User.ConnectionAlreadyRequested);
 
             var sut = new RequestConnectionHandler(() => Repository, ()=> EventRepository);
-            Result actualResult = sut.HandleCommand(request);
+            Result actualResult = sut.Handle(request);
             WriteRepository();
 
             actualResult.ShouldEqual(expectedResponse);
@@ -74,7 +75,7 @@ namespace Tests.Domain
             var expectedReceivedConnectionRequest = new ConnectionRequestReceived(processId, user2.Id, user1.Id);
 
             var sut = new RequestConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(request);
+            Result actualResult = sut.Handle(request);
             WriteRepository();
             actualResult.ShouldEqual(expectedResponse);
 
@@ -110,7 +111,7 @@ namespace Tests.Domain
             var expectedResponse = new Result(RequestConnectionHandler.TargetUserDoesNotExist);
 
             var sut = new RequestConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(request);
+            Result actualResult = sut.Handle(request);
             WriteRepository();
             actualResult.ShouldEqual(expectedResponse);
 
@@ -142,7 +143,7 @@ namespace Tests.Domain
             var expectedResponse = new Result(User.ReverseConnectionAlreadyRequested);
 
             var sut = new RequestConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(request);
+            Result actualResult = sut.Handle(request);
             WriteRepository();
 
             actualResult.ShouldEqual(expectedResponse);
@@ -176,7 +177,7 @@ namespace Tests.Domain
             var expectedResponse = new Result(User.UsersAlreadyConnected);
 
             var sut = new RequestConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(request);
+            Result actualResult = sut.Handle(request);
             WriteRepository();
 
             actualResult.ShouldEqual(expectedResponse);
@@ -207,7 +208,7 @@ namespace Tests.Domain
             var expectedResponse = new Result(RequestConnectionHandler.CantConnectToSelf);
 
             var sut = new RequestConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(request);
+            Result actualResult = sut.Handle(request);
             WriteRepository();
 
             actualResult.ShouldEqual(expectedResponse);
