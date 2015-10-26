@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lending.Cqrs
+namespace Lending.Cqrs.Command
 {
     /// <summary>
     /// Empty class used for DI registration

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lending.Cqrs
+namespace Lending.Cqrs.Command
 {
     public abstract class CommandHandler<TRequest, TResponse> : ICommandHandler<TRequest, TResponse>
     {

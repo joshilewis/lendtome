@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
 using Lending.Domain;
 using Lending.Execution.Auth;
 using NHibernate;

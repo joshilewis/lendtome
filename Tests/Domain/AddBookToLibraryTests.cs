@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;

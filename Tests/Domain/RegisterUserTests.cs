@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
 using Lending.Domain.RegisterUser;
 using Lending.Execution.Auth;
 using NUnit.Framework;

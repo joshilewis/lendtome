@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
 using Lending.Domain;
 using Lending.Domain.Model;
 using NHibernate;

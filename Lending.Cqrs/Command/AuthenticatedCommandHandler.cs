@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lending.Cqrs
+namespace Lending.Cqrs.Command
 {
     public abstract class AuthenticatedCommandHandler<TRequest, TResponse> : CommandHandler<TRequest, TResponse>, 
         IAuthenticatedCommandHandler<TRequest, TResponse> where TRequest : AuthenticatedCommand

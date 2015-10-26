@@ -1,5 +1,6 @@
 using System;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
 using Lending.Domain;
 using ServiceStack.ServiceInterface.Auth;
 using StructureMap;

@@ -1,4 +1,4 @@
-﻿namespace Lending.Cqrs
+﻿namespace Lending.Cqrs.Command
 {
     public interface ICommandHandler<in TCommand, out TResponse>
     {

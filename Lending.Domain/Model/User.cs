@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RegisterUser;
@@ -159,36 +160,6 @@ namespace Lending.Domain.Model
             RaiseEvent(new BookRemovedFromLibrary(processId, Id, title, author, isbn));
 
             return Success();
-        }
-    }
-
-    public class Book
-    {
-        public string Title { get; protected set; }
-        public string Author { get; protected set; }
-        public string Isbn { get; protected set; }
-
-        public Book(string title, string author, string isbn)
-        {
-            Title = title;
-            Author = author;
-            Isbn = isbn;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (!(obj is Book)) return false;
-
-            Book other = (Book) obj;
-
-            return Title.Equals(other.Title) &&
-                   Author.Equals(other.Author) &&
-                   Isbn.Equals(other.Isbn);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
         }
     }
 }

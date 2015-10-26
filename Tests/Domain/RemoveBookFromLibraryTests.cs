@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
 using Lending.Domain.Model;
 using Lending.Domain.RemoveBookFromLibrary;
 using NUnit.Framework;
