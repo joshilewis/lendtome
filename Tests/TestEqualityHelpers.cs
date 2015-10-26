@@ -160,6 +160,28 @@ namespace Tests
             return true;
         }
 
+        public static bool ShouldEqual(this Result<RegisteredUser[]> actual, Result<RegisteredUser[]> expected)
+        {
+            Assert.That(actual.Payload, Is.EquivalentTo(expected.Payload).Using(new ValueEqualityComparer()));
 
+            ((Result) actual).ShouldEqual(expected);
+
+            return true;
+        }
+
+
+    }
+
+    public class ValueEqualityComparer : IEqualityComparer<RegisteredUser>
+    {
+        public bool Equals(RegisteredUser x, RegisteredUser y)
+        {
+            return y.ShouldEqual(x);
+        }
+
+        public int GetHashCode(RegisteredUser obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
