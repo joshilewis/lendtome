@@ -11,6 +11,7 @@ using Lending.Cqrs;
 using Lending.Domain.RegisterUser;
 using Lending.Execution.Auth;
 using Lending.Execution.Persistence;
+using Lending.ReadModels.Relational.ConnectionAccepted;
 using NCrunch.Framework;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
@@ -43,6 +44,8 @@ namespace Tests
                         .AddFromAssemblyOf<ServiceStackUser>()
                         .AddFromAssemblyOf<UserAuthPersistenceDto>()
                         .AddFromAssemblyOf<RegisteredUser>()
+                        .AddFromAssemblyOf<UserConnection>()
+                        .AddFromAssemblyOf<FixtureWithEventStoreAndNHibernate>()
                 )
                 .BuildConfiguration();
 

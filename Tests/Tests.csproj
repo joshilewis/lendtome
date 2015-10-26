@@ -119,6 +119,8 @@
     <Compile Include="FixtureWithEventStoreAndNHibernate.cs" />
     <Compile Include="DefaultTestData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadModels\BookAddedEventHandlerTests.cs" />
+    <Compile Include="ReadModels\ConnectionAcceptedEventHandlerTests.cs" />
     <Compile Include="ReadModels\SearchForUserTests.cs" />
     <Compile Include="TestEqualityHelpers.cs" />
   </ItemGroup>

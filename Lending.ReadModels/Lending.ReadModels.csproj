@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentNHibernate, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentNHibernate.2.0.3.0\lib\net40\FluentNHibernate.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
@@ -49,6 +53,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Relational\BookAdded\BookAddedEventHandler.cs" />
+    <Compile Include="Relational\BookAdded\LibraryBook.cs" />
+    <Compile Include="Relational\BookAdded\LibraryBookMap.cs" />
+    <Compile Include="Relational\ConnectionAccepted\ConnectionAcceptedEventHandler.cs" />
+    <Compile Include="Relational\ConnectionAccepted\UserConnection.cs" />
+    <Compile Include="Relational\ConnectionAccepted\UserConnectionMap.cs" />
     <Compile Include="Relational\SearchForUser\SearchForUser.cs" />
     <Compile Include="Relational\SearchForUser\SearchForUserHandler.cs" />
   </ItemGroup>
@@ -63,8 +73,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
