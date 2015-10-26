@@ -5,7 +5,7 @@ using Lending.Cqrs.Query;
 using Lending.Domain.RegisterUser;
 using NHibernate;
 
-namespace Tests
+namespace Lending.ReadModels.Relational.SearchForUser
 {
     public class SearchForUserHandler : IQueryHandler<SearchForUser, RegisteredUser[]>
     {

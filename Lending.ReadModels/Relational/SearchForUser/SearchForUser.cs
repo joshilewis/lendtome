@@ -1,6 +1,6 @@
 using Lending.Cqrs.Query;
 
-namespace Tests
+namespace Lending.ReadModels.Relational.SearchForUser
 {
     public class SearchForUser : Query
     {
