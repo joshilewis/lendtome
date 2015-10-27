@@ -22,17 +22,16 @@ using Lending.Execution.Persistence;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
 using Lending.ReadModels.Relational.SearchForUser;
-//using Nancy;
 using NHibernate.Context;
+//using Nancy;
 using ServiceStack.Authentication.NHibernate;
 using ServiceStack.CacheAccess;
 using ServiceStack.CacheAccess.Memcached;
 using ServiceStack.CacheAccess.Providers;
 using ServiceStack.ServiceInterface.Auth;
+using StructureMap;
 using StructureMap.Configuration.DSL;
-using Configuration = NHibernate.Cfg.Configuration;
-using ISession = NHibernate.ISession;
-using ISessionFactory = NHibernate.ISessionFactory;
+using StructureMap.Web;
 
 namespace Lending.Execution.DI
 {
@@ -56,24 +55,26 @@ namespace Lending.Execution.DI
                 .BuildConfiguration()
                 ;
 
-            For<Configuration>()
+            For<NHibernate.Cfg.Configuration>()
                 .Singleton()
                 .Use(config)
                 ;
 
-            For<ISessionFactory>()
+            For<NHibernate.ISessionFactory>()
                 .Singleton()
                 .Use(config.BuildSessionFactory())
                 ;
+
+            var settings = ConfigurationManager.AppSettings;
 
             For<IUnitOfWork>()
                 .HybridHttpOrThreadLocalScoped()
                 .Use<UnitOfWork.UnitOfWork>()
                 .Ctor<string>()
-                .EqualToAppSetting("EventStore:IPAddress")
+                .Is(settings["EventStore:IPAddress"])
                 ;
 
-            For<ISession>()
+            For<NHibernate.ISession>()
                 .Use(c => c.GetInstance<IUnitOfWork>().CurrentSession)
                 ;
 
@@ -125,7 +126,7 @@ namespace Lending.Execution.DI
                 ;
 
             For<Func<Guid>>()
-                .Use(() => SequentialGuid.NewGuid());
+                .Use(new Func<Guid>(SequentialGuid.NewGuid));
             
             For<IEventEmitter>()
                 .AlwaysUnique()
@@ -138,12 +139,20 @@ namespace Lending.Execution.DI
                 ;
 
             For<Func<Type, IEnumerable<IEventHandler>>>()
-                .Use(c => eventType =>
-                {
-                    Type type = typeof (IEventHandler<>).MakeGenericType(eventType);
-                    return c.GetAllInstances(type)
-                    .Select(x => (IEventHandler)x);
-                });
+                .Use<Func<Type, IEnumerable<IEventHandler>>>(context => eventType => GetEventHandlers(context, eventType));
+
+            For<IMessageHandler<SearchForUser, Result>>()
+                .AlwaysUnique()
+                .Use<SearchForUserHandler>();
+
+        }
+
+        private static IEnumerable<IEventHandler> GetEventHandlers(IContext context, Type eventType)
+        {
+            Type type = typeof(IEventHandler<>).MakeGenericType(eventType);
+            return context.GetAllInstances(type)
+                .Select(x => (IEventHandler)x);
+
         }
 
 

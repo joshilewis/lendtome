@@ -1,10 +1,8 @@
 using System;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
-using Lending.Cqrs.Query;
-using Lending.Domain;
-using ServiceStack.ServiceInterface.Auth;
 using StructureMap;
+using StructureMap.Graph;
 
 namespace Lending.Web.DependencyResolution
 {
@@ -12,7 +10,7 @@ namespace Lending.Web.DependencyResolution
     {
         public static IContainer Initialize()
         {
-            ObjectFactory.Initialize(x =>
+            var container = new Container(x =>
             {
                 x.Scan(scan =>
                 {
@@ -28,13 +26,14 @@ namespace Lending.Web.DependencyResolution
                 //    ;
             });
 
-            ObjectFactory.AssertConfigurationIsValid();
-            string blah = ObjectFactory.WhatDoIHave();
+            container.AssertConfigurationIsValid();
+            string blah = container.WhatDoIHave();
+
 
             //new SchemaUpdate(ObjectFactory.GetInstance<Configuration>())
             //    .Execute(true, true);
 
-            return ObjectFactory.Container;
+            return container;
         }
     }
 }

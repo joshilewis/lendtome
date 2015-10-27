@@ -17,7 +17,7 @@ namespace Tests
         [Test]
         public void Test()
         {
-            ObjectFactory.Initialize(x =>
+            var container = new Container(x =>
             {
                 x.Scan(scan =>
                 {
@@ -28,7 +28,7 @@ namespace Tests
 
             });
 
-            ObjectFactory.AssertConfigurationIsValid();
+            container.AssertConfigurationIsValid();
 
         }
     }

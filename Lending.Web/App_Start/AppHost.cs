@@ -48,13 +48,15 @@ namespace Lending.Web.App_Start
 
 	public class AppHost
 		: AppHostBase
-	{		
-		public AppHost() //Tell ServiceStack the name and where to find your web services
+	{
+	    private static IContainerAdapter containerAdapter;
+
+	    public AppHost() //Tell ServiceStack the name and where to find your web services
             : base("lend-to.me services host", typeof(AppHost).Assembly, typeof(Command).Assembly, typeof(Webservice<,>).Assembly) { }
 
 	    public override void Configure(Funq.Container container)
 	    {
-            container.Adapter = new StructureMapContainerAdapter();
+	        container.Adapter = containerAdapter;
 
             SetConfig(new EndpointHostConfig() { ServiceStackHandlerFactoryPath = "api" });
 	        //Set JSON web services to return idiomatic JSON camelCase properties
@@ -98,8 +100,9 @@ namespace Lending.Web.App_Start
 
         }
 
-        public static void Start()
-		{
+        public static void Start(IContainerAdapter containerAdapter)
+        {
+            AppHost.containerAdapter = containerAdapter;
 			new AppHost().Init();
 		}
 	}

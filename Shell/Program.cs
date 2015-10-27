@@ -4,12 +4,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Lending.Execution.DI;
 using Lending.Execution.Persistence;
 using Lending.Execution.WebServices;
 //using Nancy.Hosting.Self;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using StructureMap;
+using StructureMap.Graph;
 using Environment = System.Environment;
 
 namespace Shell
@@ -18,7 +20,7 @@ namespace Shell
     {
         static void Main(string[] args)
         {
-            ObjectFactory.Initialize(x =>
+            var container = new Container(x =>
             {
                 x.Scan(y =>
                 {
@@ -31,8 +33,8 @@ namespace Shell
 
             });
 
-            ObjectFactory.AssertConfigurationIsValid();
-            string blah = ObjectFactory.WhatDoIHave();
+            container.AssertConfigurationIsValid();
+            string blah = container.WhatDoIHave();
 
             SchemaUpdater.UpdateSchema();
 
@@ -44,7 +46,7 @@ namespace Shell
             //} 
 
 
-            var host = new AppHost();
+            var host = new AppHost(new StructureMapContainerAdapter(container));
             host.Init();
             host.Start("http://localhost:8085/");
             Console.WriteLine("Listening, GO!");

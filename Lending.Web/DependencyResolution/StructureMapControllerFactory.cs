@@ -17,7 +17,7 @@ namespace Lending.Web.DependencyResolution
             if (controllerType == null)
                 return null;
 
-            var controller = ObjectFactory.GetInstance(controllerType);
+            var controller = new Container().GetInstance(controllerType);
 
             return controller as Controller;
         }
