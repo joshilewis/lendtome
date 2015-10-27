@@ -23,15 +23,19 @@ namespace Lending.Execution
         public virtual void Save(Aggregate aggregate)
         {
             Queue.Enqueue(aggregate);
-            eventEmitter.EmitEvents(aggregate.GetUncommittedEvents());
         }
 
         public void Commit(Guid transactionId)
         {
+            var eventsToEmit = new List<Event>();
             foreach (Aggregate aggregate in Queue)
             {
                 SaveAggregate(aggregate, transactionId);
+                eventsToEmit.AddRange(aggregate.GetUncommittedEvents());
             }
+
+            eventEmitter.EmitEvents(eventsToEmit);
+
             Queue = new ConcurrentQueue<Aggregate>(); //https://social.msdn.microsoft.com/Forums/en-US/accf4254-ee81-4059-9251-619bc6bbeadf/clear-a-concurrentqueue?forum=rx
         }
 

@@ -14,6 +14,7 @@ using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Domain;
 using Lending.Domain.AcceptConnection;
+using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
@@ -86,6 +87,7 @@ namespace Lending.Execution.DI
             Scan(scanner =>
             {
                 scanner.AssemblyContainingType<Command>();
+                scanner.AssemblyContainingType<AddBookToLibrary>();
                 scanner.AssemblyContainingType<ServiceStackUser>();
                 scanner.AssemblyContainingType<SearchForUser>();
                 scanner.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<,>));

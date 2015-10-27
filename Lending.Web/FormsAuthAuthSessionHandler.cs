@@ -7,17 +7,20 @@ using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Domain;
+using Lending.Domain.RegisterUser;
 using Lending.Execution.Auth;
 using NHibernate;
 using ServiceStack.ServiceInterface.Auth;
 
 namespace Lending.Web
 {
-    public class FormsAuthRegisterUserHandler : RegisterUserHandler
+    public class FormsAuthAuthSessionHandler : AuthSessionHandler
     {
-        public FormsAuthRegisterUserHandler(Func<ISession> sessionFunc, Func<IEventRepository> getRepository, Func<Guid> guidFunc)
-            : base(sessionFunc, getRepository, guidFunc)
-        { }
+        public FormsAuthAuthSessionHandler(Func<ISession> sessionFunc, Func<Guid> guidFunc,
+            IMessageHandler<RegisterUser, Result> registerUserHandler)
+            : base(sessionFunc, guidFunc, registerUserHandler)
+        {
+        }
 
         public override Result Handle(IAuthSession command)
         {
@@ -25,5 +28,6 @@ namespace Lending.Web
 
             return base.Handle(command);
         }
+
     }
 }

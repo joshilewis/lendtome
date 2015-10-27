@@ -29,7 +29,7 @@ namespace Tests.Domain
             var request = new AuthSessionDouble();
             var expectedResponse = new Result();
 
-            var sut = new RegisterUserHandler(() => Session, () => new UnexpectedEventRepository(), () => Guid.Empty);
+            var sut = new AuthSessionHandler(() => Session, () => Guid.Empty, new RegisterUserHandler(() => Repository, () => new UnexpectedEventRepository()));
             Result actualResult = sut.Handle(request);
 
             actualResult.ShouldEqual(expectedResponse);
@@ -60,7 +60,7 @@ namespace Tests.Domain
             var expectedUser = new ServiceStackUser(authDto.Id, userId, authDto.DisplayName);
             var expectedEvent = new UserRegistered(Guid.Empty, userId, authDto.DisplayName, authDto.PrimaryEmail);
 
-            var sut = new RegisterUserHandler(() => Session, () => EventRepository, () => userId);
+            var sut = new AuthSessionHandler(() => Session, () => userId, new RegisterUserHandler(() => Repository, () => EventRepository));
             Result actualResult = sut.Handle(request);
 
             actualResult.ShouldEqual(expectedResponse);

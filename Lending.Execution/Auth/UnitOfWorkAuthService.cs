@@ -16,10 +16,10 @@ namespace Lending.Execution.Auth
     public class UnitOfWorkAuthService : AuthService
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly RegisterUserHandler commandHandler;
+        private readonly AuthSessionHandler commandHandler;
 
         public UnitOfWorkAuthService(IUnitOfWork unitOfWork,
-            RegisterUserHandler commandHandler)
+            AuthSessionHandler commandHandler)
         {
             this.unitOfWork = unitOfWork;
             this.commandHandler = commandHandler;

@@ -127,7 +127,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auth\RegisterUserHandler.cs" />
+    <Compile Include="Auth\AuthSessionHandler.cs" />
     <Compile Include="Auth\ServiceStackUserMap.cs" />
     <Compile Include="Auth\UnitOfWorkAuthService.cs" />
     <Compile Include="DI\DomainRegistry.cs" />

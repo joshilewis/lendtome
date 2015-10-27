@@ -8,26 +8,26 @@ using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Domain;
 using Lending.Domain.Model;
+using Lending.Domain.RegisterUser;
 using NHibernate;
 using ServiceStack.Authentication.NHibernate;
 using ServiceStack.ServiceInterface.Auth;
 
 namespace Lending.Execution.Auth
 {
-    public class RegisterUserHandler
+    public class AuthSessionHandler
     {
         private readonly Func<ISession> getSession;
-        private readonly Func<IEventRepository> getRepository;
-        private readonly Func<Guid> getNewGuid; 
+        private readonly Func<Guid> getNewGuid;
+        private readonly IMessageHandler<RegisterUser, Result> registerUserHandler;
 
-        public RegisterUserHandler(Func<ISession> sessionFunc, Func<IEventRepository> repositoryFunc, Func<Guid> guidFunc)
+        public AuthSessionHandler(Func<ISession> sessionFunc, Func<Guid> guidFunc,
+            IMessageHandler<RegisterUser, Result> registerUserHandler)
         {
             this.getSession = sessionFunc;
-            this.getRepository = repositoryFunc;
             this.getNewGuid = guidFunc;
+            this.registerUserHandler = registerUserHandler;
         }
-
-        protected RegisterUserHandler() { }
 
         public virtual Result Handle(IAuthSession command)
         {
@@ -39,6 +39,8 @@ namespace Lending.Execution.Auth
                 .SingleOrDefault()
                 ;
 
+            Result result = new Result();
+
             if (serviceStackUser == null) //user doesn't exist yet, first time registration
             {
                 UserAuthPersistenceDto userAuth = session.Get<UserAuthPersistenceDto>(userAuthId);
@@ -47,9 +49,12 @@ namespace Lending.Execution.Auth
                 serviceStackUser = new ServiceStackUser(userAuthId, newUserId, userAuth.DisplayName);
                 session.Save(serviceStackUser);
 
-                User user = User.Register(Guid.Empty, newUserId, userAuth.DisplayName, userAuth.PrimaryEmail);
-                getRepository().Save(user);
+                result = registerUserHandler.Handle(new RegisterUser(Guid.Empty, newUserId, userAuth.DisplayName,
+                    userAuth.PrimaryEmail));
+
             }
+
+            if (!result.Success) return result;
 
             return new Result();
         }
