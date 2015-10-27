@@ -18,10 +18,10 @@ namespace Tests.ReadModels
         [Test]
         public void SearchingForUserWithSingleMatchShouldReturnThatUser()
         {
-            var joshuaLewis = new RegisteredUser(Guid.NewGuid(), "Joshua Lewis");
-            var suzaanHepburn = new RegisteredUser(Guid.NewGuid(), "Suzaan Hepburn");
-            var josieDoe = new RegisteredUser(Guid.NewGuid(), "Josie Doe");
-            var audreyHepburn = new RegisteredUser(Guid.NewGuid(), "Audrey Hepburn");
+            var joshuaLewis = new RegisteredUser(1, Guid.NewGuid(), "Joshua Lewis");
+            var suzaanHepburn = new RegisteredUser(2, Guid.NewGuid(), "Suzaan Hepburn");
+            var josieDoe = new RegisteredUser(3, Guid.NewGuid(), "Josie Doe");
+            var audreyHepburn = new RegisteredUser(4, Guid.NewGuid(), "Audrey Hepburn");
 
             SaveEntities(joshuaLewis, suzaanHepburn, josieDoe, audreyHepburn);
             CommitTransactionAndOpenNew();
@@ -46,10 +46,10 @@ namespace Tests.ReadModels
         [Test]
         public void SearchingForUserWithSingleMatchWithWrongCaseShouldReturnThatUser()
         {
-            var joshuaLewis = new RegisteredUser(Guid.NewGuid(), "Joshua Lewis");
-            var suzaanHepburn = new RegisteredUser(Guid.NewGuid(), "Suzaan Hepburn");
-            var josieDoe = new RegisteredUser(Guid.NewGuid(), "Josie Doe");
-            var audreyHepburn = new RegisteredUser(Guid.NewGuid(), "Audrey Hepburn");
+            var joshuaLewis = new RegisteredUser(1, Guid.NewGuid(), "Joshua Lewis");
+            var suzaanHepburn = new RegisteredUser(2, Guid.NewGuid(), "Suzaan Hepburn");
+            var josieDoe = new RegisteredUser(3, Guid.NewGuid(), "Josie Doe");
+            var audreyHepburn = new RegisteredUser(4, Guid.NewGuid(), "Audrey Hepburn");
 
             SaveEntities(joshuaLewis, suzaanHepburn, josieDoe, audreyHepburn);
             CommitTransactionAndOpenNew();
@@ -74,10 +74,10 @@ namespace Tests.ReadModels
         [Test]
         public void SearchingForUserWithNoMatchesShouldReturnEmptyList()
         {
-            var joshuaLewis = new RegisteredUser(Guid.NewGuid(), "Joshua Lewis");
-            var suzaanHepburn = new RegisteredUser(Guid.NewGuid(), "Suzaan Hepburn");
-            var josieDoe = new RegisteredUser(Guid.NewGuid(), "Josie Doe");
-            var audreyHepburn = new RegisteredUser(Guid.NewGuid(), "Audrey Hepburn");
+            var joshuaLewis = new RegisteredUser(1, Guid.NewGuid(), "Joshua Lewis");
+            var suzaanHepburn = new RegisteredUser(2, Guid.NewGuid(), "Suzaan Hepburn");
+            var josieDoe = new RegisteredUser(3, Guid.NewGuid(), "Josie Doe");
+            var audreyHepburn = new RegisteredUser(4, Guid.NewGuid(), "Audrey Hepburn");
 
             SaveEntities(joshuaLewis, suzaanHepburn, josieDoe, audreyHepburn);
             CommitTransactionAndOpenNew();
@@ -101,10 +101,10 @@ namespace Tests.ReadModels
         [Test]
         public void SearchingForUserWithTwoMatchsShouldReturnTwoUsers()
         {
-            var joshuaLewis = new RegisteredUser(Guid.NewGuid(), "Joshua Lewis");
-            var suzaanHepburn = new RegisteredUser(Guid.NewGuid(), "Suzaan Hepburn");
-            var josieDoe = new RegisteredUser(Guid.NewGuid(), "Josie Doe");
-            var audreyHepburn = new RegisteredUser(Guid.NewGuid(), "Audrey Hepburn");
+            var joshuaLewis = new RegisteredUser(1, Guid.NewGuid(), "Joshua Lewis");
+            var suzaanHepburn = new RegisteredUser(2, Guid.NewGuid(), "Suzaan Hepburn");
+            var josieDoe = new RegisteredUser(3, Guid.NewGuid(), "Josie Doe");
+            var audreyHepburn = new RegisteredUser(4, Guid.NewGuid(), "Audrey Hepburn");
 
             SaveEntities(joshuaLewis, suzaanHepburn, josieDoe, audreyHepburn);
             CommitTransactionAndOpenNew();

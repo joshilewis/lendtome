@@ -113,19 +113,11 @@ namespace Tests
             return true;
         }
 
-        public static bool ShouldEqual(this ServiceStackUser actual, ServiceStackUser expected)
-        {
-            Assert.That(actual.Id, Is.EqualTo(expected.Id));
-            Assert.That(actual.AuthenticatedUserId, Is.EqualTo(expected.AuthenticatedUserId));
-            Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
-
-            return true;
-        }
-
         public static bool ShouldEqual(this RegisteredUser actual, RegisteredUser expected)
         {
             Assert.That(actual.Id, Is.EqualTo(expected.Id));
             Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
+            Assert.That(actual.AuthUserId, Is.EqualTo(expected.AuthUserId));
 
             return true;
         }

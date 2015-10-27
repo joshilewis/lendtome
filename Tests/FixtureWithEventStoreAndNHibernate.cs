@@ -41,7 +41,7 @@ namespace Tests
                     )
                 .Mappings(m =>
                     m.FluentMappings
-                        .AddFromAssemblyOf<ServiceStackUser>()
+                        .AddFromAssemblyOf<RegisteredUserMap>()
                         .AddFromAssemblyOf<UserAuthPersistenceDto>()
                         .AddFromAssemblyOf<RegisteredUser>()
                         .AddFromAssemblyOf<UserConnection>()

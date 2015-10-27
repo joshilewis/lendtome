@@ -34,22 +34,20 @@ namespace Lending.Execution.Auth
             int userAuthId = int.Parse(command.UserAuthId);
             ISession session = getSession();
 
-            ServiceStackUser serviceStackUser = session.QueryOver<ServiceStackUser>()
-                .Where(x => x.AuthenticatedUserId == userAuthId)
+            RegisteredUser registeredUser = session.QueryOver<RegisteredUser>()
+                .Where(x => x.AuthUserId == userAuthId)
                 .SingleOrDefault()
                 ;
 
             Result result = new Result();
 
-            if (serviceStackUser == null) //user doesn't exist yet, first time registration
+            if (registeredUser == null) //user doesn't exist yet, first time registration
             {
                 UserAuthPersistenceDto userAuth = session.Get<UserAuthPersistenceDto>(userAuthId);
 
                 Guid newUserId = getNewGuid();
-                serviceStackUser = new ServiceStackUser(userAuthId, newUserId, userAuth.DisplayName);
-                session.Save(serviceStackUser);
 
-                result = registerUserHandler.Handle(new RegisterUser(Guid.Empty, newUserId, userAuth.DisplayName,
+                result = registerUserHandler.Handle(new RegisterUser(Guid.Empty, newUserId, userAuthId, userAuth.DisplayName,
                     userAuth.PrimaryEmail));
 
             }

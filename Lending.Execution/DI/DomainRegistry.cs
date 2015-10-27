@@ -50,7 +50,7 @@ namespace Lending.Execution.DI
                 .Mappings(m =>
                     m.FluentMappings
                         .AddFromAssemblyOf<UserAuthPersistenceDto>()
-                        .AddFromAssemblyOf<ServiceStackUser>()
+                        .AddFromAssemblyOf<RegisteredUserMap>()
                         .AddFromAssemblyOf<RegisteredUser>()
                 )
                 .BuildConfiguration()
@@ -88,7 +88,7 @@ namespace Lending.Execution.DI
             {
                 scanner.AssemblyContainingType<Command>();
                 scanner.AssemblyContainingType<AddBookToLibrary>();
-                scanner.AssemblyContainingType<ServiceStackUser>();
+                scanner.AssemblyContainingType<RegisteredUserMap>();
                 scanner.AssemblyContainingType<SearchForUser>();
                 scanner.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IQueryHandler<,>));

@@ -4,6 +4,7 @@ using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Domain;
+using Lending.Domain.RegisterUser;
 using Lending.Execution.Auth;
 using Lending.Execution.UnitOfWork;
 using NHibernate;
@@ -39,8 +40,8 @@ namespace Lending.Execution.WebServices
             unitOfWork.DoInTransaction(() =>
             {
                 ISession session = unitOfWork.CurrentSession;
-                ServiceStackUser user = session.QueryOver<ServiceStackUser>()
-                    .Where(x => x.AuthenticatedUserId == authUserId)
+                RegisteredUser user = session.QueryOver<RegisteredUser>()
+                    .Where(x => x.AuthUserId == authUserId)
                     .SingleOrDefault();
 
                 response = messageHandler.Handle(message);

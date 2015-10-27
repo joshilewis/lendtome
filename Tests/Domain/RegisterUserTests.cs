@@ -21,7 +21,7 @@ namespace Tests.Domain
         [Test]
         public void RegisterUserForExistingUserShouldFail()
         {
-            ServiceStackUser existingUser = DefaultTestData.ServiceStackUser1;
+            RegisteredUser existingUser = DefaultTestData.RegisteredUser1;
             SaveEntities(existingUser);
 
             CommitTransactionAndOpenNew();
@@ -37,7 +37,7 @@ namespace Tests.Domain
             CommitTransactionAndOpenNew();
 
             int numberOfUsersInDb = Session
-                .QueryOver<ServiceStackUser>()
+                .QueryOver<RegisteredUser>()
                 .RowCount()
                 ;
 
@@ -57,7 +57,7 @@ namespace Tests.Domain
             var stream = $"user-{userId}";
             var request = new AuthSessionDouble();
             var expectedResponse = new Result();
-            var expectedUser = new ServiceStackUser(authDto.Id, userId, authDto.DisplayName);
+            var expectedUser = new RegisteredUser(authDto.Id, userId, authDto.DisplayName);
             var expectedEvent = new UserRegistered(Guid.Empty, userId, authDto.DisplayName, authDto.PrimaryEmail);
 
             var sut = new AuthSessionHandler(() => Session, () => userId, new RegisterUserHandler(() => Repository, () => EventRepository));
@@ -68,8 +68,8 @@ namespace Tests.Domain
             CommitTransactionAndOpenNew();
             WriteRepository();
 
-            ServiceStackUser userInDb = Session
-                .QueryOver<ServiceStackUser>()
+            RegisteredUser userInDb = Session
+                .QueryOver<RegisteredUser>()
                 .SingleOrDefault()
                 ;
 

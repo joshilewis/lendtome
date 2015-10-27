@@ -10,13 +10,14 @@ namespace Lending.Domain.RegisterUser
     public class RegisterUser : AuthenticatedCommand
     {
         public long AuthUserId { get; set; }
-        public string DisplayName { get; set; }
+        public string UserName { get; set; }
         public string PrimaryEmail { get; set; }
 
-        public RegisterUser(Guid processId, Guid newUserId, string displayName, string primaryEmail)
+        public RegisterUser(Guid processId, Guid newUserId, long authUserId, string userName, string primaryEmail)
             : base(processId, newUserId, newUserId)
         {
-            DisplayName = displayName;
+            AuthUserId = authUserId;
+            UserName = userName;
             PrimaryEmail = primaryEmail;
         }
 

@@ -16,7 +16,7 @@ namespace Tests.ReadModels
         [Test]
         public void Test()
         {
-            RegisteredUser user = new RegisteredUser(Guid.NewGuid(), "user name");
+            RegisteredUser user = new RegisteredUser(1,Guid.NewGuid(), "user name");
             SaveEntities(user);
             CommitTransactionAndOpenNew();
 

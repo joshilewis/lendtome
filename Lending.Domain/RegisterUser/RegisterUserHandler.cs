@@ -12,6 +12,7 @@ namespace Lending.Domain.RegisterUser
 {
     public class RegisterUserHandler : AuthenticatedCommandHandler<RegisterUser, Result>
     {
+
         public RegisterUserHandler(Func<IRepository> repositoryFunc, Func<IEventRepository> eventRepositoryFunc)
             : base(repositoryFunc, eventRepositoryFunc)
         {
@@ -19,8 +20,11 @@ namespace Lending.Domain.RegisterUser
 
         public override Result Handle(RegisterUser command)
         {
-            User user = User.Register(Guid.Empty, command.UserId, command.DisplayName, command.PrimaryEmail);
+            User user = User.Register(Guid.Empty, command.UserId, command.UserName, command.PrimaryEmail);
             EventRepository.Save(user);
+
+            RegisteredUser registeredUser = new RegisteredUser(command.AuthUserId, command.UserId, command.UserName);
+            Session.Save(registeredUser);
 
             return Success();
         }

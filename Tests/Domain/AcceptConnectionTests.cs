@@ -34,8 +34,8 @@ namespace Tests.Domain
             user2.InitiateConnectionAcceptance(processId, user1.Id);
             SaveAggregates(user1, user2);
 
-            var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
-            var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
+            var registeredUser1 = new RegisteredUser(1,user1.Id, user1.UserName);
+            var registeredUser2 = new RegisteredUser(2,user2.Id, user2.UserName);
             SaveEntities(registeredUser1, registeredUser2);
 
             var request = new Lending.Domain.AcceptConnection.AcceptConnection(processId, user2.Id, user2.Id, user1.Id);
@@ -76,8 +76,8 @@ namespace Tests.Domain
             var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
             SaveAggregates(user1, user2);
 
-            var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
-            var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
+            var registeredUser1 = new RegisteredUser(1,user1.Id, user1.UserName);
+            var registeredUser2 = new RegisteredUser(2,user2.Id, user2.UserName);
             SaveEntities(registeredUser1, registeredUser2);
 
             var request = new Lending.Domain.AcceptConnection.AcceptConnection(processId, user1.Id, user1.Id, user2.Id);
@@ -110,8 +110,8 @@ namespace Tests.Domain
             user1.CompleteConnection(processId, user2.Id);
             SaveAggregates(user1, user2);
 
-            var registeredUser1 = new RegisteredUser(user1.Id, user1.UserName);
-            var registeredUser2 = new RegisteredUser(user2.Id, user2.UserName);
+            var registeredUser1 = new RegisteredUser(1, user1.Id, user1.UserName);
+            var registeredUser2 = new RegisteredUser(2, user2.Id, user2.UserName);
             SaveEntities(registeredUser1, registeredUser2);
 
             var request = new Lending.Domain.AcceptConnection.AcceptConnection(processId, user2.Id, user2.Id, user1.Id);
