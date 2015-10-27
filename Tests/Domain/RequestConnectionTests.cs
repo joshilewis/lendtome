@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
+using Lending.Domain.AcceptConnection;
 using Lending.Domain.Model;
 using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;
@@ -20,33 +22,39 @@ namespace Tests.Domain
     {
         /// <summary>
         /// GIVEN User1 exists AND User2 exists AND they are not connected AND there is an existing connection request from User1 to User2
-        ///WHEN User1 requests a connection to User2
-        ///THEN no request is created AND User1 is informed that the request failed because a connection request exists and is pending
+        /// WHEN User1 requests a connection to User2
+        /// THEN no request is created AND User1 is informed that the request failed because a connection request exists and is pending
         /// </summary>
         [Test]
         public void RequestConnectionFromUserWithPendingRequestShouldFail()
         {
             Guid processId = Guid.NewGuid();
-            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
-            var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
-            user1.RequestConnection(processId, user2.Id);
-            SaveAggregates(user1, user2);
-
-            var registeredUser1 = new RegisteredUser(1, user1.Id, user1.UserName);
-            var registeredUser2 = new RegisteredUser(2, user2.Id, user2.UserName);
-            SaveEntities(registeredUser1, registeredUser2);
-
-            var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
+            var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
+            var registerUser2 = new RegisterUser(processId, Guid.NewGuid(), 2, "user2", "email2");
+            var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
+            var secondRequestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
             var expectedResponse = new Result(User.ConnectionAlreadyRequested);
 
-            var sut = new RequestConnectionHandler(() => Repository, ()=> EventRepository);
-            Result actualResult = sut.Handle(request);
-            WriteRepository();
+            var expectedEventsForUser1 = new Event[]
+            {
+                new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail), 
+                new ConnectionRequested(processId, registerUser1.UserId, registerUser2.UserId), 
+            };
+
+            var expectedEventsForUser2 = new Event[]
+            {
+                new UserRegistered(processId, registerUser2.UserId, registerUser2.UserName, registerUser2.PrimaryEmail),
+                new ConnectionRequestReceived(processId, registerUser2.UserId, registerUser1.UserId), 
+            };
+
+            Result actualResult = HandleCommands(registerUser1, registerUser2, requestConnection, secondRequestConnection);
+            IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
+            IEnumerable<Event> user2Events = EventRepository.GetEventsForAggregate<User>(registerUser2.UserId);
 
             actualResult.ShouldEqual(expectedResponse);
+            Assert.That(user1Events, Is.EquivalentTo(expectedEventsForUser1));
+            Assert.That(user2Events, Is.EquivalentTo(expectedEventsForUser2));
 
-            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(2));
         }
 
         /// <summary>
@@ -59,41 +67,30 @@ namespace Tests.Domain
         {
 
             Guid processId = Guid.NewGuid();
-            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
-            var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
-
-            SaveAggregates(user1, user2);
-
-            var registeredUser1 = new RegisteredUser(1, user1.Id, user1.UserName);
-            var registeredUser2 = new RegisteredUser(2, user2.Id, user2.UserName);
-            SaveEntities(registeredUser1, registeredUser2);
-            CommitTransactionAndOpenNew();
-
-            var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
+            var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
+            var registerUser2 = new RegisterUser(processId, Guid.NewGuid(), 2, "user2", "email2");
+            var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
             var expectedResponse = new Result();
-            var expectedConnectionRequestedEvent = new ConnectionRequested(processId, user1.Id, user2.Id);
-            var expectedReceivedConnectionRequest = new ConnectionRequestReceived(processId, user2.Id, user1.Id);
 
-            var sut = new RequestConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.Handle(request);
-            WriteRepository();
+            var expectedEventsForUser1 = new Event[]
+            {
+                new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail),
+                new ConnectionRequested(processId, registerUser1.UserId, registerUser2.UserId),
+            };
+
+            var expectedEventsForUser2 = new Event[]
+            {
+                new UserRegistered(processId, registerUser2.UserId, registerUser2.UserName, registerUser2.PrimaryEmail),
+                new ConnectionRequestReceived(processId, registerUser2.UserId, registerUser1.UserId),
+            };
+
+            Result actualResult = HandleCommands(registerUser1, registerUser2, requestConnection);
+            IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
+            IEnumerable<Event> user2Events = EventRepository.GetEventsForAggregate<User>(registerUser2.UserId);
+
             actualResult.ShouldEqual(expectedResponse);
-
-            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(2));
-
-            var value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
-            ConnectionRequested actual = value.FromJson<ConnectionRequested>();
-            actual.ShouldEqual(expectedConnectionRequestedEvent);
-
-            slice = Connection.ReadStreamEventsForwardAsync($"user-{user2.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(2));
-
-            value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
-            ConnectionRequestReceived actual1 = value.FromJson<ConnectionRequestReceived>();
-            actual1.ShouldEqual(expectedReceivedConnectionRequest);
-
-
+            Assert.That(user1Events, Is.EquivalentTo(expectedEventsForUser1));
+            Assert.That(user2Events, Is.EquivalentTo(expectedEventsForUser2));
         }
 
         /// <summary>
@@ -104,21 +101,21 @@ namespace Tests.Domain
         [Test]
         public void RequestConnectionToNonExistentUserShouldFail()
         {
-            var user1 = User.Register(Guid.NewGuid(), Guid.Empty, "User 1", "email1");
-            SaveAggregates(user1);
-
-            var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, Guid.NewGuid());
+            Guid processId = Guid.NewGuid();
+            var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
+            var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, Guid.NewGuid());
             var expectedResponse = new Result(RequestConnectionHandler.TargetUserDoesNotExist);
 
-            var sut = new RequestConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.Handle(request);
-            WriteRepository();
+            var expectedEventsForUser1 = new Event[]
+            {
+                new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail),
+            };
+
+            Result actualResult = HandleCommands(registerUser1, requestConnection);
+            IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
+
             actualResult.ShouldEqual(expectedResponse);
-
-            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(1));
-
-
+            Assert.That(user1Events, Is.EquivalentTo(expectedEventsForUser1));
         }
 
         /// <summary>
@@ -129,27 +126,33 @@ namespace Tests.Domain
         [Test]
         public void RequestConnectionToUserWithPendingRequestShouldFail()
         {
-            var processId = Guid.NewGuid();
-            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
-            var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
-            user1.InitiateConnectionAcceptance(processId, user2.Id);
-            SaveAggregates(user1, user2);
-
-            var registeredUser1 = new RegisteredUser(1, user1.Id, user1.UserName);
-            var registeredUser2 = new RegisteredUser(2, user2.Id, user2.UserName);
-            SaveEntities(registeredUser1, registeredUser2);
-
-            var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user2.Id);
+            Guid processId = Guid.NewGuid();
+            var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
+            var registerUser2 = new RegisterUser(processId, Guid.NewGuid(), 2, "user2", "email2");
+            var requestConnection = new RequestConnection(processId, registerUser2.UserId, registerUser2.UserId, registerUser1.UserId);
+            var secondRequestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
             var expectedResponse = new Result(User.ReverseConnectionAlreadyRequested);
 
-            var sut = new RequestConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.Handle(request);
-            WriteRepository();
+            var expectedEventsForUser1 = new Event[]
+            {
+                new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail),
+                new ConnectionRequestReceived(processId, registerUser1.UserId, registerUser2.UserId),
+            };
+
+            var expectedEventsForUser2 = new Event[]
+            {
+                new UserRegistered(processId, registerUser2.UserId, registerUser2.UserName, registerUser2.PrimaryEmail),
+                new ConnectionRequested(processId, registerUser2.UserId, registerUser1.UserId),
+            };
+
+            Result actualResult = HandleCommands(registerUser1, registerUser2, requestConnection, secondRequestConnection);
+            IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
+            IEnumerable<Event> user2Events = EventRepository.GetEventsForAggregate<User>(registerUser2.UserId);
 
             actualResult.ShouldEqual(expectedResponse);
+            Assert.That(user1Events, Is.EquivalentTo(expectedEventsForUser1));
+            Assert.That(user2Events, Is.EquivalentTo(expectedEventsForUser2));
 
-            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(2));
         }
 
         /// <summary>
@@ -160,33 +163,35 @@ namespace Tests.Domain
         [Test]
         public void RequestConnectionToConnectedUsersShouldFail()
         {
-            var processId = Guid.NewGuid();
-            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
-            var user2 = User.Register(processId, Guid.NewGuid(), "User 2", "email2");
-            user1.RequestConnection(processId, user2.Id);
-            user2.InitiateConnectionAcceptance(processId, user1.Id);
-            user2.AcceptConnection(processId, user1.Id);
-            user1.CompleteConnection(processId, user2.Id);
-            SaveAggregates(user1, user2);
-
-            var registeredUser1 = new RegisteredUser(1, user1.Id, user1.UserName);
-            var registeredUser2 = new RegisteredUser(2, user2.Id, user2.UserName);
-            SaveEntities(registeredUser1, registeredUser2);
-
-            var request = new Lending.Domain.RequestConnection.RequestConnection(processId, user1.Id, user1.Id, user2.Id);
+            Guid processId = Guid.NewGuid();
+            var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
+            var registerUser2 = new RegisterUser(processId, Guid.NewGuid(), 2, "user2", "email2");
+            var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
+            var acceptConnection = new AcceptConnection(processId, registerUser2.UserId, registerUser2.UserId,
+                registerUser1.UserId);
             var expectedResponse = new Result(User.UsersAlreadyConnected);
 
-            var sut = new RequestConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.Handle(request);
-            WriteRepository();
+            var expectedEventsForUser1 = new Event[]
+            {
+                new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail),
+                new ConnectionRequested(processId, registerUser1.UserId, registerUser2.UserId),
+                new ConnectionCompleted(processId, registerUser1.UserId, registerUser2.UserId), 
+            };
 
+            var expectedEventsForUser2 = new Event[]
+            {
+                new UserRegistered(processId, registerUser2.UserId, registerUser2.UserName, registerUser2.PrimaryEmail),
+                new ConnectionRequestReceived(processId, registerUser2.UserId, registerUser1.UserId),
+                new ConnectionAccepted(processId, registerUser2.UserId, registerUser1.UserId), 
+            };
+
+            Result actualResult = HandleCommands(registerUser1, registerUser2, requestConnection, acceptConnection);
+            IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
+            IEnumerable<Event> user2Events = EventRepository.GetEventsForAggregate<User>(registerUser2.UserId);
+
+            Assert.That(user1Events, Is.EquivalentTo(expectedEventsForUser1));
+            Assert.That(user2Events, Is.EquivalentTo(expectedEventsForUser2));
             actualResult.ShouldEqual(expectedResponse);
-
-            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user2.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(3));
-
-            slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(3));
 
         }
 
@@ -198,23 +203,21 @@ namespace Tests.Domain
         [Test]
         public void RequestConnectionToSelfShouldFail()
         {
-            var user1 = User.Register(Guid.NewGuid(), Guid.Empty, "User 1", "email1");
-            SaveAggregates(user1);
-
-            var registeredUser1 = new RegisteredUser(1, user1.Id, user1.UserName);
-            SaveEntities(registeredUser1);
-
-            var request = new Lending.Domain.RequestConnection.RequestConnection(Guid.NewGuid(), user1.Id, user1.Id, user1.Id);
+            Guid processId = Guid.NewGuid();
+            var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
+            var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser1.UserId);
             var expectedResponse = new Result(RequestConnectionHandler.CantConnectToSelf);
 
-            var sut = new RequestConnectionHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.Handle(request);
-            WriteRepository();
+            var expectedEventsForUser1 = new Event[]
+            {
+                new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail),
+            };
+
+            Result actualResult = HandleCommands(registerUser1, requestConnection);
+            IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
 
             actualResult.ShouldEqual(expectedResponse);
-
-            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(1));
+            Assert.That(user1Events, Is.EquivalentTo(expectedEventsForUser1));
         }
 
     }

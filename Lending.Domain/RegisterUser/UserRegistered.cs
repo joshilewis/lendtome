@@ -14,5 +14,20 @@ namespace Lending.Domain.RegisterUser
             UserName = userName;
             EmailAddress = emailAddress;
         }
+
+        // override object.Equals
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            if (!base.Equals(obj)) return false;
+            var other = (UserRegistered)obj;
+            return UserName.Equals(other.UserName) &&
+                   EmailAddress.Equals(other.EmailAddress);
+        }
+
     }
 }

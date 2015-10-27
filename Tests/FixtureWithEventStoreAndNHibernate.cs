@@ -8,8 +8,13 @@ using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
+using Lending.Domain.AcceptConnection;
 using Lending.Domain.RegisterUser;
+using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
+using Lending.Execution.EventStore;
 using Lending.Execution.Persistence;
 using Lending.ReadModels.Relational.ConnectionAccepted;
 using NCrunch.Framework;
@@ -102,6 +107,41 @@ namespace Tests
             {
                 Repository.Save(entity);
             }
+        }
+
+        protected Result HandleCommands(params Command[] commands)
+        {
+            Result result = null;
+
+            foreach (var command in commands)
+            {
+                result = HandleCommand((dynamic)command);
+                WriteRepository();
+                if (!result.Success) break;
+            }
+            CommitTransactionAndOpenNew();
+
+            return result;
+        }
+
+        private Result HandleCommand(Command command)
+        {
+            return null;
+        }
+
+        private Result HandleCommand(RegisterUser command)
+        {
+            return new RegisterUserHandler(() => Repository, () => EventRepository).Handle(command);
+        }
+
+        private Result HandleCommand(RequestConnection command)
+        {
+            return new RequestConnectionHandler(() => Repository, () => EventRepository).Handle(command);
+        }
+
+        private Result HandleCommand(AcceptConnection command)
+        {
+            return new AcceptConnectionHandler(() => Repository, () => EventRepository).Handle(command);
         }
     }
 }
