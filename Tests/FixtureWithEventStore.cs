@@ -9,6 +9,7 @@ using EventStore.ClientAPI.Embedded;
 using EventStore.Core;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain;
 using Lending.Domain.RegisterUser;
 using Lending.Execution;
@@ -17,7 +18,7 @@ using NUnit.Framework;
 
 namespace Tests
 {
-    public class FixtureWithEventStore : Fixture
+    public abstract class FixtureWithEventStore : Fixture
     {
         protected ClusterVNode Node;
         protected IEventStoreConnection Connection;
@@ -70,6 +71,23 @@ namespace Tests
             Node.Stop();
             base.TearDown();
         }
+
+        protected virtual Result HandleCommands(params Command[] commands)
+        {
+            Result result = null;
+
+            foreach (var command in commands)
+            {
+                result = DispatchCommand(command);
+                WriteRepository();
+                if (!result.Success) break;
+            }
+
+            return result;
+
+        }
+
+        protected abstract Result DispatchCommand(Command command);
 
     }
 }

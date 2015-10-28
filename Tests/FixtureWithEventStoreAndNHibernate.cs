@@ -109,19 +109,16 @@ namespace Tests
             }
         }
 
-        protected Result HandleCommands(params Command[] commands)
+        protected override Result HandleCommands(params Command[] commands)
         {
-            Result result = null;
-
-            foreach (var command in commands)
-            {
-                result = HandleCommand((dynamic)command);
-                WriteRepository();
-                if (!result.Success) break;
-            }
+            Result result = base.HandleCommands(commands);
             CommitTransactionAndOpenNew();
-
             return result;
+        }
+
+        protected override Result DispatchCommand(Command command)
+        {
+            return HandleCommand((dynamic) command);
         }
 
         private Result HandleCommand(Command command)
