@@ -169,6 +169,7 @@ namespace Tests.Domain
             var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
             var acceptConnection = new AcceptConnection(processId, registerUser2.UserId, registerUser2.UserId,
                 registerUser1.UserId);
+            var requestConnection2 = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
             var expectedResponse = new Result(User.UsersAlreadyConnected);
 
             var expectedEventsForUser1 = new Event[]
@@ -185,7 +186,7 @@ namespace Tests.Domain
                 new ConnectionAccepted(processId, registerUser2.UserId, registerUser1.UserId), 
             };
 
-            Result actualResult = HandleCommands(registerUser1, registerUser2, requestConnection, acceptConnection);
+            Result actualResult = HandleCommands(registerUser1, registerUser2, requestConnection, acceptConnection, requestConnection2);
             IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
             IEnumerable<Event> user2Events = EventRepository.GetEventsForAggregate<User>(registerUser2.UserId);
 
