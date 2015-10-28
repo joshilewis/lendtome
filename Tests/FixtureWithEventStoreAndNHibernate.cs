@@ -143,7 +143,7 @@ namespace Tests
             actualResult.ShouldEqual(expectedResult);
         }
 
-        protected void And<TAggregate>(Guid aggregateId, IEnumerable<Event> expectedEvents) where TAggregate : Aggregate
+        protected void AndEventsSavedForAggregate<TAggregate>(Guid aggregateId, params Event[] expectedEvents) where TAggregate : Aggregate
         {
             IEnumerable<Event> actualEvents = EventRepository.GetEventsForAggregate<TAggregate>(aggregateId);
             Assert.That(actualEvents, Is.EquivalentTo(expectedEvents));

@@ -20,6 +20,73 @@ namespace Tests.Domain
     [TestFixture]
     public class RequestConnectionTests : FixtureWithEventStoreAndNHibernate
     {
+        #region Fields
+        private Guid processId = Guid.Empty;
+        private Guid user1Id;
+        private Guid user2Id;
+
+        //Commands
+        private RegisterUser user1Registers;
+        private RegisterUser user2Registers;
+        private RequestConnection user1RequestsConnectionToUser2;
+        private RequestConnection user1Requests2ndConnectionToUser2;
+        private RequestConnection user2RequestsConnectionToUser1;
+        private RequestConnection user1RequestsConnectionToSelf;
+        private AcceptConnection user2AcceptsRequest1;
+
+        //Events
+        private UserRegistered user1Registered;
+        private UserRegistered user2Registered;
+        private ConnectionRequested connectionRequestedFrom1To2;
+        private ConnectionRequested connectionRequestedFrom2To1;
+        private ConnectionRequestReceived connectionRequestFrom1To2Received;
+        private ConnectionRequestReceived connectionRequestFrom2To1Received;
+        private ConnectionCompleted connectionCompleted;
+        private ConnectionAccepted connectionAccepted;
+
+        //Results
+        private readonly Result failBecauseConnectionAlreadyRequested = new Result(User.ConnectionAlreadyRequested);
+        private readonly Result succeed = new Result();
+        private readonly Result failBecauseTargetUserDoesNotExist =
+            new Result(RequestConnectionHandler.TargetUserDoesNotExist);
+        private readonly Result failBecauseReverseConnectionAlreadyRequested =
+            new Result(User.ReverseConnectionAlreadyRequested);
+        private readonly Result failBecauseUsersAlreadyConnected = new Result(User.UsersAlreadyConnected);
+        private readonly Result failBecauseCantConnectToSelf = new Result(RequestConnectionHandler.CantConnectToSelf); 
+        #endregion
+
+        public override void SetUp()
+        {
+            base.SetUp();
+            user1Id= Guid.NewGuid();
+            user2Id = Guid.NewGuid();
+            processId = Guid.NewGuid();
+            user1Registers = new RegisterUser(processId, user1Id, 1, "user1", "email1");
+            user2Registers = new RegisterUser(processId, user2Id, 2, "user2", "email2");
+            user1RequestsConnectionToUser2 = new RequestConnection(processId, user1Id, user1Id, user2Id);
+            user2RequestsConnectionToUser1 = new RequestConnection(processId, user2Id, user2Id, user1Id);
+            user1Requests2ndConnectionToUser2 = new RequestConnection(processId, user1Id, user1Id, user2Id);
+            user1Registered = new UserRegistered(processId, user1Id, user1Registers.UserName,
+                user1Registers.PrimaryEmail);
+            connectionRequestedFrom1To2 = new ConnectionRequested(processId, user1Id,
+                user2Id);
+            connectionRequestedFrom2To1 = new ConnectionRequested(processId, user2Id,
+                user1Id);
+            user2Registered = new UserRegistered(processId, user2Id, user2Registers.UserName,
+                user2Registers.PrimaryEmail);
+            connectionRequestFrom1To2Received = new ConnectionRequestReceived(processId, user2Id,
+                user1Id);
+            connectionRequestFrom2To1Received = new ConnectionRequestReceived(processId, user1Id,
+                user2Id);
+            user1RequestsConnectionToSelf = new RequestConnection(processId, user1Id, user1Id, user1Id);
+            user2AcceptsRequest1 = new AcceptConnection(processId, user2Id, user2Id,
+                user1Id);
+
+            connectionCompleted = new ConnectionCompleted(processId, user1Id, user2Id);
+            connectionAccepted = new ConnectionAccepted(processId, user2Id, user1Id);
+
+        }
+
         /// <summary>
         /// GIVEN User1 exists AND User2 exists AND they are not connected AND there is an existing connection request from User1 to User2
         /// WHEN User1 requests a connection to User2
@@ -28,67 +95,26 @@ namespace Tests.Domain
         [Test]
         public void RequestConnectionFromUserWithPendingRequestShouldFail()
         {
-            Guid processId = Guid.NewGuid();
-
-            var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
-            var registerUser2 = new RegisterUser(processId, Guid.NewGuid(), 2, "user2", "email2");
-            var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
-
-            var secondRequestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
-
-            var expectedResult = new Result(User.ConnectionAlreadyRequested);
-
-            var expectedEventsForUser1 = new Event[]
-            {
-                new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail), 
-                new ConnectionRequested(processId, registerUser1.UserId, registerUser2.UserId), 
-            };
-
-            var expectedEventsForUser2 = new Event[]
-            {
-                new UserRegistered(processId, registerUser2.UserId, registerUser2.UserName, registerUser2.PrimaryEmail),
-                new ConnectionRequestReceived(processId, registerUser2.UserId, registerUser1.UserId), 
-            };
-
-            Given(registerUser1, registerUser2, requestConnection);
-            When(secondRequestConnection);
-            Then(expectedResult);
-            And<User>(registerUser1.UserId, expectedEventsForUser1);
-            And<User>(registerUser2.UserId, expectedEventsForUser2);
+            Given(user1Registers, user2Registers, user1RequestsConnectionToUser2);
+            When(user1Requests2ndConnectionToUser2);
+            Then(failBecauseConnectionAlreadyRequested);
+            AndEventsSavedForAggregate<User>(user1Id, user1Registered, connectionRequestedFrom1To2);
+            AndEventsSavedForAggregate<User>(user2Id, user2Registered, connectionRequestFrom1To2Received);
         }
 
         /// <summary>
-        /// GIVEN User1 exists AND User2 exists AND they are not connected AND there are no connection requests between them
-        ///WHEN User1 requests a connection to User2
-        ///THEN the request is created AND User2 is informed of the connection request
+        /// GIVEN User1 Registers AND User2 Registers AND they are not connected AND there are no connection requests between them
+        /// WHEN User1 Requests a Connection to User2
+        /// THEN the request is created AND User2 is informed of the connection request
         /// </summary>
         [Test]
         public void RequestConnectionForUnconnectedUsersShouldSucceed()
         {
-
-            Guid processId = Guid.NewGuid();
-            var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
-            var registerUser2 = new RegisterUser(processId, Guid.NewGuid(), 2, "user2", "email2");
-            var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
-            var expectedResult = new Result();
-
-            var expectedEventsForUser1 = new Event[]
-            {
-                new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail),
-                new ConnectionRequested(processId, registerUser1.UserId, registerUser2.UserId),
-            };
-
-            var expectedEventsForUser2 = new Event[]
-            {
-                new UserRegistered(processId, registerUser2.UserId, registerUser2.UserName, registerUser2.PrimaryEmail),
-                new ConnectionRequestReceived(processId, registerUser2.UserId, registerUser1.UserId),
-            };
-
-            Given(registerUser1, registerUser2);
-            When(requestConnection);
-            Then(expectedResult);
-            And<User>(registerUser1.UserId, expectedEventsForUser1);
-            And<User>(registerUser2.UserId, expectedEventsForUser2);
+            Given(user1Registers, user2Registers);
+            When(user1RequestsConnectionToUser2);
+            Then(succeed);
+            AndEventsSavedForAggregate<User>(user1Id, user1Registered, connectionRequestedFrom1To2);
+            AndEventsSavedForAggregate<User>(user2Id, user2Registered, connectionRequestFrom1To2Received);
 
         }
 
@@ -100,20 +126,10 @@ namespace Tests.Domain
         [Test]
         public void RequestConnectionToNonExistentUserShouldFail()
         {
-            Guid processId = Guid.NewGuid();
-            var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
-            var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, Guid.NewGuid());
-            var expectedResult = new Result(RequestConnectionHandler.TargetUserDoesNotExist);
-
-            var expectedEventsForUser1 = new Event[]
-            {
-                new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail),
-            };
-
-            Given(registerUser1);
-            When(requestConnection);
-            Then(expectedResult);
-            And<User>(registerUser1.UserId, expectedEventsForUser1);
+            Given(user1Registers);
+            When(user1RequestsConnectionToUser2);
+            Then(failBecauseTargetUserDoesNotExist);
+            AndEventsSavedForAggregate<User>(user1Id, user1Registered);
         }
 
         /// <summary>
@@ -124,30 +140,11 @@ namespace Tests.Domain
         [Test]
         public void RequestConnectionToUserWithPendingRequestShouldFail()
         {
-            Guid processId = Guid.NewGuid();
-            var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
-            var registerUser2 = new RegisterUser(processId, Guid.NewGuid(), 2, "user2", "email2");
-            var requestConnection = new RequestConnection(processId, registerUser2.UserId, registerUser2.UserId, registerUser1.UserId);
-            var secondRequestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
-            var expectedResult = new Result(User.ReverseConnectionAlreadyRequested);
-
-            var expectedEventsForUser1 = new Event[]
-            {
-                new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail),
-                new ConnectionRequestReceived(processId, registerUser1.UserId, registerUser2.UserId),
-            };
-
-            var expectedEventsForUser2 = new Event[]
-            {
-                new UserRegistered(processId, registerUser2.UserId, registerUser2.UserName, registerUser2.PrimaryEmail),
-                new ConnectionRequested(processId, registerUser2.UserId, registerUser1.UserId),
-            };
-
-            Given(registerUser1, registerUser2, requestConnection);
-            When(secondRequestConnection);
-            Then(expectedResult);
-            And<User>(registerUser1.UserId, expectedEventsForUser1);
-            And<User>(registerUser2.UserId, expectedEventsForUser2);
+            Given(user1Registers, user2Registers, user2RequestsConnectionToUser1);
+            When(user1RequestsConnectionToUser2);
+            Then(failBecauseReverseConnectionAlreadyRequested);
+            AndEventsSavedForAggregate<User>(user1Id, user1Registered, connectionRequestFrom2To1Received);
+            AndEventsSavedForAggregate<User>(user2Id, user2Registered, connectionRequestedFrom2To1);
         }
 
         /// <summary>
@@ -158,34 +155,11 @@ namespace Tests.Domain
         [Test]
         public void RequestConnectionToConnectedUsersShouldFail()
         {
-            Guid processId = Guid.NewGuid();
-            var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
-            var registerUser2 = new RegisterUser(processId, Guid.NewGuid(), 2, "user2", "email2");
-            var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
-            var acceptConnection = new AcceptConnection(processId, registerUser2.UserId, registerUser2.UserId,
-                registerUser1.UserId);
-            var secondRequestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
-            var expectedResult = new Result(User.UsersAlreadyConnected);
-
-            var expectedEventsForUser1 = new Event[]
-            {
-                new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail),
-                new ConnectionRequested(processId, registerUser1.UserId, registerUser2.UserId),
-                new ConnectionCompleted(processId, registerUser1.UserId, registerUser2.UserId), 
-            };
-
-            var expectedEventsForUser2 = new Event[]
-            {
-                new UserRegistered(processId, registerUser2.UserId, registerUser2.UserName, registerUser2.PrimaryEmail),
-                new ConnectionRequestReceived(processId, registerUser2.UserId, registerUser1.UserId),
-                new ConnectionAccepted(processId, registerUser2.UserId, registerUser1.UserId), 
-            };
-
-            Given(registerUser1, registerUser2, requestConnection, acceptConnection);
-            When(secondRequestConnection);
-            Then(expectedResult);
-            And<User>(registerUser1.UserId, expectedEventsForUser1);
-            And<User>(registerUser2.UserId, expectedEventsForUser2);
+            Given(user1Registers, user2Registers, user1RequestsConnectionToUser2, user2AcceptsRequest1);
+            When(user1Requests2ndConnectionToUser2);
+            Then(failBecauseUsersAlreadyConnected);
+            AndEventsSavedForAggregate<User>(user1Id, user1Registered, connectionRequestedFrom1To2, connectionCompleted);
+            AndEventsSavedForAggregate<User>(user2Id, user2Registered, connectionRequestFrom1To2Received, connectionAccepted);
 
         }
 
@@ -197,20 +171,10 @@ namespace Tests.Domain
         [Test]
         public void RequestConnectionToSelfShouldFail()
         {
-            Guid processId = Guid.NewGuid();
-            var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
-            var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser1.UserId);
-            var expectedResult = new Result(RequestConnectionHandler.CantConnectToSelf);
-
-            var expectedEventsForUser1 = new Event[]
-            {
-                new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail),
-            };
-
-            Given(registerUser1);
-            When(requestConnection);
-            Then(expectedResult);
-            And<User>(registerUser1.UserId, expectedEventsForUser1);
+            Given(user1Registers);
+            When(user1RequestsConnectionToSelf);
+            Then(failBecauseCantConnectToSelf);
+            AndEventsSavedForAggregate<User>(user1Id, user1Registered);
         }
 
     }
