@@ -1,5 +1,6 @@
 using System;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
 
 namespace Lending.Domain.AcceptConnection
 {

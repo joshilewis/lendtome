@@ -15,5 +15,18 @@ namespace Lending.Cqrs
             ProcessId = processId;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            var other = (Event)obj;
+            return AggregateId.Equals(other.AggregateId) &&
+                   ProcessId.Equals(other.ProcessId);
+
+        }
+
     }
 }

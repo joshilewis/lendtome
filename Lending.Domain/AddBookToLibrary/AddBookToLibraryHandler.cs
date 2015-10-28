@@ -1,5 +1,7 @@
 using System;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain.Model;
 
 namespace Lending.Domain.AddBookToLibrary
@@ -12,7 +14,7 @@ namespace Lending.Domain.AddBookToLibrary
         {
         }
 
-        public override Result HandleCommand(AddBookToLibrary command)
+        public override Result Handle(AddBookToLibrary command)
         {
 
             User user = User.CreateFromHistory(EventRepository.GetEventsForAggregate<User>(command.AggregateId));

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain.RegisterUser;
 using Lending.Execution.Auth;
 using NUnit.Framework;
@@ -19,7 +21,7 @@ namespace Tests.Domain
         [Test]
         public void RegisterUserForExistingUserShouldFail()
         {
-            ServiceStackUser existingUser = DefaultTestData.ServiceStackUser1;
+            RegisteredUser existingUser = DefaultTestData.RegisteredUser1;
             SaveEntities(existingUser);
 
             CommitTransactionAndOpenNew();
@@ -27,15 +29,15 @@ namespace Tests.Domain
             var request = new AuthSessionDouble();
             var expectedResponse = new Result();
 
-            var sut = new RegisterUserHandler(() => Session, () => new UnexpectedEventRepository(), () => Guid.Empty);
-            Result actualResult = sut.HandleCommand(request);
+            var sut = new AuthSessionHandler(() => Session, () => Guid.Empty, new RegisterUserHandler(() => Repository, () => new UnexpectedEventRepository()));
+            Result actualResult = sut.Handle(request);
 
             actualResult.ShouldEqual(expectedResponse);
 
             CommitTransactionAndOpenNew();
 
             int numberOfUsersInDb = Session
-                .QueryOver<ServiceStackUser>()
+                .QueryOver<RegisteredUser>()
                 .RowCount()
                 ;
 
@@ -55,19 +57,19 @@ namespace Tests.Domain
             var stream = $"user-{userId}";
             var request = new AuthSessionDouble();
             var expectedResponse = new Result();
-            var expectedUser = new ServiceStackUser(authDto.Id, userId, authDto.DisplayName);
+            var expectedUser = new RegisteredUser(authDto.Id, userId, authDto.DisplayName);
             var expectedEvent = new UserRegistered(Guid.Empty, userId, authDto.DisplayName, authDto.PrimaryEmail);
 
-            var sut = new RegisterUserHandler(() => Session, () => EventRepository, () => userId);
-            Result actualResult = sut.HandleCommand(request);
+            var sut = new AuthSessionHandler(() => Session, () => userId, new RegisterUserHandler(() => Repository, () => EventRepository));
+            Result actualResult = sut.Handle(request);
 
             actualResult.ShouldEqual(expectedResponse);
 
             CommitTransactionAndOpenNew();
             WriteRepository();
 
-            ServiceStackUser userInDb = Session
-                .QueryOver<ServiceStackUser>()
+            RegisteredUser userInDb = Session
+                .QueryOver<RegisteredUser>()
                 .SingleOrDefault()
                 ;
 

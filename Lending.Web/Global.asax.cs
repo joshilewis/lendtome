@@ -10,6 +10,7 @@ using System.Web.Routing;
 using Lending.Web.App_Start;
 using Lending.Web.DependencyResolution;
 using log4net.Config;
+using Lending.Execution.DI;
 using ServiceStack.Logging;
 using StructureMap;
 
@@ -28,7 +29,7 @@ namespace Lending.Web
             DependencyResolver.SetResolver(new SmDependencyResolver(container));
             ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
 
-            AppHost.Start();
+            AppHost.Start(new StructureMapContainerAdapter(container));
             
             //AreaRegistration.RegisterAllAreas();
 

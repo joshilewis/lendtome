@@ -12,5 +12,17 @@ namespace Lending.Domain.AcceptConnection
         {
             RequestingUserId = requestingUserId;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            if (!base.Equals(obj)) return false;
+            var other = (ConnectionAccepted)obj;
+            return RequestingUserId.Equals(other.RequestingUserId);
+        }
     }
 }

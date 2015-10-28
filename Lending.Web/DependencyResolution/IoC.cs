@@ -1,8 +1,8 @@
 using System;
 using Lending.Cqrs;
-using Lending.Domain;
-using ServiceStack.ServiceInterface.Auth;
+using Lending.Cqrs.Command;
 using StructureMap;
+using StructureMap.Graph;
 
 namespace Lending.Web.DependencyResolution
 {
@@ -10,7 +10,7 @@ namespace Lending.Web.DependencyResolution
     {
         public static IContainer Initialize()
         {
-            ObjectFactory.Initialize(x =>
+            var container = new Container(x =>
             {
                 x.Scan(scan =>
                 {
@@ -20,19 +20,20 @@ namespace Lending.Web.DependencyResolution
                     //scan.TheCallingAssembly();
                 });
 
-                x.For<ICommandHandler<IAuthSession, Result>>()
-                    .AlwaysUnique()
-                    .Use<FormsAuthRegisterUserHandler>()
-                    ;
+                //x.For<ICommandHandler<IAuthSession, Result>>()
+                //    .AlwaysUnique()
+                //    .Use<FormsAuthRegisterUserHandler>()
+                //    ;
             });
 
-            ObjectFactory.AssertConfigurationIsValid();
-            string blah = ObjectFactory.WhatDoIHave();
+            container.AssertConfigurationIsValid();
+            string blah = container.WhatDoIHave();
+
 
             //new SchemaUpdate(ObjectFactory.GetInstance<Configuration>())
             //    .Execute(true, true);
 
-            return ObjectFactory.Container;
+            return container;
         }
     }
 }

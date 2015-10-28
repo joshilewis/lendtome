@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
 using Lending.Domain;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.DI;
@@ -21,12 +22,17 @@ namespace Shell
 {
     internal class AppHost : AppHostHttpListenerBase
     {
-        public AppHost()
-            : base("HttpListener Self-Host", typeof(Command).Assembly, typeof(WebserviceBase<,>).Assembly) { }
+        private readonly IContainerAdapter containerAdapter;
+
+        public AppHost(IContainerAdapter containerAdapter)
+            : base("HttpListener Self-Host", typeof (Command).Assembly, typeof (Webservice<,>).Assembly)
+        {
+            this.containerAdapter = containerAdapter;
+        }
 
         public override void Configure(Funq.Container container)
         {
-            container.Adapter = new StructureMapContainerAdapter();
+            container.Adapter = containerAdapter;
 
             var appSettings = new AppSettings(); 
 

@@ -41,11 +41,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FluentNHibernate, Version=1.4.0.0, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Nancy, Version=0.21.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -56,8 +56,8 @@
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.3.3.1.4000\lib\Net35\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
@@ -105,8 +105,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
+    <Reference Include="StructureMap, Version=3.1.6.186, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\structuremap.3.1.6.186\lib\net40\StructureMap.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StructureMap.Net4, Version=3.1.6.186, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\structuremap.3.1.6.186\lib\net40\StructureMap.Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StructureMap.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\structuremap.web.3.1.6.186\lib\net40\StructureMap.Web.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -118,8 +127,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auth\RegisterUserHandler.cs" />
-    <Compile Include="Auth\ServiceStackUserMap.cs" />
+    <Compile Include="Auth\AuthSessionHandler.cs" />
     <Compile Include="Auth\UnitOfWorkAuthService.cs" />
     <Compile Include="DI\DomainRegistry.cs" />
     <Compile Include="DI\StructureMapContainerAdapter.cs" />
@@ -138,14 +146,15 @@
     <Compile Include="Persistence\SchemaUpdater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Auth\UnitOfWorkAuthProvider.cs" />
-    <Compile Include="Auth\ServiceStackUser.cs" />
     <Compile Include="EventRepository.cs" />
     <Compile Include="SequentialGuid.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkHelpers.cs" />
-    <Compile Include="WebServices\AuthenticatedWebserviceBase.cs" />
-    <Compile Include="WebServices\WebserviceBase.cs" />
+    <Compile Include="WebServices\AuthenticatedWebservice.cs" />
+    <Compile Include="WebServices\IAuthenticatedWebservice.cs" />
+    <Compile Include="WebServices\IWebservice.cs" />
+    <Compile Include="WebServices\Webservice.cs" />
     <Compile Include="WebServices\Webservices.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +165,10 @@
     <ProjectReference Include="..\Lending.Domain\Lending.Domain.csproj">
       <Project>{4fe3afd5-ff4c-4fa6-990a-c7f9cce9441f}</Project>
       <Name>Lending.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lending.ReadModels\Lending.ReadModels.csproj">
+      <Project>{1c5e7e03-e256-42a2-a3e5-039d56692dbd}</Project>
+      <Name>Lending.ReadModels</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

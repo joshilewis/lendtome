@@ -1,4 +1,4 @@
-﻿namespace Lending.Cqrs
+﻿namespace Lending.Cqrs.Query
 {
     public class Result
     {

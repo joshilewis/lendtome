@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Lending.Cqrs
+namespace Lending.Cqrs.Command
 {
     /// <summary>
     /// Empty class used for DI registration
     /// </summary>
-    public abstract class Command
+    public abstract class Command : Message
     {
         public Guid AggregateId { get; set; }
         public Guid ProcessId { get; set; }

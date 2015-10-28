@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
@@ -37,7 +39,7 @@ namespace Tests.Domain
             var expectedBookAddedToCollection = new BookAddedToLibrary(processId, user1.Id, command.Title, command.Author, command.Isbn);
 
             var sut = new AddBookToLibraryHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(command);
+            Result actualResult = sut.Handle(command);
             CommitTransactionAndOpenNew();
             WriteRepository();
 
@@ -68,7 +70,7 @@ namespace Tests.Domain
             var expectedResult = new Result(User.BookAlreadyInLibrary);
 
             var sut = new AddBookToLibraryHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(command);
+            Result actualResult = sut.Handle(command);
             CommitTransactionAndOpenNew();
             WriteRepository();
 
@@ -98,7 +100,7 @@ namespace Tests.Domain
             var expectedBookAddedToCollection = new BookAddedToLibrary(processId, user1.Id, command.Title, command.Author, command.Isbn);
 
             var sut = new AddBookToLibraryHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.HandleCommand(command);
+            Result actualResult = sut.Handle(command);
             CommitTransactionAndOpenNew();
             WriteRepository();
 

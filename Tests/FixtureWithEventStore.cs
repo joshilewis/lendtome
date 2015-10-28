@@ -8,7 +8,9 @@ using EventStore.ClientAPI;
 using EventStore.ClientAPI.Embedded;
 using EventStore.Core;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
 using Lending.Domain;
+using Lending.Domain.RegisterUser;
 using Lending.Execution;
 using Lending.Execution.EventStore;
 using NUnit.Framework;
@@ -68,5 +70,6 @@ namespace Tests
             Node.Stop();
             base.TearDown();
         }
+
     }
 }

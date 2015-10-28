@@ -48,7 +48,10 @@
     <Compile Include="AddBookToLibrary\AddBookToLibrary.cs" />
     <Compile Include="AddBookToLibrary\AddBookToLibraryHandler.cs" />
     <Compile Include="AddBookToLibrary\BookAddedToLibrary.cs" />
+    <Compile Include="Model\Book.cs" />
     <Compile Include="RegisterUser\RegisteredUser.cs" />
+    <Compile Include="RegisterUser\RegisterUser.cs" />
+    <Compile Include="RegisterUser\RegisterUserHandler.cs" />
     <Compile Include="RemoveBookFromLibrary\BookRemovedFromLibrary.cs" />
     <Compile Include="RemoveBookFromLibrary\RemoveBookFromLibrary.cs" />
     <Compile Include="RemoveBookFromLibrary\RemoveBookFromLibraryHandler.cs" />
@@ -66,7 +69,9 @@
       <Name>Lending.Cqrs</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="SearchForUser\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

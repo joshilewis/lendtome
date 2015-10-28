@@ -1,5 +1,7 @@
 using System;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain.Model;
 
 namespace Lending.Domain.AcceptConnection
@@ -11,7 +13,7 @@ namespace Lending.Domain.AcceptConnection
         {
         }
 
-        public override Result HandleCommand(AcceptConnection command)
+        public override Result Handle(AcceptConnection command)
         {
             User acceptingUser = User.CreateFromHistory(EventRepository.GetEventsForAggregate<User>(command.AggregateId));
 

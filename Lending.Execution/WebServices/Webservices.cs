@@ -4,49 +4,61 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Cqrs;
+using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Domain;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.UnitOfWork;
+using Lending.ReadModels.Relational.SearchForUser;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface;
 
 namespace Lending.Execution.WebServices
 {
-    public class RequestConnectionWebservice : AuthenticatedWebserviceBase<RequestConnection, Result>
+    public class RequestConnectionWebservice : AuthenticatedWebservice<RequestConnection, Result>
     {
         public RequestConnectionWebservice(IUnitOfWork unitOfWork,
-            IAuthenticatedCommandHandler<RequestConnection, Result> commandHandler)
-            : base(unitOfWork, commandHandler)
+            IAuthenticatedMessageHandler<RequestConnection, Result> messageHandler)
+            : base(unitOfWork, messageHandler)
         { }
 
     }
 
-    public class AcceptConnectionWebservice : AuthenticatedWebserviceBase<AcceptConnection, Result>
+    public class AcceptConnectionWebservice : AuthenticatedWebservice<AcceptConnection, Result>
     {
         public AcceptConnectionWebservice(IUnitOfWork unitOfWork,
-            IAuthenticatedCommandHandler<AcceptConnection, Result> commandHandler)
-            : base(unitOfWork, commandHandler)
+            IAuthenticatedMessageHandler<AcceptConnection, Result> messageHandler)
+            : base(unitOfWork, messageHandler)
         { }
 
     }
 
-    public class AddBookToLibraryWebservice : AuthenticatedWebserviceBase<AddBookToLibrary, Result>
+    public class AddBookToLibraryWebservice : AuthenticatedWebservice<AddBookToLibrary, Result>
     {
         public AddBookToLibraryWebservice(IUnitOfWork unitOfWork,
-            IAuthenticatedCommandHandler<AddBookToLibrary, Result> commandHandler)
-            : base(unitOfWork, commandHandler)
+            IAuthenticatedMessageHandler<AddBookToLibrary, Result> messageHandler)
+            : base(unitOfWork, messageHandler)
         { }
 
     }
 
-    public class RemoveBookFromLibraryWebservice : AuthenticatedWebserviceBase<RemoveBookFromLibrary, Result>
+    public class RemoveBookFromLibraryWebservice : AuthenticatedWebservice<RemoveBookFromLibrary, Result>
     {
         public RemoveBookFromLibraryWebservice(IUnitOfWork unitOfWork,
-            IAuthenticatedCommandHandler<RemoveBookFromLibrary, Result> commandHandler)
-            : base(unitOfWork, commandHandler)
+            IAuthenticatedMessageHandler<RemoveBookFromLibrary, Result> messageHandler)
+            : base(unitOfWork, messageHandler)
+        { }
+
+    }
+
+    public class SearchForUserWebservice : Webservice<SearchForUser, Result>
+    {
+        public SearchForUserWebservice(IUnitOfWork unitOfWork,
+            IMessageHandler<SearchForUser, Result> messageHandler)
+            : base(unitOfWork, messageHandler)
         { }
 
     }

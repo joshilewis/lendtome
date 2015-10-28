@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lending.Domain.RegisterUser;
 using Lending.Execution.Auth;
 using ServiceStack.Authentication.NHibernate;
 using ServiceStack.ServiceInterface.Auth;
@@ -19,7 +20,7 @@ namespace Tests
 
         public static UserAuthPersistenceDto UserAuthPersistenceDto1 => new UserAuthPersistenceDto(UserAuth1);
 
-        public static ServiceStackUser ServiceStackUser1 => new ServiceStackUser(1, Guid.Empty, UserAuth1.DisplayName);
+        public static RegisteredUser RegisteredUser1 => new RegisteredUser(1, Guid.Empty, UserAuth1.DisplayName);
 
         public static UserAuth UserAuth2 => new UserAuth()
         {
@@ -29,7 +30,7 @@ namespace Tests
 
         public static UserAuthPersistenceDto UserAuthPersistenceDto2 => new UserAuthPersistenceDto(UserAuth2);
 
-        public static ServiceStackUser ServiceStackUser2 => new ServiceStackUser(2, Guid.Empty, UserAuth1.DisplayName);
+        public static RegisteredUser RegisteredUser2 => new RegisteredUser(2, Guid.Empty, UserAuth1.DisplayName);
 
         public static UserAuth UserAuth3 => new UserAuth()
         {
@@ -39,6 +40,6 @@ namespace Tests
 
         public static UserAuthPersistenceDto UserAuthPersistenceDto3 => new UserAuthPersistenceDto(UserAuth3);
 
-        public static ServiceStackUser ServiceStackUser3 => new ServiceStackUser(3, Guid.Empty, UserAuth1.DisplayName);
+        public static RegisteredUser RegisteredUser3 => new RegisteredUser(3, Guid.Empty, UserAuth1.DisplayName);
     }
 }
