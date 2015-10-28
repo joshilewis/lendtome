@@ -10,6 +10,8 @@ using Lending.Cqrs.Query;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
+using Lending.Domain.RegisterUser;
+using Lending.Domain.RemoveBookFromLibrary;
 using Mono.Security.Authenticode;
 using NUnit.Framework;
 using ServiceStack.Text;
@@ -22,6 +24,41 @@ namespace Tests.Domain
     /// </summary>
     public class AddBookToLibraryTests : FixtureWithEventStoreAndNHibernate
     {
+        private Guid processId = Guid.Empty;
+        private Guid user1Id;
+
+        //Commands
+        private RegisterUser user1Registers;
+        private AddBookToLibrary user1AddsBookToLibrary;
+        private RemoveBookFromLibrary user1RemovesBookFromLibrary;
+
+        //Events
+        private UserRegistered user1Registered;
+        private BookAddedToLibrary book1AddedToUser1Library;
+        private BookRemovedFromLibrary book1RemovedFromLibrary;
+
+        //Results
+        private readonly Result succeed = new Result();
+        private readonly Result failBecauseBookAlreadyInLibrary = new Result(User.BookAlreadyInLibrary);
+
+        public override void SetUp()
+        {
+            base.SetUp();
+            user1Id = Guid.NewGuid();
+            processId = Guid.NewGuid();
+            user1Registers = new RegisterUser(processId, user1Id, 1, "user1", "email1");
+            user1Registered = new UserRegistered(processId, user1Id, user1Registers.UserName,
+                user1Registers.PrimaryEmail);
+            var title = "title";
+            var author = "author";
+            var isbnnumber = "isbn";
+            user1AddsBookToLibrary = new AddBookToLibrary(processId, user1Id, user1Id, title, author, isbnnumber);
+            book1AddedToUser1Library = new BookAddedToLibrary(processId, user1Id, title, author, isbnnumber);
+            user1RemovesBookFromLibrary = new RemoveBookFromLibrary(processId, user1Id, user1Id, title, author,
+                isbnnumber);
+            book1RemovedFromLibrary = new BookRemovedFromLibrary(processId, user1Id, title, author, isbnnumber);
+        }
+
         /// <summary>
         /// GIVEN User1 is a Registered User
         /// WHEN User1 Adds Book1 to her Library
@@ -30,27 +67,10 @@ namespace Tests.Domain
         [Test]
         public void AddingNewBookToLibraryShouldSucceed()
         {
-            var processId = Guid.NewGuid();
-            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
-            SaveAggregates(user1);
-
-            var command = new AddBookToLibrary(processId, user1.Id, user1.Id, "Title", "Author", "Isbn");
-            var expectedResult = new Result();
-            var expectedBookAddedToCollection = new BookAddedToLibrary(processId, user1.Id, command.Title, command.Author, command.Isbn);
-
-            var sut = new AddBookToLibraryHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.Handle(command);
-            CommitTransactionAndOpenNew();
-            WriteRepository();
-
-            actualResult.ShouldEqual(expectedResult);
-
-            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(2));
-            var value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
-            BookAddedToLibrary actualAddedToLibrary = value.FromJson<BookAddedToLibrary>();
-            actualAddedToLibrary.ShouldEqual(expectedBookAddedToCollection);
-
+            Given(user1Registers);
+            When(user1AddsBookToLibrary);
+            Then(succeed);
+            AndEventsSavedForAggregate<User>(user1Id, user1Registered, book1AddedToUser1Library);
         }
 
         /// <summary>
@@ -61,24 +81,10 @@ namespace Tests.Domain
         [Test]
         public void AddingDuplicateBookToLibraryShouldFail()
         {
-            var processId = Guid.NewGuid();
-            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
-            user1.AddBookToLibrary(processId, "Title", "Authority", "Isbn");
-            SaveAggregates(user1);
-
-            var command = new AddBookToLibrary(processId, user1.Id, user1.Id, "Title", "Authority", "Isbn");
-            var expectedResult = new Result(User.BookAlreadyInLibrary);
-
-            var sut = new AddBookToLibraryHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.Handle(command);
-            CommitTransactionAndOpenNew();
-            WriteRepository();
-
-            actualResult.ShouldEqual(expectedResult);
-
-            StreamEventsSlice  slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(2));
-
+            Given(user1Registers, user1AddsBookToLibrary);
+            When(user1AddsBookToLibrary);
+            Then(failBecauseBookAlreadyInLibrary);
+            AndEventsSavedForAggregate<User>(user1Id, user1Registered, book1AddedToUser1Library);
         }
 
         /// <summary>
@@ -89,29 +95,10 @@ namespace Tests.Domain
         [Test]
         public void AddingPreviouslyRemovedBookToLibraryShouldSucceed()
         {
-            var processId = Guid.NewGuid();
-            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
-            user1.AddBookToLibrary(processId, "Title", "Author", "Isbn");
-            user1.RemoveBookFromLibrary(processId, "Title", "Author", "Isbn");
-            SaveAggregates(user1);
-
-            var command = new AddBookToLibrary(processId, user1.Id, user1.Id, "Title", "Author", "Isbn");
-            var expectedResult = new Result();
-            var expectedBookAddedToCollection = new BookAddedToLibrary(processId, user1.Id, command.Title, command.Author, command.Isbn);
-
-            var sut = new AddBookToLibraryHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.Handle(command);
-            CommitTransactionAndOpenNew();
-            WriteRepository();
-
-            actualResult.ShouldEqual(expectedResult);
-
-            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(4));
-            var value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
-            BookAddedToLibrary actualAddedToLibrary = value.FromJson<BookAddedToLibrary>();
-            actualAddedToLibrary.ShouldEqual(expectedBookAddedToCollection);
-
+            Given(user1Registers, user1AddsBookToLibrary, user1RemovesBookFromLibrary);
+            When(user1AddsBookToLibrary);
+            Then(succeed);
+            AndEventsSavedForAggregate<User>(user1Id, user1Registered, book1AddedToUser1Library, book1RemovedFromLibrary, book1AddedToUser1Library);
         }
 
     }

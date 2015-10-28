@@ -14,7 +14,7 @@ namespace Lending.Domain.Model
     public class User : Aggregate
     {
         public const string UsersAlreadyConnected = "This user is already connected to the specified user";
-        public const string ConnectionRequestNotReceived = "This user did not receive a connection request from the specified user";
+        public const string NoPendingConnectionRequest = "This user did not receive a connection request from the specified user";
         public const string ConnectionAlreadyRequested = "A connection request for these users already exists";
         public const string ReverseConnectionAlreadyRequested = "A reverse connection request for these users already exists";
         public const string ConnectionNotRequested = "This user did not request a connection with the specified user";
@@ -131,7 +131,7 @@ namespace Lending.Domain.Model
         public Result AcceptConnection(Guid processId, Guid requestingUserId)
         {
             if (ConnectedUsers.Contains(requestingUserId)) return Fail(UsersAlreadyConnected);
-            if (!ReceivedConnectionRequests.Contains(requestingUserId)) return new Result(ConnectionRequestNotReceived);
+            if (!ReceivedConnectionRequests.Contains(requestingUserId)) return new Result(NoPendingConnectionRequest);
 
             RaiseEvent(new ConnectionAccepted(processId, Id, requestingUserId));
 

@@ -7,7 +7,9 @@ using EventStore.ClientAPI;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
+using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
+using Lending.Domain.RegisterUser;
 using Lending.Domain.RemoveBookFromLibrary;
 using NUnit.Framework;
 using ServiceStack.Text;
@@ -21,36 +23,39 @@ namespace Tests.Domain
     [TestFixture]
     public class RemoveBookFromLibraryTests : FixtureWithEventStoreAndNHibernate
     {
-        /// <summary>
-        /// GIVEN 'User1' is a Registered user AND Book1 is not in User1's Library
-        /// WHEN User1 Removes Book1 from her Library
-        /// THEN User1 is notified that Book1 is not in her Library        
-        /// </summary>
-        [Test]
-        public void RemoveBookInLibraryShouldSucceed()
+        private Guid processId = Guid.Empty;
+        private Guid user1Id;
+
+        //Commands
+        private RegisterUser user1Registers;
+        private AddBookToLibrary user1AddsBookToLibrary;
+        private RemoveBookFromLibrary user1RemovesBookFromLibrary;
+
+        //Events
+        private UserRegistered user1Registered;
+        private BookAddedToLibrary book1AddedToUser1Library;
+        private BookRemovedFromLibrary book1RemovedFromLibrary;
+
+        //Results
+        private readonly Result succeed = new Result();
+        private readonly Result failBecauseBookNotInLibrary = new Result(User.BookNotInLibrary);
+
+        public override void SetUp()
         {
-            var processId = Guid.NewGuid();
-            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
-            user1.AddBookToLibrary(processId, "Title", "Author", "Isbn");
-            SaveAggregates(user1);
-
-            var command = new RemoveBookFromLibrary(processId, user1.Id, user1.Id, "Title", "Author", "Isbn");
-            var expectedResult = new Result();
-            var expectedEvent = new BookRemovedFromLibrary(processId, user1.Id, "Title", "Author", "Isbn");
-
-            var sut = new RemoveBookFromLibraryHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.Handle(command);
-            CommitTransactionAndOpenNew();
-            WriteRepository();
-
-            actualResult.ShouldEqual(expectedResult);
-
-            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(3));
-            var value = Encoding.UTF8.GetString(slice.Events[1].Event.Data);
-            BookRemovedFromLibrary actualEvent = value.FromJson<BookRemovedFromLibrary>();
-            actualEvent.ShouldEqual(expectedEvent);
-
+            base.SetUp();
+            user1Id = Guid.NewGuid();
+            processId = Guid.NewGuid();
+            user1Registers = new RegisterUser(processId, user1Id, 1, "user1", "email1");
+            user1Registered = new UserRegistered(processId, user1Id, user1Registers.UserName,
+                user1Registers.PrimaryEmail);
+            var title = "title";
+            var author = "author";
+            var isbnnumber = "isbn";
+            user1AddsBookToLibrary = new AddBookToLibrary(processId, user1Id, user1Id, title, author, isbnnumber);
+            book1AddedToUser1Library = new BookAddedToLibrary(processId, user1Id, title, author, isbnnumber);
+            user1RemovesBookFromLibrary = new RemoveBookFromLibrary(processId, user1Id, user1Id, title, author,
+                isbnnumber);
+            book1RemovedFromLibrary = new BookRemovedFromLibrary(processId, user1Id, title, author, isbnnumber);
         }
 
         /// <summary>
@@ -59,25 +64,26 @@ namespace Tests.Domain
         /// THEN Book1 is Removed from User1's Library
         /// </summary>
         [Test]
+        public void RemoveBookInLibraryShouldSucceed()
+        {
+            Given(user1Registers, user1AddsBookToLibrary);
+            When(user1RemovesBookFromLibrary);
+            Then(succeed);
+            AndEventsSavedForAggregate<User>(user1Id, user1Registered, book1AddedToUser1Library, book1RemovedFromLibrary);
+        }
+
+        /// <summary>
+        /// GIVEN 'User1' is a Registered user AND Book1 is not in User1's Library
+        /// WHEN User1 Removes Book1 from her Library
+        /// THEN User1 is notified that Book1 is not in her Library        
+        /// </summary>
+        [Test]
         public void RemoveBookNotInLibraryShouldFail()
         {
-            var processId = Guid.NewGuid();
-            var user1 = User.Register(processId, Guid.NewGuid(), "User 1", "email1");
-            SaveAggregates(user1);
-
-            var command = new RemoveBookFromLibrary(processId, user1.Id, user1.Id, "Title", "Author", "Isbn");
-            var expectedResult = new Result(User.BookNotInLibrary);
-
-            var sut = new RemoveBookFromLibraryHandler(() => Repository, () => EventRepository);
-            Result actualResult = sut.Handle(command);
-            CommitTransactionAndOpenNew();
-            WriteRepository();
-
-            actualResult.ShouldEqual(expectedResult);
-
-            StreamEventsSlice slice = Connection.ReadStreamEventsForwardAsync($"user-{user1.Id}", 0, 10, false).Result;
-            Assert.That(slice.Events.Length, Is.EqualTo(1));
-
+            Given(user1Registers);
+            When(user1RemovesBookFromLibrary);
+            Then(failBecauseBookNotInLibrary);
+            AndEventsSavedForAggregate<User>(user1Id, user1Registered);
         }
 
     }

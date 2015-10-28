@@ -11,7 +11,9 @@ using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Domain.AcceptConnection;
+using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RegisterUser;
+using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
@@ -163,5 +165,16 @@ namespace Tests
         {
             return new AcceptConnectionHandler(() => Repository, () => EventRepository).Handle(command);
         }
+
+        private Result HandleCommand(AddBookToLibrary command)
+        {
+            return new AddBookToLibraryHandler(() => Repository, () => EventRepository).Handle(command);
+        }
+
+        private Result HandleCommand(RemoveBookFromLibrary command)
+        {
+            return new RemoveBookFromLibraryHandler(() => Repository, () => EventRepository).Handle(command);
+        }
+
     }
 }

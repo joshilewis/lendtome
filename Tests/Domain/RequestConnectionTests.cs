@@ -115,7 +115,6 @@ namespace Tests.Domain
             Then(succeed);
             AndEventsSavedForAggregate<User>(user1Id, user1Registered, connectionRequestedFrom1To2);
             AndEventsSavedForAggregate<User>(user2Id, user2Registered, connectionRequestFrom1To2Received);
-
         }
 
         /// <summary>
