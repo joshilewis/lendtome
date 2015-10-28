@@ -29,11 +29,14 @@ namespace Tests.Domain
         public void RequestConnectionFromUserWithPendingRequestShouldFail()
         {
             Guid processId = Guid.NewGuid();
+
             var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
             var registerUser2 = new RegisterUser(processId, Guid.NewGuid(), 2, "user2", "email2");
             var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
+
             var secondRequestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
-            var expectedResponse = new Result(User.ConnectionAlreadyRequested);
+
+            var expectedResult = new Result(User.ConnectionAlreadyRequested);
 
             var expectedEventsForUser1 = new Event[]
             {
@@ -47,14 +50,11 @@ namespace Tests.Domain
                 new ConnectionRequestReceived(processId, registerUser2.UserId, registerUser1.UserId), 
             };
 
-            Result actualResult = HandleCommands(registerUser1, registerUser2, requestConnection, secondRequestConnection);
-            IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
-            IEnumerable<Event> user2Events = EventRepository.GetEventsForAggregate<User>(registerUser2.UserId);
-
-            actualResult.ShouldEqual(expectedResponse);
-            Assert.That(user1Events, Is.EquivalentTo(expectedEventsForUser1));
-            Assert.That(user2Events, Is.EquivalentTo(expectedEventsForUser2));
-
+            Given(registerUser1, registerUser2, requestConnection);
+            When(secondRequestConnection);
+            Then(expectedResult);
+            And<User>(registerUser1.UserId, expectedEventsForUser1);
+            And<User>(registerUser2.UserId, expectedEventsForUser2);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Tests.Domain
             var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
             var registerUser2 = new RegisterUser(processId, Guid.NewGuid(), 2, "user2", "email2");
             var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
-            var expectedResponse = new Result();
+            var expectedResult = new Result();
 
             var expectedEventsForUser1 = new Event[]
             {
@@ -84,13 +84,12 @@ namespace Tests.Domain
                 new ConnectionRequestReceived(processId, registerUser2.UserId, registerUser1.UserId),
             };
 
-            Result actualResult = HandleCommands(registerUser1, registerUser2, requestConnection);
-            IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
-            IEnumerable<Event> user2Events = EventRepository.GetEventsForAggregate<User>(registerUser2.UserId);
+            Given(registerUser1, registerUser2);
+            When(requestConnection);
+            Then(expectedResult);
+            And<User>(registerUser1.UserId, expectedEventsForUser1);
+            And<User>(registerUser2.UserId, expectedEventsForUser2);
 
-            actualResult.ShouldEqual(expectedResponse);
-            Assert.That(user1Events, Is.EquivalentTo(expectedEventsForUser1));
-            Assert.That(user2Events, Is.EquivalentTo(expectedEventsForUser2));
         }
 
         /// <summary>
@@ -104,18 +103,17 @@ namespace Tests.Domain
             Guid processId = Guid.NewGuid();
             var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
             var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, Guid.NewGuid());
-            var expectedResponse = new Result(RequestConnectionHandler.TargetUserDoesNotExist);
+            var expectedResult = new Result(RequestConnectionHandler.TargetUserDoesNotExist);
 
             var expectedEventsForUser1 = new Event[]
             {
                 new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail),
             };
 
-            Result actualResult = HandleCommands(registerUser1, requestConnection);
-            IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
-
-            actualResult.ShouldEqual(expectedResponse);
-            Assert.That(user1Events, Is.EquivalentTo(expectedEventsForUser1));
+            Given(registerUser1);
+            When(requestConnection);
+            Then(expectedResult);
+            And<User>(registerUser1.UserId, expectedEventsForUser1);
         }
 
         /// <summary>
@@ -131,7 +129,7 @@ namespace Tests.Domain
             var registerUser2 = new RegisterUser(processId, Guid.NewGuid(), 2, "user2", "email2");
             var requestConnection = new RequestConnection(processId, registerUser2.UserId, registerUser2.UserId, registerUser1.UserId);
             var secondRequestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
-            var expectedResponse = new Result(User.ReverseConnectionAlreadyRequested);
+            var expectedResult = new Result(User.ReverseConnectionAlreadyRequested);
 
             var expectedEventsForUser1 = new Event[]
             {
@@ -145,14 +143,11 @@ namespace Tests.Domain
                 new ConnectionRequested(processId, registerUser2.UserId, registerUser1.UserId),
             };
 
-            Result actualResult = HandleCommands(registerUser1, registerUser2, requestConnection, secondRequestConnection);
-            IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
-            IEnumerable<Event> user2Events = EventRepository.GetEventsForAggregate<User>(registerUser2.UserId);
-
-            actualResult.ShouldEqual(expectedResponse);
-            Assert.That(user1Events, Is.EquivalentTo(expectedEventsForUser1));
-            Assert.That(user2Events, Is.EquivalentTo(expectedEventsForUser2));
-
+            Given(registerUser1, registerUser2, requestConnection);
+            When(secondRequestConnection);
+            Then(expectedResult);
+            And<User>(registerUser1.UserId, expectedEventsForUser1);
+            And<User>(registerUser2.UserId, expectedEventsForUser2);
         }
 
         /// <summary>
@@ -169,8 +164,8 @@ namespace Tests.Domain
             var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
             var acceptConnection = new AcceptConnection(processId, registerUser2.UserId, registerUser2.UserId,
                 registerUser1.UserId);
-            var requestConnection2 = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
-            var expectedResponse = new Result(User.UsersAlreadyConnected);
+            var secondRequestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser2.UserId);
+            var expectedResult = new Result(User.UsersAlreadyConnected);
 
             var expectedEventsForUser1 = new Event[]
             {
@@ -186,13 +181,11 @@ namespace Tests.Domain
                 new ConnectionAccepted(processId, registerUser2.UserId, registerUser1.UserId), 
             };
 
-            Result actualResult = HandleCommands(registerUser1, registerUser2, requestConnection, acceptConnection, requestConnection2);
-            IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
-            IEnumerable<Event> user2Events = EventRepository.GetEventsForAggregate<User>(registerUser2.UserId);
-
-            Assert.That(user1Events, Is.EquivalentTo(expectedEventsForUser1));
-            Assert.That(user2Events, Is.EquivalentTo(expectedEventsForUser2));
-            actualResult.ShouldEqual(expectedResponse);
+            Given(registerUser1, registerUser2, requestConnection, acceptConnection);
+            When(secondRequestConnection);
+            Then(expectedResult);
+            And<User>(registerUser1.UserId, expectedEventsForUser1);
+            And<User>(registerUser2.UserId, expectedEventsForUser2);
 
         }
 
@@ -207,18 +200,17 @@ namespace Tests.Domain
             Guid processId = Guid.NewGuid();
             var registerUser1 = new RegisterUser(processId, Guid.NewGuid(), 1, "user1", "email1");
             var requestConnection = new RequestConnection(processId, registerUser1.UserId, registerUser1.UserId, registerUser1.UserId);
-            var expectedResponse = new Result(RequestConnectionHandler.CantConnectToSelf);
+            var expectedResult = new Result(RequestConnectionHandler.CantConnectToSelf);
 
             var expectedEventsForUser1 = new Event[]
             {
                 new UserRegistered(processId, registerUser1.UserId, registerUser1.UserName, registerUser1.PrimaryEmail),
             };
 
-            Result actualResult = HandleCommands(registerUser1, requestConnection);
-            IEnumerable<Event> user1Events = EventRepository.GetEventsForAggregate<User>(registerUser1.UserId);
-
-            actualResult.ShouldEqual(expectedResponse);
-            Assert.That(user1Events, Is.EquivalentTo(expectedEventsForUser1));
+            Given(registerUser1);
+            When(requestConnection);
+            Then(expectedResult);
+            And<User>(registerUser1.UserId, expectedEventsForUser1);
         }
 
     }

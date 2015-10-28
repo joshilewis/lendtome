@@ -126,6 +126,29 @@ namespace Tests
             return null;
         }
 
+        protected void Given(params Command[] commands)
+        {
+            Result result = HandleCommands(commands);
+            if(!result.Success) Assert.Fail();
+        }
+
+        private Result actualResult;
+        protected void When(Command command)
+        {
+            actualResult = HandleCommands(command);
+        }
+
+        protected void Then(Result expectedResult)
+        {
+            actualResult.ShouldEqual(expectedResult);
+        }
+
+        protected void And<TAggregate>(Guid aggregateId, IEnumerable<Event> expectedEvents) where TAggregate : Aggregate
+        {
+            IEnumerable<Event> actualEvents = EventRepository.GetEventsForAggregate<TAggregate>(aggregateId);
+            Assert.That(actualEvents, Is.EquivalentTo(expectedEvents));
+        }
+
         private Result HandleCommand(RegisterUser command)
         {
             return new RegisterUserHandler(() => Repository, () => EventRepository).Handle(command);
