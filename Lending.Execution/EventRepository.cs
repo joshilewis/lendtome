@@ -30,8 +30,8 @@ namespace Lending.Execution
             var eventsToEmit = new List<Event>();
             foreach (Aggregate aggregate in Queue)
             {
-                SaveAggregate(aggregate, transactionId);
                 eventsToEmit.AddRange(aggregate.GetUncommittedEvents());
+                SaveAggregate(aggregate, transactionId);
             }
 
             eventEmitter.EmitEvents(eventsToEmit);

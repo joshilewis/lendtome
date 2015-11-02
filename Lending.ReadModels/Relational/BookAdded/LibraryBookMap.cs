@@ -2,7 +2,7 @@ using FluentNHibernate.Mapping;
 
 namespace Lending.ReadModels.Relational.BookAdded
 {
-    class LibraryBookMap : ClassMap<LibraryBook>
+    public class LibraryBookMap : ClassMap<LibraryBook>
     {
         public LibraryBookMap()
         {

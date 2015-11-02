@@ -11,17 +11,16 @@ namespace Lending.Execution
 {
     public class InMemoryEventEmitter : IEventEmitter
     {
-        private readonly InMemoryEventConsumer inMemoryEventConsumer;
+        private readonly Queue<Event> eventsToEmit;
 
-        public InMemoryEventEmitter(InMemoryEventConsumer inMemoryEventConsumer)
+        public InMemoryEventEmitter()
         {
-            this.inMemoryEventConsumer = inMemoryEventConsumer;
+            eventsToEmit = new Queue<Event>();
         }
-
 
         public void EmitEvent(Event @event)
         {
-            inMemoryEventConsumer.ConsumeEvent(@event);
+            eventsToEmit.Enqueue(@event);
         }
 
         public void EmitEvents(IEnumerable<Event> events)
@@ -31,5 +30,7 @@ namespace Lending.Execution
                 EmitEvent(@event);
             }
         }
+
+        public Queue<Event> EmittedEvents => eventsToEmit;
     }
 }

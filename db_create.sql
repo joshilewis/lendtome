@@ -1,4 +1,7 @@
-drop table if exists lender.UserAuth cascade;
+
+    drop table if exists lender."RegisteredUser" cascade;
+
+    drop table if exists lender.UserAuth cascade;
 
     drop table if exists lender.UserAuth_Permissions cascade;
 
@@ -8,11 +11,16 @@ drop table if exists lender.UserAuth cascade;
 
     drop table if exists lender.UserOAuthProvider_Items cascade;
 
-    drop table if exists lender."PendingConnectionRequest" cascade;
+    drop table if exists lender."LibraryBook" cascade;
 
-    drop table if exists lender."RegisteredUser" cascade;
+    drop table if exists lender."UserConnection" cascade;
 
-    drop table if exists lender."ServiceStackUser" cascade;
+    create table lender."RegisteredUser" (
+        Id uuid not null,
+       UserName varchar(255),
+       AuthUserId int8 unique,
+       primary key (Id)
+    );
 
     create table lender.UserAuth (
         Id  serial,
@@ -65,22 +73,24 @@ drop table if exists lender.UserAuth cascade;
        primary key (UserOAuthProviderID, "Key")
     );
 
-    create table lender."PendingConnectionRequest" (
-        SourceUserId uuid not null,
-       TargetUserId uuid unique,
-       primary key (SourceUserId)
+    create table lender."LibraryBook" (
+        Id  bigserial,
+       ProcessId uuid,
+       OwnerId uuid,
+       Title varchar(255),
+       Author varchar(255),
+       Isbn varchar(255),
+       primary key (Id),
+      unique (OwnerId, Title, Author, Isbn)
     );
 
-    create table lender."RegisteredUser" (
-        Id uuid not null,
-       UserName varchar(255),
-       primary key (Id)
-    );
-
-    create table lender."ServiceStackUser" (
-        RegisteredUser_id uuid not null,
-       AuthenticatedUserId int8 unique,
-       primary key (RegisteredUser_id)
+    create table lender."UserConnection" (
+        Id  bigserial,
+       ProcessId uuid,
+       RequestingUserId uuid,
+       AcceptingUserId uuid,
+       primary key (Id),
+      unique (RequestingUserId, AcceptingUserId)
     );
 
     alter table lender.UserAuth_Permissions 
@@ -98,7 +108,3 @@ drop table if exists lender.UserAuth cascade;
         foreign key (UserOAuthProviderID) 
         references lender.UserOAuthProvider;
 
-    alter table lender."ServiceStackUser" 
-        add constraint FK8021AAF553CF4AAC 
-        foreign key (RegisteredUser_id) 
-        references lender."RegisteredUser";

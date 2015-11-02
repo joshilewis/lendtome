@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -24,12 +23,15 @@ namespace Lending.Execution.UnitOfWork
         private readonly Guid transactionId;
         private readonly IEventEmitter eventEmitter;
         private EventStoreEventRepository eventRepository;
+        private readonly EventDispatcher eventDispatcher;
 
-        public UnitOfWork(ISessionFactory sessionFactory, string eventStoreIpAddress, IEventEmitter eventEmitter)
+        public UnitOfWork(ISessionFactory sessionFactory, string eventStoreIpAddress, IEventEmitter eventEmitter,
+            EventDispatcher eventDispatcher)
         {
             //Log.DebugFormat("Creating unit of work {0}", GetHashCode());
             this.sessionFactory = sessionFactory;
             this.eventEmitter = eventEmitter;
+            this.eventDispatcher = eventDispatcher;
             connection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), 1113));
             transactionId = Guid.NewGuid();
         }
@@ -48,8 +50,14 @@ namespace Lending.Execution.UnitOfWork
         {
             eventRepository.Commit(transactionId);
 
+
             //Log.DebugFormat("Committing unit of work {0}", GetHashCode());
             currentSession.Transaction.Commit();
+
+            currentSession.BeginTransaction();
+            eventDispatcher.DispatchEvents();
+            currentSession.Transaction.Commit();
+
             CurrentSessionContext.Unbind(sessionFactory);
         }
 

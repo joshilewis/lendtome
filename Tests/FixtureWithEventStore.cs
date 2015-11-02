@@ -42,7 +42,7 @@ namespace Tests
 
             Connection = EmbeddedEventStoreConnection.Create(Node);
             Connection.ConnectAsync().Wait();
-            EventRepository = new EventStoreEventRepository(new InMemoryEventEmitter(EventConsumer), Connection);
+            EventRepository = new EventStoreEventRepository(new InMemoryEventEmitter(), Connection);
         }
 
         protected void RegisterEventHandler<TEvent>(IEventHandler eventHandler) where TEvent : Event

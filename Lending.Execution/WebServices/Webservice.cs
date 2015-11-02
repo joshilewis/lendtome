@@ -32,6 +32,7 @@ namespace Lending.Execution.WebServices
                 unitOfWork.DoInTransaction(() =>
                 {
                     response = messageHandler.Handle(request);
+
                 });
 
             return response;

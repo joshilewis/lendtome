@@ -131,6 +131,7 @@
     <Compile Include="Auth\UnitOfWorkAuthService.cs" />
     <Compile Include="DI\DomainRegistry.cs" />
     <Compile Include="DI\StructureMapContainerAdapter.cs" />
+    <Compile Include="EventDispatcher.cs" />
     <Compile Include="EventHandlerProvider.cs" />
     <Compile Include="EventStore\AggregateDeletedException.cs" />
     <Compile Include="EventStore\AggregateNotFoundException.cs" />

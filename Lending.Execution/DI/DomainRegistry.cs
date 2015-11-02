@@ -22,6 +22,7 @@ using Lending.Execution.EventStore;
 using Lending.Execution.Persistence;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
+using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.SearchForUser;
 using NHibernate.Context;
 //using Nancy;
@@ -52,6 +53,7 @@ namespace Lending.Execution.DI
                         .AddFromAssemblyOf<UserAuthPersistenceDto>()
                         .AddFromAssemblyOf<RegisteredUserMap>()
                         .AddFromAssemblyOf<RegisteredUser>()
+                        .AddFromAssemblyOf<LibraryBookMap>()
                 )
                 .BuildConfiguration()
                 ;
@@ -96,6 +98,7 @@ namespace Lending.Execution.DI
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedCommandHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
             });
 
             For<IUserAuthRepository>()
@@ -130,10 +133,15 @@ namespace Lending.Execution.DI
             For<Func<Guid>>()
                 .Use(new Func<Guid>(SequentialGuid.NewGuid));
             
+            var eventEmitter = new InMemoryEventEmitter();
+
             For<IEventEmitter>()
-                .AlwaysUnique()
-                .Use<InMemoryEventEmitter>()
-                ;
+                .Singleton()
+                .Use(eventEmitter);
+
+            For<InMemoryEventEmitter>()
+                .Singleton()
+                .Use(eventEmitter);
 
             For<BlockingCollection<Event>>()
                 .Singleton()
@@ -146,6 +154,14 @@ namespace Lending.Execution.DI
             For<IMessageHandler<SearchForUser, Result>>()
                 .AlwaysUnique()
                 .Use<SearchForUserHandler>();
+
+            For<EventDispatcher>()
+                .AlwaysUnique()
+                .Use<EventDispatcher>();
+
+            For<EventHandlerProvider>()
+                .AlwaysUnique()
+                .Use<EventHandlerProvider>();
 
         }
 
