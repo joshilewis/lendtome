@@ -61,6 +61,7 @@
     <Compile Include="Relational\ConnectionAccepted\UserConnectionMap.cs" />
     <Compile Include="Relational\SearchForUser\SearchForUser.cs" />
     <Compile Include="Relational\SearchForUser\SearchForUserHandler.cs" />
+    <Compile Include="Relational\UserRegistered\UserRegisteredHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lending.Cqrs\Lending.Cqrs.csproj">

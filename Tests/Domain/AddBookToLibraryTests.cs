@@ -48,7 +48,7 @@ namespace Tests.Domain
             user1Id = Guid.NewGuid();
             processId = Guid.NewGuid();
             user1Registers = new RegisterUser(processId, user1Id, 1, "user1", "email1");
-            user1Registered = new UserRegistered(processId, user1Id, user1Registers.UserName,
+            user1Registered = new UserRegistered(processId, user1Id, 1, user1Registers.UserName,
                 user1Registers.PrimaryEmail);
             var title = "title";
             var author = "author";

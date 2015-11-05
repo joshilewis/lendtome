@@ -58,7 +58,7 @@ namespace Tests.Domain
             var request = new AuthSessionDouble();
             var expectedResponse = new Result();
             var expectedUser = new RegisteredUser(authDto.Id, userId, authDto.DisplayName);
-            var expectedEvent = new UserRegistered(Guid.Empty, userId, authDto.DisplayName, authDto.PrimaryEmail);
+            var expectedEvent = new UserRegistered(Guid.Empty, userId, 1, authDto.DisplayName, authDto.PrimaryEmail);
 
             var sut = new AuthSessionHandler(() => Session, () => userId, new RegisterUserHandler(() => Repository, () => EventRepository));
             Result actualResult = sut.Handle(request);

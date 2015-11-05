@@ -10,6 +10,36 @@ namespace Tests.ReadModels
     [TestFixture]
     public class SearchForUserTests: FixtureWithEventStoreAndNHibernate
     {
+        #region Fields
+        private Guid processId = Guid.Empty;
+        private Guid user1Id;
+        private Guid user2Id;
+        private Guid user3Id;
+        private Guid user4Id;
+
+        //Events
+        private UserRegistered user1Registered;
+        private UserRegistered user2Registered;
+        private UserRegistered user3Registered;
+        private UserRegistered user4Registered;
+
+        public override void SetUp()
+        {
+            base.SetUp();
+            user1Id = Guid.NewGuid();
+            user2Id = Guid.NewGuid();
+            user3Id = Guid.NewGuid();
+            user4Id = Guid.NewGuid();
+            processId = Guid.NewGuid();
+
+            user1Registered = new UserRegistered(processId, user1Id, 1, "Joshua Lewis", "Email1");
+            user2Registered = new UserRegistered(processId, user2Id, 2, "Suzaan Hepburn", "Email2");
+            user3Registered = new UserRegistered(processId, user3Id, 3, "Josie Doe", "Email3");
+            user4Registered = new UserRegistered(processId, user4Id, 4, "Audrey Hepburn", "Email4");
+        }
+
+        #endregion
+
         /// <summary>
         /// GIVEN Users with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have Registered 
         /// WHEN I Search for Users with the search string 'Lew' 
@@ -18,24 +48,12 @@ namespace Tests.ReadModels
         [Test]
         public void SearchingForUserWithSingleMatchShouldReturnThatUser()
         {
-            var joshuaLewis = new RegisteredUser(1, Guid.NewGuid(), "Joshua Lewis");
-            var suzaanHepburn = new RegisteredUser(2, Guid.NewGuid(), "Suzaan Hepburn");
-            var josieDoe = new RegisteredUser(3, Guid.NewGuid(), "Josie Doe");
-            var audreyHepburn = new RegisteredUser(4, Guid.NewGuid(), "Audrey Hepburn");
-
-            SaveEntities(joshuaLewis, suzaanHepburn, josieDoe, audreyHepburn);
-            CommitTransactionAndOpenNew();
-            
-            var query = new SearchForUser("Lew");
-            var expectedResult = new Result<RegisteredUser[]>(new RegisteredUser[]
+            Given(user1Registered, user2Registered, user3Registered, user4Registered);
+            When(new SearchForUser("Lew"));
+            Then(actualResult => ((Result<RegisteredUser[]>)actualResult).ShouldEqual(new Result<RegisteredUser[]>(new RegisteredUser[]
             {
-                joshuaLewis,
-            });
-
-            var sut = new SearchForUserHandler(() => Session);
-            Result actualResult = sut.Handle(query);
-
-            ((Result<RegisteredUser[]>)actualResult).ShouldEqual(expectedResult);
+                new RegisteredUser(1, user1Id, user1Registered.UserName), 
+            })));
         }
 
         /// <summary>
@@ -46,24 +64,12 @@ namespace Tests.ReadModels
         [Test]
         public void SearchingForUserWithSingleMatchWithWrongCaseShouldReturnThatUser()
         {
-            var joshuaLewis = new RegisteredUser(1, Guid.NewGuid(), "Joshua Lewis");
-            var suzaanHepburn = new RegisteredUser(2, Guid.NewGuid(), "Suzaan Hepburn");
-            var josieDoe = new RegisteredUser(3, Guid.NewGuid(), "Josie Doe");
-            var audreyHepburn = new RegisteredUser(4, Guid.NewGuid(), "Audrey Hepburn");
-
-            SaveEntities(joshuaLewis, suzaanHepburn, josieDoe, audreyHepburn);
-            CommitTransactionAndOpenNew();
-
-            var query = new SearchForUser("lEw");
-            var expectedResult = new Result<RegisteredUser[]>(new RegisteredUser[]
+            Given(user1Registered, user2Registered, user3Registered, user4Registered);
+            When(new SearchForUser("lEw"));
+            Then(actualResult => ((Result<RegisteredUser[]>)actualResult).ShouldEqual(new Result<RegisteredUser[]>(new RegisteredUser[]
             {
-                joshuaLewis,
-            });
-
-            var sut = new SearchForUserHandler(() => Session);
-            Result actualResult = sut.Handle(query);
-
-            ((Result<RegisteredUser[]>) actualResult).ShouldEqual(expectedResult);
+                new RegisteredUser(1, user1Id, user1Registered.UserName),
+            })));
         }
 
         /// <summary>
@@ -74,23 +80,12 @@ namespace Tests.ReadModels
         [Test]
         public void SearchingForUserWithNoMatchesShouldReturnEmptyList()
         {
-            var joshuaLewis = new RegisteredUser(1, Guid.NewGuid(), "Joshua Lewis");
-            var suzaanHepburn = new RegisteredUser(2, Guid.NewGuid(), "Suzaan Hepburn");
-            var josieDoe = new RegisteredUser(3, Guid.NewGuid(), "Josie Doe");
-            var audreyHepburn = new RegisteredUser(4, Guid.NewGuid(), "Audrey Hepburn");
-
-            SaveEntities(joshuaLewis, suzaanHepburn, josieDoe, audreyHepburn);
-            CommitTransactionAndOpenNew();
-
-            var query = new SearchForUser("Pet");
-            var expectedResult = new Result<RegisteredUser[]>(new RegisteredUser[]
+            Given(user1Registered, user2Registered, user3Registered, user4Registered);
+            When(new SearchForUser("Pet"));
+            Then(actualResult => ((Result<RegisteredUser[]>)actualResult).ShouldEqual(new Result<RegisteredUser[]>(new RegisteredUser[]
             {
-            });
+            })));
 
-            var sut = new SearchForUserHandler(() => Session);
-            Result actualResult = sut.Handle(query);
-
-            ((Result<RegisteredUser[]>)actualResult).ShouldEqual(expectedResult);
         }
 
         /// <summary>
@@ -101,25 +96,13 @@ namespace Tests.ReadModels
         [Test]
         public void SearchingForUserWithTwoMatchsShouldReturnTwoUsers()
         {
-            var joshuaLewis = new RegisteredUser(1, Guid.NewGuid(), "Joshua Lewis");
-            var suzaanHepburn = new RegisteredUser(2, Guid.NewGuid(), "Suzaan Hepburn");
-            var josieDoe = new RegisteredUser(3, Guid.NewGuid(), "Josie Doe");
-            var audreyHepburn = new RegisteredUser(4, Guid.NewGuid(), "Audrey Hepburn");
-
-            SaveEntities(joshuaLewis, suzaanHepburn, josieDoe, audreyHepburn);
-            CommitTransactionAndOpenNew();
-
-            var query = new SearchForUser("Jos");
-            var expectedResult = new Result<RegisteredUser[]>(new RegisteredUser[]
+            Given(user1Registered, user2Registered, user3Registered, user4Registered);
+            When(new SearchForUser("Jos"));
+            Then(actualResult => ((Result<RegisteredUser[]>)actualResult).ShouldEqual(new Result<RegisteredUser[]>(new RegisteredUser[]
             {
-                joshuaLewis,
-                josieDoe,
-            });
-
-            var sut = new SearchForUserHandler(() => Session);
-            Result actualResult = sut.Handle(query);
-
-            ((Result<RegisteredUser[]>)actualResult).ShouldEqual(expectedResult);
+                new RegisteredUser(1, user1Id, user1Registered.UserName),
+                new RegisteredUser(3, user3Id, user3Registered.UserName),
+            })));
         }
 
     }

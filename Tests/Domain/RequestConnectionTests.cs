@@ -66,13 +66,13 @@ namespace Tests.Domain
             user1RequestsConnectionToUser2 = new RequestConnection(processId, user1Id, user1Id, user2Id);
             user2RequestsConnectionToUser1 = new RequestConnection(processId, user2Id, user2Id, user1Id);
             user1Requests2ndConnectionToUser2 = new RequestConnection(processId, user1Id, user1Id, user2Id);
-            user1Registered = new UserRegistered(processId, user1Id, user1Registers.UserName,
+            user1Registered = new UserRegistered(processId, user1Id, 1, user1Registers.UserName,
                 user1Registers.PrimaryEmail);
             connectionRequestedFrom1To2 = new ConnectionRequested(processId, user1Id,
                 user2Id);
             connectionRequestedFrom2To1 = new ConnectionRequested(processId, user2Id,
                 user1Id);
-            user2Registered = new UserRegistered(processId, user2Id, user2Registers.UserName,
+            user2Registered = new UserRegistered(processId, user2Id, 2, user2Registers.UserName,
                 user2Registers.PrimaryEmail);
             connectionRequestFrom1To2Received = new ConnectionRequestReceived(processId, user2Id,
                 user1Id);

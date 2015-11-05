@@ -54,11 +54,11 @@ namespace Tests.Domain
             user1Registers = new RegisterUser(processId, user1Id, 1, "user1", "email1");
             user2Registers = new RegisterUser(processId, user2Id, 2, "user2", "email2");
             user1RequestsConnectionToUser2 = new RequestConnection(processId, user1Id, user1Id, user2Id);
-            user1Registered = new UserRegistered(processId, user1Id, user1Registers.UserName,
+            user1Registered = new UserRegistered(processId, user1Id, 1, user1Registers.UserName,
                 user1Registers.PrimaryEmail);
             connectionRequestedFrom1To2 = new ConnectionRequested(processId, user1Id,
                 user2Id);
-            user2Registered = new UserRegistered(processId, user2Id, user2Registers.UserName,
+            user2Registered = new UserRegistered(processId, user2Id, 2, user2Registers.UserName,
                 user2Registers.PrimaryEmail);
             connectionRequestFrom1To2Received = new ConnectionRequestReceived(processId, user2Id,
                 user1Id);

@@ -21,6 +21,7 @@ using Lending.Execution.Persistence;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.ConnectionAccepted;
 using Lending.ReadModels.Relational.SearchForUser;
+using Lending.ReadModels.Relational.UserRegistered;
 using NCrunch.Framework;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
@@ -77,6 +78,7 @@ namespace Tests
             Repository = new NHibernateRepository(() => Session);
 
             Container.Inject<IRepository>(Repository);
+            Container.Inject<ISession>(Session);
         }
 
         [TearDown]
@@ -173,10 +175,15 @@ namespace Tests
                         .Use<RequestConnectionHandler>();
                     x.For<IMessageHandler<AcceptConnection, Result>>()
                         .Use<AcceptConnectionHandler>();
+                    x.For<IMessageHandler<SearchForUser, Result>>()
+                        .Use<SearchForUserHandler>();
+
                     x.For<IEventHandler<ConnectionAccepted>>()
                         .Use<ConnectionAcceptedEventHandler>();
                     x.For<IEventHandler<BookAddedToLibrary>>()
                         .Use<BookAddedEventHandler>();
+                    x.For<IEventHandler<UserRegistered>>()
+                        .Use<UserRegisteredHandler>();
                 };
             }
         }
