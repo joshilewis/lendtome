@@ -3,7 +3,8 @@ using Lending.Cqrs.Query;
 
 namespace Lending.Cqrs.Command
 {
-    public abstract class CommandHandler<TMessage, TResult> : ICommandHandler<TMessage, TResult> where TMessage : Command where TResult : Result
+    public abstract class CommandHandler<TMessage, TResult> : MessageHandler<TMessage, TResult>, 
+        ICommandHandler<TMessage, TResult> where TMessage : Command where TResult : Result
     {
         private readonly Func<IRepository> getRepository;
         private readonly Func<IEventRepository> getEventRepository;
@@ -13,8 +14,6 @@ namespace Lending.Cqrs.Command
             this.getRepository = repositoryFunc;
             this.getEventRepository = eventRepositoryFunc;
         }
-
-        public abstract TResult Handle(TMessage command);
 
         protected IRepository Session => getRepository();
 

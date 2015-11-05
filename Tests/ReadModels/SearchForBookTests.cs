@@ -72,7 +72,7 @@ namespace Tests.ReadModels
 
     }
 
-    public class SearchForBookHandler : IQueryHandler<SearchForBook, Result>
+    public class SearchForBookHandler : MessageHandler<SearchForBook, Result>, IQueryHandler<SearchForBook, Result>
     {
         public const string UserHasNoConnection = "User has no connections";
 
@@ -83,7 +83,7 @@ namespace Tests.ReadModels
             this.getSession = sessionFunc;
         }
 
-        public Result Handle(SearchForBook message)
+        public override Result Handle(SearchForBook message)
         {
             ISession session = getSession();
 

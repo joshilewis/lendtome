@@ -18,6 +18,7 @@ using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
 using Lending.Execution.Persistence;
+using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.ConnectionAccepted;
 using Lending.ReadModels.Relational.SearchForUser;
 using NCrunch.Framework;
@@ -25,6 +26,8 @@ using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using NUnit.Framework;
 using ServiceStack.Authentication.NHibernate;
+using StructureMap;
+using StructureMap.Graph;
 using Tests.ReadModels;
 using Configuration = NHibernate.Cfg.Configuration;
 
@@ -73,6 +76,7 @@ namespace Tests
             Session.BeginTransaction();
             Repository = new NHibernateRepository(() => Session);
 
+            Container.Inject<IRepository>(Repository);
         }
 
         [TearDown]
@@ -120,36 +124,6 @@ namespace Tests
             return result;
         }
 
-        protected override Result DispatchMessage(Message message)
-        {
-            return HandleMessage((dynamic) message);
-        }
-
-        protected virtual void HandleEvents(params Event[] events)
-        {
-            foreach (var @event in events)
-            {
-                DispatchEvent(@event);
-            }
-            CommitTransactionAndOpenNew();
-
-        }
-
-        protected virtual void DispatchEvent(Event @event)
-        {
-            HandleEvent((dynamic)@event);
-        }
-
-        private Result HandleEvent(Event @event)
-        {
-            throw new NotImplementedException();
-        }
-
-        private Result HandleMessage(Message command)
-        {
-            throw new NotImplementedException();
-        }
-
         protected void Given(params Message[] messages)
         {
             Result result = HandleMessages(messages);
@@ -183,49 +157,40 @@ namespace Tests
             Assert.That(actualEvents, Is.EquivalentTo(expectedEvents));
         }
 
-        private Result HandleMessage(RegisterUser message)
+        protected override Action<ConfigurationExpression> ConfigurationExpressionAction
         {
-            return new RegisterUserHandler(() => Repository, () => EventRepository).Handle(message);
+            get
+            {
+                return x =>
+                {
+                    x.For<IMessageHandler<RegisterUser, Result>>()
+                        .Use<RegisterUserHandler>();
+                    x.For<IMessageHandler<AddBookToLibrary, Result>>()
+                        .Use<AddBookToLibraryHandler>();
+                    x.For<IMessageHandler<RemoveBookFromLibrary, Result>>()
+                        .Use<RemoveBookFromLibraryHandler>();
+                    x.For<IMessageHandler<RequestConnection, Result>>()
+                        .Use<RequestConnectionHandler>();
+                    x.For<IMessageHandler<AcceptConnection, Result>>()
+                        .Use<AcceptConnectionHandler>();
+                    x.For<IEventHandler<ConnectionAccepted>>()
+                        .Use<ConnectionAcceptedEventHandler>();
+                    x.For<IEventHandler<BookAddedToLibrary>>()
+                        .Use<BookAddedEventHandler>();
+                };
+            }
         }
 
-        private Result HandleMessage(RequestConnection message)
+        protected override Action<IAssemblyScanner> ScannerAction
         {
-            return new RequestConnectionHandler(() => Repository, () => EventRepository).Handle(message);
+            get
+            {
+                return x =>
+                {
+                    x.AssemblyContainingType<AcceptConnection>();
+                    x.AssemblyContainingType<RegisteredUser>();
+                };
+            }
         }
-
-        private Result HandleMessage(AcceptConnection message)
-        {
-            return new AcceptConnectionHandler(() => Repository, () => EventRepository).Handle(message);
-        }
-
-        private Result HandleMessage(AddBookToLibrary message)
-        {
-            return new AddBookToLibraryHandler(() => Repository, () => EventRepository).Handle(message);
-        }
-
-        private Result HandleMessage(RemoveBookFromLibrary message)
-        {
-            return new RemoveBookFromLibraryHandler(() => Repository, () => EventRepository).Handle(message);
-        }
-
-        private void HandleEvent(UserRegistered @event)
-        {
-        }
-
-        private void HandleEvent(ConnectionAccepted @event)
-        {
-            new ConnectionAcceptedEventHandler(() => Session).When(@event);
-        }
-
-        private Result HandleMessage(SearchForBook message)
-        {
-            throw new NotImplementedException();
-        }
-
-        private Result HandleMessage(SearchForUser message)
-        {
-            return new SearchForUserHandler(() => Session).Handle(message);
-        }
-
     }
 }

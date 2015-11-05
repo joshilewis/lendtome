@@ -10,7 +10,7 @@ using Lending.Domain.Model;
 
 namespace Lending.Domain.RegisterUser
 {
-    public class RegisterUserHandler : AuthenticatedCommandHandler<RegisterUser, Result>
+    public class RegisterUserHandler : CommandHandler<RegisterUser, Result>, IAuthenticatedCommandHandler<RegisterUser, Result>
     {
 
         public RegisterUserHandler(Func<IRepository> repositoryFunc, Func<IEventRepository> eventRepositoryFunc)

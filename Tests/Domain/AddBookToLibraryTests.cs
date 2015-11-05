@@ -15,6 +15,7 @@ using Lending.Domain.RemoveBookFromLibrary;
 using Mono.Security.Authenticode;
 using NUnit.Framework;
 using ServiceStack.Text;
+using StructureMap;
 
 namespace Tests.Domain
 {
