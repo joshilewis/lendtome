@@ -72,13 +72,13 @@ namespace Tests
             base.TearDown();
         }
 
-        protected virtual Result HandleCommands(params Command[] commands)
+        protected virtual Result HandleMessages(params Message[] messages)
         {
             Result result = null;
 
-            foreach (var command in commands)
+            foreach (var message in messages)
             {
-                result = DispatchCommand(command);
+                result = DispatchMessage(message);
                 WriteRepository();
                 if (!result.Success) break;
             }
@@ -87,7 +87,7 @@ namespace Tests
 
         }
 
-        protected abstract Result DispatchCommand(Command command);
+        protected abstract Result DispatchMessage(Message message);
 
     }
 }

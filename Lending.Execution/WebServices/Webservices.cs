@@ -36,7 +36,7 @@ namespace Lending.Execution.WebServices
 
     }
 
-    public class AddBookToLibraryWebservice : Webservice<AddBookToLibrary, Result>
+    public class AddBookToLibraryWebservice : AuthenticatedWebservice<AddBookToLibrary, Result>
     {
         public AddBookToLibraryWebservice(IUnitOfWork unitOfWork,
             IAuthenticatedMessageHandler<AddBookToLibrary, Result> messageHandler)

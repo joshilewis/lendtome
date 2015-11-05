@@ -183,6 +183,14 @@ namespace Tests
             return true;
         }
 
+        public static bool ShouldEqual(this Result<BookSearchResult[]> actual, Result<BookSearchResult[]> expected)
+        {
+            Assert.That(actual.Payload, Is.EquivalentTo(expected.Payload));
+
+            ((Result)actual).ShouldEqual(expected);
+
+            return true;
+        }
 
 
     }

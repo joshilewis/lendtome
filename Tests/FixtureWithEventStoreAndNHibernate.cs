@@ -19,11 +19,13 @@ using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
 using Lending.Execution.Persistence;
 using Lending.ReadModels.Relational.ConnectionAccepted;
+using Lending.ReadModels.Relational.SearchForUser;
 using NCrunch.Framework;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using NUnit.Framework;
 using ServiceStack.Authentication.NHibernate;
+using Tests.ReadModels;
 using Configuration = NHibernate.Cfg.Configuration;
 
 namespace Tests
@@ -111,38 +113,68 @@ namespace Tests
             }
         }
 
-        protected override Result HandleCommands(params Command[] commands)
+        protected override Result HandleMessages(params Message[] messages)
         {
-            Result result = base.HandleCommands(commands);
+            Result result = base.HandleMessages(messages);
             CommitTransactionAndOpenNew();
             return result;
         }
 
-        protected override Result DispatchCommand(Command command)
+        protected override Result DispatchMessage(Message message)
         {
-            return HandleCommand((dynamic) command);
+            return HandleMessage((dynamic) message);
         }
 
-        private Result HandleCommand(Command command)
+        protected virtual void HandleEvents(params Event[] events)
         {
-            return null;
+            foreach (var @event in events)
+            {
+                DispatchEvent(@event);
+            }
+            CommitTransactionAndOpenNew();
+
         }
 
-        protected void Given(params Command[] commands)
+        protected virtual void DispatchEvent(Event @event)
         {
-            Result result = HandleCommands(commands);
+            HandleEvent((dynamic)@event);
+        }
+
+        private Result HandleEvent(Event @event)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Result HandleMessage(Message command)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected void Given(params Message[] messages)
+        {
+            Result result = HandleMessages(messages);
             if(!result.Success) Assert.Fail();
         }
 
-        private Result actualResult;
-        protected void When(Command command)
+        protected void Given(params Event[] events)
         {
-            actualResult = HandleCommands(command);
+            HandleEvents(events);
+        }
+
+        private Result actualResult;
+        protected void When(Message message)
+        {
+            actualResult = HandleMessages(message);
         }
 
         protected void Then(Result expectedResult)
         {
             actualResult.ShouldEqual(expectedResult);
+        }
+
+        protected void Then(Predicate<Result> resultEqualityPredicate)
+        {
+            resultEqualityPredicate(actualResult);
         }
 
         protected void AndEventsSavedForAggregate<TAggregate>(Guid aggregateId, params Event[] expectedEvents) where TAggregate : Aggregate
@@ -151,29 +183,48 @@ namespace Tests
             Assert.That(actualEvents, Is.EquivalentTo(expectedEvents));
         }
 
-        private Result HandleCommand(RegisterUser command)
+        private Result HandleMessage(RegisterUser message)
         {
-            return new RegisterUserHandler(() => Repository, () => EventRepository).Handle(command);
+            return new RegisterUserHandler(() => Repository, () => EventRepository).Handle(message);
         }
 
-        private Result HandleCommand(RequestConnection command)
+        private Result HandleMessage(RequestConnection message)
         {
-            return new RequestConnectionHandler(() => Repository, () => EventRepository).Handle(command);
+            return new RequestConnectionHandler(() => Repository, () => EventRepository).Handle(message);
         }
 
-        private Result HandleCommand(AcceptConnection command)
+        private Result HandleMessage(AcceptConnection message)
         {
-            return new AcceptConnectionHandler(() => Repository, () => EventRepository).Handle(command);
+            return new AcceptConnectionHandler(() => Repository, () => EventRepository).Handle(message);
         }
 
-        private Result HandleCommand(AddBookToLibrary command)
+        private Result HandleMessage(AddBookToLibrary message)
         {
-            return new AddBookToLibraryHandler(() => Repository, () => EventRepository).Handle(command);
+            return new AddBookToLibraryHandler(() => Repository, () => EventRepository).Handle(message);
         }
 
-        private Result HandleCommand(RemoveBookFromLibrary command)
+        private Result HandleMessage(RemoveBookFromLibrary message)
         {
-            return new RemoveBookFromLibraryHandler(() => Repository, () => EventRepository).Handle(command);
+            return new RemoveBookFromLibraryHandler(() => Repository, () => EventRepository).Handle(message);
+        }
+
+        private void HandleEvent(UserRegistered @event)
+        {
+        }
+
+        private void HandleEvent(ConnectionAccepted @event)
+        {
+            new ConnectionAcceptedEventHandler(() => Session).When(@event);
+        }
+
+        private Result HandleMessage(SearchForBook message)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Result HandleMessage(SearchForUser message)
+        {
+            return new SearchForUserHandler(() => Session).Handle(message);
         }
 
     }
