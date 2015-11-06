@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lending.Cqrs;
 using Lending.Cqrs.Query;
 using Lending.Domain.AcceptConnection;
+using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;
-using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.ConnectionAccepted;
-using NHibernate;
+using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 
 namespace Tests.ReadModels
@@ -21,6 +19,78 @@ namespace Tests.ReadModels
     /// </summary>
     public class SearchForBookTests : FixtureWithEventStoreAndNHibernate
     {
+
+        #region Fields
+        private Guid processId = Guid.Empty;
+        private Guid user1Id;
+        private Guid user2Id;
+        private Guid user3Id;
+        private Guid user4Id;
+        private Guid user5Id;
+        private Guid user6Id;
+
+        //Events
+        private UserRegistered user1Registered;
+        private UserRegistered user2Registered;
+        private UserRegistered user3Registered;
+        private UserRegistered user4Registered;
+        private UserRegistered user5Registered;
+        private UserRegistered user6Registered;
+
+        private ConnectionAccepted conn1To2Accepted;
+        private ConnectionAccepted conn1To3Accepted;
+        private ConnectionAccepted conn1To4Accepted;
+        private ConnectionAccepted conn1To5Accepted;
+        private ConnectionAccepted conn1To6Accepted;
+        private BookAddedToLibrary tddByKbAddTo3;
+        private BookAddedToLibrary xpeByKbAddTo4;
+        private BookAddedToLibrary xpeByKbAddTo2;
+        private BookAddedToLibrary essBySSAddTo5;
+        private BookAddedToLibrary bBySAAddTo6;
+
+        private const string TestDrivenDevelopment = "Test-Driven Development";
+        private const string KentBeck = "Kent Beck";
+        private const string Isbn = "Isbn";
+        private const string ExtremeProgrammingExplained = "Extreme Programming Explained";
+        private const string ExtremeSnowboardStunts = "Extreme Snowboard Stunts";
+        private const string SomeSkiier = "Some Skiier";
+        private const string BeckAMusicalMaestro = "Beck: A musical Maestro";
+        private const string SomeAuthor = "Some Author";
+
+        public override void SetUp()
+        {
+            base.SetUp();
+            user1Id = Guid.NewGuid();
+            user2Id = Guid.NewGuid();
+            user3Id = Guid.NewGuid();
+            user4Id = Guid.NewGuid();
+            user5Id = Guid.NewGuid();
+            user6Id = Guid.NewGuid();
+            processId = Guid.NewGuid();
+
+            user1Registered = new UserRegistered(processId, user1Id, 1, "User1", "Email1");
+            user2Registered = new UserRegistered(processId, user2Id, 2, "User2", "Email2");
+            user3Registered = new UserRegistered(processId, user3Id, 3, "User3", "Email3");
+            user4Registered = new UserRegistered(processId, user4Id, 4, "User4", "Email4");
+            user5Registered = new UserRegistered(processId, user5Id, 5, "User5", "Email5");
+            user6Registered = new UserRegistered(processId, user6Id, 6, "User6", "Email6");
+
+            conn1To2Accepted = new ConnectionAccepted(processId, user2Id, user1Id);
+            conn1To3Accepted = new ConnectionAccepted(processId, user3Id, user1Id);
+            conn1To4Accepted = new ConnectionAccepted(processId, user4Id, user1Id);
+            conn1To5Accepted = new ConnectionAccepted(processId, user5Id, user1Id);
+            conn1To6Accepted = new ConnectionAccepted(processId, user6Id, user1Id);
+
+            xpeByKbAddTo2 = new BookAddedToLibrary(processId, user2Id, ExtremeProgrammingExplained, KentBeck, Isbn);
+            xpeByKbAddTo4 = new BookAddedToLibrary(processId, user4Id, ExtremeProgrammingExplained, KentBeck, Isbn);
+            tddByKbAddTo3 = new BookAddedToLibrary(processId, user3Id, TestDrivenDevelopment, KentBeck, Isbn);
+            essBySSAddTo5 = new BookAddedToLibrary(processId, user5Id, ExtremeSnowboardStunts, SomeSkiier, Isbn);
+            bBySAAddTo6 = new BookAddedToLibrary(processId, user6Id, BeckAMusicalMaestro, SomeAuthor, Isbn);
+        }
+
+        #endregion
+
+
         /// <summary>
         /// GIVEN User1 has Registered AND User2 has Registered AND User1 has Request to Connect with User2 AND User2 
         /// has Accepted the Connection from User1
@@ -30,21 +100,11 @@ namespace Tests.ReadModels
         [Test]
         public void SearchingForBookNotOwnedByAnyConnectionShouldReturnEmptyList()
         {
-            var registeredUser1 = new RegisteredUser(1, Guid.NewGuid(), "User1");
-            var registeredUser2 = new RegisteredUser(2, Guid.NewGuid(), "User2");
-            var userConnection = new UserConnection(Guid.Empty, registeredUser1.Id, registeredUser2.Id);
+            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[] { });
 
-            SaveEntities(registeredUser1, registeredUser2, userConnection);
-            CommitTransactionAndOpenNew();
-
-            var query = new SearchForBook(registeredUser1.Id, "Extreme Programming Explained");
-
-            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[] {});
-
-            Result actualResult = new SearchForBookHandler(() => Session).Handle(query);
-
-            ((Result<BookSearchResult[]>) actualResult).ShouldEqual(expectedResult);
-
+            Given(user1Registered, user2Registered, conn1To2Accepted);
+            When(new SearchForBook(user1Id, ExtremeProgrammingExplained));
+            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
         }
 
         /// <summary>
@@ -55,98 +115,153 @@ namespace Tests.ReadModels
         [Test]
         public void SearchingForBookWithNoConnectionsShouldFail()
         {
-            var registeredUser1 = new RegisteredUser(1, Guid.NewGuid(), "User1");
-
-            SaveEntities(registeredUser1);
-            CommitTransactionAndOpenNew();
-
-            var query = new SearchForBook(registeredUser1.Id, "Extreme Programming Explained");
-
             var expectedResult = new Result<BookSearchResult[]>(SearchForBookHandler.UserHasNoConnection, new BookSearchResult[] { });
 
-            Result actualResult = new SearchForBookHandler(() => Session).Handle(query);
-
-            ((Result<BookSearchResult[]>)actualResult).ShouldEqual(expectedResult);
+            Given(user1Registered);
+            When(new SearchForBook(user1Id, ExtremeProgrammingExplained));
+            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
 
         }
 
-    }
-
-    public class SearchForBookHandler : MessageHandler<SearchForBook, Result>, IQueryHandler<SearchForBook, Result>
-    {
-        public const string UserHasNoConnection = "User has no connections";
-
-        private readonly Func<ISession> getSession;
-
-        public SearchForBookHandler(Func<ISession> sessionFunc)
+        /// <summary>
+        /// GIVEN User1, User2, User3 and User4 have all Registered, AND User1 is Connected to User2, User3 and User4 
+        /// AND User2 and User4 have Added the Book ("Extreme Programming Explained", "Kent Beck") to their Libraries 
+        /// AND User3 has Added the Book "Test-Driven Development", "Kent Beck") to her Library
+        /// WHEN User1 Searches for a Book with the Search Term "Extreme Programming Eplained"
+        /// THEN A successful result is returned with content('User2:("Extreme Programming Explained", "Kent Beck")', 
+        /// 'User4':("Extreme Programming Explained", "Kent Beck"))'
+        /// </summary>
+        [Test]
+        public void SearchingForBookWithSingleMatchingTitleInManyLibrariesShouldReturnAllOwners()
         {
-            this.getSession = sessionFunc;
-        }
-
-        public override Result Handle(SearchForBook message)
-        {
-            ISession session = getSession();
-
-            int numberOfConnections = session.QueryOver<UserConnection>()
-                .Where(x => x.AcceptingUserId == message.UserId || x.RequestingUserId == message.UserId)
-                .RowCount();
-
-            if (numberOfConnections == 0)
-                return new Result<BookSearchResult[]>(UserHasNoConnection, new BookSearchResult[] {});
-
-            BookSearchResult[] payload = session.QueryOver<LibraryBook>()
-                .WhereRestrictionOn(x => x.Title).IsInsensitiveLike("%" + message.SearchString + "%")
-                .WhereRestrictionOn(x => x.Author).IsInsensitiveLike("%" + message.SearchString + "%")
-                .List()
-                .Select(x => new BookSearchResult(x.OwnerId, "", x.Title, x.Author))
-                .ToArray();
-
-            return new Result<BookSearchResult[]>(payload);
-        }
-
-    }
-
-    public class BookSearchResult
-    {
-        public Guid UserId { get; set; }
-        public string Username { get; set; }
-        public string Title { get; set; }
-        public string Author { get; set; }
-
-        public BookSearchResult(Guid userId, string username, string title, string author)
-        {
-            UserId = userId;
-            Username = username;
-            Title = title;
-            Author = author;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
+            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                return false;
-            }
+                new BookSearchResult(user2Id, user2Registered.UserName, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(user4Id, user4Registered.UserName, ExtremeProgrammingExplained, KentBeck),
+            });
 
-            if (!base.Equals(obj)) return false;
-            var other = (BookSearchResult)obj;
-            return UserId.Equals(other.UserId) &&
-                   Username.Equals(other.Username) &&
-                   Title.Equals(other.Title) &&
-                   Author.Equals(other.Author);
+            Given(user1Registered, user2Registered, user3Registered, user4Registered, 
+                conn1To2Accepted, conn1To3Accepted, conn1To4Accepted,
+                xpeByKbAddTo4, xpeByKbAddTo2, tddByKbAddTo3);
+            When(new SearchForBook(user1Id, ExtremeProgrammingExplained));
+            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
+
         }
-    }
 
-    public class SearchForBook : Query, IAuthenticated
-    {
-        public string SearchString { get; set; }
-
-        public SearchForBook(Guid userId, string searchString)
+        /// <summary>
+        /// GIVEN User1, User2, User3, User4 and User5 have all Registered, 
+        /// AND User1 is Connected to User2, User3, User4 and User5 
+        /// AND User2 and User4 have Added the Book ("Extreme Programming Explained", "Kent Beck") to their Libraries 
+        /// AND User3 has Added the Book "Test-Driven Development", "Kent Beck") to her Library 
+        /// AND User5 has Added the Book ("Extreme Snowboard Stunts", "Some Skiier")
+        /// WHEN User1 Searches for a Book with the Search Term "Extreme"
+        /// THEN A successful result is returned with content('User2:("Extreme Programming Explained", "Kent Beck")', 
+        /// 'User4':("Extreme Programming Explained", "Kent Beck"), 'User5':("Extreme Snowboard Stunts", "Some Skiier"))
+        /// </summary>
+        [Test]
+        public void SearchingForBookWithManyMatchingTitlesInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
-            SearchString = searchString;
-            UserId = userId;
+            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
+            {
+                new BookSearchResult(user2Id, user2Registered.UserName, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(user4Id, user4Registered.UserName, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(user5Id, user5Registered.UserName, ExtremeSnowboardStunts, SomeSkiier), 
+            });
+
+            Given(user1Registered, user2Registered, user3Registered, user4Registered, user5Registered, 
+                conn1To2Accepted, conn1To3Accepted, conn1To4Accepted, conn1To5Accepted,
+                xpeByKbAddTo4, xpeByKbAddTo2, tddByKbAddTo3, essBySSAddTo5);
+            When(new SearchForBook(user1Id, "Extreme"));
+            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
+
         }
 
-        public Guid UserId { get; set; }
+        /// <summary>
+        /// GIVEN User1, User2, User3, User4 and User5 have all Registered, 
+        /// AND User1 is Connected to User2, User3, User4 and User5 
+        /// AND User2 and User4 have Added the Book ("Extreme Programming Explained", "Kent Beck") to their Libraries 
+        /// AND User3 has Added the Book "Test-Driven Development", "Kent Beck") to her Library 
+        /// AND User5 has Added the Book ("Extreme Snowboard Stunts", "Some Skiier")
+        /// WHEN User1 Searches for a Book with the Search Term "Kent Beck"
+        /// THEN A successful result is returned with content ('User2:("Extreme Programming Explained", "Kent Beck")',
+        ///  "Kent Beck"), 'User3':("Test-Driven Development", "Kent Beck"), 'User4':("Extreme Programming Explained"))
+        /// </summary>
+        [Test]
+        public void SearchingForBookWithSingleMatchingAuthorInManyLibrariesShouldReturnAllOwnersAndBooks()
+        {
+            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
+            {
+                new BookSearchResult(user2Id, user2Registered.UserName, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(user3Id, user3Registered.UserName, TestDrivenDevelopment, KentBeck),
+                new BookSearchResult(user4Id, user4Registered.UserName, ExtremeProgrammingExplained, KentBeck),
+            });
+
+            Given(user1Registered, user2Registered, user3Registered, user4Registered, user5Registered,
+                conn1To2Accepted, conn1To3Accepted, conn1To4Accepted, conn1To5Accepted,
+                xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5);
+            When(new SearchForBook(user1Id, KentBeck));
+            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
+
+        }
+
+        /// <summary>
+        /// GIVEN User1, User2, User3, User4, User5 and User6 have all Registered, 
+        /// AND User1 is Connected to User2, User3, User4, User5 and User6 
+        /// AND User2 and User4 have Added the Book ("Extreme Programming Explained", "Kent Beck") to their Libraries 
+        /// AND User3 has Added the Book "Test-Driven Development", "Kent Beck") to her Library 
+        /// AND User5 has Added the Book ("Extreme Snowboard Stunts", "Some Skiier") 
+        /// AND User6 has Added the Book ("Beck: A Musical Maestro", "Some Author")
+        /// WHEN User1 Searches for a Book with the Search Term "Beck"
+        /// THEN A successful result is returned with content('User2:("Extreme Programming Explained", "Kent Beck")', "Kent Beck"), 
+        /// 'User3':("Test-Driven Development", "Kent Beck"), 'User4':("Extreme Programming Explained"), 'User6':("Beck: A Musical Maestro", "Some Author"))
+        /// </summary>
+        [Test]
+        public void SearchingForBookWithManyMatchingTitlesAndAuthorsInManyLibrariesShouldReturnAllOwnersAndBooks()
+        {
+            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
+            {
+                new BookSearchResult(user2Id, user2Registered.UserName, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(user3Id, user3Registered.UserName, TestDrivenDevelopment, KentBeck),
+                new BookSearchResult(user4Id, user4Registered.UserName, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(user6Id, user6Registered.UserName, BeckAMusicalMaestro, SomeAuthor),
+            });
+
+            Given(user1Registered, user2Registered, user3Registered, user4Registered, user5Registered, user6Registered,
+                conn1To2Accepted, conn1To3Accepted, conn1To4Accepted, conn1To5Accepted, conn1To6Accepted,
+                xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5, bBySAAddTo6);
+            When(new SearchForBook(user1Id, "Beck"));
+            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
+
+        }
+
+        /// <summary>
+        /// GIVEN User1, User2, User3, User4, User5 and User6 have all Registered, 
+        /// AND User1 is Connected to User2, User3, User5 and User6 
+        /// AND User2 and User4 have Added the Book ("Extreme Programming Explained", "Kent Beck") to their Libraries 
+        /// AND User3 has Added the Book "Test-Driven Development", "Kent Beck") to her Library 
+        /// AND User5 has Added the Book ("Extreme Snowboard Stunts", "Some Skiier") 
+        /// AND User6 has Added the Book ("Beck: A Musical Maestro", "Some Author")
+        /// WHEN User1 Searches for a Book with the Search Term "Beck"
+        /// THEN A successful result is returned with content('User2:("Extreme Programming Explained", "Kent Beck")', "Kent Beck"), 
+        /// 'User3':("Test-Driven Development", "Kent Beck"), 'User6':("Beck: A Musical Maestro", "Some Author"))
+        /// </summary>
+        [Test]
+        public void SearchingForBookWithManyMatchesShouldExcludeUnconnectedLibraries()
+        {
+            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
+            {
+                new BookSearchResult(user2Id, user2Registered.UserName, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(user3Id, user3Registered.UserName, TestDrivenDevelopment, KentBeck),
+                new BookSearchResult(user6Id, user6Registered.UserName, BeckAMusicalMaestro, SomeAuthor),
+            });
+
+            Given(user1Registered, user2Registered, user3Registered, user4Registered, user5Registered, user6Registered,
+                conn1To2Accepted, conn1To3Accepted, conn1To5Accepted, conn1To6Accepted,
+                xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5, bBySAAddTo6);
+            When(new SearchForBook(user1Id, "Beck"));
+            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
+
+        }
+
     }
 }

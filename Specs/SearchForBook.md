@@ -58,7 +58,15 @@ User1, User2, User3, User4, User5 and User6 have all Registered, **AND** User1 i
 User1 Searches for a Book with the Search Term "Beck"
 
 **THEN**
-A successful result is returned with content ('User2:("Extreme Programming Explained", "Kent Beck")', "Kent Beck"), 'User3':("Test-Driven Development", "Kent Beck"), 'User4':("Extreme Programming Explained")'User6':("Beck: A Musical Maestro", "Some Author"))
+A successful result is returned with content ('User2:("Extreme Programming Explained", "Kent Beck")', "Kent Beck"), 'User3':("Test-Driven Development", "Kent Beck"), 'User4':("Extreme Programming Explained"), 'User6':("Beck: A Musical Maestro", "Some Author"))
 
 
+#### SearchingForBookWithManyMatchesShouldExcludeUnconnectedLibraries
+**GIVEN**
+User1, User2, User3, User4, User5 and User6 have all Registered, **AND** User1 is Connected to User2, User3, User5 and User6 **AND** User2 and User4 have Added the Book ("Extreme Programming Explained", "Kent Beck") to their Libraries **AND** User2 has Added the Book "Test-Driven Development", "Kent Beck") to her Library **AND** User5 has Added the Book ("Extreme Snowboard Stunts", "Some Skiier") **AND** User6 has Added the Book ("Beck: A Musical Maestro", "Some Author")
 
+**WHEN**
+User1 Searches for a Book with the Search Term "Beck"
+
+**THEN**
+A successful result is returned with content ('User2:("Extreme Programming Explained", "Kent Beck")', "Kent Beck"), 'User3':("Test-Driven Development", "Kent Beck"), User6':("Beck: A Musical Maestro", "Some Author"))

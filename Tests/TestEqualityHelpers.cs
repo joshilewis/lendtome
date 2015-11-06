@@ -15,6 +15,7 @@ using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.ConnectionAccepted;
+using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;

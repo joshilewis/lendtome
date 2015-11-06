@@ -21,7 +21,7 @@ namespace Tests.ReadModels
             CommitTransactionAndOpenNew();
 
             var bookAdded = new BookAddedToLibrary(Guid.NewGuid(), user.Id, "Title", "Author", "Isbn");
-            var expectedLibraryBook = new LibraryBook(bookAdded.ProcessId, user.Id, "Title", "Author", "Isbn");
+            var expectedLibraryBook = new LibraryBook(bookAdded.ProcessId, user.Id, "user name", "Title", "Author", "Isbn");
 
             var sut = new BookAddedEventHandler(() => Session);
             sut.When(bookAdded);

@@ -20,6 +20,7 @@ using Lending.Execution.EventStore;
 using Lending.Execution.Persistence;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.ConnectionAccepted;
+using Lending.ReadModels.Relational.SearchForBook;
 using Lending.ReadModels.Relational.SearchForUser;
 using Lending.ReadModels.Relational.UserRegistered;
 using NCrunch.Framework;
@@ -108,7 +109,7 @@ namespace Tests
 
             Session = SessionFactory.OpenSession();
             Session.BeginTransaction();
-
+            //Container.Inject<ISession>(Session);
         }
 
         protected void SaveEntities(params object[] entitiesToSave)
@@ -135,6 +136,7 @@ namespace Tests
         protected void Given(params Event[] events)
         {
             HandleEvents(events);
+            //CommitTransactionAndOpenNew();
         }
 
         private Result actualResult;
@@ -177,6 +179,8 @@ namespace Tests
                         .Use<AcceptConnectionHandler>();
                     x.For<IMessageHandler<SearchForUser, Result>>()
                         .Use<SearchForUserHandler>();
+                    x.For<IMessageHandler<SearchForBook, Result>>()
+                        .Use<SearchForBookHandler>();
 
                     x.For<IEventHandler<ConnectionAccepted>>()
                         .Use<ConnectionAcceptedEventHandler>();

@@ -59,6 +59,9 @@
     <Compile Include="Relational\ConnectionAccepted\ConnectionAcceptedEventHandler.cs" />
     <Compile Include="Relational\ConnectionAccepted\UserConnection.cs" />
     <Compile Include="Relational\ConnectionAccepted\UserConnectionMap.cs" />
+    <Compile Include="Relational\SearchForBook\BookSearchResult.cs" />
+    <Compile Include="Relational\SearchForBook\SearchForBook.cs" />
+    <Compile Include="Relational\SearchForBook\SearchForBookHandler.cs" />
     <Compile Include="Relational\SearchForUser\SearchForUser.cs" />
     <Compile Include="Relational\SearchForUser\SearchForUserHandler.cs" />
     <Compile Include="Relational\UserRegistered\UserRegisteredHandler.cs" />

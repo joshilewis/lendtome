@@ -1,5 +1,6 @@
 ﻿using System;
 using Lending.Domain.AddBookToLibrary;
+using Lending.Domain.RegisterUser;
 using NHibernate;
 
 namespace Lending.ReadModels.Relational.BookAdded
@@ -15,8 +16,12 @@ namespace Lending.ReadModels.Relational.BookAdded
 
         public override void When(BookAddedToLibrary @event)
         {
-            getSession()
-                .Save(new LibraryBook(@event.ProcessId, @event.AggregateId, @event.Title, @event.Author, @event.Isbn));
+            ISession session = getSession();
+
+            string username = session.Get<RegisteredUser>(@event.AggregateId).UserName;
+
+            session.Save(new LibraryBook(@event.ProcessId, @event.AggregateId, username, @event.Title, @event.Author,
+                @event.Isbn));
         }
     }
 }
