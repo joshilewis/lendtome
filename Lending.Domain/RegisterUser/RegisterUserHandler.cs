@@ -23,9 +23,6 @@ namespace Lending.Domain.RegisterUser
             User user = User.Register(command.ProcessId, command.UserId, command.AuthUserId, command.UserName, command.PrimaryEmail);
             EventRepository.Save(user);
 
-            RegisteredUser registeredUser = new RegisteredUser(command.AuthUserId, command.UserId, command.UserName);
-            Session.Save(registeredUser);
-
             return Success();
         }
     }

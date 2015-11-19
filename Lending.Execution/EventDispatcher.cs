@@ -24,6 +24,7 @@ namespace Lending.Execution
                     eventHandler.When(emittedEvent);
                 }
             }
+            eventEmitter.EmittedEvents.Clear();
         }
     }
 }

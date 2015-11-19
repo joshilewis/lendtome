@@ -18,6 +18,7 @@ using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
 using Lending.Execution.Persistence;
+using Lending.Execution.UnitOfWork;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.ConnectionAccepted;
 using Lending.ReadModels.Relational.SearchForBook;
@@ -40,31 +41,10 @@ namespace Tests
     [TestFixture]
     public abstract class FixtureWithEventStoreAndNHibernate : FixtureWithEventStore
     {
-        protected static readonly Configuration Configuration;
-        protected static readonly ISessionFactory SessionFactory;
-        protected IRepository Repository;
-        protected ISession Session;
-
-        static FixtureWithEventStoreAndNHibernate()
-        {
-            //Set up database
-            Configuration = Fluently.Configure()
-                .Database(PostgreSQLConfiguration.PostgreSQL82
-                    .ConnectionString(c => c.FromConnectionStringWithKey("lender_db"))
-                    .DefaultSchema(ConfigurationManager.AppSettings["lender_db_schema"])
-                    )
-                .Mappings(m =>
-                    m.FluentMappings
-                        .AddFromAssemblyOf<RegisteredUserMap>()
-                        .AddFromAssemblyOf<UserAuthPersistenceDto>()
-                        .AddFromAssemblyOf<RegisteredUser>()
-                        .AddFromAssemblyOf<UserConnection>()
-                        .AddFromAssemblyOf<FixtureWithEventStoreAndNHibernate>()
-                )
-                .BuildConfiguration();
-
-            SessionFactory = Configuration.BuildSessionFactory();
-        }
+        protected Configuration Configuration => Container.GetInstance<Configuration>();
+        protected ISessionFactory SessionFactory => Container.GetInstance<ISessionFactory>();
+        protected IRepository Repository => Container.GetInstance<IRepository>();
+        protected ISession Session => Container.GetInstance<ISession>();
 
         [SetUp]
         public override void SetUp()
@@ -72,14 +52,10 @@ namespace Tests
             base.SetUp();
             //Create DB
             new SchemaExport(Configuration)
-                .Execute(true, true, false);
+                .Execute(false, true, false);
 
-            Session = SessionFactory.OpenSession();
-            Session.BeginTransaction();
-            Repository = new NHibernateRepository(() => Session);
+            Container.GetInstance<IUnitOfWork>().Begin();
 
-            Container.Inject<IRepository>(Repository);
-            Container.Inject<ISession>(Session);
         }
 
         [TearDown]
@@ -96,20 +72,14 @@ namespace Tests
 
         protected void CommitTransaction()
         {
-            Session.Transaction.Commit();
-            Session.Flush();
-            Session.Transaction.Dispose();
-            Session.Dispose();
-
+            Container.GetInstance<IUnitOfWork>().Commit();
         }
 
-        protected void CommitTransactionAndOpenNew()
+        protected override void CommitTransactionAndOpenNew()
         {
             CommitTransaction();
 
-            Session = SessionFactory.OpenSession();
-            Session.BeginTransaction();
-            //Container.Inject<ISession>(Session);
+            Container.GetInstance<IUnitOfWork>().Begin();
         }
 
         protected void SaveEntities(params object[] entitiesToSave)
@@ -123,7 +93,6 @@ namespace Tests
         protected override Result HandleMessages(params Message[] messages)
         {
             Result result = base.HandleMessages(messages);
-            CommitTransactionAndOpenNew();
             return result;
         }
 
@@ -136,7 +105,6 @@ namespace Tests
         protected void Given(params Event[] events)
         {
             HandleEvents(events);
-            //CommitTransactionAndOpenNew();
         }
 
         private Result actualResult;

@@ -3,9 +3,11 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using Enyim.Caching;
 using Enyim.Caching.Configuration;
 using Enyim.Caching.Memcached;
+using EventStore.ClientAPI;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
@@ -68,13 +70,9 @@ namespace Lending.Execution.DI
                 .Use(config.BuildSessionFactory())
                 ;
 
-            var settings = ConfigurationManager.AppSettings;
-
             For<IUnitOfWork>()
                 .HybridHttpOrThreadLocalScoped()
                 .Use<UnitOfWork.UnitOfWork>()
-                .Ctor<string>()
-                .Is(settings["EventStore:IPAddress"])
                 ;
 
             For<NHibernate.ISession>()
@@ -98,7 +96,7 @@ namespace Lending.Execution.DI
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedCommandHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<,>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
+                //scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
             });
 
             For<IUserAuthRepository>()

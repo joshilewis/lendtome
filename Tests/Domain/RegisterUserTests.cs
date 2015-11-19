@@ -66,7 +66,6 @@ namespace Tests.Domain
             actualResult.ShouldEqual(expectedResponse);
 
             CommitTransactionAndOpenNew();
-            WriteRepository();
 
             RegisteredUser userInDb = Session
                 .QueryOver<RegisteredUser>()

@@ -18,7 +18,7 @@ namespace Lending.Execution
 
         public IEnumerable<IEventHandler> GetEventHandlers(Type type)
         {
-            return eventHandlerFunc(type);
+            return eventHandlerFunc(type).Distinct();
         }
     }
 }

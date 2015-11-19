@@ -25,14 +25,14 @@ namespace Lending.Execution.UnitOfWork
         private EventStoreEventRepository eventRepository;
         private readonly EventDispatcher eventDispatcher;
 
-        public UnitOfWork(ISessionFactory sessionFactory, string eventStoreIpAddress, IEventEmitter eventEmitter,
+        public UnitOfWork(ISessionFactory sessionFactory, IEventStoreConnection connection, IEventEmitter eventEmitter,
             EventDispatcher eventDispatcher)
         {
             //Log.DebugFormat("Creating unit of work {0}", GetHashCode());
             this.sessionFactory = sessionFactory;
             this.eventEmitter = eventEmitter;
             this.eventDispatcher = eventDispatcher;
-            connection = EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), 1113));
+            this.connection = connection;
             transactionId = Guid.NewGuid();
         }
 
@@ -49,7 +49,6 @@ namespace Lending.Execution.UnitOfWork
         public void Commit()
         {
             eventRepository.Commit(transactionId);
-
 
             //Log.DebugFormat("Committing unit of work {0}", GetHashCode());
             currentSession.Transaction.Commit();

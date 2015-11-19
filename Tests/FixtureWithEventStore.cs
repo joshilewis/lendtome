@@ -14,6 +14,7 @@ using Lending.Domain;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.RegisterUser;
 using Lending.Execution;
+using Lending.Execution.DI;
 using Lending.Execution.EventStore;
 using NUnit.Framework;
 using StructureMap;
@@ -25,10 +26,10 @@ namespace Tests
     {
         protected ClusterVNode Node;
         protected IEventStoreConnection Connection;
-        protected IEventRepository EventRepository;
         protected InMemoryEventConsumer EventConsumer;
         protected DummyEventHandlerProvider EventHandlerProvider;
         protected IContainer Container;
+        protected EventDispatcher EventDispatcher;
 
         protected virtual Action<IAssemblyScanner> ScannerAction
         {
@@ -43,8 +44,6 @@ namespace Tests
         public override void SetUp()
         {
             base.SetUp();
-            EventHandlerProvider = new DummyEventHandlerProvider();
-            EventConsumer = new InMemoryEventConsumer(EventHandlerProvider);
             var noIp = new IPEndPoint(IPAddress.None, 0);
             Node = EmbeddedVNodeBuilder
                 .AsSingleNode()
@@ -56,7 +55,6 @@ namespace Tests
 
             Connection = EmbeddedEventStoreConnection.Create(Node);
             Connection.ConnectAsync().Wait();
-            EventRepository = new EventStoreEventRepository(new InMemoryEventEmitter(), Connection);
 
             Container = new Container(x =>
             {
@@ -65,50 +63,20 @@ namespace Tests
                     y.WithDefaultConventions();
                     y.LookForRegistries();
                     y.AssemblyContainingType<Query>();
+                    y.AssemblyContainingType<DomainRegistry>();
 
-                    y.AddAllTypesOf(typeof (IMessageHandler<,>));
-                    y.AddAllTypesOf(typeof(IAuthenticatedMessageHandler<,>));
-                    y.AddAllTypesOf(typeof(ICommandHandler<,>));
-                    y.AddAllTypesOf(typeof(IAuthenticatedCommandHandler<,>));
-                    y.AddAllTypesOf(typeof(IEventHandler<>));
-                    y.AddAllTypesOf(typeof(AuthenticatedCommandHandler<,>));
-
-                    y.ConnectImplementationsToTypesClosing(typeof(IMessageHandler<,>));
-                    y.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<,>));
-                    y.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<,>));
-                    y.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedCommandHandler<,>));
-                    y.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
-                    y.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<,>));
                     ScannerAction(y);
+
                 });
 
-                x.For<IEventRepository>()
-                    .Use(EventRepository);
+                x.For<IEventStoreConnection>()
+                    .Use(Connection);
 
                 ConfigurationExpressionAction(x);
             });
 
             var blah = Container.WhatDoIHave();
-            Console.WriteLine(blah);
-        }
-
-        protected void RegisterEventHandler<TEvent>(IEventHandler eventHandler) where TEvent : Event
-        {
-            EventHandlerProvider.RegisterHandler<TEvent>(eventHandler);
-        }
-
-        protected void WriteRepository()
-        {
-            ((EventStoreEventRepository)EventRepository).Commit(Guid.NewGuid());
-        }
-
-        protected void SaveAggregates(params Aggregate[] aggregatesToSave)
-        {
-            foreach (var aggregate in aggregatesToSave)
-            {
-                EventRepository.Save(aggregate);
-            }
-            ((EventStoreEventRepository)EventRepository).Commit(Guid.NewGuid());
+            //Console.WriteLine(blah);
         }
 
         public override void TearDown()
@@ -128,13 +96,15 @@ namespace Tests
                 Type type = typeof (IMessageHandler<,>).MakeGenericType(message.GetType(), typeof (Result));
                 MessageHandler handler = (MessageHandler)Container.GetInstance(type);
                 result = (Result)handler.Handle(message);
-                WriteRepository();
-                if (!result.Success) break;
+                if (!result.Success) return result;
+                CommitTransactionAndOpenNew();
             }
 
             return result;
 
         }
+
+        protected abstract void CommitTransactionAndOpenNew();
 
         protected virtual void HandleEvents(params Event[] events)
         {
@@ -147,5 +117,6 @@ namespace Tests
 
         }
 
+        protected IEventRepository EventRepository => Container.GetInstance<IEventRepository>();
     }
 }
