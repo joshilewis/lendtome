@@ -129,37 +129,6 @@ namespace Tests
             Assert.That(actualEvents, Is.EquivalentTo(expectedEvents));
         }
 
-        protected override Action<ConfigurationExpression> ConfigurationExpressionAction
-        {
-            get
-            {
-                return x =>
-                {
-                    x.For<IMessageHandler<RegisterUser, Result>>()
-                        .Use<RegisterUserHandler>();
-                    x.For<IMessageHandler<AddBookToLibrary, Result>>()
-                        .Use<AddBookToLibraryHandler>();
-                    x.For<IMessageHandler<RemoveBookFromLibrary, Result>>()
-                        .Use<RemoveBookFromLibraryHandler>();
-                    x.For<IMessageHandler<RequestConnection, Result>>()
-                        .Use<RequestConnectionHandler>();
-                    x.For<IMessageHandler<AcceptConnection, Result>>()
-                        .Use<AcceptConnectionHandler>();
-                    x.For<IMessageHandler<SearchForUser, Result>>()
-                        .Use<SearchForUserHandler>();
-                    x.For<IMessageHandler<SearchForBook, Result>>()
-                        .Use<SearchForBookHandler>();
-
-                    x.For<IEventHandler<ConnectionAccepted>>()
-                        .Use<ConnectionAcceptedEventHandler>();
-                    x.For<IEventHandler<BookAddedToLibrary>>()
-                        .Use<BookAddedEventHandler>();
-                    x.For<IEventHandler<UserRegistered>>()
-                        .Use<UserRegisteredHandler>();
-                };
-            }
-        }
-
         protected override Action<IAssemblyScanner> ScannerAction
         {
             get

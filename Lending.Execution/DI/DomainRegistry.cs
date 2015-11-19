@@ -96,7 +96,7 @@ namespace Lending.Execution.DI
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedCommandHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<,>));
-                //scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
             });
 
             For<IUserAuthRepository>()

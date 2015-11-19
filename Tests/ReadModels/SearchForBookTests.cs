@@ -6,6 +6,7 @@ using Lending.Cqrs.Query;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RegisterUser;
+using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestConnection;
 using Lending.ReadModels.Relational.ConnectionAccepted;
 using Lending.ReadModels.Relational.SearchForBook;
@@ -47,6 +48,7 @@ namespace Tests.ReadModels
         private BookAddedToLibrary xpeByKbAddTo2;
         private BookAddedToLibrary essBySSAddTo5;
         private BookAddedToLibrary bBySAAddTo6;
+        private BookRemovedFromLibrary xpeByKbRemoveFrom4;
 
         private const string TestDrivenDevelopment = "Test-Driven Development";
         private const string KentBeck = "Kent Beck";
@@ -86,10 +88,11 @@ namespace Tests.ReadModels
             tddByKbAddTo3 = new BookAddedToLibrary(processId, user3Id, TestDrivenDevelopment, KentBeck, Isbn);
             essBySSAddTo5 = new BookAddedToLibrary(processId, user5Id, ExtremeSnowboardStunts, SomeSkiier, Isbn);
             bBySAAddTo6 = new BookAddedToLibrary(processId, user6Id, BeckAMusicalMaestro, SomeAuthor, Isbn);
+
+            xpeByKbRemoveFrom4 = new BookRemovedFromLibrary(processId, user4Id, ExtremeProgrammingExplained, KentBeck, Isbn);
         }
 
         #endregion
-
 
         /// <summary>
         /// GIVEN User1 has Registered AND User2 has Registered AND User1 has Request to Connect with User2 AND User2 
@@ -258,6 +261,36 @@ namespace Tests.ReadModels
             Given(user1Registered, user2Registered, user3Registered, user4Registered, user5Registered, user6Registered,
                 conn1To2Accepted, conn1To3Accepted, conn1To5Accepted, conn1To6Accepted,
                 xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5, bBySAAddTo6);
+            When(new SearchForBook(user1Id, "Beck"));
+            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
+
+        }
+
+        /// <summary>
+        /// GIVEN User1, User2, User3, User4, User5 and User6 have all Registered, 
+        /// AND User1 is Connected to User2, User3, User4, User5 and User6 
+        /// AND User2 and User4 have Added the Book ("Extreme Programming Explained", "Kent Beck") to their Libraries 
+        /// AND User3 has Added the Book ("Test-Driven Development", "Kent Beck") to her Library 
+        /// AND User5 has Added the Book ("Extreme Snowboard Stunts", "Some Skiier") 
+        /// AND User6 has Added the Book ("Beck: A Musical Maestro", "Some Author")
+        /// AND User4 Removes the Book ("Extreme Programming Explained", "Kent Beck") from their Library
+        /// WHEN User1 Searches for a Book with the Search Term "Beck"
+        /// THEN A successful result is returned with content('User2:("Extreme Programming Explained", "Kent Beck")', "Kent Beck"), 
+        /// 'User3':("Test-Driven Development", "Kent Beck"), 'User6':("Beck: A Musical Maestro", "Some Author"))
+        /// </summary>
+        [Test]
+        public void SearchingForBookWithManyMatchingTitlesAndAuthorsInManyLibrariesShouldReturnAllOwnersAndBooksExceptRemovedBooks()
+        {
+            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
+            {
+                new BookSearchResult(user2Id, user2Registered.UserName, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(user3Id, user3Registered.UserName, TestDrivenDevelopment, KentBeck),
+                new BookSearchResult(user6Id, user6Registered.UserName, BeckAMusicalMaestro, SomeAuthor),
+            });
+
+            Given(user1Registered, user2Registered, user3Registered, user4Registered, user5Registered, user6Registered,
+                conn1To2Accepted, conn1To3Accepted, conn1To4Accepted, conn1To5Accepted, conn1To6Accepted,
+                xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5, bBySAAddTo6, xpeByKbRemoveFrom4);
             When(new SearchForBook(user1Id, "Beck"));
             Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
 
