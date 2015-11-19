@@ -31,7 +31,6 @@ using NUnit.Framework;
 using ServiceStack.Authentication.NHibernate;
 using StructureMap;
 using StructureMap.Graph;
-using Tests.ReadModels;
 using Configuration = NHibernate.Cfg.Configuration;
 
 namespace Tests

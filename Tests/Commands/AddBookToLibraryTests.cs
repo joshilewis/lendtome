@@ -1,23 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventStore.ClientAPI;
-using Lending.Cqrs;
-using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
-using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
 using Lending.Domain.RegisterUser;
 using Lending.Domain.RemoveBookFromLibrary;
-using Mono.Security.Authenticode;
 using NUnit.Framework;
-using ServiceStack.Text;
-using StructureMap;
 
-namespace Tests.Domain
+namespace Tests.Commands
 {
     /// <summary>
     /// https://github.com/joshilewis/lending/issues/9

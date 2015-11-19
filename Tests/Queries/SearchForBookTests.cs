@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Lending.Cqrs.Query;
 using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RegisterUser;
 using Lending.Domain.RemoveBookFromLibrary;
-using Lending.Domain.RequestConnection;
-using Lending.ReadModels.Relational.ConnectionAccepted;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 
-namespace Tests.ReadModels
+namespace Tests.Queries
 {
     /// <summary>
     /// As a User I want to Search for Books in my Connections' Libraries so that I can find out if any of my Connections have the Book 

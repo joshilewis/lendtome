@@ -19,8 +19,6 @@ using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
-using Tests.Domain;
-using Tests.ReadModels;
 using Is = NUnit.Framework.Is;
 
 namespace Tests

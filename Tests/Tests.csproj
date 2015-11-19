@@ -112,19 +112,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContainerTests.cs" />
-    <Compile Include="Domain\AcceptConnectionTests.cs" />
-    <Compile Include="Domain\AddBookToLibraryTests.cs" />
-    <Compile Include="Domain\RemoveBookFromLibraryTests.cs" />
-    <Compile Include="Domain\RequestConnectionTests.cs" />
-    <Compile Include="Domain\RegisterUserTests.cs" />
+    <Compile Include="Commands\AcceptConnectionTests.cs" />
+    <Compile Include="Commands\AddBookToLibraryTests.cs" />
+    <Compile Include="Commands\RemoveBookFromLibraryTests.cs" />
+    <Compile Include="Commands\RequestConnectionTests.cs" />
+    <Compile Include="Commands\RegisterUserTests.cs" />
     <Compile Include="DummyEventHandlerProvider.cs" />
     <Compile Include="Fixture.cs" />
     <Compile Include="FixtureWithEventStore.cs" />
     <Compile Include="FixtureWithEventStoreAndNHibernate.cs" />
     <Compile Include="DefaultTestData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadModels\SearchForBookTests.cs" />
-    <Compile Include="ReadModels\SearchForUserTests.cs" />
+    <Compile Include="Queries\SearchForBookTests.cs" />
+    <Compile Include="Queries\SearchForUserTests.cs" />
     <Compile Include="TestEqualityHelpers.cs" />
   </ItemGroup>
   <ItemGroup>

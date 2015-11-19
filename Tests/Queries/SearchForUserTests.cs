@@ -1,11 +1,10 @@
 using System;
-using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Domain.RegisterUser;
 using Lending.ReadModels.Relational.SearchForUser;
 using NUnit.Framework;
 
-namespace Tests.ReadModels
+namespace Tests.Queries
 {
     [TestFixture]
     public class SearchForUserTests: FixtureWithEventStoreAndNHibernate
