@@ -16,9 +16,12 @@ using Lending.Domain.RegisterUser;
 using Lending.Execution;
 using Lending.Execution.DI;
 using Lending.Execution.EventStore;
+using Lending.Execution.UnitOfWork;
+using NHibernate;
 using NUnit.Framework;
 using StructureMap;
 using StructureMap.Graph;
+using StructureMap.Web;
 
 namespace Tests
 {
@@ -58,6 +61,19 @@ namespace Tests
 
             Container = new Container(x =>
             {
+                x.For<IUnitOfWork>()
+                    .HybridHttpOrThreadLocalScoped()
+                    .Use<TestUnitOfWork>()
+                    .Ctor<IEventStoreConnection>()
+                    .Is(Connection)
+                    .Ctor<ISessionFactory>()
+                    .Is(c => c.GetInstance<ISessionFactory>())
+                    .Ctor<IEventEmitter>()
+                    .Is(c => c.GetInstance<IEventEmitter>())
+                    .Ctor<EventDispatcher>()
+                    .Is(c => c.GetInstance<EventDispatcher>())
+                    ;
+
                 x.Scan(y =>
                 {
                     y.WithDefaultConventions();
@@ -67,10 +83,9 @@ namespace Tests
 
                     ScannerAction(y);
 
+
                 });
 
-                x.For<IEventStoreConnection>()
-                    .Use(Connection);
 
                 ConfigurationExpressionAction(x);
             });
@@ -118,5 +133,14 @@ namespace Tests
         }
 
         protected IEventRepository EventRepository => Container.GetInstance<IEventRepository>();
+    }
+
+    public class TestUnitOfWork : UnitOfWork
+    {
+        public TestUnitOfWork(ISessionFactory sessionFactory, IEventStoreConnection eventStoreConnection,
+            IEventEmitter eventEmitter, EventDispatcher eventDispatcher)
+            : base(sessionFactory, eventStoreConnection, eventEmitter, eventDispatcher)
+        {
+        }
     }
 }

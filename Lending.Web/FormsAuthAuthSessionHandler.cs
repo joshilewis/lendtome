@@ -24,7 +24,7 @@ namespace Lending.Web
 
         public override Result Handle(IAuthSession command)
         {
-            FormsAuthentication.SetAuthCookie(command.DisplayName, true);
+            //FormsAuthentication.SetAuthCookie(command.DisplayName, true);
 
             return base.Handle(command);
         }

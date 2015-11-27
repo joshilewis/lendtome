@@ -70,10 +70,7 @@ namespace Lending.Execution.DI
                 .Use(config.BuildSessionFactory())
                 ;
 
-            For<IUnitOfWork>()
-                .HybridHttpOrThreadLocalScoped()
-                .Use<UnitOfWork.UnitOfWork>()
-                ;
+            var settings = ConfigurationManager.AppSettings;
 
             For<NHibernate.ISession>()
                 .Use(c => c.GetInstance<IUnitOfWork>().CurrentSession)

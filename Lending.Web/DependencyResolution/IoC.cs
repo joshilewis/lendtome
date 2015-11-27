@@ -4,8 +4,10 @@ using System.Net;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Execution.UnitOfWork;
 using StructureMap;
 using StructureMap.Graph;
+using StructureMap.Web;
 
 namespace Lending.Web.DependencyResolution
 {
@@ -15,6 +17,14 @@ namespace Lending.Web.DependencyResolution
         {
             var container = new Container(x =>
             {
+                string eventStoreIpAddress = ConfigurationManager.AppSettings["EventStore:IPAddress"];
+
+                x.For<IUnitOfWork>()
+                    .HybridHttpOrThreadLocalScoped()
+                    .Use<UnitOfWork>()
+                    .Ctor<string>()
+                    .Is(eventStoreIpAddress);
+
                 x.Scan(scan =>
                 {
                     scan.LookForRegistries();
@@ -28,12 +38,6 @@ namespace Lending.Web.DependencyResolution
                 //    .Use<FormsAuthRegisterUserHandler>()
                 //    ;
 
-                string eventStoreIpAddress = ConfigurationManager.AppSettings["EventStore:IPAddress"];
-
-                x.For<IEventStoreConnection>()
-                    .AlwaysUnique()
-                    .Use(EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), 1113)));
-
             });
 
             container.AssertConfigurationIsValid();
@@ -43,6 +47,11 @@ namespace Lending.Web.DependencyResolution
             //    .Execute(true, true);
 
             return container;
+        }
+
+        private static IEventStoreConnection Create(string eventStoreIpAddress)
+        {
+            return EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), 1113));
         }
     }
 }
