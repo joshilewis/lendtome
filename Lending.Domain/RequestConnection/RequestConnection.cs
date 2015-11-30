@@ -13,5 +13,9 @@ namespace Lending.Domain.RequestConnection
         {
             TargetUserId = targetUserId;
         }
+
+        public RequestConnection()
+        {
+        }
     }
 }

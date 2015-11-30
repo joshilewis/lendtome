@@ -6,26 +6,31 @@ using System.Threading.Tasks;
 using Lending.Cqrs;
 using Lending.Cqrs.Query;
 using Lending.Execution.UnitOfWork;
-using Lending.ReadModels.Relational.SearchForUser;
 using Nancy;
 using Nancy.ModelBinding;
+using Nancy.Security;
 
 namespace Lending.Execution.Nancy
 {
-    public abstract class GetModule<TMessage, TResult> : NancyModule where TMessage : Message where TResult : Result
+    public abstract class PostModule<TMessage, TResult> : NancyModule where TMessage : Message where TResult : Result
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMessageHandler<TMessage, TResult> messageHandler;
         protected abstract string Path { get; }
 
-        protected GetModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler)
+        protected PostModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler)
             : base("nancy")
         {
             this.unitOfWork = unitOfWork;
             this.messageHandler = messageHandler;
 
-            Get[Path] = _ =>
+            //this.RequiresAuthentication();
+            //this.RequiresHttps();
+
+            Post[Path] = _ =>
             {
+                var blah = this.Context.CurrentUser;
+
                 TMessage request = this.Bind<TMessage>();
 
                 Result response = default(Result);
@@ -36,9 +41,8 @@ namespace Lending.Execution.Nancy
                 });
 
                 return response;
+
             };
         }
-
-
     }
 }

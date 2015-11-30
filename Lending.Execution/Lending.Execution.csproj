@@ -143,7 +143,8 @@
     <Compile Include="InMemoryEventConsumer.cs" />
     <Compile Include="InMemoryEventEmitter.cs" />
     <Compile Include="Nancy\GetModule.cs" />
-    <Compile Include="Nancy\SearchForUserModule.cs" />
+    <Compile Include="Nancy\PostModule.cs" />
+    <Compile Include="Nancy\Modules.cs" />
     <Compile Include="Persistence\NHibernateRepository.cs" />
     <Compile Include="Persistence\RegisteredUserMap.cs" />
     <Compile Include="Persistence\SchemaUpdater.cs" />

@@ -11,5 +11,9 @@ namespace Lending.Cqrs.Command
         {
             UserId = userId;
         }
+
+        protected AuthenticatedCommand()
+        {
+        }
     }
 }

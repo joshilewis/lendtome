@@ -15,5 +15,9 @@ namespace Lending.Cqrs.Command
             AggregateId = aggregateId;
             ProcessId = processId;
         }
+
+        protected Command()
+        {
+        }
     }
 }
