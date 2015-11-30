@@ -4,6 +4,7 @@ using System.Net;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Execution.Auth;
 using Lending.Execution.UnitOfWork;
 using StructureMap;
 using StructureMap.Graph;

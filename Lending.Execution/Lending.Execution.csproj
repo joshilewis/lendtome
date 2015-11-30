@@ -48,9 +48,9 @@
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Nancy, Version=0.21.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Nancy.0.21.1\lib\net40\Nancy.dll</HintPath>
+    <Reference Include="Nancy, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.1.4.2\lib\net40\Nancy.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -142,6 +142,8 @@
     <Compile Include="IEventHandlerProvider.cs" />
     <Compile Include="InMemoryEventConsumer.cs" />
     <Compile Include="InMemoryEventEmitter.cs" />
+    <Compile Include="Nancy\GetModule.cs" />
+    <Compile Include="Nancy\SearchForUserModule.cs" />
     <Compile Include="Persistence\NHibernateRepository.cs" />
     <Compile Include="Persistence\RegisteredUserMap.cs" />
     <Compile Include="Persistence\SchemaUpdater.cs" />

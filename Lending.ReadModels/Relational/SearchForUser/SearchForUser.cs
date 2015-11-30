@@ -10,5 +10,9 @@ namespace Lending.ReadModels.Relational.SearchForUser
         {
             SearchString = searchString;
         }
+
+        public SearchForUser()
+        {
+        }
     }
 }
