@@ -11,6 +11,7 @@ using Nancy.Hosting.Self;
 //using Nancy.Hosting.Self;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
+using SimpleAuthentication.Core.Providers;
 using StructureMap;
 using StructureMap.Graph;
 using Environment = System.Environment;

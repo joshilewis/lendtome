@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using System.Configuration;
 using System.Net;
 using EventStore.ClientAPI;
 using Lending.Execution.UnitOfWork;
+using SimpleAuthentication.Core;
+using SimpleAuthentication.Core.Providers;
 using StructureMap;
 using StructureMap.Graph;
 
@@ -29,11 +32,6 @@ namespace Shell
                     //scan.TheCallingAssembly();
                 });
 
-                //x.For<ICommandHandler<IAuthSession, Result>>()
-                //    .AlwaysUnique()
-                //    .Use<FormsAuthRegisterUserHandler>()
-                //    ;
-
             });
 
             container.AssertConfigurationIsValid();
@@ -45,9 +43,5 @@ namespace Shell
             return container;
         }
 
-        private static IEventStoreConnection Create(string eventStoreIpAddress)
-        {
-            return EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), 1113));
-        }
     }
 }
