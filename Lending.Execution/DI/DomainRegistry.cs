@@ -21,11 +21,13 @@ using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
+using Lending.Execution.Nancy;
 using Lending.Execution.Persistence;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.SearchForUser;
+using Nancy.SimpleAuthentication;
 using NHibernate.Context;
 //using Nancy;
 using ServiceStack.Authentication.NHibernate;
@@ -158,6 +160,9 @@ namespace Lending.Execution.DI
                 .AlwaysUnique()
                 .Use<EventHandlerProvider>();
 
+            For<IAuthenticationCallbackProvider>()
+                .AlwaysUnique()
+                .Use<AuthCallbackProvider>();
         }
 
         private static IEnumerable<IEventHandler> GetEventHandlers(IContext context, Type eventType)

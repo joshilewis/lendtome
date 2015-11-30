@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Lending.Execution.DI;
 using Lending.Execution.Persistence;
 using Lending.Execution.WebServices;
+using Nancy.Hosting.Self;
 //using Nancy.Hosting.Self;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
@@ -18,38 +19,22 @@ namespace Shell
 {
     class Program
     {
+        public static IContainer Container;
+
         static void Main(string[] args)
         {
-            var container = new Container(x =>
+            Container = IoC.Initialize();
+
+            //SchemaUpdater.UpdateSchema();
+
+            using (var host = new NancyHost(new Uri("http://localhost:1234")))
             {
-                x.Scan(y =>
-                {
-                    y.WithDefaultConventions();
-                    y.LookForRegistries();
-                    //y.AssembliesFromPath(Environment.CurrentDirectory, a => a.FullName.StartsWith("Lending"));
-                    y.AssembliesFromPath(Environment.CurrentDirectory, Blah);
-                });
+                host.Start();
+                Console.WriteLine("Listening, GO!");
+                Console.ReadLine();
+            }
 
 
-            });
-
-            container.AssertConfigurationIsValid();
-            string blah = container.WhatDoIHave();
-
-            SchemaUpdater.UpdateSchema();
-
-            //using (var host = new NancyHost(new Uri("http://localhost:8080")))
-            //{
-            //    host.Start();
-            //    Console.WriteLine("Nancy has started");
-            //    Console.ReadLine();
-            //} 
-
-
-            var host = new AppHost(new StructureMapContainerAdapter(container));
-            host.Init();
-            host.Start("http://localhost:8085/");
-            Console.WriteLine("Listening, GO!");
             Console.ReadLine();
         }
 

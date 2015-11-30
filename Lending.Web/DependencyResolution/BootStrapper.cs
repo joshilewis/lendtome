@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Nancy.Bootstrappers.StructureMap;
+using Nancy.Diagnostics;
 using StructureMap;
 
 namespace Lending.Web.DependencyResolution
@@ -14,5 +15,6 @@ namespace Lending.Web.DependencyResolution
         {
             return MvcApplication.Container;
         }
+
     }
 }
