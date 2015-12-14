@@ -23,7 +23,7 @@ namespace Tests.Commands
         ///THEN User1 and User2 are connected
         /// </summary>
         [Test]
-        public void AcceptConnectionForUnconnectedUsersWithNoPendingRequestsShouldSucceed()
+        public void AcceptConnectionForUnconnectedUsersWithAPendingRequestShouldSucceed()
         {
             Given(user1Registers, user2Registers, user1RequestsConnectionToUser2);
             When(user2AcceptsRequestFrom1);
