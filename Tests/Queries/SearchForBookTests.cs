@@ -6,6 +6,7 @@ using Lending.Domain.RegisterUser;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
+using static Tests.DefaultTestData;
 
 namespace Tests.Queries
 {
@@ -15,79 +16,6 @@ namespace Tests.Queries
     /// </summary>
     public class SearchForBookTests : FixtureWithEventStoreAndNHibernate
     {
-
-        #region Fields
-        private Guid processId = Guid.Empty;
-        private Guid user1Id;
-        private Guid user2Id;
-        private Guid user3Id;
-        private Guid user4Id;
-        private Guid user5Id;
-        private Guid user6Id;
-
-        //Events
-        private UserRegistered user1Registered;
-        private UserRegistered user2Registered;
-        private UserRegistered user3Registered;
-        private UserRegistered user4Registered;
-        private UserRegistered user5Registered;
-        private UserRegistered user6Registered;
-
-        private ConnectionAccepted conn1To2Accepted;
-        private ConnectionAccepted conn1To3Accepted;
-        private ConnectionAccepted conn1To4Accepted;
-        private ConnectionAccepted conn1To5Accepted;
-        private ConnectionAccepted conn1To6Accepted;
-        private BookAddedToLibrary tddByKbAddTo3;
-        private BookAddedToLibrary xpeByKbAddTo4;
-        private BookAddedToLibrary xpeByKbAddTo2;
-        private BookAddedToLibrary essBySSAddTo5;
-        private BookAddedToLibrary bBySAAddTo6;
-        private BookRemovedFromLibrary xpeByKbRemoveFrom4;
-
-        private const string TestDrivenDevelopment = "Test-Driven Development";
-        private const string KentBeck = "Kent Beck";
-        private const string Isbn = "Isbn";
-        private const string ExtremeProgrammingExplained = "Extreme Programming Explained";
-        private const string ExtremeSnowboardStunts = "Extreme Snowboard Stunts";
-        private const string SomeSkiier = "Some Skiier";
-        private const string BeckAMusicalMaestro = "Beck: A musical Maestro";
-        private const string SomeAuthor = "Some Author";
-
-        public override void SetUp()
-        {
-            base.SetUp();
-            user1Id = Guid.NewGuid();
-            user2Id = Guid.NewGuid();
-            user3Id = Guid.NewGuid();
-            user4Id = Guid.NewGuid();
-            user5Id = Guid.NewGuid();
-            user6Id = Guid.NewGuid();
-            processId = Guid.NewGuid();
-
-            user1Registered = new UserRegistered(processId, user1Id, 1, "User1", "Email1");
-            user2Registered = new UserRegistered(processId, user2Id, 2, "User2", "Email2");
-            user3Registered = new UserRegistered(processId, user3Id, 3, "User3", "Email3");
-            user4Registered = new UserRegistered(processId, user4Id, 4, "User4", "Email4");
-            user5Registered = new UserRegistered(processId, user5Id, 5, "User5", "Email5");
-            user6Registered = new UserRegistered(processId, user6Id, 6, "User6", "Email6");
-
-            conn1To2Accepted = new ConnectionAccepted(processId, user2Id, user1Id);
-            conn1To3Accepted = new ConnectionAccepted(processId, user3Id, user1Id);
-            conn1To4Accepted = new ConnectionAccepted(processId, user4Id, user1Id);
-            conn1To5Accepted = new ConnectionAccepted(processId, user5Id, user1Id);
-            conn1To6Accepted = new ConnectionAccepted(processId, user6Id, user1Id);
-
-            xpeByKbAddTo2 = new BookAddedToLibrary(processId, user2Id, ExtremeProgrammingExplained, KentBeck, Isbn);
-            xpeByKbAddTo4 = new BookAddedToLibrary(processId, user4Id, ExtremeProgrammingExplained, KentBeck, Isbn);
-            tddByKbAddTo3 = new BookAddedToLibrary(processId, user3Id, TestDrivenDevelopment, KentBeck, Isbn);
-            essBySSAddTo5 = new BookAddedToLibrary(processId, user5Id, ExtremeSnowboardStunts, SomeSkiier, Isbn);
-            bBySAAddTo6 = new BookAddedToLibrary(processId, user6Id, BeckAMusicalMaestro, SomeAuthor, Isbn);
-
-            xpeByKbRemoveFrom4 = new BookRemovedFromLibrary(processId, user4Id, ExtremeProgrammingExplained, KentBeck, Isbn);
-        }
-
-        #endregion
 
         /// <summary>
         /// GIVEN User1 has Registered AND User2 has Registered AND User1 has Request to Connect with User2 AND User2 
