@@ -34,6 +34,9 @@ namespace Lending.Web.DependencyResolution
                     //scan.TheCallingAssembly();
                 });
 
+                x.For<AuthSessionHandler>()
+                    .AlwaysUnique()
+                    .Use<FormsAuthAuthSessionHandler>();
                 //x.For<ICommandHandler<IAuthSession, Result>>()
                 //    .AlwaysUnique()
                 //    .Use<FormsAuthRegisterUserHandler>()
