@@ -15,59 +15,60 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         @Styles.Render("~/content/css/app")
     </head>
-    <body>
-        <!--[if lt IE 9]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+<body>
+    <!--[if lt IE 9]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
 
-        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle btn navbar-btn" ng-init="navCollapsed = true"
-                            ng-click="navCollapsed = !navCollapsed">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="~/">lend-to.me</a>
-                </div>
-                <div collapse="navCollapsed" class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        @if (Request.IsAuthenticated)
-                        {
-                            <li>
-                                <a href="~/myitems" >My Items</a>
-                            </li>
-                        }            
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle btn navbar-btn" ng-init="navCollapsed = true"
+                        ng-click="navCollapsed = !navCollapsed">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="~/">lend-to.me</a>
+            </div>
+            <div collapse="navCollapsed" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>
+                            <a href="~/myitems">My Items</a>
+                        </li>
+                    }
+                </ul>
+                <div class=" navbar-right">
+                    <ul class="nav navbar-nav ">
+                        <li>
+                            @if (Request.IsAuthenticated)
+                            {
+                                <a href="~/api/auth/logout">@User.Identity.Name</a>
+                            }
+                            else
+                            {
+                                <a href="~/signin">Sign In</a>
+                            }
+                        </li>
                     </ul>
-                    <div  class=" navbar-right">
-                        <ul class="nav navbar-nav ">
-                            <li>
-                                @if (Request.IsAuthenticated)
-                                {
-                                    <a href="~/api/auth/logout">@User.Identity.Name</a>
-                                }
-                                else
-                                {
-                                    <a href="~/signin" >Sign In</a>
-                                }
-                            </li>
-                        </ul>
-                    </div>
                 </div>
-                <!--/.navbar-collapse -->
             </div>
+            <!--/.navbar-collapse -->
         </div>
-        <div id="ui-view" class="container" ui-view data-tmpl-url="@Request.RequestContext.RouteData.DataTokens["templateUrl"]">
-            <div ng-view>
-            </div>
+    </div>
+    <div id="ui-view" class="container" ui-view data-tmpl-url="@Request.RequestContext.RouteData.DataTokens["templateUrl"]">
+        <div ng-view>
         </div>
+    </div>
 
-        @*<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js"></script>*@
-        @Scripts.Render("~/js/jquery")
-        @*
+    @*<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js"></script>*@
+    @Scripts.Render("~/Scripts/jquery")
+    @Scripts.Render("~/Scripts/app")
+    @*
         Google Analytics
         ----------------
         Google recommends that this script be placed at the top of the page. Factors to consider: if you place this
@@ -75,14 +76,15 @@
         the max number of simultaneous connections of the browser.
         https://developers.google.com/analytics/devguides/collection/analyticsjs/
     *@
-        <script>
-            (function (i, s, o, g, r, a, m) {
-                i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date(); a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-            ga('create', '@WebConfigurationManager.AppSettings["GoogleAnalytics:PropertyID"]', '@(Request.IsLocal ? "none" : "auto")');
-        </script>
-    </body>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', '@WebConfigurationManager.AppSettings["GoogleAnalytics:PropertyID"]', '@(Request.IsLocal ? "none" : "auto")');
+    </script>
+</body>
+
 </html>
