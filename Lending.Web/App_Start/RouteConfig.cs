@@ -14,6 +14,7 @@ namespace Lending.Web
             //ServiceStack
             routes.IgnoreRoute("api/{*pathInfo}");
             routes.IgnoreRoute("nancy/{*pathInfo}");
+            routes.IgnoreRoute("authentication/{*pathInfo}");
 
             routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" }); //Prevent exceptions for favicon
 
