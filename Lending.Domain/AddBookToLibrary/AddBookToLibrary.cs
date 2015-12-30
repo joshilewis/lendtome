@@ -18,5 +18,10 @@ namespace Lending.Domain.AddBookToLibrary
             Isbn = isbnnumber;
         }
 
+        public AddBookToLibrary()
+        {
+            
+        }
+
     }
 }

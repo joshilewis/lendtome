@@ -12,6 +12,7 @@ namespace Lending.Execution.Nancy
     {
         public dynamic Process(NancyModule nancyModule, AuthenticateCallbackData model)
         {
+            return null;
             throw new NotImplementedException();
         }
 
