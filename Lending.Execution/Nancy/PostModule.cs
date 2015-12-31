@@ -24,7 +24,7 @@ namespace Lending.Execution.Nancy
             this.unitOfWork = unitOfWork;
             this.messageHandler = messageHandler;
 
-            this.RequiresAuthentication();
+            //this.RequiresAuthentication();
             //this.RequiresHttps();
 
             Post[Path] = _ =>

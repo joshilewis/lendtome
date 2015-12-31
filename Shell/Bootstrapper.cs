@@ -1,5 +1,6 @@
 ﻿using Lending.Execution.Nancy;
 using Nancy.Bootstrappers.StructureMap;
+using Nancy.Diagnostics;
 using Nancy.SimpleAuthentication;
 using SimpleAuthentication.Core;
 using SimpleAuthentication.Core.Providers;
@@ -14,5 +15,6 @@ namespace Shell
             return Program.Container;
         }
 
+        protected override DiagnosticsConfiguration DiagnosticsConfiguration => new DiagnosticsConfiguration { Password = @"secret" };
     }
 }

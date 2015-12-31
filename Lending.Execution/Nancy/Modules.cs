@@ -39,6 +39,6 @@ namespace Lending.Execution.Nancy
         {
         }
 
-        protected override string Path => "/books/add/";
+        protected override string Path => "/books/add";
     }
 }

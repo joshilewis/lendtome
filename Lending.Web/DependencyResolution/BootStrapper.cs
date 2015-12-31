@@ -16,5 +16,6 @@ namespace Lending.Web.DependencyResolution
             return MvcApplication.Container;
         }
 
+        protected override DiagnosticsConfiguration DiagnosticsConfiguration => new DiagnosticsConfiguration { Password = @"secret" };
     }
 }
