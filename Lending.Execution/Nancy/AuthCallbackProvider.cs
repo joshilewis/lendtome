@@ -15,14 +15,14 @@ namespace Lending.Execution.Nancy
     {
         private readonly ITokenizer tokenizer;
 
-        public AuthCallbackProvider()
+        public AuthCallbackProvider(ITokenizer tokenizer)
         {
-            this.tokenizer = new Tokenizer();
+            this.tokenizer = tokenizer;
         }
 
         public dynamic Process(NancyModule nancyModule, AuthenticateCallbackData model)
         {
-            return nancyModule.LoginAndRedirect(Guid.NewGuid());
+            //return nancyModule.LoginAndRedirect(Guid.NewGuid());
 
             var user = new User(Guid.NewGuid(), model.AuthenticatedClient.UserInformation.Name, new []
             {

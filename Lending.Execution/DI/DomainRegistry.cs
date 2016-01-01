@@ -27,6 +27,7 @@ using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.SearchForUser;
+using Nancy.Authentication.Token;
 using Nancy.SimpleAuthentication;
 using NHibernate.Context;
 //using Nancy;
@@ -163,6 +164,11 @@ namespace Lending.Execution.DI
             For<IAuthenticationCallbackProvider>()
                 .AlwaysUnique()
                 .Use<AuthCallbackProvider>();
+
+            For<ITokenizer>()
+                .AlwaysUnique()
+                .Use(c => new Tokenizer());
+
         }
 
         private static IEnumerable<IEventHandler> GetEventHandlers(IContext context, Type eventType)
