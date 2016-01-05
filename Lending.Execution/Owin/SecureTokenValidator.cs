@@ -29,11 +29,9 @@ namespace Lending.Execution.Owin
 
                 if (decodedtoken.ContainsKey("Claims"))
                 {
-                    for (var i = 0; i < ((ArrayList)decodedtoken["Claims"]).Count; i++)
+                    foreach (Dictionary<string, object> kvp in ((ArrayList) decodedtoken["Claims"]))
                     {
-                        var type = ((Dictionary<string, object>)((ArrayList)decodedtoken["Claims"])[i])["Type"].ToString();
-                        var value = ((Dictionary<string, object>)((ArrayList)decodedtoken["Claims"])[i])["Value"].ToString();
-                        claims.Add(new Claim(type, value));
+                        claims.Add(new Claim(kvp["Type"].ToString(), kvp["Value"].ToString()));
                     }
                 }
 

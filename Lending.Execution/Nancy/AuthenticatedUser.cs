@@ -6,7 +6,7 @@ namespace Lending.Execution.Nancy
 {
     public class AuthenticatedUser : IUserIdentity
     {
-        public Guid Id { get; set; }  
+        public Guid Id { get; }  
         public string UserName { get; }
         public IEnumerable<string> Claims { get; }
 

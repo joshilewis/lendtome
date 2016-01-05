@@ -23,8 +23,6 @@ namespace Lending.Execution.Nancy
 
         public dynamic Process(NancyModule nancyModule, AuthenticateCallbackData model)
         {
-            //return nancyModule.LoginAndRedirect(Guid.NewGuid());
-
             var user = new User(Guid.NewGuid(), model.AuthenticatedClient.UserInformation.Name, new[]
             {
                 new AuthenticationProvider(model.AuthenticatedClient.ProviderName,
