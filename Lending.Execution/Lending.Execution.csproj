@@ -199,12 +199,12 @@
     <Compile Include="InMemoryEventConsumer.cs" />
     <Compile Include="InMemoryEventEmitter.cs" />
     <Compile Include="Nancy\AuthCallbackProvider.cs" />
-    <Compile Include="Nancy\AuthenticatedUser.cs" />
+    <Compile Include="Nancy\CustomUserIdentity.cs" />
     <Compile Include="Nancy\AuthenticationProvider.cs" />
     <Compile Include="Nancy\GetModule.cs" />
     <Compile Include="Nancy\PostModule.cs" />
     <Compile Include="Nancy\Modules.cs" />
-    <Compile Include="Nancy\User.cs" />
+    <Compile Include="Nancy\AuthenticatedUser.cs" />
     <Compile Include="Owin\SecureTokenValidator.cs" />
     <Compile Include="Owin\Startup.cs" />
     <Compile Include="Persistence\NHibernateRepository.cs" />

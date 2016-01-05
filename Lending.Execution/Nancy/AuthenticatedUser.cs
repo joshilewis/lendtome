@@ -6,15 +6,23 @@ namespace Lending.Execution.Nancy
 {
     public class AuthenticatedUser : IUserIdentity
     {
-        public Guid Id { get; }  
-        public string UserName { get; }
-        public IEnumerable<string> Claims { get; }
+        public virtual Guid Id { get; protected set; }
+        public virtual string UserName { get; protected set; }
+        public virtual IEnumerable<string> Claims { get; }
+        public virtual IList<AuthenticationProvider> AuthenticationProviders { get; protected set; }
 
-        public AuthenticatedUser(Guid id, string userName, IEnumerable<string> claims)
+        public AuthenticatedUser(Guid id, string userName, IList<AuthenticationProvider> authenticationProviders)
         {
             Id = id;
             UserName = userName;
-            Claims = claims;
+            AuthenticationProviders = authenticationProviders;
+            Claims = new List<string>();
         }
+
+        protected AuthenticatedUser()
+        {
+            Claims = new List<string>();
+        }
+
     }
 }

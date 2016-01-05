@@ -41,7 +41,7 @@ namespace Lending.Web.DependencyResolution
             if (user != null && user.Identity.IsAuthenticated)
             {
                 context.CurrentUser =
-                    new AuthenticatedUser(Guid.Parse(user.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value),
+                    new CustomUserIdentity(Guid.Parse(user.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value),
                         user.Identity.Name, user.Claims.Select(x => x.Value));
             }
 
@@ -69,7 +69,6 @@ namespace Lending.Web.DependencyResolution
                 {
                     c.ResponseProcessors.Clear();
                     c.ResponseProcessors.Add(typeof(JsonProcessor));
-                    c.ResponseProcessors.Add(typeof(XmlProcessor));
                 });
             }
         }

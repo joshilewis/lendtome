@@ -7,27 +7,23 @@ using System.Threading.Tasks;
 using JWT;
 using Nancy;
 using Nancy.SimpleAuthentication;
-using Nancy.Authentication.Forms;
-using Nancy.Authentication.Token;
 
 namespace Lending.Execution.Nancy
 {
     public class AuthCallbackProvider : IAuthenticationCallbackProvider
     {
         private readonly string secretKey;
+        private readonly IUserMapper userMapper;
 
-        public AuthCallbackProvider()
+        public AuthCallbackProvider(IUserMapper userMapper)
         {
+            this.userMapper = userMapper;
             this.secretKey = "30ea254132194749377862e7d9a644c1";
         }
 
         public dynamic Process(NancyModule nancyModule, AuthenticateCallbackData model)
         {
-            var user = new User(Guid.NewGuid(), model.AuthenticatedClient.UserInformation.Name, new[]
-            {
-                new AuthenticationProvider(model.AuthenticatedClient.ProviderName,
-                    model.AuthenticatedClient.UserInformation.Id),
-            });
+            var user = userMapper.MapUser(model);
 
             var payload = new Dictionary<string, object>
             {
@@ -47,6 +43,23 @@ namespace Lending.Execution.Nancy
         public dynamic OnRedirectToAuthenticationProviderError(NancyModule nancyModule, string errorMessage)
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public interface IUserMapper
+    {
+        AuthenticatedUser MapUser(AuthenticateCallbackData authenticateCallbackData);
+    }
+
+    public class UserMapper : IUserMapper
+    {
+        public AuthenticatedUser MapUser(AuthenticateCallbackData authenticateCallbackData)
+        {
+            return new AuthenticatedUser(Guid.NewGuid(), authenticateCallbackData.AuthenticatedClient.UserInformation.Name, new[]
+                       {
+                new AuthenticationProvider(authenticateCallbackData.AuthenticatedClient.ProviderName,
+                    authenticateCallbackData.AuthenticatedClient.UserInformation.Id),
+            });
         }
     }
 }
