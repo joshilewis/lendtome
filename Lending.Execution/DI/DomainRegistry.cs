@@ -30,10 +30,6 @@ using Nancy.SimpleAuthentication;
 using NHibernate.Context;
 //using Nancy;
 using ServiceStack.Authentication.NHibernate;
-using ServiceStack.CacheAccess;
-using ServiceStack.CacheAccess.Memcached;
-using ServiceStack.CacheAccess.Providers;
-using ServiceStack.ServiceInterface.Auth;
 using StructureMap;
 using StructureMap.Configuration.DSL;
 using StructureMap.Web;
@@ -53,7 +49,6 @@ namespace Lending.Execution.DI
                 .CurrentSessionContext<ThreadStaticSessionContext>()
                 .Mappings(m =>
                     m.FluentMappings
-                        .AddFromAssemblyOf<UserAuthPersistenceDto>()
                         .AddFromAssemblyOf<RegisteredUserMap>()
                         .AddFromAssemblyOf<RegisteredUser>()
                         .AddFromAssemblyOf<LibraryBookMap>()
@@ -96,21 +91,6 @@ namespace Lending.Execution.DI
                 scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
             });
-
-            For<IUserAuthRepository>()
-                .AlwaysUnique()
-                .Use<NHibernateUserAuthRepository>()
-                ;
-
-
-            var cfg = ConfigurationManager.GetSection("enyim.com/memcached") as MemcachedClientSection;
-            var cache = new MemcachedClientCache(cfg);
-
-            For<ICacheClient>()
-                .Singleton()
-                //.Use(cache)
-                .Use<MemoryCacheClient>()
-                ;
 
             For<IEventRepository>()
                 .AlwaysUnique()
