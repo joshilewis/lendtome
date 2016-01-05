@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using Lending.Execution.Auth;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.StructureMap;
-using Nancy.Diagnostics;
-using StructureMap;
-using Nancy.Authentication.Forms;
-using Nancy.Authentication.Token;
 using Nancy.Conventions;
+using Nancy.Diagnostics;
 using Nancy.Owin;
 using Nancy.Responses.Negotiation;
+using StructureMap;
 
-namespace Lending.Web.DependencyResolution
+namespace Lending.Web
 {
     public class BootStrapper : StructureMapNancyBootstrapper
     {

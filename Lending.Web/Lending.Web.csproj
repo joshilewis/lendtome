@@ -228,9 +228,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\BootStrapper.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\JasmineController.cs" />
-    <Compile Include="DependencyResolution\BootStrapper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\SmDependencyResolver.cs" />
