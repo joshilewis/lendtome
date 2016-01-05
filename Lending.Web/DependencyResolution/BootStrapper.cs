@@ -1,14 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Lending.Execution.Nancy;
+using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.StructureMap;
 using Nancy.Diagnostics;
 using StructureMap;
 using Nancy.Authentication.Forms;
 using Nancy.Authentication.Token;
+using Nancy.Owin;
 
 namespace Lending.Web.DependencyResolution
 {
@@ -24,20 +27,23 @@ namespace Lending.Web.DependencyResolution
         protected override void ApplicationStartup(IContainer container, IPipelines pipelines)
         {
             base.ApplicationStartup(container, pipelines);
-            TokenAuthentication.Enable(pipelines, new TokenAuthenticationConfiguration(container.GetInstance<ITokenizer>()));
         }
 
-        //protected override void ApplicationStartup(IContainer container, IPipelines pipelines)
-        //{
-        //    base.ApplicationStartup(container, pipelines);
-        //    var formsAuthConfiguration =
-        //                   new FormsAuthenticationConfiguration()
-        //                   {
-        //                       RedirectUrl = "~/signin",
-        //                       //UserMapper = requestContainer.Resolve<IUserMapper>(),
-        //                   };
+        protected override void RequestStartup(IContainer container, IPipelines pipelines, NancyContext context)
+        {
+            base.RequestStartup(container, pipelines, context);
 
-        //    FormsAuthentication.Enable(pipelines, formsAuthConfiguration);
-        //}
+            var owinEnvironment = context.GetOwinEnvironment();
+
+            var principal = owinEnvironment?["server.User"] as ClaimsPrincipal;
+
+            if (principal == null) return;
+
+            var userName = principal.Identity.Name;
+            var claims = principal.Claims.Where(
+                o => o.Type == ClaimTypes.Role)
+                .Select(o => o.Value);
+            context.CurrentUser = new AuthenticatedUser(userName,claims);
+        }
     }
 }

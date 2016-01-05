@@ -29,11 +29,7 @@ namespace Lending.Execution.Nancy
                 new AuthenticationProvider(model.AuthenticatedClient.ProviderName, model.AuthenticatedClient.UserInformation.Id), 
             });
 
-            var token = tokenizer.Tokenize(user, nancyModule.Context);
-            return new
-            {
-                Token = token,
-            };
+            return null;
         }
 
         public dynamic OnRedirectToAuthenticationProviderError(NancyModule nancyModule, string errorMessage)
