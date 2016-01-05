@@ -14,6 +14,7 @@ using Nancy.Authentication.Forms;
 using Nancy.Authentication.Token;
 using Nancy.Conventions;
 using Nancy.Owin;
+using Nancy.Responses.Negotiation;
 
 namespace Lending.Web.DependencyResolution
 {
@@ -59,18 +60,18 @@ namespace Lending.Web.DependencyResolution
             nancyConventions.StaticContentsConventions
                 .Add(StaticContentConventionBuilder.AddDirectory("Content", @"Content"));
         }
-        
-        //protected override void ApplicationStartup(IContainer container, IPipelines pipelines)
-        //{
-        //    base.ApplicationStartup(container, pipelines);
-        //    var formsAuthConfiguration =
-        //                   new FormsAuthenticationConfiguration()
-        //                   {
-        //                       RedirectUrl = "~/signin",
-        //                       //UserMapper = requestContainer.Resolve<IUserMapper>(),
-        //                   };
 
-        //    FormsAuthentication.Enable(pipelines, formsAuthConfiguration);
-        //}
+        protected override NancyInternalConfiguration InternalConfiguration
+        {
+            get
+            {
+                return NancyInternalConfiguration.WithOverrides((c) =>
+                {
+                    c.ResponseProcessors.Clear();
+                    c.ResponseProcessors.Add(typeof(JsonProcessor));
+                    c.ResponseProcessors.Add(typeof(XmlProcessor));
+                });
+            }
+        }
     }
 }
