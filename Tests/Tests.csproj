@@ -120,7 +120,6 @@
     <Compile Include="Commands\AddBookToLibraryTests.cs" />
     <Compile Include="Commands\RemoveBookFromLibraryTests.cs" />
     <Compile Include="Commands\RequestConnectionTests.cs" />
-    <Compile Include="Commands\RegisterUserTests.cs" />
     <Compile Include="DummyEventHandlerProvider.cs" />
     <Compile Include="Fixture.cs" />
     <Compile Include="FixtureWithEventStore.cs" />

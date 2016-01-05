@@ -186,11 +186,9 @@
     <Compile Include="Auth\AuthCallbackProvider.cs" />
     <Compile Include="Auth\AuthenticatedUser.cs" />
     <Compile Include="Auth\AuthenticationProvider.cs" />
-    <Compile Include="Auth\AuthSessionHandler.cs" />
     <Compile Include="Auth\CustomUserIdentity.cs" />
     <Compile Include="Auth\IUserMapper.cs" />
     <Compile Include="Auth\SecureTokenValidator.cs" />
-    <Compile Include="Auth\UnitOfWorkAuthService.cs" />
     <Compile Include="Auth\UserMapper.cs" />
     <Compile Include="DI\DomainRegistry.cs" />
     <Compile Include="DI\StructureMapContainerAdapter.cs" />
@@ -213,17 +211,11 @@
     <Compile Include="Persistence\RegisteredUserMap.cs" />
     <Compile Include="Persistence\SchemaUpdater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Auth\UnitOfWorkAuthProvider.cs" />
     <Compile Include="EventRepository.cs" />
     <Compile Include="SequentialGuid.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkHelpers.cs" />
-    <Compile Include="WebServices\AuthenticatedWebservice.cs" />
-    <Compile Include="WebServices\IAuthenticatedWebservice.cs" />
-    <Compile Include="WebServices\IWebservice.cs" />
-    <Compile Include="WebServices\Webservice.cs" />
-    <Compile Include="WebServices\Webservices.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lending.Cqrs\Lending.Cqrs.csproj">

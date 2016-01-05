@@ -23,7 +23,6 @@ using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
 using Lending.Execution.Persistence;
 using Lending.Execution.UnitOfWork;
-using Lending.Execution.WebServices;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.SearchForUser;
 using Nancy.Authentication.Token;
@@ -103,15 +102,6 @@ namespace Lending.Execution.DI
                 .Use<NHibernateUserAuthRepository>()
                 ;
 
-            For<IAuthProvider>()
-                .AlwaysUnique()
-                .Use<UnitOfWorkAuthProvider>()
-                ;
-
-            For<AuthService>()
-                .AlwaysUnique()
-                .Use<UnitOfWorkAuthService>()
-                ;
 
             var cfg = ConfigurationManager.GetSection("enyim.com/memcached") as MemcachedClientSection;
             var cache = new MemcachedClientCache(cfg);
