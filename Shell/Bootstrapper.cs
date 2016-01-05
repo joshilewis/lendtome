@@ -1,5 +1,4 @@
-﻿using Lending.Execution.Nancy;
-using Nancy.Bootstrappers.StructureMap;
+﻿using Nancy.Bootstrappers.StructureMap;
 using Nancy.Diagnostics;
 using Nancy.SimpleAuthentication;
 using SimpleAuthentication.Core;

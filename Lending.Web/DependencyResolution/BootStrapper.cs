@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Lending.Execution.Nancy;
+using Lending.Execution.Auth;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.StructureMap;

@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using JWT;
 using Nancy;
 using Nancy.SimpleAuthentication;
 
-namespace Lending.Execution.Nancy
+namespace Lending.Execution.Auth
 {
     public class AuthCallbackProvider : IAuthenticationCallbackProvider
     {
@@ -43,23 +40,6 @@ namespace Lending.Execution.Nancy
         public dynamic OnRedirectToAuthenticationProviderError(NancyModule nancyModule, string errorMessage)
         {
             throw new NotImplementedException();
-        }
-    }
-
-    public interface IUserMapper
-    {
-        AuthenticatedUser MapUser(AuthenticateCallbackData authenticateCallbackData);
-    }
-
-    public class UserMapper : IUserMapper
-    {
-        public AuthenticatedUser MapUser(AuthenticateCallbackData authenticateCallbackData)
-        {
-            return new AuthenticatedUser(Guid.NewGuid(), authenticateCallbackData.AuthenticatedClient.UserInformation.Name, new[]
-                       {
-                new AuthenticationProvider(authenticateCallbackData.AuthenticatedClient.ProviderName,
-                    authenticateCallbackData.AuthenticatedClient.UserInformation.Id),
-            });
         }
     }
 }

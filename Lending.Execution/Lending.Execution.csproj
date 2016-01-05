@@ -183,8 +183,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auth\AuthCallbackProvider.cs" />
+    <Compile Include="Auth\AuthenticatedUser.cs" />
+    <Compile Include="Auth\AuthenticationProvider.cs" />
     <Compile Include="Auth\AuthSessionHandler.cs" />
+    <Compile Include="Auth\CustomUserIdentity.cs" />
+    <Compile Include="Auth\IUserMapper.cs" />
+    <Compile Include="Auth\SecureTokenValidator.cs" />
     <Compile Include="Auth\UnitOfWorkAuthService.cs" />
+    <Compile Include="Auth\UserMapper.cs" />
     <Compile Include="DI\DomainRegistry.cs" />
     <Compile Include="DI\StructureMapContainerAdapter.cs" />
     <Compile Include="EventDispatcher.cs" />
@@ -198,14 +205,9 @@
     <Compile Include="IEventHandlerProvider.cs" />
     <Compile Include="InMemoryEventConsumer.cs" />
     <Compile Include="InMemoryEventEmitter.cs" />
-    <Compile Include="Nancy\AuthCallbackProvider.cs" />
-    <Compile Include="Nancy\CustomUserIdentity.cs" />
-    <Compile Include="Nancy\AuthenticationProvider.cs" />
-    <Compile Include="Nancy\GetModule.cs" />
-    <Compile Include="Nancy\PostModule.cs" />
-    <Compile Include="Nancy\Modules.cs" />
-    <Compile Include="Nancy\AuthenticatedUser.cs" />
-    <Compile Include="Owin\SecureTokenValidator.cs" />
+    <Compile Include="Modules\GetModule.cs" />
+    <Compile Include="Modules\PostModule.cs" />
+    <Compile Include="Modules\Modules.cs" />
     <Compile Include="Owin\Startup.cs" />
     <Compile Include="Persistence\NHibernateRepository.cs" />
     <Compile Include="Persistence\RegisteredUserMap.cs" />

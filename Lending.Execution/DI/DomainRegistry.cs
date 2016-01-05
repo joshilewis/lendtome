@@ -21,7 +21,6 @@ using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
-using Lending.Execution.Nancy;
 using Lending.Execution.Persistence;
 using Lending.Execution.UnitOfWork;
 using Lending.Execution.WebServices;

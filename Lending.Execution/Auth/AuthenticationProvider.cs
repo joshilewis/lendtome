@@ -1,4 +1,4 @@
-namespace Lending.Execution.Nancy
+namespace Lending.Execution.Auth
 {
     public class AuthenticationProvider
     {

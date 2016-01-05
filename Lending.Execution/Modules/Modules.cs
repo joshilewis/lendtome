@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lending.Cqrs;
+﻿using Lending.Cqrs;
 using Lending.Cqrs.Query;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.UnitOfWork;
 using Lending.ReadModels.Relational.SearchForUser;
 
-namespace Lending.Execution.Nancy
+namespace Lending.Execution.Modules
 {
     public class SearchForUserModule : GetModule<SearchForUser, Result>
     {

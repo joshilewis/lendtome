@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Nancy.Security;
 
-namespace Lending.Execution.Nancy
+namespace Lending.Execution.Auth
 {
     public class AuthenticatedUser : IUserIdentity
     {

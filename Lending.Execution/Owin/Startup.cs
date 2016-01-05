@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lending.Execution.Auth;
 using Microsoft.Owin.Extensions;
 using Owin;
 using Owin.StatelessAuth;

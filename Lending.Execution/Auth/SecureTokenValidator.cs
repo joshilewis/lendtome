@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using JWT;
 using Owin.StatelessAuth;
 
-namespace Lending.Execution.Owin
+namespace Lending.Execution.Auth
 {
     public class SecureTokenValidator : ITokenValidator
     {
