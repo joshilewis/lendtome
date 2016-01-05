@@ -22,10 +22,8 @@ namespace Lending.Execution.Owin
                 if (decodedtoken == null)
                     return null;
 
-                DateTime expiry = DateTime.Parse(decodedtoken["Expiry"].ToString());
-
-                if (expiry < DateTime.UtcNow)
-                    return null;
+                DateTime expiry = DateTime.Parse(decodedtoken["Expires"].ToString());
+                if (expiry < DateTime.UtcNow) return null;
 
                 var claims = new List<Claim>();
 

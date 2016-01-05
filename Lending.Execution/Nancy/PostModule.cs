@@ -29,7 +29,7 @@ namespace Lending.Execution.Nancy
 
             Post[Path] = _ =>
             {
-                var blah = this.Context.CurrentUser;
+                AuthenticatedUser user = this.Context.CurrentUser as AuthenticatedUser;
 
                 TMessage request = this.Bind<TMessage>();
 

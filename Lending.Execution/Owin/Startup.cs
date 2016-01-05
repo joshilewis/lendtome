@@ -13,8 +13,24 @@ namespace Lending.Execution.Owin
     {
         public void Configuration(IAppBuilder app)
         {
-            app.RequiresStatelessAuth(new SecureTokenValidator(),
-                    new StatelessAuthOptions { });
+            var pathsToIgnore = new[]
+            {
+                "/",
+                "/App/*.*",
+                "/App/",
+                "/authentication/*.*",
+                "/authentication/**",
+                "/authentication",
+                "/content",
+                "/content/*.*",
+                "/fonts/*.*",
+                "/scripts/*.js",
+            };
+
+            app.RequiresStatelessAuth(new SecureTokenValidator(), new StatelessAuthOptions
+            {
+                IgnorePaths = pathsToIgnore,
+            });
             app.UseNancy();
             app.UseStageMarker(PipelineStage.MapHandler);
         }
