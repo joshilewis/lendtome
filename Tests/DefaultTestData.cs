@@ -16,11 +16,11 @@ namespace Tests
 {
     public class DefaultTestData
     {
-        public static RegisteredUser RegisteredUser1 => new RegisteredUser(1, Guid.Empty, "Joshua Lewis");
+        public static RegisteredUser RegisteredUser1 => new RegisteredUser(Guid.Empty, "Joshua Lewis");
 
-        public static RegisteredUser RegisteredUser2 => new RegisteredUser(2, Guid.Empty, "User2");
+        public static RegisteredUser RegisteredUser2 => new RegisteredUser(Guid.Empty, "User2");
 
-        public static RegisteredUser RegisteredUser3 => new RegisteredUser(3, Guid.Empty, "User3");
+        public static RegisteredUser RegisteredUser3 => new RegisteredUser(Guid.Empty, "User3");
 
         public static Guid processId = Guid.Empty;
         public static Guid user1Id = Guid.NewGuid();
@@ -30,9 +30,9 @@ namespace Tests
         public static Guid user5Id = Guid.NewGuid();
         public static Guid user6Id = Guid.NewGuid();
 
-        public static RegisterUser user1Registers = new RegisterUser(processId, user1Id, 1, "user1", "email1");
+        public static RegisterUser user1Registers = new RegisterUser(processId, user1Id, "user1", "email1");
 
-        public static UserRegistered user1Registered = new UserRegistered(processId, user1Id, 1, user1Registers.UserName,
+        public static UserRegistered user1Registered = new UserRegistered(processId, user1Id, user1Registers.UserName,
             user1Registers.PrimaryEmail);
 
         public static string title = "title";
@@ -56,7 +56,7 @@ namespace Tests
         public static Result failBecauseBookNotInLibrary = new Result(User.BookNotInLibrary);
         public static Result failBecauseNoPendingConnectionRequest = new Result(User.NoPendingConnectionRequest);
         public static Result failBecauseUsersAlreadyConnected = new Result(User.UsersAlreadyConnected);
-        public static RegisterUser user2Registers = new RegisterUser(processId, user2Id, 2, "user2", "email2");
+        public static RegisterUser user2Registers = new RegisterUser(processId, user2Id, "user2", "email2");
 
         public static RequestConnection user1RequestsConnectionToUser2 = new RequestConnection(processId, user1Id,
             user1Id, user2Id);
@@ -64,7 +64,7 @@ namespace Tests
         public static ConnectionRequested connectionRequestedFrom1To2 = new ConnectionRequested(processId, user1Id,
             user2Id);
 
-        public static UserRegistered user2Registered = new UserRegistered(processId, user2Id, 2, user2Registers.UserName,
+        public static UserRegistered user2Registered = new UserRegistered(processId, user2Id, user2Registers.UserName,
             user2Registers.PrimaryEmail);
 
         public static ConnectionRequestReceived connectionRequestFrom1To2Received =
@@ -102,16 +102,16 @@ namespace Tests
 
         public static AcceptConnection user2AcceptsRequest1 = new AcceptConnection(processId, user2Id, user2Id, user1Id);
 
-        public static UserRegistered joshuaLewisRegistered = new UserRegistered(processId, user1Id, 1, "Joshua Lewis",
+        public static UserRegistered joshuaLewisRegistered = new UserRegistered(processId, user1Id, "Joshua Lewis",
             "Email1");
 
-        public static UserRegistered suzaanHepburnRegistered = new UserRegistered(processId, user2Id, 2,
-            "Suzaan Hepburn", "Email2");
+        public static UserRegistered suzaanHepburnRegistered = new UserRegistered(processId, user2Id, "Suzaan Hepburn",
+            "Email2");
 
-        public static UserRegistered josieDoe3Registered = new UserRegistered(processId, user3Id, 3, "Josie Doe",
+        public static UserRegistered josieDoe3Registered = new UserRegistered(processId, user3Id, "Josie Doe",
             "Email3");
 
-        public static UserRegistered audreyHepburn4Registered = new UserRegistered(processId, user4Id, 4,
+        public static UserRegistered audreyHepburn4Registered = new UserRegistered(processId, user4Id,
             "Audrey Hepburn", "Email4");
 
         public static string TestDrivenDevelopment = "Test-Driven Development";
@@ -123,10 +123,10 @@ namespace Tests
         public static string BeckAMusicalMaestro = "Beck: A musical Maestro";
         public static string SomeAuthor = "Some Author";
 
-        public static UserRegistered user3Registered = new UserRegistered(processId, user3Id, 3, "User3", "Email3");
-        public static UserRegistered user4Registered = new UserRegistered(processId, user4Id, 4, "User4", "Email4");
-        public static UserRegistered user5Registered = new UserRegistered(processId, user5Id, 5, "User5", "Email5");
-        public static UserRegistered user6Registered = new UserRegistered(processId, user6Id, 6, "User6", "Email6");
+        public static UserRegistered user3Registered = new UserRegistered(processId, user3Id, "User3", "Email3");
+        public static UserRegistered user4Registered = new UserRegistered(processId, user4Id, "User4", "Email4");
+        public static UserRegistered user5Registered = new UserRegistered(processId, user5Id, "User5", "Email5");
+        public static UserRegistered user6Registered = new UserRegistered(processId, user6Id, "User6", "Email6");
 
         public static ConnectionAccepted conn1To2Accepted = new ConnectionAccepted(processId, user2Id, user1Id);
         public static ConnectionAccepted conn1To3Accepted = new ConnectionAccepted(processId, user3Id, user1Id);

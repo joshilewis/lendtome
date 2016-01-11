@@ -5,14 +5,12 @@ namespace Lending.Domain.RegisterUser
 {
     public class UserRegistered : Event
     {
-        public long AuthUserId { get; set; }
         public string UserName { get; set; }
         public string EmailAddress { get; set; }
 
-        public UserRegistered(Guid processId, Guid aggregateId, long authUserId, string userName, string emailAddress)
+        public UserRegistered(Guid processId, Guid aggregateId, string userName, string emailAddress)
             : base(processId, aggregateId)
         {
-            AuthUserId = authUserId;
             UserName = userName;
             EmailAddress = emailAddress;
         }
@@ -27,8 +25,7 @@ namespace Lending.Domain.RegisterUser
 
             if (!base.Equals(obj)) return false;
             var other = (UserRegistered)obj;
-            return AuthUserId.Equals(other.AuthUserId) &&
-                UserName.Equals(other.UserName) &&
+            return UserName.Equals(other.UserName) &&
                    EmailAddress.Equals(other.EmailAddress);
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lending.Domain.RegisterUser;
 using Lending.Execution.Auth;
 using Nancy.SimpleAuthentication;
 using NUnit.Framework;
@@ -16,7 +17,7 @@ namespace Tests.Infra
         [Test]
         public void ExistingUserAuthenticatingShouldUseExistingUser()
         {
-            var authenticatedUser = new AuthenticatedUser(Guid.NewGuid(), "user1", new List<AuthenticationProvider>()
+            var authenticatedUser = new AuthenticatedUser(Guid.NewGuid(), "user1", "email1", new List<AuthenticationProvider>()
             {
                 new AuthenticationProvider(Guid.NewGuid(), "Facebook", "12345"),
             });
@@ -31,7 +32,7 @@ namespace Tests.Infra
             };
             SaveEntities(authenticatedUser);
 
-            var sut = new UserMapper(() => Session);
+            var sut = new UserMapper(() => Session, new RegisterUserHandler(() => Repository, () => EventRepository));
             AuthenticatedUser actual = sut.MapUser(authenticatedClient);
 
             actual.ShouldEqual(authenticatedUser);
@@ -45,7 +46,7 @@ namespace Tests.Infra
         [Test]
         public void NewUserAuthenticatingShouldCreateNewUserAndNewLibrary()
         {
-            var authenticatedUser = new AuthenticatedUser(Guid.NewGuid(), "user1", new List<AuthenticationProvider>()
+            var authenticatedUser = new AuthenticatedUser(Guid.NewGuid(), "user1", "Email1", new List<AuthenticationProvider>()
             {
                 new AuthenticationProvider(Guid.NewGuid(), "Facebook", "12345"),
             });
@@ -59,7 +60,7 @@ namespace Tests.Infra
                 }
             };
 
-            var sut = new UserMapper(() => Session);
+            var sut = new UserMapper(() => Session, new RegisterUserHandler(() => Repository, () => EventRepository));
             AuthenticatedUser actual = sut.MapUser(authenticatedClient);
 
             actual.ShouldEqual(authenticatedUser);

@@ -8,12 +8,14 @@ namespace Lending.Execution.Auth
     {
         public virtual Guid Id { get; protected set; }
         public virtual string UserName { get; protected set; }
+        public virtual string Email { get; protected set; }
         public virtual IList<AuthenticationProvider> AuthenticationProviders { get; protected set; }
 
-        public AuthenticatedUser(Guid id, string userName, IList<AuthenticationProvider> authenticationProviders)
+        public AuthenticatedUser(Guid id, string userName, string email, IList<AuthenticationProvider> authenticationProviders)
         {
             Id = id;
             UserName = userName;
+            Email = email;
             AuthenticationProviders = authenticationProviders;
         }
 

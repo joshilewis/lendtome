@@ -116,7 +116,6 @@ namespace Tests
         {
             Assert.That(actual.Id, Is.EqualTo(expected.Id));
             Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
-            Assert.That(actual.AuthUserId, Is.EqualTo(expected.AuthUserId));
 
             return true;
         }
