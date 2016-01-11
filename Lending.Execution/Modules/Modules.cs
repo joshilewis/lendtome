@@ -1,5 +1,6 @@
 ﻿using Lending.Cqrs;
 using Lending.Cqrs.Query;
+using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.UnitOfWork;
@@ -25,6 +26,16 @@ namespace Lending.Execution.Modules
         }
 
         protected override string Path => "/connections/request/";
+    }
+
+    public class AcceptConnectionModule : PostModule<AcceptConnection, Result>
+    {
+        public AcceptConnectionModule(IUnitOfWork unitOfWork, IMessageHandler<AcceptConnection, Result> messageHandler)
+            : base(unitOfWork, messageHandler)
+        {
+        }
+
+        protected override string Path => "/connections/accept/";
     }
 
     public class AddBookModule : PostModule<AddBookToLibrary, Result>

@@ -13,5 +13,10 @@ namespace Lending.Domain.AcceptConnection
         {
             RequestingUserId = requestingUserId;
         }
+
+        public AcceptConnection()
+        {
+            
+        }
     }
 }
