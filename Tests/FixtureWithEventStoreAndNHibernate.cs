@@ -51,7 +51,7 @@ namespace Tests
             base.SetUp();
             //Create DB
             new SchemaExport(Configuration)
-                .Execute(false, true, false);
+                .Execute(true, true, false);
 
             Container.GetInstance<IUnitOfWork>().Begin();
 

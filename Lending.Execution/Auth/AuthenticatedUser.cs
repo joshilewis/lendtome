@@ -4,11 +4,10 @@ using Nancy.Security;
 
 namespace Lending.Execution.Auth
 {
-    public class AuthenticatedUser : IUserIdentity
+    public class AuthenticatedUser
     {
         public virtual Guid Id { get; protected set; }
         public virtual string UserName { get; protected set; }
-        public virtual IEnumerable<string> Claims { get; }
         public virtual IList<AuthenticationProvider> AuthenticationProviders { get; protected set; }
 
         public AuthenticatedUser(Guid id, string userName, IList<AuthenticationProvider> authenticationProviders)
@@ -16,12 +15,10 @@ namespace Lending.Execution.Auth
             Id = id;
             UserName = userName;
             AuthenticationProviders = authenticationProviders;
-            Claims = new List<string>();
         }
 
         protected AuthenticatedUser()
         {
-            Claims = new List<string>();
         }
 
     }

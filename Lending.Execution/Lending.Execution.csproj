@@ -156,7 +156,9 @@
   <ItemGroup>
     <Compile Include="Auth\AuthCallbackProvider.cs" />
     <Compile Include="Auth\AuthenticatedUser.cs" />
+    <Compile Include="Auth\AuthenticatedUserMap.cs" />
     <Compile Include="Auth\AuthenticationProvider.cs" />
+    <Compile Include="Auth\AuthenticationProviderMap.cs" />
     <Compile Include="Auth\CustomUserIdentity.cs" />
     <Compile Include="Auth\IUserMapper.cs" />
     <Compile Include="Auth\SecureTokenValidator.cs" />

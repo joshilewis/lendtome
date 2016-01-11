@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using JWT;
+using Lending.Execution.UnitOfWork;
 using Nancy;
 using Nancy.SimpleAuthentication;
 
@@ -11,16 +12,21 @@ namespace Lending.Execution.Auth
     {
         private readonly string secretKey;
         private readonly IUserMapper userMapper;
+        private readonly IUnitOfWork unitOfWork;
 
-        public AuthCallbackProvider(IUserMapper userMapper)
+        public AuthCallbackProvider(IUserMapper userMapper, IUnitOfWork unitOfWork)
         {
             this.userMapper = userMapper;
+            this.unitOfWork = unitOfWork;
             this.secretKey = "30ea254132194749377862e7d9a644c1";
         }
 
         public dynamic Process(NancyModule nancyModule, AuthenticateCallbackData model)
         {
-            var user = userMapper.MapUser(model);
+            AuthenticatedUser user = null;
+            unitOfWork.DoInTransaction(() => 
+             user = userMapper.MapUser(model.AuthenticatedClient)
+            );
 
             var payload = new Dictionary<string, object>
             {

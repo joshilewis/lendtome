@@ -1,17 +1,41 @@
 using System;
+using System.Collections.Generic;
+using Lending.Domain.RegisterUser;
 using Nancy.SimpleAuthentication;
+using NHibernate;
+using SimpleAuthentication.Core;
 
 namespace Lending.Execution.Auth
 {
     public class UserMapper : IUserMapper
     {
-        public AuthenticatedUser MapUser(AuthenticateCallbackData authenticateCallbackData)
+        private readonly Func<ISession> getSession;
+
+        public UserMapper(Func<ISession> sessionFunc)
         {
-            return new AuthenticatedUser(Guid.NewGuid(), authenticateCallbackData.AuthenticatedClient.UserInformation.Name, new[]
-            {
-                new AuthenticationProvider(authenticateCallbackData.AuthenticatedClient.ProviderName,
-                    authenticateCallbackData.AuthenticatedClient.UserInformation.Id),
-            });
+            this.getSession = sessionFunc;
+        }
+
+        public AuthenticatedUser MapUser(IAuthenticatedClient client)
+        {
+            ISession session = getSession();
+            AuthenticatedUser user = session.QueryOver<AuthenticatedUser>()
+                .JoinQueryOver<AuthenticationProvider>(x => x.AuthenticationProviders)
+                .Where(y => y.Name == client.ProviderName)
+                .Where(y => y.UserId == client.UserInformation.Id)
+                .SingleOrDefault();
+
+            if (user != null) return user;
+
+            user = new AuthenticatedUser(SequentialGuid.NewGuid(), client.UserInformation.Name,
+                new List<AuthenticationProvider>()
+                {
+                    new AuthenticationProvider(SequentialGuid.NewGuid(), client.ProviderName, client.UserInformation.Id),
+                });
+
+            session.Save(user);
+            return user;
+
         }
     }
 }

@@ -1,9 +1,11 @@
+using Lending.Domain.RegisterUser;
 using Nancy.SimpleAuthentication;
+using SimpleAuthentication.Core;
 
 namespace Lending.Execution.Auth
 {
     public interface IUserMapper
     {
-        AuthenticatedUser MapUser(AuthenticateCallbackData authenticateCallbackData);
+        AuthenticatedUser MapUser(IAuthenticatedClient client);
     }
 }

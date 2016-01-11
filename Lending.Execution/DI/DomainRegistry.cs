@@ -52,6 +52,7 @@ namespace Lending.Execution.DI
                         .AddFromAssemblyOf<RegisteredUserMap>()
                         .AddFromAssemblyOf<RegisteredUser>()
                         .AddFromAssemblyOf<LibraryBookMap>()
+                        .AddFromAssemblyOf<AuthenticatedUserMap>()
                 )
                 .BuildConfiguration()
                 ;
@@ -137,6 +138,10 @@ namespace Lending.Execution.DI
             For<ITokenizer>()
                 .AlwaysUnique()
                 .Use(c => new Tokenizer());
+
+            For<IUserMapper>()
+                .AlwaysUnique()
+                .Use<UserMapper>();
 
         }
 
