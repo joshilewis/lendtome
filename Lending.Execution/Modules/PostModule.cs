@@ -1,4 +1,6 @@
-﻿using Lending.Cqrs;
+﻿using System;
+using Lending.Cqrs;
+using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Execution.Auth;
 using Lending.Execution.UnitOfWork;
@@ -8,7 +10,7 @@ using Nancy.Security;
 
 namespace Lending.Execution.Modules
 {
-    public abstract class PostModule<TMessage, TResult> : NancyModule where TMessage : Message where TResult : Result
+    public abstract class PostModule<TMessage, TResult> : NancyModule where TMessage : AuthenticatedCommand where TResult : Result
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMessageHandler<TMessage, TResult> messageHandler;
@@ -27,12 +29,14 @@ namespace Lending.Execution.Modules
             {
                 CustomUserIdentity user = this.Context.CurrentUser as CustomUserIdentity;
 
-                TMessage request = this.Bind<TMessage>();
+                TMessage message = this.Bind<TMessage>();
+                message.UserId = user.Id;
+                message.ProcessId = Guid.NewGuid();
 
                 Result response = default(Result);
                 unitOfWork.DoInTransaction(() =>
                 {
-                    response = messageHandler.Handle(request);
+                    response = messageHandler.Handle(message);
 
                 });
 
