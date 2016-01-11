@@ -24,7 +24,7 @@ namespace Lending.Execution.Modules
         {
         }
 
-        protected override string Path => "/connections/request/{TargetUserId}/";
+        protected override string Path => "/connections/request/";
     }
 
     public class AddBookModule : PostModule<AddBookToLibrary, Result>
