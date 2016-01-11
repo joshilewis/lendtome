@@ -10,7 +10,6 @@ using Lending.Domain;
 using Lending.Execution.DI;
 using Lending.Execution.EventStore;
 using NUnit.Framework;
-using ServiceStack.ServiceInterface.Auth;
 using StructureMap;
 
 namespace Tests

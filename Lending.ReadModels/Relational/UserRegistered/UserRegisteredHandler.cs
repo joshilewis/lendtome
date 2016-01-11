@@ -19,7 +19,7 @@ namespace Lending.ReadModels.Relational.UserRegistered
 
         public override void When(Domain.RegisterUser.UserRegistered @event)
         {
-            RegisteredUser registeredUser = new RegisteredUser(@event.AuthUserId, @event.AggregateId, @event.UserName);
+            RegisteredUser registeredUser = new RegisteredUser(@event.AggregateId, @event.UserName);
             getSession().Save(registeredUser);
 
         }

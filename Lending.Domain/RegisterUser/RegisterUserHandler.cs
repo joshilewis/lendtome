@@ -20,7 +20,7 @@ namespace Lending.Domain.RegisterUser
 
         public override Result Handle(RegisterUser command)
         {
-            User user = User.Register(command.ProcessId, command.UserId, command.AuthUserId, command.UserName, command.PrimaryEmail);
+            User user = User.Register(command.ProcessId, command.UserId, command.UserName, command.PrimaryEmail);
             EventRepository.Save(user);
 
             return Success();

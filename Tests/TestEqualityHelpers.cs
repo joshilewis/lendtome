@@ -116,7 +116,6 @@ namespace Tests
         {
             Assert.That(actual.Id, Is.EqualTo(expected.Id));
             Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
-            Assert.That(actual.AuthUserId, Is.EqualTo(expected.AuthUserId));
 
             return true;
         }
@@ -157,7 +156,9 @@ namespace Tests
 
         public static bool ShouldEqual(this Result<RegisteredUser[]> actual, Result<RegisteredUser[]> expected)
         {
-            Assert.That(actual.Payload, Is.EquivalentTo(expected.Payload).Using(new ValueEqualityComparer()));
+            Assert.That(actual.Payload,
+                Is.EquivalentTo(expected.Payload)
+                    .Using((IEqualityComparer<RegisteredUser>) new ValueEqualityComparer()));
 
             ((Result) actual).ShouldEqual(expected);
 
@@ -191,10 +192,27 @@ namespace Tests
             return true;
         }
 
+        public static bool ShouldEqual(this AuthenticatedUser actual, AuthenticatedUser expected)
+        {
+            Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
+            Assert.That(actual.AuthenticationProviders, Is.EquivalentTo(expected.AuthenticationProviders)
+                .Using((IEqualityComparer<AuthenticationProvider>)new ValueEqualityComparer()));
+
+            return true;
+        }
+
+        public static bool ShouldEqual(this AuthenticationProvider actual, AuthenticationProvider expected)
+        {
+            Assert.That(actual.UserId, Is.EqualTo(expected.UserId));
+            Assert.That(actual.Name, Is.EqualTo(expected.Name));
+
+            return true;
+        }
 
     }
 
-    public class ValueEqualityComparer : IEqualityComparer<RegisteredUser>
+    public class ValueEqualityComparer : IEqualityComparer<RegisteredUser>,
+        IEqualityComparer<AuthenticationProvider>
     {
         public bool Equals(RegisteredUser x, RegisteredUser y)
         {
@@ -202,6 +220,16 @@ namespace Tests
         }
 
         public int GetHashCode(RegisteredUser obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(AuthenticationProvider x, AuthenticationProvider y)
+        {
+            return y.ShouldEqual(x);
+        }
+
+        public int GetHashCode(AuthenticationProvider obj)
         {
             throw new NotImplementedException();
         }

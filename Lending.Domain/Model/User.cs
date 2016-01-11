@@ -29,10 +29,10 @@ namespace Lending.Domain.Model
         public List<Guid> ConnectedUsers { get; set; }
         public List<Book> Library { get; set; } 
 
-        protected User(Guid processId, Guid id, long authUserId, string userName, string emailAddress)
+        protected User(Guid processId, Guid id, string userName, string emailAddress)
             : this()
         {
-            RaiseEvent(new UserRegistered(processId, id, authUserId, userName, emailAddress));
+            RaiseEvent(new UserRegistered(processId, id, userName, emailAddress));
         }
 
         protected User()
@@ -43,9 +43,9 @@ namespace Lending.Domain.Model
             Library = new List<Book>();
         }
 
-        public static User Register(Guid processId, Guid id, long authUserId, string userName, string emailAddress)
+        public static User Register(Guid processId, Guid id, string userName, string emailAddress)
         {
-            return new User(processId, id, authUserId, userName, emailAddress);
+            return new User(processId, id, userName, emailAddress);
         }
 
         public static User CreateFromHistory(IEnumerable<Event> events)

@@ -12,8 +12,11 @@ namespace Lending.Web
         public static void RegisterRoutes(RouteCollection routes)
         {
             //ServiceStack
-            routes.IgnoreRoute("api/{*pathInfo}");
+            //routes.IgnoreRoute("api/{*pathInfo}");
             routes.IgnoreRoute("nancy/{*pathInfo}");
+            routes.IgnoreRoute("_nancy/{*pathInfo}");
+            routes.IgnoreRoute("pga/{*pathInfo}");
+            routes.IgnoreRoute("authentication/{*pathInfo}");
 
             routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" }); //Prevent exceptions for favicon
 

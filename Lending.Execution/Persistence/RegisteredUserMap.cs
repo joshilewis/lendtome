@@ -10,8 +10,6 @@ namespace Lending.Execution.Persistence
             Id(x => x.Id)
                 .GeneratedBy.Assigned();
             Map(x => x.UserName);
-            Map(x => x.AuthUserId)
-                .Unique();
         }
     }
 }

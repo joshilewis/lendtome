@@ -29,7 +29,7 @@ namespace Lending.Web
             DependencyResolver.SetResolver(new SmDependencyResolver(Container));
             ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
 
-            AppHost.Start(new StructureMapContainerAdapter(Container));
+            //AppHost.Start(new StructureMapContainerAdapter(Container));
             
             //AreaRegistration.RegisterAllAreas();
 

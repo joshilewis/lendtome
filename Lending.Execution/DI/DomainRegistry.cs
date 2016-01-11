@@ -21,20 +21,15 @@ using Lending.Domain.RegisterUser;
 using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
-using Lending.Execution.Nancy;
 using Lending.Execution.Persistence;
 using Lending.Execution.UnitOfWork;
-using Lending.Execution.WebServices;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.SearchForUser;
+using Nancy.Authentication.Token;
 using Nancy.SimpleAuthentication;
 using NHibernate.Context;
 //using Nancy;
 using ServiceStack.Authentication.NHibernate;
-using ServiceStack.CacheAccess;
-using ServiceStack.CacheAccess.Memcached;
-using ServiceStack.CacheAccess.Providers;
-using ServiceStack.ServiceInterface.Auth;
 using StructureMap;
 using StructureMap.Configuration.DSL;
 using StructureMap.Web;
@@ -54,10 +49,10 @@ namespace Lending.Execution.DI
                 .CurrentSessionContext<ThreadStaticSessionContext>()
                 .Mappings(m =>
                     m.FluentMappings
-                        .AddFromAssemblyOf<UserAuthPersistenceDto>()
                         .AddFromAssemblyOf<RegisteredUserMap>()
                         .AddFromAssemblyOf<RegisteredUser>()
                         .AddFromAssemblyOf<LibraryBookMap>()
+                        .AddFromAssemblyOf<AuthenticatedUserMap>()
                 )
                 .BuildConfiguration()
                 ;
@@ -97,30 +92,6 @@ namespace Lending.Execution.DI
                 scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
             });
-
-            For<IUserAuthRepository>()
-                .AlwaysUnique()
-                .Use<NHibernateUserAuthRepository>()
-                ;
-
-            For<IAuthProvider>()
-                .AlwaysUnique()
-                .Use<UnitOfWorkAuthProvider>()
-                ;
-
-            For<AuthService>()
-                .AlwaysUnique()
-                .Use<UnitOfWorkAuthService>()
-                ;
-
-            var cfg = ConfigurationManager.GetSection("enyim.com/memcached") as MemcachedClientSection;
-            var cache = new MemcachedClientCache(cfg);
-
-            For<ICacheClient>()
-                .Singleton()
-                //.Use(cache)
-                .Use<MemoryCacheClient>()
-                ;
 
             For<IEventRepository>()
                 .AlwaysUnique()
@@ -163,6 +134,15 @@ namespace Lending.Execution.DI
             For<IAuthenticationCallbackProvider>()
                 .AlwaysUnique()
                 .Use<AuthCallbackProvider>();
+
+            For<ITokenizer>()
+                .AlwaysUnique()
+                .Use(c => new Tokenizer());
+
+            For<IUserMapper>()
+                .AlwaysUnique()
+                .Use<UserMapper>();
+
         }
 
         private static IEnumerable<IEventHandler> GetEventHandlers(IContext context, Type eventType)

@@ -23,7 +23,7 @@ namespace Tests.Queries
             When(new SearchForUser("Lew"));
             Then(actualResult => ((Result<RegisteredUser[]>)actualResult).ShouldEqual(new Result<RegisteredUser[]>(new RegisteredUser[]
             {
-                new RegisteredUser(1, user1Id, joshuaLewisRegistered.UserName), 
+                new RegisteredUser(user1Id, joshuaLewisRegistered.UserName), 
             })));
         }
 
@@ -39,7 +39,7 @@ namespace Tests.Queries
             When(new SearchForUser("lEw"));
             Then(actualResult => ((Result<RegisteredUser[]>)actualResult).ShouldEqual(new Result<RegisteredUser[]>(new RegisteredUser[]
             {
-                new RegisteredUser(1, user1Id, joshuaLewisRegistered.UserName),
+                new RegisteredUser(user1Id, joshuaLewisRegistered.UserName),
             })));
         }
 
@@ -71,8 +71,8 @@ namespace Tests.Queries
             When(new SearchForUser("Jos"));
             Then(actualResult => ((Result<RegisteredUser[]>)actualResult).ShouldEqual(new Result<RegisteredUser[]>(new RegisteredUser[]
             {
-                new RegisteredUser(1, user1Id, joshuaLewisRegistered.UserName),
-                new RegisteredUser(3, user3Id, josieDoe3Registered.UserName),
+                new RegisteredUser(user1Id, joshuaLewisRegistered.UserName),
+                new RegisteredUser(user3Id, josieDoe3Registered.UserName),
             })));
         }
 
