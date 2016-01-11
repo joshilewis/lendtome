@@ -158,7 +158,7 @@ namespace Tests
         {
             Assert.That(actual.Payload,
                 Is.EquivalentTo(expected.Payload)
-                    .Using((IEqualityComparer<AuthenticationProvider>) new ValueEqualityComparer()));
+                    .Using((IEqualityComparer<RegisteredUser>) new ValueEqualityComparer()));
 
             ((Result) actual).ShouldEqual(expected);
 
