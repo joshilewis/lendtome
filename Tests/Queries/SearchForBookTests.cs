@@ -1,8 +1,6 @@
 ﻿using System;
 using Lending.Cqrs.Query;
-using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
-using Lending.Domain.RegisterUser;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
@@ -28,8 +26,8 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[] { });
 
-            Given(user1Registered, user2Registered, conn1To2Accepted);
-            When(new SearchForBook(user1Id, ExtremeProgrammingExplained));
+            Given(Library1Opened, Library2Opened, Link1To2Accepted);
+            When(new SearchForBook(Library1Id, ExtremeProgrammingExplained));
             Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
         }
 
@@ -43,8 +41,8 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(SearchForBookHandler.UserHasNoConnection, new BookSearchResult[] { });
 
-            Given(user1Registered);
-            When(new SearchForBook(user1Id, ExtremeProgrammingExplained));
+            Given(Library1Opened);
+            When(new SearchForBook(Library1Id, ExtremeProgrammingExplained));
             Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
 
         }
@@ -62,14 +60,14 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(user2Id, user2Registered.UserName, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(user4Id, user4Registered.UserName, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library2Id, Library2Opened.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library4Id, Library4Opened.Name, ExtremeProgrammingExplained, KentBeck),
             });
 
-            Given(user1Registered, user2Registered, user3Registered, user4Registered, 
-                conn1To2Accepted, conn1To3Accepted, conn1To4Accepted,
+            Given(Library1Opened, Library2Opened, Library3Opened, Library4Opened, 
+                Link1To2Accepted, Link1To3Accepted, Link1To4Accepted,
                 xpeByKbAddTo4, xpeByKbAddTo2, tddByKbAddTo3);
-            When(new SearchForBook(user1Id, ExtremeProgrammingExplained));
+            When(new SearchForBook(Library1Id, ExtremeProgrammingExplained));
             Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
 
         }
@@ -89,15 +87,15 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(user2Id, user2Registered.UserName, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(user4Id, user4Registered.UserName, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(user5Id, user5Registered.UserName, ExtremeSnowboardStunts, SomeSkiier), 
+                new BookSearchResult(Library2Id, Library2Opened.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library4Id, Library4Opened.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library5Id, Library5Opened.Name, ExtremeSnowboardStunts, SomeSkiier), 
             });
 
-            Given(user1Registered, user2Registered, user3Registered, user4Registered, user5Registered, 
-                conn1To2Accepted, conn1To3Accepted, conn1To4Accepted, conn1To5Accepted,
+            Given(Library1Opened, Library2Opened, Library3Opened, Library4Opened, Library5Opened, 
+                Link1To2Accepted, Link1To3Accepted, Link1To4Accepted, Link1To5Accepted,
                 xpeByKbAddTo4, xpeByKbAddTo2, tddByKbAddTo3, essBySSAddTo5);
-            When(new SearchForBook(user1Id, "Extreme"));
+            When(new SearchForBook(Library1Id, "Extreme"));
             Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
 
         }
@@ -117,15 +115,15 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(user2Id, user2Registered.UserName, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(user3Id, user3Registered.UserName, TestDrivenDevelopment, KentBeck),
-                new BookSearchResult(user4Id, user4Registered.UserName, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library2Id, Library2Opened.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library3Id, Library3Opened.Name, TestDrivenDevelopment, KentBeck),
+                new BookSearchResult(Library4Id, Library4Opened.Name, ExtremeProgrammingExplained, KentBeck),
             });
 
-            Given(user1Registered, user2Registered, user3Registered, user4Registered, user5Registered,
-                conn1To2Accepted, conn1To3Accepted, conn1To4Accepted, conn1To5Accepted,
+            Given(Library1Opened, Library2Opened, Library3Opened, Library4Opened, Library5Opened,
+                Link1To2Accepted, Link1To3Accepted, Link1To4Accepted, Link1To5Accepted,
                 xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5);
-            When(new SearchForBook(user1Id, KentBeck));
+            When(new SearchForBook(Library1Id, KentBeck));
             Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
 
         }
@@ -146,16 +144,16 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(user2Id, user2Registered.UserName, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(user3Id, user3Registered.UserName, TestDrivenDevelopment, KentBeck),
-                new BookSearchResult(user4Id, user4Registered.UserName, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(user6Id, user6Registered.UserName, BeckAMusicalMaestro, SomeAuthor),
+                new BookSearchResult(Library2Id, Library2Opened.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library3Id, Library3Opened.Name, TestDrivenDevelopment, KentBeck),
+                new BookSearchResult(Library4Id, Library4Opened.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library6Id, Library6Opened.Name, BeckAMusicalMaestro, SomeAuthor),
             });
 
-            Given(user1Registered, user2Registered, user3Registered, user4Registered, user5Registered, user6Registered,
-                conn1To2Accepted, conn1To3Accepted, conn1To4Accepted, conn1To5Accepted, conn1To6Accepted,
+            Given(Library1Opened, Library2Opened, Library3Opened, Library4Opened, Library5Opened, Library6Opened,
+                Link1To2Accepted, Link1To3Accepted, Link1To4Accepted, Link1To5Accepted, Link1To6Accepted,
                 xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5, bBySAAddTo6);
-            When(new SearchForBook(user1Id, "Beck"));
+            When(new SearchForBook(Library1Id, "Beck"));
             Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
 
         }
@@ -176,15 +174,15 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(user2Id, user2Registered.UserName, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(user3Id, user3Registered.UserName, TestDrivenDevelopment, KentBeck),
-                new BookSearchResult(user6Id, user6Registered.UserName, BeckAMusicalMaestro, SomeAuthor),
+                new BookSearchResult(Library2Id, Library2Opened.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library3Id, Library3Opened.Name, TestDrivenDevelopment, KentBeck),
+                new BookSearchResult(Library6Id, Library6Opened.Name, BeckAMusicalMaestro, SomeAuthor),
             });
 
-            Given(user1Registered, user2Registered, user3Registered, user4Registered, user5Registered, user6Registered,
-                conn1To2Accepted, conn1To3Accepted, conn1To5Accepted, conn1To6Accepted,
+            Given(Library1Opened, Library2Opened, Library3Opened, Library4Opened, Library5Opened, Library6Opened,
+                Link1To2Accepted, Link1To3Accepted, Link1To5Accepted, Link1To6Accepted,
                 xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5, bBySAAddTo6);
-            When(new SearchForBook(user1Id, "Beck"));
+            When(new SearchForBook(Library1Id, "Beck"));
             Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
 
         }
@@ -206,15 +204,15 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(user2Id, user2Registered.UserName, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(user3Id, user3Registered.UserName, TestDrivenDevelopment, KentBeck),
-                new BookSearchResult(user6Id, user6Registered.UserName, BeckAMusicalMaestro, SomeAuthor),
+                new BookSearchResult(Library2Id, Library2Opened.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library3Id, Library3Opened.Name, TestDrivenDevelopment, KentBeck),
+                new BookSearchResult(Library6Id, Library6Opened.Name, BeckAMusicalMaestro, SomeAuthor),
             });
 
-            Given(user1Registered, user2Registered, user3Registered, user4Registered, user5Registered, user6Registered,
-                conn1To2Accepted, conn1To3Accepted, conn1To4Accepted, conn1To5Accepted, conn1To6Accepted,
+            Given(Library1Opened, Library2Opened, Library3Opened, Library4Opened, Library5Opened, Library6Opened,
+                Link1To2Accepted, Link1To3Accepted, Link1To4Accepted, Link1To5Accepted, Link1To6Accepted,
                 xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5, bBySAAddTo6, xpeByKbRemoveFrom4);
-            When(new SearchForBook(user1Id, "Beck"));
+            When(new SearchForBook(Library1Id, "Beck"));
             Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
 
         }

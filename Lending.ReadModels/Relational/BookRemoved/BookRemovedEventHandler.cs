@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lending.Domain.RegisterUser;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.ReadModels.Relational.BookAdded;
 using NHibernate;

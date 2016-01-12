@@ -7,14 +7,14 @@ using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Domain;
-using Lending.Domain.AcceptConnection;
+using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
-using Lending.Domain.RegisterUser;
-using Lending.Domain.RequestConnection;
+using Lending.Domain.OpenLibrary;
+using Lending.Domain.RequestLink;
 using Lending.Execution.Auth;
 using Lending.ReadModels.Relational.BookAdded;
-using Lending.ReadModels.Relational.ConnectionAccepted;
+using Lending.ReadModels.Relational.LinkAccepted;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -25,17 +25,17 @@ namespace Tests
 {
     public static class TestEqualityHelpers
     {
-        public static bool ShouldEqual(this User actual, User expected)
+        public static bool ShouldEqual(this Library actual, Library expected)
         {
-            Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
-            Assert.That(actual.EmailAddress, Is.EqualTo(expected.EmailAddress));
+            Assert.That(actual.Name, Is.EqualTo(expected.Name));
+            Assert.That(actual.Administrators, Is.EquivalentTo(expected.Administrators));
 
             return true;
         }
 
-        public static User MatchArg(this User expected)
+        public static Library MatchArg(this Library expected)
         {
-            return Arg<User>.Matches(x => x.ShouldEqual(expected));
+            return Arg<Library>.Matches(x => x.ShouldEqual(expected));
         }
 
         
@@ -91,54 +91,54 @@ namespace Tests
             return true;
         }
 
-        public static bool ShouldEqual(this UserRegistered actual, UserRegistered expected)
+        public static bool ShouldEqual(this LibraryOpened actual, LibraryOpened expected)
         {
-            Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
-            Assert.That(actual.EmailAddress, Is.EqualTo(expected.EmailAddress));
+            Assert.That(actual.Name, Is.EqualTo(expected.Name));
+            Assert.That(actual.AdministratorId, Is.EqualTo(expected.AdministratorId));
             ((Event)actual).ShouldEqual(expected);
 
             return true;
         }
 
-        public static UserRegistered MatchArg(this UserRegistered expected)
+        public static LibraryOpened MatchArg(this LibraryOpened expected)
         {
-            return Arg<UserRegistered>.Matches(x => x.ShouldEqual(expected));
+            return Arg<LibraryOpened>.Matches(x => x.ShouldEqual(expected));
         }
 
-        public static bool ShouldEqual(this ConnectionRequested actual, ConnectionRequested expected)
+        public static bool ShouldEqual(this LinkRequested actual, LinkRequested expected)
         {
-            Assert.That(actual.TargetUserId, Is.EqualTo(expected.TargetUserId));
+            Assert.That(actual.TargetLibraryId, Is.EqualTo(expected.TargetLibraryId));
             ((Event) actual).ShouldEqual(expected);
             return true;
         }
 
-        public static bool ShouldEqual(this RegisteredUser actual, RegisteredUser expected)
+        public static bool ShouldEqual(this OpenedLibrary actual, OpenedLibrary expected)
         {
             Assert.That(actual.Id, Is.EqualTo(expected.Id));
-            Assert.That(actual.UserName, Is.EqualTo(expected.UserName));
+            Assert.That(actual.Name, Is.EqualTo(expected.Name));
 
             return true;
         }
 
-        public static bool ShouldEqual(this ConnectionRequestReceived actual, ConnectionRequestReceived expected)
+        public static bool ShouldEqual(this LinkRequestReceived actual, LinkRequestReceived expected)
         {
-            Assert.That(actual.RequestingUserId, Is.EqualTo(expected.RequestingUserId));
+            Assert.That(actual.RequestingLibraryId, Is.EqualTo(expected.RequestingLibraryId));
             ((Event)actual).ShouldEqual(expected);
 
             return true;
         }
 
-        public static bool ShouldEqual(this ConnectionAccepted actual, ConnectionAccepted expected)
+        public static bool ShouldEqual(this LinkAccepted actual, LinkAccepted expected)
         {
-            Assert.That(actual.RequestingUserId, Is.EqualTo(expected.RequestingUserId));
+            Assert.That(actual.RequestingLibraryId, Is.EqualTo(expected.RequestingLibraryId));
             ((Event)actual).ShouldEqual(expected);
 
             return true;
         }
 
-        public static bool ShouldEqual(this ConnectionCompleted actual, ConnectionCompleted expected)
+        public static bool ShouldEqual(this LinkCompleted actual, LinkCompleted expected)
         {
-            Assert.That(actual.AcceptingUserId, Is.EqualTo(expected.AcceptingUserId));
+            Assert.That(actual.AcceptingLibraryId, Is.EqualTo(expected.AcceptingLibraryId));
             ((Event)actual).ShouldEqual(expected);
 
             return true;
@@ -154,22 +154,22 @@ namespace Tests
             return true;
         }
 
-        public static bool ShouldEqual(this Result<RegisteredUser[]> actual, Result<RegisteredUser[]> expected)
+        public static bool ShouldEqual(this Result<OpenedLibrary[]> actual, Result<OpenedLibrary[]> expected)
         {
             Assert.That(actual.Payload,
                 Is.EquivalentTo(expected.Payload)
-                    .Using((IEqualityComparer<RegisteredUser>) new ValueEqualityComparer()));
+                    .Using((IEqualityComparer<OpenedLibrary>) new ValueEqualityComparer()));
 
             ((Result) actual).ShouldEqual(expected);
 
             return true;
         }
 
-        public static bool ShouldEqual(this UserConnection actual, UserConnection expected)
+        public static bool ShouldEqual(this LibraryLink actual, LibraryLink expected)
         {
             Assert.That(actual.ProcessId, Is.EqualTo(expected.ProcessId));
-            Assert.That(actual.RequestingUserId, Is.EqualTo(expected.RequestingUserId));
-            Assert.That(actual.AcceptingUserId, Is.EqualTo(expected.AcceptingUserId));
+            Assert.That(actual.RequestingLibraryId, Is.EqualTo(expected.RequestingLibraryId));
+            Assert.That(actual.AcceptingLibraryId, Is.EqualTo(expected.AcceptingLibraryId));
             return true;
         }
 
@@ -211,15 +211,15 @@ namespace Tests
 
     }
 
-    public class ValueEqualityComparer : IEqualityComparer<RegisteredUser>,
+    public class ValueEqualityComparer : IEqualityComparer<OpenedLibrary>,
         IEqualityComparer<AuthenticationProvider>
     {
-        public bool Equals(RegisteredUser x, RegisteredUser y)
+        public bool Equals(OpenedLibrary x, OpenedLibrary y)
         {
             return y.ShouldEqual(x);
         }
 
-        public int GetHashCode(RegisteredUser obj)
+        public int GetHashCode(OpenedLibrary obj)
         {
             throw new NotImplementedException();
         }

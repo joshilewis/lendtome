@@ -2,7 +2,6 @@
 using Lending.Cqrs.Query;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
-using Lending.Domain.RegisterUser;
 using Lending.Domain.RemoveBookFromLibrary;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
@@ -24,10 +23,10 @@ namespace Tests.Commands
         [Test]
         public void AddingNewBookToLibraryShouldSucceed()
         {
-            Given(user1Registers);
-            When(user1AddsBookToLibrary);
+            Given(Library1Opens);
+            When(User1AddsBookToLibrary);
             Then(succeed);
-            AndEventsSavedForAggregate<User>(user1Id, user1Registered, book1AddedToUser1Library);
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
 
         /// <summary>
@@ -38,10 +37,10 @@ namespace Tests.Commands
         [Test]
         public void AddingDuplicateBookToLibraryShouldFail()
         {
-            Given(user1Registers, user1AddsBookToLibrary);
-            When(user1AddsBookToLibrary);
+            Given(Library1Opens, User1AddsBookToLibrary);
+            When(User1AddsBookToLibrary);
             Then(failBecauseBookAlreadyInLibrary);
-            AndEventsSavedForAggregate<User>(user1Id, user1Registered, book1AddedToUser1Library);
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
 
         /// <summary>
@@ -52,10 +51,10 @@ namespace Tests.Commands
         [Test]
         public void AddingPreviouslyRemovedBookToLibraryShouldSucceed()
         {
-            Given(user1Registers, user1AddsBookToLibrary, user1RemovesBookFromLibrary);
-            When(user1AddsBookToLibrary);
+            Given(Library1Opens, User1AddsBookToLibrary, user1RemovesBookFromLibrary);
+            When(User1AddsBookToLibrary);
             Then(succeed);
-            AndEventsSavedForAggregate<User>(user1Id, user1Registered, book1AddedToUser1Library, book1RemovedFromLibrary, book1AddedToUser1Library);
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, book1RemovedFromLibrary, Book1AddedToUser1Library);
         }
 
     }

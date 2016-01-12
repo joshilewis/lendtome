@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
-using Lending.Domain.RegisterUser;
+using Lending.Domain.OpenLibrary;
 using Nancy.SimpleAuthentication;
 using NHibernate;
 using SimpleAuthentication.Core;
@@ -13,9 +13,9 @@ namespace Lending.Execution.Auth
     public class UserMapper : IUserMapper
     {
         private readonly Func<ISession> getSession;
-        private readonly IMessageHandler<RegisterUser, Result> commandHandler;
+        private readonly IMessageHandler<OpenLibrary, Result> commandHandler;
 
-        public UserMapper(Func<ISession> sessionFunc, IMessageHandler<RegisterUser, Result> commandHandler)
+        public UserMapper(Func<ISession> sessionFunc, IMessageHandler<OpenLibrary, Result> commandHandler)
         {
             this.getSession = sessionFunc;
             this.commandHandler = commandHandler;
@@ -38,7 +38,7 @@ namespace Lending.Execution.Auth
                     new AuthenticationProvider(SequentialGuid.NewGuid(), client.ProviderName, client.UserInformation.Id),
                 });
 
-            Result result = commandHandler.Handle(new RegisterUser(Guid.NewGuid(), user.Id, user.UserName, user.Email));
+            Result result = commandHandler.Handle(new OpenLibrary(Guid.NewGuid(), user.Id, SequentialGuid.NewGuid(), user.UserName, user.Id));
             if (!result.Success) throw new Exception();
 
             session.Save(user);

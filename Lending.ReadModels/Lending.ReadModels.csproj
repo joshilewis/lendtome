@@ -57,15 +57,16 @@
     <Compile Include="Relational\BookAdded\LibraryBook.cs" />
     <Compile Include="Relational\BookAdded\LibraryBookMap.cs" />
     <Compile Include="Relational\BookRemoved\BookRemovedEventHandler.cs" />
-    <Compile Include="Relational\ConnectionAccepted\ConnectionAcceptedEventHandler.cs" />
-    <Compile Include="Relational\ConnectionAccepted\UserConnection.cs" />
-    <Compile Include="Relational\ConnectionAccepted\UserConnectionMap.cs" />
+    <Compile Include="Relational\LinkAccepted\LinkAcceptedEventHandler.cs" />
+    <Compile Include="Relational\LinkAccepted\LibraryLink.cs" />
+    <Compile Include="Relational\LinkAccepted\LibrayLinkMap.cs" />
+    <Compile Include="Relational\LibraryOpened\OpenedLibraryMap.cs" />
     <Compile Include="Relational\SearchForBook\BookSearchResult.cs" />
     <Compile Include="Relational\SearchForBook\SearchForBook.cs" />
     <Compile Include="Relational\SearchForBook\SearchForBookHandler.cs" />
-    <Compile Include="Relational\SearchForUser\SearchForUser.cs" />
-    <Compile Include="Relational\SearchForUser\SearchForUserHandler.cs" />
-    <Compile Include="Relational\UserRegistered\UserRegisteredHandler.cs" />
+    <Compile Include="Relational\SearchForLibrary\SearchForLibrary.cs" />
+    <Compile Include="Relational\SearchForLibrary\SearchForLibraryHandler.cs" />
+    <Compile Include="Relational\LibraryOpened\LibraryOpenedHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lending.Cqrs\Lending.Cqrs.csproj">

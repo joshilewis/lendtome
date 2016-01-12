@@ -15,16 +15,15 @@ using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Domain;
-using Lending.Domain.AcceptConnection;
 using Lending.Domain.AddBookToLibrary;
-using Lending.Domain.RegisterUser;
-using Lending.Domain.RequestConnection;
+using Lending.Domain.OpenLibrary;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
 using Lending.Execution.Persistence;
 using Lending.Execution.UnitOfWork;
 using Lending.ReadModels.Relational.BookAdded;
-using Lending.ReadModels.Relational.SearchForUser;
+using Lending.ReadModels.Relational.LibraryOpened;
+using Lending.ReadModels.Relational.SearchForLibrary;
 using Nancy.Authentication.Token;
 using Nancy.SimpleAuthentication;
 using NHibernate.Context;
@@ -49,8 +48,8 @@ namespace Lending.Execution.DI
                 .CurrentSessionContext<ThreadStaticSessionContext>()
                 .Mappings(m =>
                     m.FluentMappings
-                        .AddFromAssemblyOf<RegisteredUserMap>()
-                        .AddFromAssemblyOf<RegisteredUser>()
+                        .AddFromAssemblyOf<OpenedLibraryMap>()
+                        .AddFromAssemblyOf<OpenedLibrary>()
                         .AddFromAssemblyOf<LibraryBookMap>()
                         .AddFromAssemblyOf<AuthenticatedUserMap>()
                 )
@@ -82,15 +81,15 @@ namespace Lending.Execution.DI
             {
                 scanner.AssemblyContainingType<Command>();
                 scanner.AssemblyContainingType<AddBookToLibrary>();
-                scanner.AssemblyContainingType<RegisteredUserMap>();
-                scanner.AssemblyContainingType<SearchForUser>();
+                scanner.AssemblyContainingType<OpenedLibraryMap>();
+                scanner.AssemblyContainingType<SearchForLibrary>();
                 scanner.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IQueryHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IMessageHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedCommandHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<,>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
+                //scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
             });
 
             For<IEventRepository>()
@@ -119,9 +118,9 @@ namespace Lending.Execution.DI
             For<Func<Type, IEnumerable<IEventHandler>>>()
                 .Use<Func<Type, IEnumerable<IEventHandler>>>(context => eventType => GetEventHandlers(context, eventType));
 
-            For<IMessageHandler<SearchForUser, Result>>()
+            For<IMessageHandler<SearchForLibrary, Result>>()
                 .AlwaysUnique()
-                .Use<SearchForUserHandler>();
+                .Use<SearchForLibraryHandler>();
 
             For<EventDispatcher>()
                 .AlwaysUnique()
@@ -148,7 +147,8 @@ namespace Lending.Execution.DI
         private static IEnumerable<IEventHandler> GetEventHandlers(IContext context, Type eventType)
         {
             Type type = typeof(IEventHandler<>).MakeGenericType(eventType);
-            return context.GetAllInstances(type)
+            var allInstances = context.GetAllInstances(type);
+            return allInstances
                 .Select(x => (IEventHandler)x);
 
         }

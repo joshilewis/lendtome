@@ -4,115 +4,112 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Cqrs.Query;
-using Lending.Domain.AcceptConnection;
+using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
-using Lending.Domain.RegisterUser;
+using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
-using Lending.Domain.RequestConnection;
+using Lending.Domain.RequestLink;
 using Lending.Execution.Auth;
 
 namespace Tests
 {
     public class DefaultTestData
     {
-        public static RegisteredUser RegisteredUser1 => new RegisteredUser(Guid.Empty, "Joshua Lewis");
+        public static OpenedLibrary RegisteredUser1 => new OpenedLibrary(Guid.Empty, "Joshua Lewis");
 
-        public static RegisteredUser RegisteredUser2 => new RegisteredUser(Guid.Empty, "User2");
+        public static OpenedLibrary RegisteredUser2 => new OpenedLibrary(Guid.Empty, "User2");
 
-        public static RegisteredUser RegisteredUser3 => new RegisteredUser(Guid.Empty, "User3");
+        public static OpenedLibrary RegisteredUser3 => new OpenedLibrary(Guid.Empty, "User3");
 
         public static Guid processId = Guid.Empty;
-        public static Guid user1Id = Guid.NewGuid();
-        public static Guid user2Id = Guid.NewGuid();
-        public static Guid user3Id = Guid.NewGuid();
-        public static Guid user4Id = Guid.NewGuid();
-        public static Guid user5Id = Guid.NewGuid();
-        public static Guid user6Id = Guid.NewGuid();
+        public static Guid Library1Id = Guid.NewGuid();
+        public static Guid Library2Id = Guid.NewGuid();
+        public static Guid Library3Id = Guid.NewGuid();
+        public static Guid Library4Id = Guid.NewGuid();
+        public static Guid Library5Id = Guid.NewGuid();
+        public static Guid Library6Id = Guid.NewGuid();
 
-        public static RegisterUser user1Registers = new RegisterUser(processId, user1Id, "user1", "email1");
+        public static OpenLibrary Library1Opens = new OpenLibrary(processId, Library1Id, Library1Id, "library1", Library1Id);
 
-        public static UserRegistered user1Registered = new UserRegistered(processId, user1Id, user1Registers.UserName,
-            user1Registers.PrimaryEmail);
+        public static LibraryOpened Library1Opened = new LibraryOpened(processId, Library1Id, Library1Opens.Name,
+            Library1Opens.AdministratorId);
 
-        public static string title = "title";
-        public static string author = "author";
-        public static string isbnnumber = "isbn";
+        public static string Title = "Title";
+        public static string Author = "Author";
+        public static string Isbnnumber = "isbn";
 
-        public static AddBookToLibrary user1AddsBookToLibrary = new AddBookToLibrary(processId, user1Id, user1Id, title,
-            author, isbnnumber);
+        public static AddBookToLibrary User1AddsBookToLibrary = new AddBookToLibrary(processId, Library1Id, Library1Id, Title,
+            Author, Isbnnumber);
 
-        public static BookAddedToLibrary book1AddedToUser1Library = new BookAddedToLibrary(processId, user1Id, title,
-            author, isbnnumber);
+        public static BookAddedToLibrary Book1AddedToUser1Library = new BookAddedToLibrary(processId, Library1Id, Title,
+            Author, Isbnnumber);
 
-        public static RemoveBookFromLibrary user1RemovesBookFromLibrary = new RemoveBookFromLibrary(processId, user1Id,
-            user1Id, title, author, isbnnumber);
+        public static RemoveBookFromLibrary user1RemovesBookFromLibrary = new RemoveBookFromLibrary(processId, Library1Id,
+            Library1Id, Title, Author, Isbnnumber);
 
-        public static BookRemovedFromLibrary book1RemovedFromLibrary = new BookRemovedFromLibrary(processId, user1Id,
-            title, author, isbnnumber);
+        public static BookRemovedFromLibrary book1RemovedFromLibrary = new BookRemovedFromLibrary(processId, Library1Id,
+            Title, Author, Isbnnumber);
 
         public static Result succeed = new Result();
-        public static Result failBecauseBookAlreadyInLibrary = new Result(User.BookAlreadyInLibrary);
-        public static Result failBecauseBookNotInLibrary = new Result(User.BookNotInLibrary);
-        public static Result failBecauseNoPendingConnectionRequest = new Result(User.NoPendingConnectionRequest);
-        public static Result failBecauseUsersAlreadyConnected = new Result(User.UsersAlreadyConnected);
-        public static RegisterUser user2Registers = new RegisterUser(processId, user2Id, "user2", "email2");
+        public static Result failBecauseBookAlreadyInLibrary = new Result(Library.BookAlreadyInLibrary);
+        public static Result failBecauseBookNotInLibrary = new Result(Library.BookNotInLibrary);
+        public static Result failBecauseNoPendingConnectionRequest = new Result(Library.NoPendingLinkRequest);
+        public static Result FailBecauseLibrariesAlreadyLinked = new Result(Library.LibrariesAlreadyLinked);
+        public static OpenLibrary Library2Opens = new OpenLibrary(processId, Library2Id, Library2Id, "user2", Library2Id);
 
-        public static RequestConnection user1RequestsConnectionToUser2 = new RequestConnection(processId, user1Id,
-            user1Id, user2Id);
+        public static RequestLink Library1RequestsLinkToLibrary2 = new RequestLink(processId, Library1Id,
+            Library1Id, Library2Id);
 
-        public static ConnectionRequested connectionRequestedFrom1To2 = new ConnectionRequested(processId, user1Id,
-            user2Id);
+        public static LinkRequested LinkRequestedFrom1To2 = new LinkRequested(processId, Library1Id,
+            Library2Id);
 
-        public static UserRegistered user2Registered = new UserRegistered(processId, user2Id, user2Registers.UserName,
-            user2Registers.PrimaryEmail);
+        public static LibraryOpened Library2Opened = new LibraryOpened(processId, Library2Id, Library2Opens.Name,
+            Library2Opens.AdministratorId);
 
-        public static ConnectionRequestReceived connectionRequestFrom1To2Received =
-            new ConnectionRequestReceived(processId, user2Id, user1Id);
+        public static LinkRequestReceived LinkRequestFrom1To2Received =
+            new LinkRequestReceived(processId, Library2Id, Library1Id);
 
-        public static AcceptConnection user2AcceptsRequestFrom1 = new AcceptConnection(processId, user2Id, user2Id,
-            user1Id);
+        public static AcceptLink Library2AcceptsLinkFromLibrary1 = new AcceptLink(processId, Library2Id, Library2Id,
+            Library1Id);
 
-        public static ConnectionCompleted connectionCompleted = new ConnectionCompleted(processId, user1Id, user2Id);
-        public static ConnectionAccepted connectionAccepted = new ConnectionAccepted(processId, user2Id, user1Id);
-        public static Result failBecauseConnectionAlreadyRequested = new Result(User.ConnectionAlreadyRequested);
+        public static LinkCompleted LinkCompleted = new LinkCompleted(processId, Library1Id, Library2Id);
+        public static LinkAccepted LinkAccepted = new LinkAccepted(processId, Library2Id, Library1Id);
+        public static Result FailBecauseLinkAlreadyRequested = new Result(Library.LinkAlreadyRequested);
 
-        public static Result failBecauseTargetUserDoesNotExist =
-            new Result(RequestConnectionHandler.TargetUserDoesNotExist);
+        public static Result FailBecauseTargetLibraryDoesNotExist =
+            new Result(RequestLinkHandler.TargetLibraryDoesNotExist);
 
-        public static Result failBecauseReverseConnectionAlreadyRequested =
-            new Result(User.ReverseConnectionAlreadyRequested);
+        public static Result FailBecauseReverseLinkAlreadyRequested =
+            new Result(Library.ReverseLinkAlreadyRequested);
 
-        public static Result failBecauseCantConnectToSelf = new Result(RequestConnectionHandler.CantConnectToSelf);
+        public static Result FailBecauseCantLinkToSelf = new Result(RequestLinkHandler.CantConnectToSelf);
 
-        public static RequestConnection user2RequestsConnectionToUser1 = new RequestConnection(processId, user2Id,
-            user2Id, user1Id);
+        public static RequestLink Library2RequestsLinkToLibrary1 = new RequestLink(processId, Library2Id,
+            Library2Id, Library1Id);
 
-        public static RequestConnection user1Requests2ndConnectionToUser2 = new RequestConnection(processId, user1Id,
-            user1Id, user2Id);
+        public static RequestLink Library1Requests2NdLinkToLibrary2 = new RequestLink(processId, Library1Id,
+            Library1Id, Library2Id);
 
-        public static ConnectionRequested connectionRequestedFrom2To1 = new ConnectionRequested(processId, user2Id,
-            user1Id);
+        public static LinkRequested LinkRequestedFrom2To1 = new LinkRequested(processId, Library2Id,
+            Library1Id);
 
-        public static ConnectionRequestReceived connectionRequestFrom2To1Received =
-            new ConnectionRequestReceived(processId, user1Id, user2Id);
+        public static LinkRequestReceived LinkRequestFrom2To1Received =
+            new LinkRequestReceived(processId, Library1Id, Library2Id);
 
-        public static RequestConnection user1RequestsConnectionToSelf = new RequestConnection(processId, user1Id,
-            user1Id, user1Id);
+        public static RequestLink Library1RequestsLinkToSelf = new RequestLink(processId, Library1Id,
+            Library1Id, Library1Id);
 
-        public static AcceptConnection user2AcceptsRequest1 = new AcceptConnection(processId, user2Id, user2Id, user1Id);
+        public static LibraryOpened joshuaLewisLibraryOpened = new LibraryOpened(processId, Library1Id, "Joshua Lewis",
+            Library1Id);
 
-        public static UserRegistered joshuaLewisRegistered = new UserRegistered(processId, user1Id, "Joshua Lewis",
-            "Email1");
+        public static LibraryOpened suzaanHepburnLibraryOpened = new LibraryOpened(processId, Library2Id, "Suzaan Hepburn",
+            Library2Id);
 
-        public static UserRegistered suzaanHepburnRegistered = new UserRegistered(processId, user2Id, "Suzaan Hepburn",
-            "Email2");
+        public static LibraryOpened josieDoe3LibraryOpened = new LibraryOpened(processId, Library3Id, "Josie Doe", Library3Id);
 
-        public static UserRegistered josieDoe3Registered = new UserRegistered(processId, user3Id, "Josie Doe",
-            "Email3");
-
-        public static UserRegistered audreyHepburn4Registered = new UserRegistered(processId, user4Id,
-            "Audrey Hepburn", "Email4");
+        public static LibraryOpened audreyHepburn4LibraryOpened = new LibraryOpened(processId, Library4Id,
+            "Audrey Hepburn", Library4Id);
 
         public static string TestDrivenDevelopment = "Test-Driven Development";
         public static string KentBeck = "Kent Beck";
@@ -123,33 +120,33 @@ namespace Tests
         public static string BeckAMusicalMaestro = "Beck: A musical Maestro";
         public static string SomeAuthor = "Some Author";
 
-        public static UserRegistered user3Registered = new UserRegistered(processId, user3Id, "User3", "Email3");
-        public static UserRegistered user4Registered = new UserRegistered(processId, user4Id, "User4", "Email4");
-        public static UserRegistered user5Registered = new UserRegistered(processId, user5Id, "User5", "Email5");
-        public static UserRegistered user6Registered = new UserRegistered(processId, user6Id, "User6", "Email6");
+        public static LibraryOpened Library3Opened = new LibraryOpened(processId, Library3Id, "User3", Library3Id);
+        public static LibraryOpened Library4Opened = new LibraryOpened(processId, Library4Id, "User4", Library4Id);
+        public static LibraryOpened Library5Opened = new LibraryOpened(processId, Library5Id, "User5", Library5Id);
+        public static LibraryOpened Library6Opened = new LibraryOpened(processId, Library6Id, "User6", Library6Id);
 
-        public static ConnectionAccepted conn1To2Accepted = new ConnectionAccepted(processId, user2Id, user1Id);
-        public static ConnectionAccepted conn1To3Accepted = new ConnectionAccepted(processId, user3Id, user1Id);
-        public static ConnectionAccepted conn1To4Accepted = new ConnectionAccepted(processId, user4Id, user1Id);
-        public static ConnectionAccepted conn1To5Accepted = new ConnectionAccepted(processId, user5Id, user1Id);
-        public static ConnectionAccepted conn1To6Accepted = new ConnectionAccepted(processId, user6Id, user1Id);
+        public static LinkAccepted Link1To2Accepted = new LinkAccepted(processId, Library2Id, Library1Id);
+        public static LinkAccepted Link1To3Accepted = new LinkAccepted(processId, Library3Id, Library1Id);
+        public static LinkAccepted Link1To4Accepted = new LinkAccepted(processId, Library4Id, Library1Id);
+        public static LinkAccepted Link1To5Accepted = new LinkAccepted(processId, Library5Id, Library1Id);
+        public static LinkAccepted Link1To6Accepted = new LinkAccepted(processId, Library6Id, Library1Id);
 
-        public static BookAddedToLibrary xpeByKbAddTo2 = new BookAddedToLibrary(processId, user2Id,
+        public static BookAddedToLibrary xpeByKbAddTo2 = new BookAddedToLibrary(processId, Library2Id,
             ExtremeProgrammingExplained, KentBeck, Isbn);
 
-        public static BookAddedToLibrary xpeByKbAddTo4 = new BookAddedToLibrary(processId, user4Id,
+        public static BookAddedToLibrary xpeByKbAddTo4 = new BookAddedToLibrary(processId, Library4Id,
             ExtremeProgrammingExplained, KentBeck, Isbn);
 
-        public static BookAddedToLibrary tddByKbAddTo3 = new BookAddedToLibrary(processId, user3Id,
+        public static BookAddedToLibrary tddByKbAddTo3 = new BookAddedToLibrary(processId, Library3Id,
             TestDrivenDevelopment, KentBeck, Isbn);
 
-        public static BookAddedToLibrary essBySSAddTo5 = new BookAddedToLibrary(processId, user5Id,
+        public static BookAddedToLibrary essBySSAddTo5 = new BookAddedToLibrary(processId, Library5Id,
             ExtremeSnowboardStunts, SomeSkiier, Isbn);
 
-        public static BookAddedToLibrary bBySAAddTo6 = new BookAddedToLibrary(processId, user6Id, BeckAMusicalMaestro,
+        public static BookAddedToLibrary bBySAAddTo6 = new BookAddedToLibrary(processId, Library6Id, BeckAMusicalMaestro,
             SomeAuthor, Isbn);
 
-        public static BookRemovedFromLibrary xpeByKbRemoveFrom4 = new BookRemovedFromLibrary(processId, user4Id,
+        public static BookRemovedFromLibrary xpeByKbRemoveFrom4 = new BookRemovedFromLibrary(processId, Library4Id,
             ExtremeProgrammingExplained, KentBeck, Isbn);
 
     }

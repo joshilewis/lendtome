@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lending.Domain.RegisterUser;
+using Lending.Domain.OpenLibrary;
 using Lending.Execution.Auth;
 using Nancy.SimpleAuthentication;
 using NUnit.Framework;
@@ -32,7 +32,7 @@ namespace Tests.Infra
             };
             SaveEntities(authenticatedUser);
 
-            var sut = new UserMapper(() => Session, new RegisterUserHandler(() => Repository, () => EventRepository));
+            var sut = new UserMapper(() => Session, new OpenLibraryHandler(() => Repository, () => EventRepository));
             AuthenticatedUser actual = sut.MapUser(authenticatedClient);
 
             actual.ShouldEqual(authenticatedUser);
@@ -60,7 +60,7 @@ namespace Tests.Infra
                 }
             };
 
-            var sut = new UserMapper(() => Session, new RegisterUserHandler(() => Repository, () => EventRepository));
+            var sut = new UserMapper(() => Session, new OpenLibraryHandler(() => Repository, () => EventRepository));
             AuthenticatedUser actual = sut.MapUser(authenticatedClient);
 
             actual.ShouldEqual(authenticatedUser);

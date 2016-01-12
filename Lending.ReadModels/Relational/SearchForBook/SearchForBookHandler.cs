@@ -5,7 +5,7 @@ using System.Linq;
 using Lending.Cqrs;
 using Lending.Cqrs.Query;
 using Lending.ReadModels.Relational.BookAdded;
-using Lending.ReadModels.Relational.ConnectionAccepted;
+using Lending.ReadModels.Relational.LinkAccepted;
 using NHibernate;
 using NHibernate.Criterion;
 
@@ -26,20 +26,20 @@ namespace Lending.ReadModels.Relational.SearchForBook
         {
             ISession session = getSession();
 
-            int numberOfConnections = session.QueryOver<UserConnection>()
-                .Where(x => x.AcceptingUserId == message.UserId || x.RequestingUserId == message.UserId)
+            int numberOfConnections = session.QueryOver<LibraryLink>()
+                .Where(x => x.AcceptingLibraryId == message.UserId || x.RequestingLibraryId == message.UserId)
                 .RowCount();
 
             if (numberOfConnections == 0)
                 return new Result<BookSearchResult[]>(UserHasNoConnection, new BookSearchResult[] {});
 
-            IEnumerable<UserConnection> connectedUsers = session.QueryOver<UserConnection>()
-                .Where(x => x.RequestingUserId == message.UserId || x.AcceptingUserId == message.UserId)
+            IEnumerable<LibraryLink> connectedUsers = session.QueryOver<LibraryLink>()
+                .Where(x => x.RequestingLibraryId == message.UserId || x.AcceptingLibraryId == message.UserId)
                 .List();
 
             List<Guid> connectedUserIds = new List<Guid>();
-            connectedUserIds.AddRange(connectedUsers.Select(x => x.AcceptingUserId));
-            connectedUserIds.AddRange(connectedUsers.Select(x => x.RequestingUserId));
+            connectedUserIds.AddRange(connectedUsers.Select(x => x.AcceptingLibraryId));
+            connectedUserIds.AddRange(connectedUsers.Select(x => x.RequestingLibraryId));
             connectedUserIds = connectedUserIds.Distinct().ToList();
 
             BookSearchResult[] payload = session.QueryOver<LibraryBook>()

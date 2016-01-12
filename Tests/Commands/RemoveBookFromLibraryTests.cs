@@ -2,7 +2,6 @@
 using Lending.Cqrs.Query;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
-using Lending.Domain.RegisterUser;
 using Lending.Domain.RemoveBookFromLibrary;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
@@ -24,10 +23,10 @@ namespace Tests.Commands
         [Test]
         public void RemoveBookInLibraryShouldSucceed()
         {
-            Given(user1Registers, user1AddsBookToLibrary);
+            Given(Library1Opens, User1AddsBookToLibrary);
             When(user1RemovesBookFromLibrary);
             Then(succeed);
-            AndEventsSavedForAggregate<User>(user1Id, user1Registered, book1AddedToUser1Library, book1RemovedFromLibrary);
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, book1RemovedFromLibrary);
         }
 
         /// <summary>
@@ -38,10 +37,10 @@ namespace Tests.Commands
         [Test]
         public void RemoveBookNotInLibraryShouldFail()
         {
-            Given(user1Registers);
+            Given(Library1Opens);
             When(user1RemovesBookFromLibrary);
             Then(failBecauseBookNotInLibrary);
-            AndEventsSavedForAggregate<User>(user1Id, user1Registered);
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
     }

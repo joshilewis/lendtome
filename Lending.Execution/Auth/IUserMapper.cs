@@ -1,4 +1,3 @@
-using Lending.Domain.RegisterUser;
 using Nancy.SimpleAuthentication;
 using SimpleAuthentication.Core;
 

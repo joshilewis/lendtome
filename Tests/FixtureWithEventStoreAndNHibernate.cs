@@ -10,20 +10,16 @@ using FluentNHibernate.Conventions.Helpers;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
-using Lending.Domain.AcceptConnection;
+using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
-using Lending.Domain.RegisterUser;
+using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
-using Lending.Domain.RequestConnection;
 using Lending.Execution.Auth;
 using Lending.Execution.EventStore;
 using Lending.Execution.Persistence;
 using Lending.Execution.UnitOfWork;
 using Lending.ReadModels.Relational.BookAdded;
-using Lending.ReadModels.Relational.ConnectionAccepted;
 using Lending.ReadModels.Relational.SearchForBook;
-using Lending.ReadModels.Relational.SearchForUser;
-using Lending.ReadModels.Relational.UserRegistered;
 using NCrunch.Framework;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
@@ -134,8 +130,8 @@ namespace Tests
             {
                 return x =>
                 {
-                    x.AssemblyContainingType<AcceptConnection>();
-                    x.AssemblyContainingType<RegisteredUser>();
+                    x.AssemblyContainingType<AcceptLink>();
+                    x.AssemblyContainingType<OpenedLibrary>();
                 };
             }
         }

@@ -1,16 +1,16 @@
 ﻿using Lending.Cqrs;
 using Lending.Cqrs.Query;
-using Lending.Domain.AcceptConnection;
+using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
-using Lending.Domain.RequestConnection;
+using Lending.Domain.RequestLink;
 using Lending.Execution.UnitOfWork;
-using Lending.ReadModels.Relational.SearchForUser;
+using Lending.ReadModels.Relational.SearchForLibrary;
 
 namespace Lending.Execution.Modules
 {
-    public class SearchForUserModule : GetModule<SearchForUser, Result>
+    public class SearchForUserModule : GetModule<SearchForLibrary, Result>
     {
-        public SearchForUserModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForUser, Result> messageHandler)
+        public SearchForUserModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForLibrary, Result> messageHandler)
             : base(unitOfWork, messageHandler)
         {
         }
@@ -18,9 +18,9 @@ namespace Lending.Execution.Modules
         protected override string Path => "/users/{searchstring}";
     }
 
-    public class RequestConnectionModule: PostModule<RequestConnection, Result>
+    public class RequestConnectionModule: PostModule<RequestLink, Result>
     {
-        public RequestConnectionModule(IUnitOfWork unitOfWork, IMessageHandler<RequestConnection, Result> messageHandler)
+        public RequestConnectionModule(IUnitOfWork unitOfWork, IMessageHandler<RequestLink, Result> messageHandler)
             : base(unitOfWork, messageHandler)
         {
         }
@@ -28,9 +28,9 @@ namespace Lending.Execution.Modules
         protected override string Path => "/connections/request/";
     }
 
-    public class AcceptConnectionModule : PostModule<AcceptConnection, Result>
+    public class AcceptConnectionModule : PostModule<AcceptLink, Result>
     {
-        public AcceptConnectionModule(IUnitOfWork unitOfWork, IMessageHandler<AcceptConnection, Result> messageHandler)
+        public AcceptConnectionModule(IUnitOfWork unitOfWork, IMessageHandler<AcceptLink, Result> messageHandler)
             : base(unitOfWork, messageHandler)
         {
         }

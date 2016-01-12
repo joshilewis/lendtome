@@ -41,27 +41,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AcceptConnection\AcceptConnection.cs" />
-    <Compile Include="AcceptConnection\AcceptConnectionHandler.cs" />
-    <Compile Include="AcceptConnection\ConnectionAccepted.cs" />
-    <Compile Include="AcceptConnection\ConnectionCompleted.cs" />
+    <Compile Include="AcceptLink\AcceptLink.cs" />
+    <Compile Include="AcceptLink\AcceptLinkHandler.cs" />
+    <Compile Include="AcceptLink\LinkAccepted.cs" />
+    <Compile Include="AcceptLink\LinkCompleted.cs" />
     <Compile Include="AddBookToLibrary\AddBookToLibrary.cs" />
     <Compile Include="AddBookToLibrary\AddBookToLibraryHandler.cs" />
     <Compile Include="AddBookToLibrary\BookAddedToLibrary.cs" />
     <Compile Include="Model\Book.cs" />
-    <Compile Include="RegisterUser\RegisteredUser.cs" />
-    <Compile Include="RegisterUser\RegisterUser.cs" />
-    <Compile Include="RegisterUser\RegisterUserHandler.cs" />
+    <Compile Include="OpenLibrary\OpenedLibrary.cs" />
+    <Compile Include="OpenLibrary\OpenLibrary.cs" />
+    <Compile Include="OpenLibrary\OpenLibraryHandler.cs" />
     <Compile Include="RemoveBookFromLibrary\BookRemovedFromLibrary.cs" />
     <Compile Include="RemoveBookFromLibrary\RemoveBookFromLibrary.cs" />
     <Compile Include="RemoveBookFromLibrary\RemoveBookFromLibraryHandler.cs" />
-    <Compile Include="RequestConnection\ConnectionRequested.cs" />
-    <Compile Include="RequestConnection\ConnectionRequestReceived.cs" />
-    <Compile Include="RequestConnection\RequestConnection.cs" />
-    <Compile Include="RequestConnection\RequestConnectionHandler.cs" />
-    <Compile Include="RegisterUser\UserRegistered.cs" />
+    <Compile Include="RequestLink\LinkRequested.cs" />
+    <Compile Include="RequestLink\LinkRequestReceived.cs" />
+    <Compile Include="RequestLink\RequestLink.cs" />
+    <Compile Include="RequestLink\RequestLinkHandler.cs" />
+    <Compile Include="OpenLibrary\LibraryOpened.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\User.cs" />
+    <Compile Include="Model\Library.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lending.Cqrs\Lending.Cqrs.csproj">
@@ -69,9 +69,7 @@
       <Name>Lending.Cqrs</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SearchForUser\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

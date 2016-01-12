@@ -1,6 +1,6 @@
 ﻿using System;
 using Lending.Domain.AddBookToLibrary;
-using Lending.Domain.RegisterUser;
+using Lending.Domain.OpenLibrary;
 using NHibernate;
 
 namespace Lending.ReadModels.Relational.BookAdded
@@ -18,7 +18,7 @@ namespace Lending.ReadModels.Relational.BookAdded
         {
             ISession session = getSession();
 
-            string username = session.Get<RegisteredUser>(@event.AggregateId).UserName;
+            string username = session.Get<OpenedLibrary>(@event.AggregateId).Name;
 
             session.Save(new LibraryBook(@event.ProcessId, @event.AggregateId, username, @event.Title, @event.Author,
                 @event.Isbn));
