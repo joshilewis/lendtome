@@ -49,7 +49,6 @@ namespace Lending.Execution.DI
                 .Mappings(m =>
                     m.FluentMappings
                         .AddFromAssemblyOf<OpenedLibraryMap>()
-                        .AddFromAssemblyOf<OpenedLibrary>()
                         .AddFromAssemblyOf<LibraryBookMap>()
                         .AddFromAssemblyOf<AuthenticatedUserMap>()
                 )
@@ -81,7 +80,6 @@ namespace Lending.Execution.DI
             {
                 scanner.AssemblyContainingType<Command>();
                 scanner.AssemblyContainingType<AddBookToLibrary>();
-                scanner.AssemblyContainingType<OpenedLibraryMap>();
                 scanner.AssemblyContainingType<SearchForLibrary>();
                 scanner.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IQueryHandler<,>));
@@ -89,7 +87,7 @@ namespace Lending.Execution.DI
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedCommandHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<,>));
-                //scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
             });
 
             For<IEventRepository>()
