@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Lending.Cqrs;
 using Lending.Domain;
 using Lending.Execution.DI;
 using Lending.Execution.EventStore;
+using Lending.Execution.UnitOfWork;
 using NUnit.Framework;
 using StructureMap;
 
@@ -24,6 +26,13 @@ namespace Tests
             {
                 x.For<IEventStoreConnection>()
                     .Use<DummyConnection>();
+
+                string eventStoreIpAddress = ConfigurationManager.AppSettings["EventStore:IPAddress"];
+                x.For<IUnitOfWork>()
+                    //.
+                    .Use<UnitOfWork>()
+                    .Ctor<string>()
+                    .Is(eventStoreIpAddress);
 
                 x.Scan(scan =>
                 {
