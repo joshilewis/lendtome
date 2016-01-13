@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace Lending.Execution.Owin
                 "/scripts/*.js",
             };
 
-            app.RequiresStatelessAuth(new SecureTokenValidator(), new StatelessAuthOptions
+            app.RequiresStatelessAuth(new SecureTokenValidator(ConfigurationManager.AppSettings["jwt_secret"]), new StatelessAuthOptions
             {
                 IgnorePaths = pathsToIgnore,
             });

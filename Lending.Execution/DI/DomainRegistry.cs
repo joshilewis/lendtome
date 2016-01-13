@@ -128,9 +128,12 @@ namespace Lending.Execution.DI
                 .AlwaysUnique()
                 .Use<EventHandlerProvider>();
 
+            string jwtSecret = ConfigurationManager.AppSettings["jwt_secret"];
             For<IAuthenticationCallbackProvider>()
                 .AlwaysUnique()
-                .Use<AuthCallbackProvider>();
+                .Use<AuthCallbackProvider>()
+                .Ctor<string>()
+                .Is(jwtSecret);
 
             For<ITokenizer>()
                 .AlwaysUnique()
@@ -145,8 +148,7 @@ namespace Lending.Execution.DI
         private static IEnumerable<IEventHandler> GetEventHandlers(IContext context, Type eventType)
         {
             Type type = typeof(IEventHandler<>).MakeGenericType(eventType);
-            var allInstances = context.GetAllInstances(type);
-            return allInstances
+            return context.GetAllInstances(type)
                 .Select(x => (IEventHandler)x);
 
         }

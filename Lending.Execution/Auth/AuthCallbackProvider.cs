@@ -14,11 +14,11 @@ namespace Lending.Execution.Auth
         private readonly IUserMapper userMapper;
         private readonly IUnitOfWork unitOfWork;
 
-        public AuthCallbackProvider(IUserMapper userMapper, IUnitOfWork unitOfWork)
+        public AuthCallbackProvider(IUserMapper userMapper, IUnitOfWork unitOfWork, string secretKey)
         {
             this.userMapper = userMapper;
             this.unitOfWork = unitOfWork;
-            this.secretKey = "30ea254132194749377862e7d9a644c1";
+            this.secretKey = secretKey;
         }
 
         public dynamic Process(NancyModule nancyModule, AuthenticateCallbackData model)

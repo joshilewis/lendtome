@@ -9,13 +9,18 @@ namespace Lending.Execution.Auth
 {
     public class SecureTokenValidator : ITokenValidator
     {
-        const string SecretKey = "30ea254132194749377862e7d9a644c1";
+        private readonly string secretKey;
+
+        public SecureTokenValidator(string secretKey)
+        {
+            this.secretKey = secretKey;
+        }
 
         public ClaimsPrincipal ValidateUser(string token)
         {
             try
             {
-                var decodedtoken = JsonWebToken.DecodeToObject(token, SecretKey) as Dictionary<string, object>;
+                var decodedtoken = JsonWebToken.DecodeToObject(token, secretKey) as Dictionary<string, object>;
                 if (decodedtoken == null)
                     return null;
 
