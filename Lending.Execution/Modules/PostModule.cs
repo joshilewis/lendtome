@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Execution.Auth;
+using Lending.Execution.EventStore;
 using Lending.Execution.UnitOfWork;
 using Nancy;
 using Nancy.ModelBinding;
@@ -10,37 +12,52 @@ using Nancy.Security;
 
 namespace Lending.Execution.Modules
 {
-    public abstract class PostModule<TMessage, TResult> : NancyModule where TMessage : AuthenticatedCommand where TResult : Result
+    public abstract class PostModule<TMessage, TResult, TAggregate> : NancyModule where TMessage : AuthenticatedCommand
+        where TResult : Result
+        where TAggregate : Aggregate
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IMessageHandler<TMessage, TResult> messageHandler;
+        private readonly ICommandHandler<TMessage, TResult, TAggregate> messageHandler;
+        private readonly Func<IEventRepository> getEventRepository;
         protected abstract string Path { get; }
 
-        protected PostModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler)
+        protected PostModule(IUnitOfWork unitOfWork, ICommandHandler<TMessage, TResult, TAggregate> messageHandler,
+            Func<IEventRepository> getEventRepository)
             : base("api")
         {
             this.unitOfWork = unitOfWork;
             this.messageHandler = messageHandler;
+            this.getEventRepository = getEventRepository;
 
             this.RequiresAuthentication();
             //this.RequiresHttps();
 
             Post[Path] = _ =>
             {
+                TMessage message = this.Bind<TMessage>();
+
                 CustomUserIdentity user = this.Context.CurrentUser as CustomUserIdentity;
 
-                TMessage message = this.Bind<TMessage>();
                 message.UserId = user.Id;
                 message.ProcessId = Guid.NewGuid();
 
-                Result response = default(Result);
+                dynamic result = default(Result);
                 unitOfWork.DoInTransaction(() =>
                 {
-                    response = messageHandler.Handle(message);
+                    try
+                    {
+                        IEventRepository eventRepository = getEventRepository();
+                        IEnumerable<Event> events = eventRepository.GetEventsForAggregate<TAggregate>(message.AggregateId);
+                        result = messageHandler.Handle(message);
+                    }
+                    catch (AggregateNotFoundException)
+                    {
+                        result = new NotFoundResponse();
+                    }
 
                 });
 
-                return response;
+                return result;
 
             };
         }

@@ -7,7 +7,7 @@ using Lending.Domain.OpenLibrary;
 
 namespace Lending.Domain.RequestLink
 {
-    public class RequestLinkHandler : AuthenticatedCommandHandler<RequestLink, Result>
+    public class RequestLinkHandler : AuthenticatedCommandHandler<RequestLink, Result, Library>
     {
         public const string TargetLibraryDoesNotExist = "The target user does not exist";
         public const string CantConnectToSelf = "You can't connect to yourself";

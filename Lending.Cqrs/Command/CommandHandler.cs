@@ -3,8 +3,8 @@ using Lending.Cqrs.Query;
 
 namespace Lending.Cqrs.Command
 {
-    public abstract class CommandHandler<TMessage, TResult> : MessageHandler<TMessage, TResult>, 
-        ICommandHandler<TMessage, TResult> where TMessage : Command where TResult : Result
+    public abstract class CommandHandler<TMessage, TResult, TAggregate> : MessageHandler<TMessage, TResult>, 
+        ICommandHandler<TMessage, TResult, TAggregate> where TMessage : Command where TResult : Result where TAggregate : Aggregate
     {
         private readonly Func<IRepository> getRepository;
         private readonly Func<IEventRepository> getEventRepository;

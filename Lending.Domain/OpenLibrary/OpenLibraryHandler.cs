@@ -6,7 +6,8 @@ using Lending.Domain.Model;
 
 namespace Lending.Domain.OpenLibrary
 {
-    public class OpenLibraryHandler : CommandHandler<OpenLibrary, Result>, IAuthenticatedCommandHandler<OpenLibrary, Result>
+    public class OpenLibraryHandler : CommandHandler<OpenLibrary, Result, Library>,
+        IAuthenticatedCommandHandler<OpenLibrary, Result, Library>
     {
 
         public OpenLibraryHandler(Func<IRepository> repositoryFunc, Func<IEventRepository> eventRepositoryFunc)

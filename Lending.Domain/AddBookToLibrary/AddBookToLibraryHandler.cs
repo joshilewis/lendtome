@@ -6,7 +6,7 @@ using Lending.Domain.Model;
 
 namespace Lending.Domain.AddBookToLibrary
 {
-    public class AddBookToLibraryHandler : AuthenticatedCommandHandler<AddBookToLibrary, Result>
+    public class AddBookToLibraryHandler : AuthenticatedCommandHandler<AddBookToLibrary, Result, Library>
     {
  
         public AddBookToLibraryHandler(Func<IRepository> sessionFunc, Func<IEventRepository> repositoryFuncFunc)

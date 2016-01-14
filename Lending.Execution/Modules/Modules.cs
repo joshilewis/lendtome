@@ -1,7 +1,10 @@
-﻿using Lending.Cqrs;
+﻿using System;
+using Lending.Cqrs;
+using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
+using Lending.Domain.Model;
 using Lending.Domain.RequestLink;
 using Lending.Execution.UnitOfWork;
 using Lending.ReadModels.Relational.SearchForLibrary;
@@ -18,30 +21,30 @@ namespace Lending.Execution.Modules
         protected override string Path => "/libraries/{searchstring}";
     }
 
-    public class RequestConnectionModule: PostModule<RequestLink, Result>
+    public class RequestLinkModule: PostModule<RequestLink, Result, Library>
     {
-        public RequestConnectionModule(IUnitOfWork unitOfWork, IMessageHandler<RequestLink, Result> messageHandler)
-            : base(unitOfWork, messageHandler)
+        public RequestLinkModule(IUnitOfWork unitOfWork, ICommandHandler<RequestLink, Result, Library> messageHandler, Func<IEventRepository> eventRepositoryFunc)
+            : base(unitOfWork, messageHandler, eventRepositoryFunc)
         {
         }
 
         protected override string Path => "/links/request/";
     }
 
-    public class AcceptConnectionModule : PostModule<AcceptLink, Result>
+    public class AcceptLinkModule : PostModule<AcceptLink, Result, Library>
     {
-        public AcceptConnectionModule(IUnitOfWork unitOfWork, IMessageHandler<AcceptLink, Result> messageHandler)
-            : base(unitOfWork, messageHandler)
+        public AcceptLinkModule(IUnitOfWork unitOfWork, ICommandHandler<AcceptLink, Result, Library> messageHandler, Func<IEventRepository> eventRepositoryFunc)
+            : base(unitOfWork, messageHandler, eventRepositoryFunc)
         {
         }
 
         protected override string Path => "/links/accept/";
     }
 
-    public class AddBookModule : PostModule<AddBookToLibrary, Result>
+    public class AddBookModule : PostModule<AddBookToLibrary, Result, Library>
     {
-        public AddBookModule(IUnitOfWork unitOfWork, IMessageHandler<AddBookToLibrary, Result> messageHandler)
-            : base(unitOfWork, messageHandler)
+        public AddBookModule(IUnitOfWork unitOfWork, ICommandHandler<AddBookToLibrary, Result, Library> messageHandler, Func<IEventRepository> eventRepositoryFunc)
+            : base(unitOfWork, messageHandler, eventRepositoryFunc)
         {
         }
 
