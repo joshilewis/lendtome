@@ -17,7 +17,7 @@ namespace Lending.Execution.Modules
         protected abstract string Path { get; }
 
         protected PostModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler)
-            : base("nancy")
+            : base("api")
         {
             this.unitOfWork = unitOfWork;
             this.messageHandler = messageHandler;
