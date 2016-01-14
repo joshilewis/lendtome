@@ -45,7 +45,7 @@ namespace Tests.Commands
         {
             Given(Library1Opens, Library2Opens);
             When(Library1RequestsLinkToLibrary2);
-            Then(succeed);
+            Then(Succeed);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
         }

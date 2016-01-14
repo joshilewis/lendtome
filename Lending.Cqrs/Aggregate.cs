@@ -70,12 +70,17 @@ namespace Lending.Cqrs
 
         protected virtual Result Success()
         {
-            return new Result();
+            return new Result(Result.EResultCode.Ok);
+        }
+
+        protected virtual Result Created()
+        {
+            return new Result(Result.EResultCode.Created);
         }
 
         protected virtual Result Fail(string reason)
         {
-            return new Result(reason);
+            throw new InvalidOperationException(reason);
         }
 
     }

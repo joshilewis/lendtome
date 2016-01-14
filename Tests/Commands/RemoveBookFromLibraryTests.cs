@@ -23,9 +23,9 @@ namespace Tests.Commands
         [Test]
         public void RemoveBookInLibraryShouldSucceed()
         {
-            Given(Library1Opens, User1AddsBookToLibrary);
+            Given(Library1Opens, AddBook1ToLibrary);
             When(user1RemovesBookFromLibrary);
-            Then(succeed);
+            Then(Succeed);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, book1RemovedFromLibrary);
         }
 
@@ -39,7 +39,7 @@ namespace Tests.Commands
         {
             Given(Library1Opens);
             When(user1RemovesBookFromLibrary);
-            Then(failBecauseBookNotInLibrary);
+            Then(FailBecauseBookNotInLibrary);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 

@@ -24,8 +24,8 @@ namespace Tests.Commands
         public void AddingNewBookToLibraryShouldSucceed()
         {
             Given(Library1Opens);
-            When(User1AddsBookToLibrary);
-            Then(succeed);
+            When(AddBook1ToLibrary);
+            Then(Created);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
 
@@ -37,9 +37,9 @@ namespace Tests.Commands
         [Test]
         public void AddingDuplicateBookToLibraryShouldFail()
         {
-            Given(Library1Opens, User1AddsBookToLibrary);
-            When(User1AddsBookToLibrary);
-            Then(failBecauseBookAlreadyInLibrary);
+            Given(Library1Opens, AddBook1ToLibrary);
+            When(AddBook1ToLibrary);
+            Then(FailBecauseBookAlreadyInLibrary1);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
 
@@ -51,9 +51,9 @@ namespace Tests.Commands
         [Test]
         public void AddingPreviouslyRemovedBookToLibraryShouldSucceed()
         {
-            Given(Library1Opens, User1AddsBookToLibrary, user1RemovesBookFromLibrary);
-            When(User1AddsBookToLibrary);
-            Then(succeed);
+            Given(Library1Opens, AddBook1ToLibrary, user1RemovesBookFromLibrary);
+            When(AddBook1ToLibrary);
+            Then(Created);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, book1RemovedFromLibrary, Book1AddedToUser1Library);
         }
 

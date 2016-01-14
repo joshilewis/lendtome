@@ -21,12 +21,12 @@ namespace Lending.Cqrs.Command
 
         protected virtual Result Success()
         {
-            return new Result();
+            return new Result(Result.EResultCode.Ok);
         }
 
         protected virtual Result Fail(string reason)
         {
-            return new Result(reason);
+            throw new InvalidOperationException(reason);
         }
 
     }

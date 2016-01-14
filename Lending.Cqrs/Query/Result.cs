@@ -2,19 +2,17 @@
 {
     public class Result
     {
-        public bool Success { get; set; }
-        public string Reason { get; set; }
+        public EResultCode Code { get; set; }
 
-        public Result()
+        public Result(EResultCode code)
         {
-            Success = true;
-            Reason = null;
+            Code = code;
         }
 
-        public Result(string reason)
+        public enum EResultCode : byte
         {
-            Reason = reason;
-            Success = false;
+            Ok = 200,
+            Created = 201,
         }
     }
 
@@ -23,13 +21,12 @@
         public virtual T Payload { get; protected set; }
 
         public Result(T payload)
-            : base()
+            : base(EResultCode.Ok)
         {
             Payload = payload;
         }
-
-        public Result(string reason, T payload)
-            : base(reason)
+        public Result(EResultCode code, T payload)
+            : base(code)
         {
             Payload = payload;
         }

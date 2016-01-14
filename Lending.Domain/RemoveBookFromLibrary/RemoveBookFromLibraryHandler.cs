@@ -18,8 +18,6 @@ namespace Lending.Domain.RemoveBookFromLibrary
             Library library = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
             Result result = library.RemoveBookFromLibrary(command.ProcessId, command.Title, command.Author, command.Isbn);
 
-            if (!result.Success) return result;
-
             EventRepository.Save(library);
             return Success();
         }

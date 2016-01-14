@@ -19,12 +19,9 @@ namespace Lending.Domain.AcceptLink
 
             Result result = acceptingLibrary.AcceptLink(command.ProcessId, command.RequestingLibraryId);
 
-            if (!result.Success) return result;
-
             Library requestingLibrary = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.RequestingLibraryId));
 
             result = requestingLibrary.CompleteLink(command.ProcessId, command.AggregateId);
-            if (!result.Success) return result;
 
             EventRepository.Save(acceptingLibrary);
             EventRepository.Save(requestingLibrary);

@@ -112,12 +112,12 @@ namespace Lending.Domain.Model
 
         public Result RequestLink(Guid processId, Guid desinationLibraryId)
         {
-            if (PendingLinkRequests.Contains(desinationLibraryId)) return new Result(LinkAlreadyRequested);
-            if (ReceivedLinkRequests.Contains(desinationLibraryId)) return new Result(ReverseLinkAlreadyRequested);
-            if(LinkedLibraries.Contains(desinationLibraryId)) return new Result(LibrariesAlreadyLinked);
+            if (PendingLinkRequests.Contains(desinationLibraryId)) return Fail(LinkAlreadyRequested);
+            if (ReceivedLinkRequests.Contains(desinationLibraryId)) return Fail(ReverseLinkAlreadyRequested);
+            if(LinkedLibraries.Contains(desinationLibraryId)) return Fail(LibrariesAlreadyLinked);
 
             RaiseEvent(new LinkRequested(processId, Id, desinationLibraryId));
-            return new Result();
+            return Created();
         }
 
         public Result InitiateLinkAcceptance(Guid processId, Guid sourceLibraryId)
@@ -132,7 +132,7 @@ namespace Lending.Domain.Model
         public Result AcceptLink(Guid processId, Guid requestingLibraryId)
         {
             if (LinkedLibraries.Contains(requestingLibraryId)) return Fail(LibrariesAlreadyLinked);
-            if (!ReceivedLinkRequests.Contains(requestingLibraryId)) return new Result(NoPendingLinkRequest);
+            if (!ReceivedLinkRequests.Contains(requestingLibraryId)) return Fail(NoPendingLinkRequest);
 
             RaiseEvent(new LinkAccepted(processId, Id, requestingLibraryId));
 
@@ -153,7 +153,7 @@ namespace Lending.Domain.Model
         {
             if (Books.Contains(new Book(title, author, isbn))) return Fail(BookAlreadyInLibrary);
             RaiseEvent(new BookAddedToLibrary(processId, Id, title, author, isbn));
-            return Success();
+            return Created();
         }
 
         public Result RemoveBookFromLibrary(Guid processId, string title, string author, string isbn)

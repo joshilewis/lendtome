@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lending.Cqrs.Exceptions;
 using Lending.Cqrs.Query;
 using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
@@ -39,7 +40,7 @@ namespace Tests
         public static string Author = "Author";
         public static string Isbnnumber = "isbn";
 
-        public static AddBookToLibrary User1AddsBookToLibrary = new AddBookToLibrary(processId, Library1Id, Library1Id, Title,
+        public static AddBookToLibrary AddBook1ToLibrary = new AddBookToLibrary(processId, Library1Id, Library1Id, Title,
             Author, Isbnnumber);
 
         public static BookAddedToLibrary Book1AddedToUser1Library = new BookAddedToLibrary(processId, Library1Id, Title,
@@ -51,11 +52,12 @@ namespace Tests
         public static BookRemovedFromLibrary book1RemovedFromLibrary = new BookRemovedFromLibrary(processId, Library1Id,
             Title, Author, Isbnnumber);
 
-        public static Result succeed = new Result();
-        public static Result failBecauseBookAlreadyInLibrary = new Result(Library.BookAlreadyInLibrary);
-        public static Result failBecauseBookNotInLibrary = new Result(Library.BookNotInLibrary);
-        public static Result failBecauseNoPendingConnectionRequest = new Result(Library.NoPendingLinkRequest);
-        public static Result FailBecauseLibrariesAlreadyLinked = new Result(Library.LibrariesAlreadyLinked);
+        public static Result Succeed = new Result(Result.EResultCode.Ok);
+        public static Result Created = new Result(Result.EResultCode.Created);
+        public static Exception FailBecauseBookAlreadyInLibrary1 = new InvalidOperationException(Library.BookAlreadyInLibrary);
+        public static Exception FailBecauseBookNotInLibrary = new InvalidOperationException(Library.BookNotInLibrary);
+        public static Exception FailBecauseNoPendingLinkRequest = new InvalidOperationException(Library.NoPendingLinkRequest);
+        public static Exception FailBecauseLibrariesAlreadyLinked = new InvalidOperationException(Library.LibrariesAlreadyLinked);
         public static OpenLibrary Library2Opens = new OpenLibrary(processId, Library2Id, Library2Id, "user2", Library2Id);
 
         public static RequestLink Library1RequestsLinkToLibrary2 = new RequestLink(processId, Library1Id,
@@ -75,15 +77,15 @@ namespace Tests
 
         public static LinkCompleted LinkCompleted = new LinkCompleted(processId, Library1Id, Library2Id);
         public static LinkAccepted LinkAccepted = new LinkAccepted(processId, Library2Id, Library1Id);
-        public static Result FailBecauseLinkAlreadyRequested = new Result(Library.LinkAlreadyRequested);
+        public static Exception FailBecauseLinkAlreadyRequested = new InvalidOperationException(Library.LinkAlreadyRequested);
 
-        public static Result FailBecauseTargetLibraryDoesNotExist =
-            new Result(RequestLinkHandler.TargetLibraryDoesNotExist);
+        public static Exception FailBecauseTargetLibraryDoesNotExist =
+            new AggregateNotFoundException(Library2Id, typeof(Library));
 
-        public static Result FailBecauseReverseLinkAlreadyRequested =
-            new Result(Library.ReverseLinkAlreadyRequested);
+        public static Exception FailBecauseReverseLinkAlreadyRequested =
+            new InvalidOperationException(Library.ReverseLinkAlreadyRequested);
 
-        public static Result FailBecauseCantLinkToSelf = new Result(RequestLinkHandler.CantConnectToSelf);
+        public static Exception FailBecauseCantLinkToSelf = new InvalidOperationException(RequestLinkHandler.CantConnectToSelf);
 
         public static RequestLink Library2RequestsLinkToLibrary1 = new RequestLink(processId, Library2Id,
             Library2Id, Library1Id);

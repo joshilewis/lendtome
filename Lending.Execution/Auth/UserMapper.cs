@@ -39,8 +39,6 @@ namespace Lending.Execution.Auth
                 });
 
             Result result = commandHandler.Handle(new OpenLibrary(Guid.NewGuid(), user.Id, SequentialGuid.NewGuid(), user.UserName, user.Id));
-            if (!result.Success) throw new Exception();
-
             session.Save(user);
             return user;
 

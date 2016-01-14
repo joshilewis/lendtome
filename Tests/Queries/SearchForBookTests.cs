@@ -39,7 +39,7 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithNoConnectionsShouldFail()
         {
-            var expectedResult = new Result<BookSearchResult[]>(SearchForBookHandler.UserHasNoConnection, new BookSearchResult[] { });
+            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[] { });
 
             Given(Library1Opened);
             When(new SearchForBook(Library1Id, ExtremeProgrammingExplained));

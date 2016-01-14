@@ -31,7 +31,7 @@ namespace Lending.ReadModels.Relational.SearchForBook
                 .RowCount();
 
             if (numberOfConnections == 0)
-                return new Result<BookSearchResult[]>(UserHasNoConnection, new BookSearchResult[] {});
+                return new Result<BookSearchResult[]>(Result.EResultCode.Ok, new BookSearchResult[] {});
 
             IEnumerable<LibraryLink> connectedUsers = session.QueryOver<LibraryLink>()
                 .Where(x => x.RequestingLibraryId == message.UserId || x.AcceptingLibraryId == message.UserId)

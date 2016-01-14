@@ -94,7 +94,6 @@ namespace Tests
         protected void Given(params Message[] messages)
         {
             Result result = HandleMessages(messages);
-            if(!result.Success) Assert.Fail();
         }
 
         protected void Given(params Event[] events)
@@ -103,14 +102,27 @@ namespace Tests
         }
 
         private Result actualResult;
+        private Exception actualException;
         protected void When(Message message)
         {
-            actualResult = HandleMessages(message);
+            try
+            {
+                actualResult = HandleMessages(message);
+            }
+            catch (Exception exception)
+            {
+                actualException = exception;
+            }
         }
 
         protected void Then(Result expectedResult)
         {
             actualResult.ShouldEqual(expectedResult);
+        }
+
+        protected void Then(Exception expectedException)
+        {
+            actualException.ShouldEqual(expectedException);
         }
 
         protected void Then(Predicate<Result> resultEqualityPredicate)

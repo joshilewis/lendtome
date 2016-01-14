@@ -1,6 +1,7 @@
 ﻿using System;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Exceptions;
 using Lending.Cqrs.Query;
 using Lending.Execution.Auth;
 using Lending.Execution.UnitOfWork;
@@ -33,14 +34,33 @@ namespace Lending.Execution.Modules
                 message.UserId = user.Id;
                 message.ProcessId = Guid.NewGuid();
 
-                Result response = default(Result);
-                unitOfWork.DoInTransaction(() =>
+                try
                 {
-                    response = messageHandler.Handle(message);
-
-                });
-
-                return response;
+                    dynamic result = default(Result);
+                    unitOfWork.DoInTransaction(() =>
+                    {
+                        result = messageHandler.Handle(message);
+                    });
+                    return new Response()
+                    {
+                        StatusCode = HttpStatusCode.OK
+                    };
+                }
+                catch (AggregateNotFoundException aggregateNotFoundException)
+                {
+                    return new NotFoundResponse()
+                    {
+                        ReasonPhrase = aggregateNotFoundException.Message,
+                    };
+                }
+                catch (InvalidOperationException invalidOperationException)
+                {
+                    return new Response()
+                    {
+                        ReasonPhrase = invalidOperationException.Message,
+                        StatusCode = HttpStatusCode.BadRequest,
+                    };
+                }
 
             };
         }

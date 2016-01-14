@@ -19,11 +19,10 @@ namespace Lending.Domain.AddBookToLibrary
 
             Library library = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
             Result result = library.AddBookToLibrary(command.ProcessId, command.Title, command.Author, command.Isbn);
-            if (!result.Success) return result;
 
             EventRepository.Save(library);
 
-            return Success();
+            return result;
         }
     }
 }

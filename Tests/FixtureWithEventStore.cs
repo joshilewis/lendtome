@@ -109,7 +109,6 @@ namespace Tests
                 Type type = typeof (IMessageHandler<,>).MakeGenericType(message.GetType(), typeof (Result));
                 MessageHandler handler = (MessageHandler)Container.GetInstance(type);
                 result = (Result)handler.Handle(message);
-                if (!result.Success) return result;
                 CommitTransactionAndOpenNew();
             }
 

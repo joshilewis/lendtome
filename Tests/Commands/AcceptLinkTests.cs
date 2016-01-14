@@ -24,7 +24,7 @@ namespace Tests.Commands
         {
             Given(Library1Opens, Library2Opens, Library1RequestsLinkToLibrary2);
             When(Library2AcceptsLinkFromLibrary1);
-            Then(succeed);
+            Then(Succeed);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, DefaultTestData.LinkCompleted);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, DefaultTestData.LinkAccepted);
         }
@@ -39,7 +39,7 @@ namespace Tests.Commands
         {
             Given(Library1Opens, Library2Opens);
             When(Library2AcceptsLinkFromLibrary1);
-            Then(failBecauseNoPendingConnectionRequest);
+            Then(FailBecauseNoPendingLinkRequest);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened);
         }

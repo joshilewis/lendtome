@@ -73,8 +73,7 @@ namespace Tests
 
         public static bool ShouldEqual(this Result actual, Result expected)
         {
-            Assert.That(actual.Success, Is.EqualTo(expected.Success));
-            Assert.That(actual.Reason, Is.EqualTo(expected.Reason));
+            Assert.That(actual.Code, Is.EqualTo(expected.Code));
 
             return true;
         }
@@ -208,6 +207,16 @@ namespace Tests
 
             return true;
         }
+
+        public static bool ShouldEqual(this Exception actual, Exception expected)
+        {
+            Assert.That(actual.GetType(), Is.EqualTo(expected.GetType()));
+            Assert.That(actual.Message, Is.EqualTo(expected.Message));
+            Assert.That(actual.Data, Is.EqualTo(expected.Data));
+
+            return true;
+        }
+
 
     }
 
