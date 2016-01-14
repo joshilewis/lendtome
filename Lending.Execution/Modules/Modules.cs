@@ -15,7 +15,7 @@ namespace Lending.Execution.Modules
         {
         }
 
-        protected override string Path => "/users/{searchstring}";
+        protected override string Path => "/libraries/{searchstring}";
     }
 
     public class RequestConnectionModule: PostModule<RequestLink, Result>
@@ -25,7 +25,7 @@ namespace Lending.Execution.Modules
         {
         }
 
-        protected override string Path => "/connections/request/";
+        protected override string Path => "/links/request/";
     }
 
     public class AcceptConnectionModule : PostModule<AcceptLink, Result>
@@ -35,7 +35,7 @@ namespace Lending.Execution.Modules
         {
         }
 
-        protected override string Path => "/connections/accept/";
+        protected override string Path => "/links/accept/";
     }
 
     public class AddBookModule : PostModule<AddBookToLibrary, Result>
