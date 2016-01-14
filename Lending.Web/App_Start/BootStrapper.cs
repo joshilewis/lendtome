@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
+using Lending.Cqrs.Exceptions;
 using Lending.Execution.Auth;
 using Nancy;
 using Nancy.Bootstrapper;
@@ -25,7 +27,18 @@ namespace Lending.Web
         protected override void ApplicationStartup(IContainer container, IPipelines pipelines)
         {
             base.ApplicationStartup(container, pipelines);
-
+            pipelines.OnError.AddItemToEndOfPipeline((context, exception) =>
+            {
+                if (exception is AggregateNotFoundException) return new NotFoundResponse()
+                {
+                    ReasonPhrase = exception.Message,
+                };
+                return new Response()
+                {
+                    ReasonPhrase = exception.Message,
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            });
         }
 
         protected override void RequestStartup(IContainer container, IPipelines pipelines, NancyContext context)

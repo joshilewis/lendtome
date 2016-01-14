@@ -34,34 +34,16 @@ namespace Lending.Execution.Modules
                 message.UserId = user.Id;
                 message.ProcessId = Guid.NewGuid();
 
-                try
+                Result result = default(Result);
+                unitOfWork.DoInTransaction(() =>
                 {
-                    Result result = default(Result);
-                    unitOfWork.DoInTransaction(() =>
-                    {
-                        result = messageHandler.Handle(message);
-                    });
+                    result = messageHandler.Handle(message);
+                });
 
-                    return new Response()
-                    {
-                        StatusCode = (HttpStatusCode)result.Code,
-                    };
-                }
-                catch (AggregateNotFoundException aggregateNotFoundException)
+                return new Response()
                 {
-                    return new NotFoundResponse()
-                    {
-                        ReasonPhrase = aggregateNotFoundException.Message,
-                    };
-                }
-                catch (InvalidOperationException invalidOperationException)
-                {
-                    return new Response()
-                    {
-                        ReasonPhrase = invalidOperationException.Message,
-                        StatusCode = HttpStatusCode.BadRequest,
-                    };
-                }
+                    StatusCode = (HttpStatusCode) result.Code,
+                };
 
             };
         }
