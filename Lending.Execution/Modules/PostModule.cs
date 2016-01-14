@@ -36,14 +36,15 @@ namespace Lending.Execution.Modules
 
                 try
                 {
-                    dynamic result = default(Result);
+                    Result result = default(Result);
                     unitOfWork.DoInTransaction(() =>
                     {
                         result = messageHandler.Handle(message);
                     });
+
                     return new Response()
                     {
-                        StatusCode = HttpStatusCode.OK
+                        StatusCode = (HttpStatusCode)result.Code,
                     };
                 }
                 catch (AggregateNotFoundException aggregateNotFoundException)
