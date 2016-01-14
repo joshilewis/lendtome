@@ -175,7 +175,7 @@ namespace Tests
         public static bool ShouldEqual(this LibraryBook actual, LibraryBook expected)
         {
             Assert.That(actual.ProcessId, Is.EqualTo(expected.ProcessId));
-            Assert.That(actual.OwnerId, Is.EqualTo(expected.OwnerId));
+            Assert.That(actual.LibraryId, Is.EqualTo(expected.LibraryId));
             Assert.That(actual.Title, Is.EqualTo(expected.Title));
             Assert.That(actual.Author, Is.EqualTo(expected.Author));
             Assert.That(actual.Isbn, Is.EqualTo(expected.Isbn));

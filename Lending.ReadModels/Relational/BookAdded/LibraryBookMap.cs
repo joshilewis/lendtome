@@ -10,14 +10,15 @@ namespace Lending.ReadModels.Relational.BookAdded
                 .GeneratedBy.Native();
 
             Map(x => x.ProcessId);
-            Map(x => x.OwnerId)
-                .UniqueKey("UK_Owner_Book");
+            Map(x => x.LibraryId)
+                .UniqueKey("UK_Library_Book");
+            Map(x => x.LibraryName);
             Map(x => x.Title)
-                .UniqueKey("UK_Owner_Book");
+                .UniqueKey("UK_Library_Book");
             Map(x => x.Author)
-                .UniqueKey("UK_Owner_Book");
+                .UniqueKey("UK_Library_Book");
             Map(x => x.Isbn)
-                .UniqueKey("UK_Owner_Book");
+                .UniqueKey("UK_Library_Book");
         }
     }
 }

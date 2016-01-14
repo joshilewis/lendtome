@@ -45,9 +45,9 @@ namespace Lending.ReadModels.Relational.SearchForBook
             BookSearchResult[] payload = session.QueryOver<LibraryBook>()
                 .Where(Restrictions.On<LibraryBook>(x => x.Title).IsInsensitiveLike("%" + message.SearchString + "%") ||
                     Restrictions.On<LibraryBook>(x => x.Author).IsInsensitiveLike("%" + message.SearchString + "%"))
-                    .WhereRestrictionOn(x => x.OwnerId).IsIn(connectedUserIds)
+                    .WhereRestrictionOn(x => x.LibraryId).IsIn(connectedUserIds)
                 .List()
-                .Select(x => new BookSearchResult(x.OwnerId, x.OwnerName, x.Title, x.Author))
+                .Select(x => new BookSearchResult(x.LibraryId, x.LibraryName, x.Title, x.Author))
                 .ToArray();
 
             return new Result<BookSearchResult[]>(payload);
