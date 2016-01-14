@@ -17,21 +17,20 @@ namespace Lending.Execution.Owin
         {
             var pathsToIgnore = new[]
             {
-                "/",
-                "/App/*.*",
+                "/App/**",
                 "/App/",
-                "/authentication/*.*",
                 "/authentication/**",
                 "/authentication",
                 "/content",
-                "/content/*.*",
-                "/fonts/*.*",
-                "/scripts/*.js",
+                "/content/**",
+                "/fonts/**",
+                "/scripts/**",
             };
 
             app.RequiresStatelessAuth(new SecureTokenValidator(ConfigurationManager.AppSettings["jwt_secret"]), new StatelessAuthOptions
             {
                 IgnorePaths = pathsToIgnore,
+                PassThroughUnauthorizedRequests = true
             });
             app.UseNancy();
             app.UseStageMarker(PipelineStage.MapHandler);
