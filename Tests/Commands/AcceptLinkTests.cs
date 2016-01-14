@@ -59,5 +59,16 @@ namespace Tests.Commands
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, DefaultTestData.LinkAccepted);
         }
 
+        [Test]
+        public void AcceptLinkByUnauthorizedUserShouldFail()
+        {
+            Given(Library1Opens, Library2Opens, Library1RequestsLinkToLibrary2);
+            When(UnauthorizedAcceptLink);
+            Then(FailBecauseUnauthorized(UnauthorizedAcceptLink.UserId,
+                UnauthorizedAcceptLink.AggregateId, typeof(Library)));
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
+            AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
+        }
+
     }
 }

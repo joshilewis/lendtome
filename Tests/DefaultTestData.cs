@@ -43,13 +43,19 @@ namespace Tests
         public static AddBookToLibrary AddBook1ToLibrary = new AddBookToLibrary(processId, Library1Id, Library1Id, Title,
             Author, Isbnnumber);
 
+        public static AddBookToLibrary UnauthorizedAddBookToLibrary = new AddBookToLibrary(processId, Library1Id, Guid.Empty, Title,
+            Author, Isbnnumber);
+
         public static BookAddedToLibrary Book1AddedToUser1Library = new BookAddedToLibrary(processId, Library1Id, Title,
             Author, Isbnnumber);
 
-        public static RemoveBookFromLibrary user1RemovesBookFromLibrary = new RemoveBookFromLibrary(processId, Library1Id,
+        public static RemoveBookFromLibrary User1RemovesBookFromLibrary = new RemoveBookFromLibrary(processId, Library1Id,
             Library1Id, Title, Author, Isbnnumber);
 
-        public static BookRemovedFromLibrary book1RemovedFromLibrary = new BookRemovedFromLibrary(processId, Library1Id,
+        public static RemoveBookFromLibrary UnauthorizedRemoveBook = new RemoveBookFromLibrary(processId, Library1Id,
+            Guid.Empty, Title, Author, Isbnnumber);
+
+        public static BookRemovedFromLibrary Book1RemovedFromLibrary = new BookRemovedFromLibrary(processId, Library1Id,
             Title, Author, Isbnnumber);
 
         public static Result Succeed = new Result(Result.EResultCode.Ok);
@@ -75,6 +81,8 @@ namespace Tests
         public static AcceptLink Library2AcceptsLinkFromLibrary1 = new AcceptLink(processId, Library2Id, Library2Id,
             Library1Id);
 
+        public static AcceptLink UnauthorizedAcceptLink = new AcceptLink(processId, Library2Id, Guid.Empty, Library1Id);
+
         public static LinkCompleted LinkCompleted = new LinkCompleted(processId, Library1Id, Library2Id);
         public static LinkAccepted LinkAccepted = new LinkAccepted(processId, Library2Id, Library1Id);
         public static Exception FailBecauseLinkAlreadyRequested = new InvalidOperationException(Library.LinkAlreadyRequested);
@@ -84,7 +92,7 @@ namespace Tests
 
         public static Exception FailBecauseReverseLinkAlreadyRequested =
             new InvalidOperationException(Library.ReverseLinkAlreadyRequested);
-
+        
         public static Exception FailBecauseCantLinkToSelf = new InvalidOperationException(RequestLinkHandler.CantConnectToSelf);
 
         public static RequestLink Library2RequestsLinkToLibrary1 = new RequestLink(processId, Library2Id,
@@ -101,6 +109,9 @@ namespace Tests
 
         public static RequestLink Library1RequestsLinkToSelf = new RequestLink(processId, Library1Id,
             Library1Id, Library1Id);
+
+        public static RequestLink UnauthorizedRequestLink = new RequestLink(processId, Library1Id,
+            Guid.Empty, Library2Id);
 
         public static LibraryOpened joshuaLewisLibraryOpened = new LibraryOpened(processId, Library1Id, "Joshua Lewis",
             Library1Id);

@@ -7,8 +7,8 @@ namespace Lending.Domain.AcceptLink
     {
         public Guid RequestingLibraryId { get; set; }
 
-        public AcceptLink(Guid processId, Guid aggregateId, Guid libraryId, Guid requestingLibraryId)
-            : base(processId, aggregateId, libraryId)
+        public AcceptLink(Guid processId, Guid aggregateId, Guid userId, Guid requestingLibraryId)
+            : base(processId, aggregateId, userId)
         {
             RequestingLibraryId = requestingLibraryId;
         }

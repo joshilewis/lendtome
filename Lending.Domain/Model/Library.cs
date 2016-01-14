@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Exceptions;
 using Lending.Cqrs.Query;
 using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
@@ -109,6 +110,15 @@ namespace Lending.Domain.Model
             new EventRoute<BookRemovedFromLibrary>(When, typeof(BookRemovedFromLibrary)),
         };
 
+        public void CheckUserAuthorized(Guid userId)
+        {
+            if (!Administrators.Contains(userId)) Fail(userId);
+        }
+
+        protected virtual void Fail(Guid userId)
+        {
+            throw new NotAuthorizedException(userId, Id, GetType());
+        }
 
         public Result RequestLink(Guid processId, Guid desinationLibraryId)
         {

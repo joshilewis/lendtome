@@ -24,9 +24,9 @@ namespace Tests.Commands
         public void RemoveBookInLibraryShouldSucceed()
         {
             Given(Library1Opens, AddBook1ToLibrary);
-            When(user1RemovesBookFromLibrary);
+            When(User1RemovesBookFromLibrary);
             Then(Succeed);
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, book1RemovedFromLibrary);
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary);
         }
 
         /// <summary>
@@ -38,9 +38,19 @@ namespace Tests.Commands
         public void RemoveBookNotInLibraryShouldFail()
         {
             Given(Library1Opens);
-            When(user1RemovesBookFromLibrary);
+            When(User1RemovesBookFromLibrary);
             Then(FailBecauseBookNotInLibrary);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
+        }
+
+        [Test]
+        public void UnauthorizedRemoveBookInLibraryShouldFail()
+        {
+            Given(Library1Opens, AddBook1ToLibrary);
+            When(UnauthorizedRemoveBook);
+            Then(FailBecauseUnauthorized(UnauthorizedRemoveBook.UserId, UnauthorizedRemoveBook.AggregateId,
+                typeof (Library)));
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
 
     }

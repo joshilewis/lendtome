@@ -33,6 +33,13 @@ namespace Lending.Web
                 {
                     ReasonPhrase = exception.Message,
                 };
+
+                if (exception is NotAuthorizedException) return new Response()
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                    ReasonPhrase = exception.Message,
+                };
+
                 return new Response()
                 {
                     ReasonPhrase = exception.Message,

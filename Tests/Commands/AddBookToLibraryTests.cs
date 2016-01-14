@@ -51,10 +51,20 @@ namespace Tests.Commands
         [Test]
         public void AddingPreviouslyRemovedBookToLibraryShouldSucceed()
         {
-            Given(Library1Opens, AddBook1ToLibrary, user1RemovesBookFromLibrary);
+            Given(Library1Opens, AddBook1ToLibrary, User1RemovesBookFromLibrary);
             When(AddBook1ToLibrary);
             Then(Created);
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, book1RemovedFromLibrary, Book1AddedToUser1Library);
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary, Book1AddedToUser1Library);
+        }
+
+        [Test]
+        public void UnauthorizedAddBookAddBookShouldFail()
+        {
+            Given(Library1Opens);
+            When(UnauthorizedAddBookToLibrary);
+            Then(FailBecauseUnauthorized(UnauthorizedAddBookToLibrary.UserId,
+                UnauthorizedAddBookToLibrary.AggregateId, typeof(Library)));
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
     }

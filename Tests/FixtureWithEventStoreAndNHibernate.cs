@@ -9,6 +9,7 @@ using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Conventions.Helpers;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Exceptions;
 using Lending.Cqrs.Query;
 using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
@@ -125,6 +126,11 @@ namespace Tests
             actualException.ShouldEqual(expectedException);
         }
 
+        protected Exception FailBecauseUnauthorized(Guid userId, Guid aggregateId, Type aggregateType)
+        {
+            return new NotAuthorizedException(userId, aggregateId, aggregateType);
+        }
+
         protected void Then(Predicate<Result> resultEqualityPredicate)
         {
             resultEqualityPredicate(actualResult);
@@ -147,5 +153,6 @@ namespace Tests
                 };
             }
         }
+
     }
 }

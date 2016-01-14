@@ -7,8 +7,8 @@ namespace Lending.Domain.RequestLink
     {
         public Guid TargetLibraryId { get; set; }
 
-        public RequestLink(Guid processId, Guid aggregateId, Guid libraryId, Guid targetLibraryId)
-            : base(processId, aggregateId, libraryId)
+        public RequestLink(Guid processId, Guid aggregateId, Guid userId, Guid targetLibraryId)
+            : base(processId, aggregateId, userId)
         {
             TargetLibraryId = targetLibraryId;
         }

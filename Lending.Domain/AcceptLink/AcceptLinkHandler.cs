@@ -16,6 +16,7 @@ namespace Lending.Domain.AcceptLink
         public override Result Handle(AcceptLink command)
         {
             Library acceptingLibrary = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
+            acceptingLibrary.CheckUserAuthorized(command.UserId);
 
             Result result = acceptingLibrary.AcceptLink(command.ProcessId, command.RequestingLibraryId);
 

@@ -21,6 +21,7 @@ namespace Lending.Domain.RequestLink
             if (command.TargetLibraryId == command.AggregateId) return Fail(CantConnectToSelf);
 
             Library library = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
+            library.CheckUserAuthorized(command.UserId);
             Result  result = library.RequestLink(command.ProcessId, command.TargetLibraryId);
 
             Library targetLibrary = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.TargetLibraryId));

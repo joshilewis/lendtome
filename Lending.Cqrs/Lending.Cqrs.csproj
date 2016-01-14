@@ -54,6 +54,7 @@
     <Compile Include="Exceptions\AggregateDeletedException.cs" />
     <Compile Include="Exceptions\AggregateNotFoundException.cs" />
     <Compile Include="Exceptions\AggregateVersionException.cs" />
+    <Compile Include="Exceptions\NotAuthorizedException.cs" />
     <Compile Include="IAuthenticated.cs" />
     <Compile Include="IAuthenticatedMessageHandler.cs" />
     <Compile Include="IEventHandler.cs" />

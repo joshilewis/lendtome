@@ -1,4 +1,5 @@
 ﻿using System;
+using Lending.Cqrs.Exceptions;
 using Lending.Cqrs.Query;
 using Lending.Domain.Model;
 using NUnit.Framework;
@@ -108,5 +109,16 @@ namespace Tests.Commands
             Then(FailBecauseCantLinkToSelf);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
+
+        [Test]
+        public void UnauthorizedRequestLinkShouldFail()
+        {
+            Given(Library1Opens);
+            When(UnauthorizedRequestLink);
+            Then(FailBecauseUnauthorized(UnauthorizedRequestLink.UserId,
+                UnauthorizedRequestLink.AggregateId, typeof (Library)));
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
+        }
     }
+
 }
