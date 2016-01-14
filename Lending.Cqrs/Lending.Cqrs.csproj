@@ -51,6 +51,9 @@
     <Compile Include="Event.cs" />
     <Compile Include="EventHandler.cs" />
     <Compile Include="EventRoute.cs" />
+    <Compile Include="Exceptions\AggregateDeletedException.cs" />
+    <Compile Include="Exceptions\AggregateNotFoundException.cs" />
+    <Compile Include="Exceptions\AggregateVersionException.cs" />
     <Compile Include="IAuthenticated.cs" />
     <Compile Include="IAuthenticatedMessageHandler.cs" />
     <Compile Include="IEventHandler.cs" />

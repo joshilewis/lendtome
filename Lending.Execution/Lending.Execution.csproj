@@ -167,9 +167,6 @@
     <Compile Include="DI\StructureMapContainerAdapter.cs" />
     <Compile Include="EventDispatcher.cs" />
     <Compile Include="EventHandlerProvider.cs" />
-    <Compile Include="EventStore\AggregateDeletedException.cs" />
-    <Compile Include="EventStore\AggregateNotFoundException.cs" />
-    <Compile Include="EventStore\AggregateVersionException.cs" />
     <Compile Include="EventStore\EventExtensions.cs" />
     <Compile Include="EventStore\EventStoreEventRepository.cs" />
     <Compile Include="IEventEmitter.cs" />

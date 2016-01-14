@@ -1,6 +1,6 @@
 using System;
 
-namespace Lending.Execution.EventStore
+namespace Lending.Cqrs.Exceptions
 {
     public class AggregateDeletedException : Exception
     {

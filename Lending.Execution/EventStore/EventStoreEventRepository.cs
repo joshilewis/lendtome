@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using EventStore.ClientAPI;
 using Lending.Cqrs;
+using Lending.Cqrs.Exceptions;
 using Lending.Domain;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
