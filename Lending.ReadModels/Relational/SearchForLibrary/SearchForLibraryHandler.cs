@@ -19,12 +19,12 @@ namespace Lending.ReadModels.Relational.SearchForLibrary
 
         public override Result Handle(SearchForLibrary query)
         {
-            OpenedLibrary[] users = getSession().QueryOver<OpenedLibrary>()
+            OpenedLibrary[] libraries = getSession().QueryOver<OpenedLibrary>()
                 .WhereRestrictionOn(x => x.Name).IsInsensitiveLike("%" + query.SearchString.ToLower() + "%")
                 .List()
                 .ToArray();
 
-            return new Result<OpenedLibrary[]>(users);
+            return new Result<OpenedLibrary[]>(libraries);
         }
     }
 }
