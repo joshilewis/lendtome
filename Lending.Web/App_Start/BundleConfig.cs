@@ -13,9 +13,9 @@ namespace Lending.Web.App_Start
         {
             bundles.Add(new StyleBundle("~/content/css/app").Include("~/content/bootstrap.css"));
 
-            bundles.Add(new ScriptBundle("~/Scripts/jquery").Include("~/scripts/jquery-{version}.js"));
+            bundles.Add(new ScriptBundle("~/js/jquery").Include("~/scripts/jquery-{version}.js"));
 
-            bundles.Add(new ScriptBundle("~/Scripts/app").Include(
+            bundles.Add(new ScriptBundle("~/js/app").Include(
                 "~/scripts/angular.js",
                 "~/scripts/angular-resource.js",
                 "~/scripts/angular-route.js",
