@@ -22,7 +22,7 @@ namespace Lending.Execution.Modules
             this.messageHandler = messageHandler;
 
             this.RequiresAuthentication();
-            //this.RequiresHttps();
+            this.RequiresHttps();
 
             Post[Path] = _ =>
             {
