@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lending.Execution.Auth;
 using Microsoft.Owin.Extensions;
+using Nancy.Owin;
 using Owin;
 using Owin.StatelessAuth;
 
@@ -32,8 +33,11 @@ namespace Lending.Execution.Owin
                 IgnorePaths = pathsToIgnore,
                 PassThroughUnauthorizedRequests = true
             });
-            app.UseNancy();
-            app.UseStageMarker(PipelineStage.MapHandler);
+            app.Map("/api", site =>
+            {
+                site.UseNancy();
+                site.UseStageMarker(PipelineStage.MapHandler);
+            });
         }
     }
 }

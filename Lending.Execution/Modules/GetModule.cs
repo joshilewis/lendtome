@@ -13,7 +13,6 @@ namespace Lending.Execution.Modules
         protected abstract string Path { get; }
 
         protected GetModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler)
-            : base("api")
         {
             this.unitOfWork = unitOfWork;
             this.messageHandler = messageHandler;

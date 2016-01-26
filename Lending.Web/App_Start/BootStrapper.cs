@@ -4,11 +4,13 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
 using Lending.Cqrs.Exceptions;
 using Lending.Execution.Auth;
+using Lending.Web.App_Start;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.StructureMap;
 using Nancy.Conventions;
 using Nancy.Diagnostics;
+using Nancy.Hosting.Aspnet;
 using Nancy.Owin;
 using Nancy.Responses.Negotiation;
 using StructureMap;
@@ -62,20 +64,6 @@ namespace Lending.Web
 
         }
 
-        protected override void ConfigureConventions(NancyConventions nancyConventions)
-        {
-            base.ConfigureConventions(nancyConventions);
-
-            nancyConventions.StaticContentsConventions
-                .Add(StaticContentConventionBuilder.AddDirectory("App", @"App"));
-            nancyConventions.StaticContentsConventions
-                .Add(StaticContentConventionBuilder.AddDirectory("fonts", @"fonts"));
-            nancyConventions.StaticContentsConventions
-                .Add(StaticContentConventionBuilder.AddDirectory("Scripts", @"Scripts"));
-            nancyConventions.StaticContentsConventions
-                .Add(StaticContentConventionBuilder.AddDirectory("Content", @"Content"));
-        }
-
         protected override NancyInternalConfiguration InternalConfiguration
         {
             get
@@ -87,5 +75,6 @@ namespace Lending.Web
                 });
             }
         }
+
     }
 }

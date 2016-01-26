@@ -1,7 +1,6 @@
 ﻿using System;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
-using Lending.Cqrs.Exceptions;
 using Lending.Cqrs.Query;
 using Lending.Execution.Auth;
 using Lending.Execution.UnitOfWork;
@@ -18,7 +17,6 @@ namespace Lending.Execution.Modules
         protected abstract string Path { get; }
 
         protected PostModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler)
-            : base("api")
         {
             this.unitOfWork = unitOfWork;
             this.messageHandler = messageHandler;
