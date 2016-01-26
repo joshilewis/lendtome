@@ -18,14 +18,8 @@ namespace Lending.Execution.Owin
         {
             var pathsToIgnore = new[]
             {
-                "/App/**",
-                "/App/",
                 "/authentication/**",
                 "/authentication",
-                "/content",
-                "/content/**",
-                "/fonts/**",
-                "/scripts/**",
             };
 
             app.RequiresStatelessAuth(new SecureTokenValidator(ConfigurationManager.AppSettings["jwt_secret"]), new StatelessAuthOptions
