@@ -3,35 +3,21 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Net;
-using Enyim.Caching;
-using Enyim.Caching.Configuration;
-using Enyim.Caching.Memcached;
-using EventStore.ClientAPI;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
-using FluentNHibernate.Conventions.Helpers;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
-using Lending.Domain;
 using Lending.Domain.AddBookToLibrary;
-using Lending.Domain.OpenLibrary;
 using Lending.Execution.Auth;
-using Lending.Execution.EventStore;
 using Lending.Execution.Persistence;
 using Lending.Execution.UnitOfWork;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.SearchForLibrary;
-using Nancy.Authentication.Token;
 using Nancy.SimpleAuthentication;
 using NHibernate.Context;
-//using Nancy;
-using ServiceStack.Authentication.NHibernate;
 using StructureMap;
-using StructureMap.Configuration.DSL;
-using StructureMap.Web;
 
 namespace Lending.Execution.DI
 {
@@ -64,8 +50,6 @@ namespace Lending.Execution.DI
                 .Singleton()
                 .Use(config.BuildSessionFactory())
                 ;
-
-            var settings = ConfigurationManager.AppSettings;
 
             For<NHibernate.ISession>()
                 .Use(c => c.GetInstance<IUnitOfWork>().CurrentSession)
@@ -134,10 +118,6 @@ namespace Lending.Execution.DI
                 .Use<AuthCallbackProvider>()
                 .Ctor<string>()
                 .Is(jwtSecret);
-
-            For<ITokenizer>()
-                .AlwaysUnique()
-                .Use(c => new Tokenizer());
 
             For<IUserMapper>()
                 .AlwaysUnique()

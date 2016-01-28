@@ -14,18 +14,7 @@ namespace Lending.Execution.DI
 
         private static IContainer Initialize()
         {
-            var container = new Container(x =>
-            {
-
-                x.Scan(scan =>
-                {
-                    scan.LookForRegistries();
-                    scan.AssembliesFromApplicationBaseDirectory(a => a.FullName.StartsWith("Lending"));
-                    scan.WithDefaultConventions();
-                    //scan.TheCallingAssembly();
-                });
-
-            });
+            var container = new LendingContainer();
 
             container.AssertConfigurationIsValid();
             string blah = container.WhatDoIHave();
@@ -34,6 +23,26 @@ namespace Lending.Execution.DI
             //    .Execute(true, true);
 
             return container;
+        }
+    }
+
+    public class LendingContainer : Container
+    {
+        public LendingContainer()
+            : base(x =>
+            {
+                x.Scan(scan =>
+                {
+                    scan.LookForRegistries();
+                    scan.AssembliesFromApplicationBaseDirectory(a => a.FullName.StartsWith("Lending"));
+                    scan.AssembliesFromApplicationBaseDirectory(a => a.FullName.StartsWith("Tests"));
+                    scan.AssemblyContainingType<DomainRegistry>();
+                    scan.WithDefaultConventions();
+                    //scan.TheCallingAssembly();
+                });
+
+            })
+        {
         }
     }
 }

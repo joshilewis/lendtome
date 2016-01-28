@@ -131,6 +131,7 @@
     <Compile Include="Queries\SearchForBookTests.cs" />
     <Compile Include="Queries\SearchForLibraryTests.cs" />
     <Compile Include="TestEqualityHelpers.cs" />
+    <Compile Include="TestRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lending.Cqrs\Lending.Cqrs.csproj">

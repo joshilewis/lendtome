@@ -25,8 +25,6 @@ namespace Tests
 {
     public abstract class FixtureWithEventStore : Fixture
     {
-        protected ClusterVNode Node;
-        protected IEventStoreConnection Connection;
         protected InMemoryEventConsumer EventConsumer;
         protected DummyEventHandlerProvider EventHandlerProvider;
         protected IContainer Container;
@@ -45,58 +43,17 @@ namespace Tests
         public override void SetUp()
         {
             base.SetUp();
-            var noIp = new IPEndPoint(IPAddress.None, 0);
-            Node = EmbeddedVNodeBuilder
-                .AsSingleNode()
-                .WithInternalTcpOn(noIp)
-                .WithInternalHttpOn(noIp)
-                .RunInMemory()
-                .Build();
-            Node.Start();
 
-            Connection = EmbeddedEventStoreConnection.Create(Node);
-            Connection.ConnectAsync().Wait();
-
-            Container = new Container(x =>
-            {
-                x.For<IUnitOfWork>()
-                    .HybridHttpOrThreadLocalScoped()
-                    .Use<TestUnitOfWork>()
-                    .Ctor<IEventStoreConnection>()
-                    .Is(Connection)
-                    .Ctor<ISessionFactory>()
-                    .Is(c => c.GetInstance<ISessionFactory>())
-                    .Ctor<IEventEmitter>()
-                    .Is(c => c.GetInstance<IEventEmitter>())
-                    .Ctor<EventDispatcher>()
-                    .Is(c => c.GetInstance<EventDispatcher>())
-                    ;
-
-                x.Scan(y =>
-                {
-                    y.WithDefaultConventions();
-                    y.LookForRegistries();
-                    y.AssemblyContainingType<Query>();
-                    y.AssemblyContainingType<DomainRegistry>();
-
-                    ScannerAction(y);
-
-
-                });
-
-
-                ConfigurationExpressionAction(x);
-            });
-
-            var blah = Container.WhatDoIHave();
-            //Console.WriteLine(blah);
+            Container = new LendingContainer();
+            Container.GetInstance<ClusterVNode>().Start();
+            Container.GetInstance<IEventStoreConnection>().ConnectAsync().Wait();
         }
 
         public override void TearDown()
         {
-            Connection.Close();
-            Connection.Dispose();
-            Node.Stop();
+            Container.GetInstance<IEventStoreConnection>().Close();
+            Container.GetInstance<IEventStoreConnection>().Dispose();
+            Container.GetInstance<ClusterVNode>().Stop();
             base.TearDown();
         }
 
