@@ -23,7 +23,7 @@ namespace Shell
 
         static void Main(string[] args)
         {
-            Container = IoC.Initialize();
+            Container = IoC.Container;
 
             //SchemaUpdater.UpdateSchema();
 

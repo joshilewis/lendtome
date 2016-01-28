@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
 using Lending.Cqrs.Exceptions;
 using Lending.Execution.Auth;
-using Lending.Web.App_Start;
+using Lending.Execution.DI;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.StructureMap;
-using Nancy.Conventions;
 using Nancy.Diagnostics;
-using Nancy.Hosting.Aspnet;
 using Nancy.Owin;
 using Nancy.Responses.Negotiation;
 using StructureMap;
 
-namespace Lending.Web
+namespace Lending.Execution.App_Start
 {
     public class BootStrapper : StructureMapNancyBootstrapper
     {
         protected override IContainer GetApplicationContainer()
         {
-            return MvcApplication.Container;
+            return IoC.Container;
         }
 
         protected override DiagnosticsConfiguration DiagnosticsConfiguration => new DiagnosticsConfiguration { Password = @"secret" };

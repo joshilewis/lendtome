@@ -25,8 +25,7 @@ namespace Lending.Web
             XmlConfigurator.Configure();
             LogManager.LogFactory = new ServiceStack.Logging.Log4Net.Log4NetFactory(true);
 
-            Container = (IContainer)IoC.Initialize();
-            DependencyResolver.SetResolver(new SmDependencyResolver(Container));
+            DependencyResolver.SetResolver(new SmDependencyResolver(IoC.Container));
             ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
 
             //AppHost.Start(new StructureMapContainerAdapter(Container));
@@ -41,7 +40,5 @@ namespace Lending.Web
             //ViewEngines.Engines.Clear();
             //ViewEngines.Engines.Add(new CustomViewEngine());
         }
-
-        public static IContainer Container;
     }
 }

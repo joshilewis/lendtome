@@ -1,28 +1,21 @@
-using System.Collections.Generic;
-using System.Configuration;
-using System.Net;
-using EventStore.ClientAPI;
-using Lending.Execution.UnitOfWork;
-using SimpleAuthentication.Core;
-using SimpleAuthentication.Core.Providers;
 using StructureMap;
 using StructureMap.Graph;
 
-namespace Shell
+namespace Lending.Execution.DI
 {
     public static class IoC
     {
-        public static IContainer Initialize()
+        public static IContainer Container { get; private set; }
+
+        static IoC()
+        {
+            Container = Initialize();
+        }
+
+        private static IContainer Initialize()
         {
             var container = new Container(x =>
             {
-                string eventStoreIpAddress = ConfigurationManager.AppSettings["EventStore:IPAddress"];
-
-                x.For<IUnitOfWork>()
-                    //.
-                    .Use<UnitOfWork>()
-                    .Ctor<string>()
-                    .Is(eventStoreIpAddress);
 
                 x.Scan(scan =>
                 {
@@ -42,6 +35,5 @@ namespace Shell
 
             return container;
         }
-
     }
 }
