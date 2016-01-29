@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Execution.DI;
+using Lending.Execution.Owin;
 using Lending.Execution.Persistence;
+using Lending.Execution.UnitOfWork;
+using Microsoft.Owin.Hosting;
 using Nancy.Hosting.Self;
 //using Nancy.Hosting.Self;
 using NHibernate.Cfg;
@@ -19,21 +23,18 @@ namespace Shell
 {
     class Program
     {
-        public static IContainer Container;
-
         static void Main(string[] args)
         {
-            Container = IoC.Container;
 
-            //SchemaUpdater.UpdateSchema();
+            IContainer container = IoC.Initialize(new ShellRegistry());
 
-            using (var host = new NancyHost(new Uri("http://localhost:1234")))
-            {
-                host.Start();
-                Console.WriteLine("Listening, GO!");
-                Console.ReadLine();
-            }
+            var url = "http://+:8083";
 
+            var webapp = WebApp.Start<Startup>(url);
+            Console.WriteLine("Running on {0}", url);
+            Console.WriteLine("Press enter to exit");
+            Console.ReadLine();
+            webapp.Dispose();
 
             Console.ReadLine();
         }

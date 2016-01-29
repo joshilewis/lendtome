@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using StructureMap;
 using StructureMap.Graph;
 
@@ -7,22 +9,26 @@ namespace Lending.Execution.DI
     {
         public static IContainer Container { get; private set; }
 
-        static IoC()
+        public static IContainer Initialize(params Registry[] registryTypesToInclude)
         {
-            Container = Initialize();
-        }
+            Container = new LendingContainer();
 
-        private static IContainer Initialize()
-        {
-            var container = new LendingContainer();
+            Container.Configure(x =>
+            {
+                foreach (Registry registryType in registryTypesToInclude)
+                {
+                    x.IncludeRegistry(registryType);
+                }
+            });
 
-            container.AssertConfigurationIsValid();
-            string blah = container.WhatDoIHave();
+            Container.AssertConfigurationIsValid();
+            string blah = Container.WhatDoIHave();
+            string scanned = Container.WhatDidIScan();
 
             //new SchemaUpdate(ObjectFactory.GetInstance<Configuration>())
             //    .Execute(true, true);
 
-            return container;
+            return Container;
         }
     }
 
@@ -35,7 +41,6 @@ namespace Lending.Execution.DI
                 {
                     scan.LookForRegistries();
                     scan.AssembliesFromApplicationBaseDirectory(a => a.FullName.StartsWith("Lending"));
-                    scan.AssembliesFromApplicationBaseDirectory(a => a.FullName.StartsWith("Tests"));
                     scan.AssemblyContainingType<DomainRegistry>();
                     scan.WithDefaultConventions();
                     //scan.TheCallingAssembly();

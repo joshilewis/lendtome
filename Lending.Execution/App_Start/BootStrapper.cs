@@ -51,6 +51,8 @@ namespace Lending.Execution.App_Start
         {
             base.RequestStartup(container, pipelines, context);
             var owinEnvironment = context.GetOwinEnvironment();
+            if (!owinEnvironment.ContainsKey("server.user")) return;
+
             var user = owinEnvironment["server.User"] as ClaimsPrincipal;
             if (user != null && user.Identity.IsAuthenticated)
             {

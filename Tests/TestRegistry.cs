@@ -26,9 +26,7 @@ namespace Tests
                 .WithInternalHttpOn(noIp)
                 .RunInMemory()
                 .Build();
-            //node.Start();
             var connection = EmbeddedEventStoreConnection.Create(node);
-            //connection.ConnectAsync().Wait();
 
             For<ClusterVNode>()
                 .Singleton()
