@@ -22,7 +22,7 @@ namespace Tests.Queries
         {
             Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
             WhenGetEndpoint("libraries/Lew");
-            Then<Result<OpenedLibrary[]>>(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
+            Then<Result<OpenedLibrary[]>>((new Result<OpenedLibrary[]>(new[]
             {
                 new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name), 
             })));
@@ -42,7 +42,7 @@ namespace Tests.Queries
         {
             Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
             WhenGetEndpoint("libraries/lEw");
-            Then<Result<OpenedLibrary[]>>(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
+            Then<Result<OpenedLibrary[]>>((new Result<OpenedLibrary[]>(new[]
             {
                 new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name),
             })));
@@ -62,9 +62,9 @@ namespace Tests.Queries
         {
             Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
             WhenGetEndpoint("libraries/Pet");
-            Then<Result<OpenedLibrary[]>>(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
+            Then<Result<OpenedLibrary[]>>(new Result<OpenedLibrary[]>(new OpenedLibrary[]
             {
-            })));
+            }));
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
@@ -82,7 +82,7 @@ namespace Tests.Queries
         {
             Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
             WhenGetEndpoint("libraries/Jos");
-            Then<Result<OpenedLibrary[]>>(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
+            Then<Result<OpenedLibrary[]>>((new Result<OpenedLibrary[]>(new[]
             {
                 new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name),
                 new OpenedLibrary(Library3Id, JosieDoeLibraryOpened.Name),
