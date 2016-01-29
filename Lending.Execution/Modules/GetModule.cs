@@ -3,6 +3,7 @@ using Lending.Cqrs.Query;
 using Lending.Execution.UnitOfWork;
 using Nancy;
 using Nancy.ModelBinding;
+using Nancy.Security;
 
 namespace Lending.Execution.Modules
 {
@@ -11,10 +12,16 @@ namespace Lending.Execution.Modules
         private readonly IUnitOfWork unitOfWork;
         private readonly IMessageHandler<TMessage, TResult> messageHandler;
 
-        protected GetModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler, string path)
+        protected GetModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler, string path, bool secure = false)
         {
             this.unitOfWork = unitOfWork;
             this.messageHandler = messageHandler;
+
+            this.RequiresHttps();
+            if (secure)
+            {
+                this.RequiresAuthentication();
+            }
 
             Get[path] = _ =>
             {
