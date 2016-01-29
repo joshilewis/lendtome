@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
@@ -11,12 +12,17 @@ using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Domain;
+using Lending.Domain.OpenLibrary;
 using Lending.Execution;
 using Lending.Execution.DI;
 using Lending.Execution.EventStore;
+using Lending.Execution.Owin;
 using Lending.Execution.UnitOfWork;
+using Lending.ReadModels.Relational.SearchForLibrary;
+using Microsoft.Owin.Testing;
 using NHibernate;
 using NUnit.Framework;
+using ServiceStack.ServiceModel.Serialization;
 using StructureMap;
 using StructureMap.Graph;
 using StructureMap.Web;
@@ -29,6 +35,9 @@ namespace Tests
         protected DummyEventHandlerProvider EventHandlerProvider;
         protected IContainer Container;
         protected EventDispatcher EventDispatcher;
+        protected HttpClient Client;
+
+        private TestServer server;
 
         protected virtual Action<IAssemblyScanner> ScannerAction
         {
@@ -47,6 +56,9 @@ namespace Tests
             Container = IoC.Initialize(new TestRegistry());
             Container.GetInstance<ClusterVNode>().Start();
             Container.GetInstance<IEventStoreConnection>().ConnectAsync().Wait();
+
+            server = TestServer.Create<Startup>();
+            Client = server.HttpClient;
         }
 
         public override void TearDown()
@@ -54,6 +66,7 @@ namespace Tests
             Container.GetInstance<IEventStoreConnection>().Close();
             Container.GetInstance<IEventStoreConnection>().Dispose();
             Container.GetInstance<ClusterVNode>().Stop();
+            server.Dispose();
             base.TearDown();
         }
 
@@ -63,14 +76,34 @@ namespace Tests
 
             foreach (var message in messages)
             {
-                Type type = typeof (IMessageHandler<,>).MakeGenericType(message.GetType(), typeof (Result));
-                MessageHandler handler = (MessageHandler)Container.GetInstance(type);
-                result = (Result)handler.Handle(message);
-                CommitTransactionAndOpenNew();
+                result = HandleMessage(message);
             }
 
             return result;
 
+        }
+
+        private Result HandleMessage(Message message)
+        {
+            Result result;
+            var library = message as SearchForLibrary;
+            if (library != null)
+            {
+                SearchForLibrary query = library;
+                string path = $"https://localhost/api/libraries/{query.SearchString}/";
+                var response = Client.GetAsync(path).Result;
+                string resultString = response.Content.ReadAsStringAsync().Result;
+                result =
+                    JsonDataContractDeserializer.Instance.DeserializeFromString<Result<OpenedLibrary[]>>(resultString);
+                return result;
+            }
+
+
+            Type type = typeof(IMessageHandler<,>).MakeGenericType(message.GetType(), typeof(Result));
+            MessageHandler handler = (MessageHandler)Container.GetInstance(type);
+            result = (Result)handler.Handle(message);
+            CommitTransactionAndOpenNew();
+            return result;
         }
 
         protected abstract void CommitTransactionAndOpenNew();
@@ -82,6 +115,7 @@ namespace Tests
                 Type type = typeof(IEventHandler<>).MakeGenericType(@event.GetType());
                 IEventHandler handler = (IEventHandler)Container.GetInstance(type);
                 handler.When(@event);
+                CommitTransactionAndOpenNew();
             }
 
         }

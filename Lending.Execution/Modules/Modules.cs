@@ -5,6 +5,7 @@ using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RequestLink;
 using Lending.Execution.UnitOfWork;
 using Lending.ReadModels.Relational.SearchForLibrary;
+using Nancy;
 
 namespace Lending.Execution.Modules
 {
@@ -41,5 +42,13 @@ namespace Lending.Execution.Modules
         {
         }
 
+    }
+
+    public class HomeModule : NancyModule
+    {
+        public HomeModule()
+        {
+            Get[""] = _ => "Hello World!";
+        }
     }
 }
