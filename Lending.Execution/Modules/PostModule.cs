@@ -14,9 +14,8 @@ namespace Lending.Execution.Modules
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMessageHandler<TMessage, TResult> messageHandler;
-        protected abstract string Path { get; }
 
-        protected PostModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler)
+        protected PostModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler, string path)
         {
             this.unitOfWork = unitOfWork;
             this.messageHandler = messageHandler;
@@ -24,7 +23,7 @@ namespace Lending.Execution.Modules
             this.RequiresAuthentication();
             this.RequiresHttps();
 
-            Post[Path] = _ =>
+            Post[path] = _ =>
             {
                 CustomUserIdentity user = this.Context.CurrentUser as CustomUserIdentity;
 

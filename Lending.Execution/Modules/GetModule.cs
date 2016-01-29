@@ -10,14 +10,13 @@ namespace Lending.Execution.Modules
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMessageHandler<TMessage, TResult> messageHandler;
-        protected abstract string Path { get; }
 
-        protected GetModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler)
+        protected GetModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler, string path)
         {
             this.unitOfWork = unitOfWork;
             this.messageHandler = messageHandler;
 
-            Get[Path] = _ =>
+            Get[path] = _ =>
             {
                 TMessage request = this.Bind<TMessage>();
 
