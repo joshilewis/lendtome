@@ -85,23 +85,9 @@ namespace Tests
 
         private Result HandleMessage(Message message)
         {
-            Result result;
-            var library = message as SearchForLibrary;
-            if (library != null)
-            {
-                SearchForLibrary query = library;
-                string path = $"https://localhost/api/libraries/{query.SearchString}/";
-                var response = Client.GetAsync(path).Result;
-                string resultString = response.Content.ReadAsStringAsync().Result;
-                result =
-                    JsonDataContractDeserializer.Instance.DeserializeFromString<Result<OpenedLibrary[]>>(resultString);
-                return result;
-            }
-
-
             Type type = typeof(IMessageHandler<,>).MakeGenericType(message.GetType(), typeof(Result));
             MessageHandler handler = (MessageHandler)Container.GetInstance(type);
-            result = (Result)handler.Handle(message);
+            Result result = (Result)handler.Handle(message);
             CommitTransactionAndOpenNew();
             return result;
         }

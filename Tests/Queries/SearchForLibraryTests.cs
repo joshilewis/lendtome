@@ -20,8 +20,8 @@ namespace Tests.Queries
         public void SearchingForLibraryWithSingleMatchShouldReturnThatUser()
         {
             Given(joshuaLewisLibraryOpened, suzaanHepburnLibraryOpened, josieDoe3LibraryOpened, audreyHepburn4LibraryOpened);
-            When(new SearchForLibrary("Lew"));
-            Then(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
+            WhenGetEndpoint("libraries/Lew");
+            Then<Result<OpenedLibrary[]>>(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
             {
                 new OpenedLibrary(Library1Id, joshuaLewisLibraryOpened.Name), 
             })));
@@ -36,8 +36,8 @@ namespace Tests.Queries
         public void SearchingForLibraryWithSingleMatchWithWrongCaseShouldReturnThatUser()
         {
             Given(joshuaLewisLibraryOpened, suzaanHepburnLibraryOpened, josieDoe3LibraryOpened, audreyHepburn4LibraryOpened);
-            When(new SearchForLibrary("lEw"));
-            Then(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
+            WhenGetEndpoint("libraries/lEw");
+            Then<Result<OpenedLibrary[]>>(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
             {
                 new OpenedLibrary(Library1Id, joshuaLewisLibraryOpened.Name),
             })));
@@ -52,8 +52,8 @@ namespace Tests.Queries
         public void SearchingForLibraryWithNoMatchesShouldReturnEmptyList()
         {
             Given(joshuaLewisLibraryOpened, suzaanHepburnLibraryOpened, josieDoe3LibraryOpened, audreyHepburn4LibraryOpened);
-            When(new SearchForLibrary("Pet"));
-            Then(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
+            WhenGetEndpoint("libraries/Pet");
+            Then<Result<OpenedLibrary[]>>(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
             {
             })));
 
@@ -68,8 +68,8 @@ namespace Tests.Queries
         public void SearchingForLibraryWithTwoMatchsShouldReturnTwoUsers()
         {
             Given(joshuaLewisLibraryOpened, suzaanHepburnLibraryOpened, josieDoe3LibraryOpened, audreyHepburn4LibraryOpened);
-            When(new SearchForLibrary("Jos"));
-            Then(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
+            WhenGetEndpoint("libraries/Jos");
+            Then<Result<OpenedLibrary[]>>(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
             {
                 new OpenedLibrary(Library1Id, joshuaLewisLibraryOpened.Name),
                 new OpenedLibrary(Library3Id, josieDoe3LibraryOpened.Name),

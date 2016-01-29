@@ -26,6 +26,7 @@ using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 using NUnit.Framework;
 using ServiceStack.Authentication.NHibernate;
+using ServiceStack.ServiceModel.Serialization;
 using StructureMap;
 using StructureMap.Graph;
 using Configuration = NHibernate.Cfg.Configuration;
@@ -116,9 +117,36 @@ namespace Tests
             }
         }
 
+        private string responseString;
+        protected void WhenGetEndpoint(string uri)
+        {
+            try
+            {
+                responseString = HitEndPoint(uri);
+            }
+            catch (Exception exception)
+            {
+                actualException = exception;
+            }
+        }
+
+        protected string HitEndPoint(string uri)
+        {
+            string path = $"https://localhost/api/{uri}/";
+            var response = Client.GetAsync(path).Result;
+            return response.Content.ReadAsStringAsync().Result;
+        }
+
+
         protected void Then(Result expectedResult)
         {
             actualResult.ShouldEqual(expectedResult);
+        }
+
+        protected void Then<TResult>(Result expectedResult) where TResult : Result
+        {
+            actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(responseString);
+            Then(expectedResult);
         }
 
         protected void Then(Exception expectedException)
@@ -134,6 +162,12 @@ namespace Tests
         protected void Then(Predicate<Result> resultEqualityPredicate)
         {
             resultEqualityPredicate(actualResult);
+        }
+
+        protected void Then<TResult>(Predicate<Result> resultEqualityPredicate) where TResult : Result
+        {
+            actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(responseString);
+            Then(resultEqualityPredicate);
         }
 
         protected void AndEventsSavedForAggregate<TAggregate>(Guid aggregateId, params Event[] expectedEvents) where TAggregate : Aggregate
