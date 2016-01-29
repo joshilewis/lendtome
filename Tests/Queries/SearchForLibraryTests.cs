@@ -13,9 +13,9 @@ namespace Tests.Queries
     {
 
         /// <summary>
-        /// GIVEN Users with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have Registered 
-        /// WHEN I Search for Users with the search string 'Lew' 
-        /// THEN 'Joshua Lewis' gets returne
+        /// GIVEN Libraries with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have been Opened 
+        /// WHEN I Search for Libraries with the search string 'Lew' 
+        /// THEN Lbrary 'Joshua Lewis' gets returned
         /// </summary>
         [Test]
         public void SearchingForLibraryWithSingleMatchShouldReturnThatUser()
@@ -33,9 +33,9 @@ namespace Tests.Queries
         }
 
         /// <summary>
-        /// GIVEN Users with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have Registered 
-        /// WHEN I Search for Users with the search string 'lEw' 
-        /// THEN 'Joshua Lewis' gets returne
+        /// GIVEN Libraries with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have been Opened 
+        /// WHEN I Search for Libraries with the search string 'lEw' 
+        /// THEN Library 'Joshua Lewis' gets returned
         /// </summary>
         [Test]
         public void SearchingForLibraryWithSingleMatchWithWrongCaseShouldReturnThatUser()
@@ -53,9 +53,9 @@ namespace Tests.Queries
         }
 
         /// <summary>
-        /// GIVEN Users with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have Registered 
-        /// WHEN I Search for Users with the search string 'Pet'
-        /// THEN 'Joshua Lewis' gets returne
+        /// GIVEN Libraries with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have been Opened 
+        /// WHEN I Search for Libraries with the search string 'Pet'
+        /// THEN no Libraries get returned
         /// </summary>
         [Test]
         public void SearchingForLibraryWithNoMatchesShouldReturnEmptyList()
@@ -73,12 +73,12 @@ namespace Tests.Queries
         }
 
         /// <summary>
-        /// GIVEN Users with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have Registered 
-        /// WHEN I Search for Users with the search string 'Jos'
-        /// THEN 'Joshua Lewis' gets returne
+        /// GIVEN Libraries with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have been Opened 
+        /// WHEN I Search for Libraries with the search string 'Jos'
+        /// THEN Libraries 'Joshua Lewis' and 'Josie Doe' get returned
         /// </summary>
         [Test]
-        public void SearchingForLibraryWithTwoMatchsShouldReturnTwoUsers()
+        public void SearchingForLibraryWithTwoMatchsShouldReturnTwoLibraries()
         {
             Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
             WhenGetEndpoint("libraries/Jos");
