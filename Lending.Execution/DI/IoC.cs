@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using StructureMap;
 using StructureMap.Graph;
+using StructureMap.Graph.Scanning;
 
 namespace Lending.Execution.DI
 {
@@ -21,9 +22,10 @@ namespace Lending.Execution.DI
                 }
             });
 
-            Container.AssertConfigurationIsValid();
             string blah = Container.WhatDoIHave();
             string scanned = Container.WhatDidIScan();
+            TypeRepository.AssertNoTypeScanningFailures();
+            Container.AssertConfigurationIsValid();
 
             //new SchemaUpdate(ObjectFactory.GetInstance<Configuration>())
             //    .Execute(true, true);

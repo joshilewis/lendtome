@@ -12,7 +12,7 @@ using Nancy.Owin;
 using Nancy.Responses.Negotiation;
 using StructureMap;
 
-namespace Lending.Execution.App_Start
+namespace Lending.Execution
 {
     public class BootStrapper : StructureMapNancyBootstrapper
     {
@@ -21,7 +21,8 @@ namespace Lending.Execution.App_Start
             return IoC.Container;
         }
 
-        protected override DiagnosticsConfiguration DiagnosticsConfiguration => new DiagnosticsConfiguration { Password = @"secret" };
+        protected override DiagnosticsConfiguration DiagnosticsConfiguration
+            => new DiagnosticsConfiguration {Password = @"secret"};
 
         protected override void ApplicationStartup(IContainer container, IPipelines pipelines)
         {
