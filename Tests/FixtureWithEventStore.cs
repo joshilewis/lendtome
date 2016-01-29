@@ -44,7 +44,7 @@ namespace Tests
         {
             base.SetUp();
 
-            Container = new LendingContainer();
+            Container = IoC.Initialize(new TestRegistry());
             Container.GetInstance<ClusterVNode>().Start();
             Container.GetInstance<IEventStoreConnection>().ConnectAsync().Wait();
         }
