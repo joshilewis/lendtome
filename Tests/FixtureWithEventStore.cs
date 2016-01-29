@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -10,6 +11,7 @@ using EventStore.ClientAPI.Embedded;
 using EventStore.Core;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Exceptions;
 using Lending.Cqrs.Query;
 using Lending.Domain;
 using Lending.Domain.OpenLibrary;
@@ -38,11 +40,6 @@ namespace Tests
         protected HttpClient Client;
 
         private TestServer server;
-
-        protected virtual Action<IAssemblyScanner> ScannerAction
-        {
-            get { return x => { }; }
-        }
 
         protected virtual Action<ConfigurationExpression> ConfigurationExpressionAction
         {
@@ -107,6 +104,88 @@ namespace Tests
         }
 
         protected IEventRepository EventRepository => Container.GetInstance<IEventRepository>();
+
+        protected void Given(params Message[] messages)
+        {
+            Result result = HandleMessages(messages);
+        }
+
+        protected void Given(params Event[] events)
+        {
+            HandleEvents(events);
+        }
+
+        private Result actualResult;
+        private Exception actualException;
+        protected void When(Message message)
+        {
+            try
+            {
+                actualResult = HandleMessages(message);
+            }
+            catch (Exception exception)
+            {
+                actualException = exception;
+            }
+        }
+
+        protected void Then(Result expectedResult)
+        {
+            actualResult.ShouldEqual(expectedResult);
+        }
+
+        protected void Then<TResult>(Result expectedResult) where TResult : Result
+        {
+            actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(responseString);
+            Then(expectedResult);
+        }
+
+        protected void Then(Exception expectedException)
+        {
+            actualException.ShouldEqual(expectedException);
+        }
+
+        protected Exception FailBecauseUnauthorized(Guid userId, Guid aggregateId, Type aggregateType)
+        {
+            return new NotAuthorizedException(userId, aggregateId, aggregateType);
+        }
+
+        protected void Then(Predicate<Result> resultEqualityPredicate)
+        {
+            resultEqualityPredicate(actualResult);
+        }
+
+        protected void Then<TResult>(Predicate<Result> resultEqualityPredicate) where TResult : Result
+        {
+            actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(responseString);
+            Then(resultEqualityPredicate);
+        }
+
+        protected void AndEventsSavedForAggregate<TAggregate>(Guid aggregateId, params Event[] expectedEvents) where TAggregate : Aggregate
+        {
+            IEnumerable<Event> actualEvents = EventRepository.GetEventsForAggregate<TAggregate>(aggregateId);
+            Assert.That(actualEvents, Is.EquivalentTo(expectedEvents));
+        }
+
+        private string responseString;
+        protected void WhenGetEndpoint(string uri)
+        {
+            try
+            {
+                responseString = HitEndPoint(uri);
+            }
+            catch (Exception exception)
+            {
+                actualException = exception;
+            }
+        }
+
+        protected string HitEndPoint(string uri)
+        {
+            string path = $"https://localhost/api/{uri}/";
+            var response = Client.GetAsync(path).Result;
+            return response.Content.ReadAsStringAsync().Result;
+        }
     }
 
     public class TestUnitOfWork : UnitOfWork
