@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
@@ -18,7 +19,6 @@ using Lending.Domain.OpenLibrary;
 using Lending.Execution;
 using Lending.Execution.DI;
 using Lending.Execution.EventStore;
-using Lending.Execution.Owin;
 using Lending.Execution.UnitOfWork;
 using Lending.ReadModels.Relational.SearchForLibrary;
 using Microsoft.Owin.Testing;
@@ -56,6 +56,7 @@ namespace Tests
 
             server = TestServer.Create<Startup>();
             Client = server.HttpClient;
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJFeHBpcmVzIjoiXC9EYXRlKDE0NTQ2ODgxMTUyNjMpXC8iLCJDbGFpbXMiOlt7Iklzc3VlciI6IkxPQ0FMIEFVVEhPUklUWSIsIk9yaWdpbmFsSXNzdWVyIjoiTE9DQUwgQVVUSE9SSVRZIiwiUHJvcGVydGllcyI6e30sIlN1YmplY3QiOm51bGwsIlR5cGUiOiJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIiwiVmFsdWUiOiJKb3NodWEgTGV3aXMiLCJWYWx1ZVR5cGUiOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSNzdHJpbmcifSx7Iklzc3VlciI6IkxPQ0FMIEFVVEhPUklUWSIsIk9yaWdpbmFsSXNzdWVyIjoiTE9DQUwgQVVUSE9SSVRZIiwiUHJvcGVydGllcyI6e30sIlN1YmplY3QiOm51bGwsIlR5cGUiOiJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciIsIlZhbHVlIjoiMGMzMTFmOGUtOWIwYS00YTIyLWFlNmUtMGM1N2YwNzczNThjIiwiVmFsdWVUeXBlIjoiaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEjc3RyaW5nIn1dfQ.GPW_aZii5oJflCa-AQKneXZHMFyuFy4F5e6Fi-1U4aU");
         }
 
         public override void TearDown()
@@ -113,6 +114,16 @@ namespace Tests
         protected void Given(params Event[] events)
         {
             HandleEvents(events);
+        }
+
+        protected void Given(string url, Message message)
+        {
+            var response = Client.PostAsJsonAsync($"https://localhost/api/{url}", message).Result;
+            Result result =
+                JsonDataContractDeserializer.Instance.DeserializeFromString<Result>(
+                    response.Content.ReadAsStringAsync().Result);
+            CommitTransactionAndOpenNew();
+
         }
 
         private Result actualResult;
@@ -186,6 +197,7 @@ namespace Tests
             var response = Client.GetAsync(path).Result;
             return response.Content.ReadAsStringAsync().Result;
         }
+
     }
 
     public class TestUnitOfWork : UnitOfWork

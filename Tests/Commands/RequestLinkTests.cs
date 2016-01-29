@@ -2,6 +2,7 @@
 using Lending.Cqrs.Exceptions;
 using Lending.Cqrs.Query;
 using Lending.Domain.Model;
+using Lending.Domain.RequestLink;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
 
@@ -29,7 +30,8 @@ namespace Tests.Commands
         [Test]
         public void RequestLinkFromLibraryWithPendingRequestShouldFail()
         {
-            Given(Library1Opens, Library2Opens, Library1RequestsLinkToLibrary2);
+            Given(Library1Opens, Library2Opens);//, Library1RequestsLinkToLibrary2);
+            Given("links/request", Library1RequestsLinkToLibrary2);
             When(Library1Requests2NdLinkToLibrary2);
             Then(FailBecauseLinkAlreadyRequested);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
