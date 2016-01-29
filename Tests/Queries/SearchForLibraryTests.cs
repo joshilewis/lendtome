@@ -1,5 +1,6 @@
 using System;
 using Lending.Cqrs.Query;
+using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.ReadModels.Relational.SearchForLibrary;
 using NUnit.Framework;
@@ -19,12 +20,16 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchShouldReturnThatUser()
         {
-            Given(joshuaLewisLibraryOpened, suzaanHepburnLibraryOpened, josieDoe3LibraryOpened, audreyHepburn4LibraryOpened);
+            Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
             WhenGetEndpoint("libraries/Lew");
             Then<Result<OpenedLibrary[]>>(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
             {
-                new OpenedLibrary(Library1Id, joshuaLewisLibraryOpened.Name), 
+                new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name), 
             })));
+            AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library4Id, AudreyHepburnLibraryOpened);
         }
 
         /// <summary>
@@ -35,12 +40,16 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchWithWrongCaseShouldReturnThatUser()
         {
-            Given(joshuaLewisLibraryOpened, suzaanHepburnLibraryOpened, josieDoe3LibraryOpened, audreyHepburn4LibraryOpened);
+            Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
             WhenGetEndpoint("libraries/lEw");
             Then<Result<OpenedLibrary[]>>(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
             {
-                new OpenedLibrary(Library1Id, joshuaLewisLibraryOpened.Name),
+                new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name),
             })));
+            AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library4Id, AudreyHepburnLibraryOpened);
         }
 
         /// <summary>
@@ -51,11 +60,15 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithNoMatchesShouldReturnEmptyList()
         {
-            Given(joshuaLewisLibraryOpened, suzaanHepburnLibraryOpened, josieDoe3LibraryOpened, audreyHepburn4LibraryOpened);
+            Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
             WhenGetEndpoint("libraries/Pet");
             Then<Result<OpenedLibrary[]>>(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
             {
             })));
+            AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library4Id, AudreyHepburnLibraryOpened);
 
         }
 
@@ -67,13 +80,17 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithTwoMatchsShouldReturnTwoUsers()
         {
-            Given(joshuaLewisLibraryOpened, suzaanHepburnLibraryOpened, josieDoe3LibraryOpened, audreyHepburn4LibraryOpened);
+            Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
             WhenGetEndpoint("libraries/Jos");
             Then<Result<OpenedLibrary[]>>(actualResult => ((Result<OpenedLibrary[]>)actualResult).ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
             {
-                new OpenedLibrary(Library1Id, joshuaLewisLibraryOpened.Name),
-                new OpenedLibrary(Library3Id, josieDoe3LibraryOpened.Name),
+                new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name),
+                new OpenedLibrary(Library3Id, JosieDoeLibraryOpened.Name),
             })));
+            AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library4Id, AudreyHepburnLibraryOpened);
         }
 
     }

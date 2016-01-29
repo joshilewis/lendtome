@@ -113,15 +113,24 @@ namespace Tests
         public static RequestLink UnauthorizedRequestLink = new RequestLink(processId, Library1Id,
             Guid.Empty, Library2Id);
 
-        public static LibraryOpened joshuaLewisLibraryOpened = new LibraryOpened(processId, Library1Id, "Joshua Lewis",
+        public static OpenLibrary JoshuaLewisOpensLibrary = new OpenLibrary(processId, Library1Id, Library1Id,
+            "Joshua Lewis", Library1Id);
+        public static LibraryOpened JoshuaLewisLibraryOpened = new LibraryOpened(processId, Library1Id, "Joshua Lewis",
             Library1Id);
 
-        public static LibraryOpened suzaanHepburnLibraryOpened = new LibraryOpened(processId, Library2Id, "Suzaan Hepburn",
+        public static OpenLibrary SuzaanHepburnOpensLibrary = new OpenLibrary(processId, Library2Id, Library2Id,
+            "Suzaan Hepburn", Library2Id);
+        public static OpenLibrary JosieDoeOpensLibrary = new OpenLibrary(processId, Library3Id, Library3Id,
+            "Josie Doe", Library3Id);
+        public static OpenLibrary AudreyHepburnOpensLibrary = new OpenLibrary(processId, Library4Id, Library4Id,
+            "Audrey Hepburn", Library4Id);
+
+        public static LibraryOpened SuzaanHepburnLibraryOpened = new LibraryOpened(processId, Library2Id, "Suzaan Hepburn",
             Library2Id);
 
-        public static LibraryOpened josieDoe3LibraryOpened = new LibraryOpened(processId, Library3Id, "Josie Doe", Library3Id);
+        public static LibraryOpened JosieDoeLibraryOpened = new LibraryOpened(processId, Library3Id, "Josie Doe", Library3Id);
 
-        public static LibraryOpened audreyHepburn4LibraryOpened = new LibraryOpened(processId, Library4Id,
+        public static LibraryOpened AudreyHepburnLibraryOpened = new LibraryOpened(processId, Library4Id,
             "Audrey Hepburn", Library4Id);
 
         public static string TestDrivenDevelopment = "Test-Driven Development";
