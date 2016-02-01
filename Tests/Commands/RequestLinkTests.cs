@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Lending.Cqrs.Exceptions;
 using Lending.Cqrs.Query;
 using Lending.Domain.Model;
@@ -15,12 +16,6 @@ namespace Tests.Commands
     public class RequestLinkTests : FixtureWithEventStoreAndNHibernate
     {
 
-        public override void SetUp()
-        {
-            base.SetUp();
-
-
-        }
 
         /// <summary>
         /// GIVEN Library1 is Open AND Library2 is Open AND they are not Linked AND there is an existing Link Eequest from Library1 to Library2
@@ -32,8 +27,8 @@ namespace Tests.Commands
         {
             Given(Library1Opens, Library2Opens);//, Library1RequestsLinkToLibrary2);
             Given("links/request", Library1RequestsLinkToLibrary2);
-            When(Library1Requests2NdLinkToLibrary2);
-            Then(FailBecauseLinkAlreadyRequested);
+            When("links/request", Library1Requests2NdLinkToLibrary2);
+            Then(HttpStatusCode.BadRequest, Library.LinkAlreadyRequested);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
         }

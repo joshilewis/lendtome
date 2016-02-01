@@ -52,7 +52,7 @@ namespace Lending.Execution
         {
             base.RequestStartup(container, pipelines, context);
             var owinEnvironment = context.GetOwinEnvironment();
-            if (!owinEnvironment.ContainsKey("server.user")) return;
+            if (!owinEnvironment.ContainsKey("server.User")) return;
 
             var user = owinEnvironment["server.User"] as ClaimsPrincipal;
             if (user != null && user.Identity.IsAuthenticated)

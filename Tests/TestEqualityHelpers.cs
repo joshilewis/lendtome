@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Cqrs;
@@ -18,7 +19,6 @@ using Lending.ReadModels.Relational.LinkAccepted;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
 using Is = NUnit.Framework.Is;
 
 namespace Tests
@@ -86,7 +86,6 @@ namespace Tests
         public static bool ShouldEqual(this Event actual, Event expected)
         {
             Assert.That(actual.AggregateId, Is.EqualTo(expected.AggregateId));
-            Assert.That(actual.ProcessId, Is.EqualTo(expected.ProcessId));
             return true;
         }
 
@@ -217,7 +216,6 @@ namespace Tests
             return true;
         }
 
-
     }
 
     public class ValueEqualityComparer : IEqualityComparer<OpenedLibrary>,
@@ -242,5 +240,36 @@ namespace Tests
         {
             throw new NotImplementedException();
         }
+
+        public bool Equals(LibraryOpened x, LibraryOpened y)
+        {
+            return y.ShouldEqual(x);
+        }
+
+        public int GetHashCode(LibraryOpened obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(LinkRequested x, LinkRequested y)
+        {
+            return y.ShouldEqual(x);
+        }
+
+        public int GetHashCode(LinkRequested obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(LinkRequestReceived x, LinkRequestReceived y)
+        {
+            return y.ShouldEqual(x);
+        }
+
+        public int GetHashCode(LinkRequestReceived obj)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

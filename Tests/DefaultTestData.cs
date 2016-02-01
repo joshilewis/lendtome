@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Cqrs.Exceptions;
@@ -85,7 +87,6 @@ namespace Tests
 
         public static LinkCompleted LinkCompleted = new LinkCompleted(processId, Library1Id, Library2Id);
         public static LinkAccepted LinkAccepted = new LinkAccepted(processId, Library2Id, Library1Id);
-        public static Exception FailBecauseLinkAlreadyRequested = new InvalidOperationException(Library.LinkAlreadyRequested);
 
         public static Exception FailBecauseTargetLibraryDoesNotExist =
             new AggregateNotFoundException(Library2Id, typeof(Library));

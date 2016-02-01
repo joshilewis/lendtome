@@ -16,13 +16,13 @@ namespace Lending.Execution
                 "/authentication",
             };
 
-            app.RequiresStatelessAuth(new SecureTokenValidator(ConfigurationManager.AppSettings["jwt_secret"]), new StatelessAuthOptions
-            {
-                IgnorePaths = pathsToIgnore,
-                PassThroughUnauthorizedRequests = true
-            });
             app.Map("/api", site =>
             {
+                site.RequiresStatelessAuth(new SecureTokenValidator(ConfigurationManager.AppSettings["jwt_secret"]), new StatelessAuthOptions
+                {
+                    IgnorePaths = pathsToIgnore,
+                    PassThroughUnauthorizedRequests = true
+                });
                 site.UseNancy();
                 site.UseStageMarker(PipelineStage.MapHandler);
             });
