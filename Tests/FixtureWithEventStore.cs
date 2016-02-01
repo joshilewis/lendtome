@@ -40,23 +40,15 @@ namespace Tests
     {
         protected InMemoryEventConsumer EventConsumer;
         protected DummyEventHandlerProvider EventHandlerProvider;
-        protected IContainer Container;
         protected EventDispatcher EventDispatcher;
-        protected HttpClient Client;
-
-        private TestServer server;
-        protected Tokeniser Tokeniser => Container.GetInstance<Tokeniser>();
 
         public override void SetUp()
         {
             base.SetUp();
 
-            Container = IoC.Initialize(new TestRegistry());
             Container.GetInstance<ClusterVNode>().Start();
             Container.GetInstance<IEventStoreConnection>().ConnectAsync().Wait();
 
-            server = TestServer.Create<Startup>();
-            Client = server.HttpClient;
         }
 
         public override void TearDown()
@@ -64,7 +56,6 @@ namespace Tests
             Container.GetInstance<IEventStoreConnection>().Close();
             Container.GetInstance<IEventStoreConnection>().Dispose();
             Container.GetInstance<ClusterVNode>().Stop();
-            server.Dispose();
             base.TearDown();
         }
 
@@ -116,16 +107,6 @@ namespace Tests
             HandleEvents(events);
         }
 
-        protected void Given(AuthenticatedCommand command, string url)
-        {
-            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Tokeniser.CreateToken("username", command.UserId));
-            var response = Client.PostAsJsonAsync($"https://localhost/api/{url}", command).Result;
-            Result result =
-                JsonDataContractDeserializer.Instance.DeserializeFromString<Result>(
-                    response.Content.ReadAsStringAsync().Result);
-
-        }
-
         private Result actualResult;
         private Exception actualException;
         protected void When(Message message)
@@ -140,27 +121,6 @@ namespace Tests
             }
         }
 
-        private HttpResponseMessage actualResponse;
-
-        protected void When(string url, AuthenticatedCommand command)
-        {
-            Client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue(Tokeniser.CreateToken("username", command.UserId));
-            actualResponse = Client.PostAsJsonAsync($"https://localhost/api/{url}", command).Result;
-        }
-
-        private PostBuilder whenPostBuilder;
-        protected PostBuilder WhenCommand(AuthenticatedCommand command)
-        {
-            whenPostBuilder = new PostBuilder(command, Client, Tokeniser);
-            return whenPostBuilder;
-        }
-
-        protected void Then(HttpResponseMessage expectedResponseMessage)
-        {
-            whenPostBuilder.Response.ShouldEqual(expectedResponseMessage);
-        }
-
         protected void Then(Result expectedResult)
         {
             actualResult.ShouldEqual(expectedResult);
@@ -172,33 +132,9 @@ namespace Tests
             Then(expectedResult);
         }
 
-        protected void Then(Exception expectedException)
-        {
-            actualException.ShouldEqual(expectedException);
-        }
-
-        protected Exception FailBecauseUnauthorized(Guid userId, Guid aggregateId, Type aggregateType)
-        {
-            return new NotAuthorizedException(userId, aggregateId, aggregateType);
-        }
-
-        protected HttpResponseMessage Http403BecauseUnauthorized(Guid userId, Guid aggregateId, Type aggregateType)
-        {
-            return new HttpResponseMessage(HttpStatusCode.Forbidden)
-            {
-                ReasonPhrase = $"User {userId} is not authorized for {aggregateType} {aggregateId}"
-            };
-        }
-
         protected void Then(Predicate<Result> resultEqualityPredicate)
         {
             resultEqualityPredicate(actualResult);
-        }
-
-        protected void Then<TResult>(Predicate<Result> resultEqualityPredicate) where TResult : Result
-        {
-            actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(responseString);
-            Then(resultEqualityPredicate);
         }
 
         protected void AndEventsSavedForAggregate<TAggregate>(Guid aggregateId, params Event[] expectedEvents) where TAggregate : Aggregate
