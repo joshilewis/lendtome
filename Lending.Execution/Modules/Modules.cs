@@ -2,6 +2,7 @@
 using Lending.Cqrs.Query;
 using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
+using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestLink;
 using Lending.Execution.UnitOfWork;
 using Lending.ReadModels.Relational.SearchForLibrary;
@@ -39,6 +40,15 @@ namespace Lending.Execution.Modules
     {
         public AddBookModule(IUnitOfWork unitOfWork, IMessageHandler<AddBookToLibrary, Result> messageHandler)
             : base(unitOfWork, messageHandler, "/books/add")
+        {
+        }
+
+    }
+
+    public class RemoveBookModule : PostModule<RemoveBookFromLibrary, Result>
+    {
+        public RemoveBookModule(IUnitOfWork unitOfWork, IMessageHandler<RemoveBookFromLibrary, Result> messageHandler)
+            : base(unitOfWork, messageHandler, "/books/remove")
         {
         }
 

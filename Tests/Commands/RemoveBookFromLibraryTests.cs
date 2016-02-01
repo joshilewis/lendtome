@@ -23,9 +23,10 @@ namespace Tests.Commands
         [Test]
         public void RemoveBookInLibraryShouldSucceed()
         {
-            Given(Library1Opens, AddBook1ToLibrary);
-            When(User1RemovesBookFromLibrary);
-            Then(Succeed);
+            Given(Library1Opens);
+            Given(AddBook1ToLibrary, "books/add");
+            WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo("books/remove");
+            Then(Http200Ok);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary);
         }
 
@@ -38,17 +39,18 @@ namespace Tests.Commands
         public void RemoveBookNotInLibraryShouldFail()
         {
             Given(Library1Opens);
-            When(User1RemovesBookFromLibrary);
-            Then(FailBecauseBookNotInLibrary);
+            WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo("books/remove");
+            Then(Http400BecauseBookNotInLibrary);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
         [Test]
         public void UnauthorizedRemoveBookInLibraryShouldFail()
         {
-            Given(Library1Opens, AddBook1ToLibrary);
-            When(UnauthorizedRemoveBook);
-            Then(FailBecauseUnauthorized(UnauthorizedRemoveBook.UserId, UnauthorizedRemoveBook.AggregateId,
+            Given(Library1Opens);
+            Given(AddBook1ToLibrary, "books/add");
+            WhenCommand(UnauthorizedRemoveBook).IsPOSTedTo("books/remove");
+            Then(Http403BecauseUnauthorized(UnauthorizedRemoveBook.UserId, UnauthorizedRemoveBook.AggregateId,
                 typeof (Library)));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }

@@ -33,6 +33,9 @@ namespace Tests
         public static Guid Library5Id = Guid.NewGuid();
         public static Guid Library6Id = Guid.NewGuid();
 
+        public static HttpResponseMessage Http201Created = new HttpResponseMessage(HttpStatusCode.Created);
+        public static HttpResponseMessage Http200Ok = new HttpResponseMessage(HttpStatusCode.OK);
+
         public static OpenLibrary Library1Opens = new OpenLibrary(processId, Library1Id, Library1Id, "library1", Library1Id);
 
         public static LibraryOpened Library1Opened = new LibraryOpened(processId, Library1Id, Library1Opens.Name,
@@ -61,11 +64,28 @@ namespace Tests
             Title, Author, Isbnnumber);
 
         public static Result Succeed = new Result(Result.EResultCode.Ok);
-        public static Result Created = new Result(Result.EResultCode.Created);
-        public static Exception FailBecauseBookAlreadyInLibrary1 = new InvalidOperationException(Library.BookAlreadyInLibrary);
-        public static Exception FailBecauseBookNotInLibrary = new InvalidOperationException(Library.BookNotInLibrary);
-        public static Exception FailBecauseNoPendingLinkRequest = new InvalidOperationException(Library.NoPendingLinkRequest);
-        public static Exception FailBecauseLibrariesAlreadyLinked = new InvalidOperationException(Library.LibrariesAlreadyLinked);
+
+        public static HttpResponseMessage Http400BecauseBookAlreadyInLibrary1 =
+            new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = Library.BookAlreadyInLibrary,
+            };
+
+        public static HttpResponseMessage Http400BecauseBookNotInLibrary =
+            new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = Library.BookNotInLibrary
+            };
+            
+        public static HttpResponseMessage Http400BecauseNoPendingLinkRequest =
+            new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = Library.NoPendingLinkRequest
+            };
+        public static HttpResponseMessage Http400BecauseLibrariesAlreadyLinked = new HttpResponseMessage(HttpStatusCode.BadRequest)
+        {
+            ReasonPhrase = Library.LibrariesAlreadyLinked,
+        };
         public static OpenLibrary Library2Opens = new OpenLibrary(processId, Library2Id, Library2Id, "user2", Library2Id);
 
         public static RequestLink Library1RequestsLinkToLibrary2 = new RequestLink(processId, Library1Id,
@@ -87,14 +107,27 @@ namespace Tests
 
         public static LinkCompleted LinkCompleted = new LinkCompleted(processId, Library1Id, Library2Id);
         public static LinkAccepted LinkAccepted = new LinkAccepted(processId, Library2Id, Library1Id);
+        public static HttpResponseMessage Http400BecauseLinkAlreadyRequested = new HttpResponseMessage(HttpStatusCode.BadRequest)
+        {
+            ReasonPhrase = Library.LinkAlreadyRequested,
+        };
 
-        public static Exception FailBecauseTargetLibraryDoesNotExist =
-            new AggregateNotFoundException(Library2Id, typeof(Library));
+        public static HttpResponseMessage Http404BecauseTargetLibraryDoesNotExist =
+            new HttpResponseMessage(HttpStatusCode.NotFound)
+            {
+                ReasonPhrase = $"Aggregate '{Library2Id}' (type {typeof (Library).Name}) was not found.",
+            };
 
-        public static Exception FailBecauseReverseLinkAlreadyRequested =
-            new InvalidOperationException(Library.ReverseLinkAlreadyRequested);
+        public static HttpResponseMessage Http400BecauseReverseLinkAlreadyRequested =
+            new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = Library.ReverseLinkAlreadyRequested
+            };
         
-        public static Exception FailBecauseCantLinkToSelf = new InvalidOperationException(RequestLinkHandler.CantConnectToSelf);
+        public static HttpResponseMessage Http400BecauseCantLinkToSelf = new HttpResponseMessage(HttpStatusCode.BadRequest)
+        {
+            ReasonPhrase = RequestLinkHandler.CantConnectToSelf
+        };
 
         public static RequestLink Library2RequestsLinkToLibrary1 = new RequestLink(processId, Library2Id,
             Library2Id, Library1Id);

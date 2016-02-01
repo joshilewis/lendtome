@@ -17,5 +17,9 @@ namespace Lending.Domain.RemoveBookFromLibrary
             Author = author;
             Isbn = isbn;
         }
+
+        public RemoveBookFromLibrary()
+        {
+        }
     }
 }

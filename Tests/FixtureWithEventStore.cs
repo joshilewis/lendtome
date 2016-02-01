@@ -45,7 +45,6 @@ namespace Tests
         protected HttpClient Client;
 
         private TestServer server;
-
         protected Tokeniser Tokeniser => Container.GetInstance<Tokeniser>();
 
         public override void SetUp()
@@ -117,14 +116,13 @@ namespace Tests
             HandleEvents(events);
         }
 
-        protected void Given(string url, AuthenticatedCommand command)
+        protected void Given(AuthenticatedCommand command, string url)
         {
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Tokeniser.CreateToken("username", command.UserId));
             var response = Client.PostAsJsonAsync($"https://localhost/api/{url}", command).Result;
             Result result =
                 JsonDataContractDeserializer.Instance.DeserializeFromString<Result>(
                     response.Content.ReadAsStringAsync().Result);
-            CommitTransactionAndOpenNew();
 
         }
 
@@ -143,25 +141,24 @@ namespace Tests
         }
 
         private HttpResponseMessage actualResponse;
+
         protected void When(string url, AuthenticatedCommand command)
         {
-            try
-            {
-
-                Client.DefaultRequestHeaders.Authorization= new AuthenticationHeaderValue(Tokeniser.CreateToken("username", command.UserId));
-                actualResponse = Client.PostAsJsonAsync($"https://localhost/api/{url}", command).Result;
-            }
-            catch (Exception exception)
-            {
-                actualException = exception;
-            }
-
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue(Tokeniser.CreateToken("username", command.UserId));
+            actualResponse = Client.PostAsJsonAsync($"https://localhost/api/{url}", command).Result;
         }
 
-        protected void Then(HttpStatusCode statusCode, string reason)
+        private PostBuilder whenPostBuilder;
+        protected PostBuilder WhenCommand(AuthenticatedCommand command)
         {
-            Assert.That(statusCode, Is.EqualTo(actualResponse.StatusCode));
-            Assert.That(reason, Is.EqualTo(actualResponse.ReasonPhrase));
+            whenPostBuilder = new PostBuilder(command, Client, Tokeniser);
+            return whenPostBuilder;
+        }
+
+        protected void Then(HttpResponseMessage expectedResponseMessage)
+        {
+            whenPostBuilder.Response.ShouldEqual(expectedResponseMessage);
         }
 
         protected void Then(Result expectedResult)
@@ -183,6 +180,14 @@ namespace Tests
         protected Exception FailBecauseUnauthorized(Guid userId, Guid aggregateId, Type aggregateType)
         {
             return new NotAuthorizedException(userId, aggregateId, aggregateType);
+        }
+
+        protected HttpResponseMessage Http403BecauseUnauthorized(Guid userId, Guid aggregateId, Type aggregateType)
+        {
+            return new HttpResponseMessage(HttpStatusCode.Forbidden)
+            {
+                ReasonPhrase = $"User {userId} is not authorized for {aggregateType} {aggregateId}"
+            };
         }
 
         protected void Then(Predicate<Result> resultEqualityPredicate)
@@ -226,6 +231,27 @@ namespace Tests
             return response.Content.ReadAsStringAsync().Result;
         }
 
+    }
+
+    public class PostBuilder
+    {
+        public AuthenticatedCommand Command { get; }
+        public HttpResponseMessage Response { get; private set; }
+        private readonly HttpClient client;
+        private readonly Tokeniser tokeniser;
+
+        public PostBuilder(AuthenticatedCommand command, HttpClient client, Tokeniser tokeniser)
+        {
+            Command = command;
+            this.client = client;
+            this.tokeniser = tokeniser;
+        }
+
+        public void IsPOSTedTo(string url)
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokeniser.CreateToken("username", Command.UserId));
+            Response = client.PostAsJsonAsync($"https://localhost/api/{url}", Command).Result;
+        }
     }
 
     public class TestUnitOfWork : UnitOfWork
