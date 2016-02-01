@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Embedded;
 using EventStore.Core;
+using JWT;
 using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Exceptions;
@@ -17,17 +19,20 @@ using Lending.Cqrs.Query;
 using Lending.Domain;
 using Lending.Domain.OpenLibrary;
 using Lending.Execution;
+using Lending.Execution.Auth;
 using Lending.Execution.DI;
 using Lending.Execution.EventStore;
 using Lending.Execution.UnitOfWork;
 using Lending.ReadModels.Relational.SearchForLibrary;
 using Microsoft.Owin.Testing;
+using Nancy;
 using NHibernate;
 using NUnit.Framework;
 using ServiceStack.ServiceModel.Serialization;
 using StructureMap;
 using StructureMap.Graph;
 using StructureMap.Web;
+using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace Tests
 {
@@ -41,10 +46,7 @@ namespace Tests
 
         private TestServer server;
 
-        protected virtual Action<ConfigurationExpression> ConfigurationExpressionAction
-        {
-            get { return x => { }; }
-        }
+        protected Tokeniser Tokeniser => Container.GetInstance<Tokeniser>();
 
         public override void SetUp()
         {
@@ -56,7 +58,6 @@ namespace Tests
 
             server = TestServer.Create<Startup>();
             Client = server.HttpClient;
-            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJFeHBpcmVzIjoiXC9EYXRlKDE0NTQ2ODgxMTUyNjMpXC8iLCJDbGFpbXMiOlt7Iklzc3VlciI6IkxPQ0FMIEFVVEhPUklUWSIsIk9yaWdpbmFsSXNzdWVyIjoiTE9DQUwgQVVUSE9SSVRZIiwiUHJvcGVydGllcyI6e30sIlN1YmplY3QiOm51bGwsIlR5cGUiOiJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIiwiVmFsdWUiOiJKb3NodWEgTGV3aXMiLCJWYWx1ZVR5cGUiOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYSNzdHJpbmcifSx7Iklzc3VlciI6IkxPQ0FMIEFVVEhPUklUWSIsIk9yaWdpbmFsSXNzdWVyIjoiTE9DQUwgQVVUSE9SSVRZIiwiUHJvcGVydGllcyI6e30sIlN1YmplY3QiOm51bGwsIlR5cGUiOiJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciIsIlZhbHVlIjoiMGMzMTFmOGUtOWIwYS00YTIyLWFlNmUtMGM1N2YwNzczNThjIiwiVmFsdWVUeXBlIjoiaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEjc3RyaW5nIn1dfQ.GPW_aZii5oJflCa-AQKneXZHMFyuFy4F5e6Fi-1U4aU");
         }
 
         public override void TearDown()
@@ -116,9 +117,10 @@ namespace Tests
             HandleEvents(events);
         }
 
-        protected void Given(string url, Message message)
+        protected void Given(string url, AuthenticatedCommand command)
         {
-            var response = Client.PostAsJsonAsync($"https://localhost/api/{url}", message).Result;
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Tokeniser.CreateToken("username", command.UserId));
+            var response = Client.PostAsJsonAsync($"https://localhost/api/{url}", command).Result;
             Result result =
                 JsonDataContractDeserializer.Instance.DeserializeFromString<Result>(
                     response.Content.ReadAsStringAsync().Result);
@@ -138,6 +140,28 @@ namespace Tests
             {
                 actualException = exception;
             }
+        }
+
+        private HttpResponseMessage actualResponse;
+        protected void When(string url, AuthenticatedCommand command)
+        {
+            try
+            {
+
+                Client.DefaultRequestHeaders.Authorization= new AuthenticationHeaderValue(Tokeniser.CreateToken("username", command.UserId));
+                actualResponse = Client.PostAsJsonAsync($"https://localhost/api/{url}", command).Result;
+            }
+            catch (Exception exception)
+            {
+                actualException = exception;
+            }
+
+        }
+
+        protected void Then(HttpStatusCode statusCode, string reason)
+        {
+            Assert.That(statusCode, Is.EqualTo(actualResponse.StatusCode));
+            Assert.That(reason, Is.EqualTo(actualResponse.ReasonPhrase));
         }
 
         protected void Then(Result expectedResult)
@@ -175,6 +199,10 @@ namespace Tests
         protected void AndEventsSavedForAggregate<TAggregate>(Guid aggregateId, params Event[] expectedEvents) where TAggregate : Aggregate
         {
             IEnumerable<Event> actualEvents = EventRepository.GetEventsForAggregate<TAggregate>(aggregateId);
+            foreach (Event @event in actualEvents)
+            {
+                @event.ProcessId = Guid.Empty;
+            }
             Assert.That(actualEvents, Is.EquivalentTo(expectedEvents));
         }
 

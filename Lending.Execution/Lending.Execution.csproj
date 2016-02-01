@@ -157,6 +157,7 @@
     <Compile Include="Auth\CustomUserIdentity.cs" />
     <Compile Include="Auth\IUserMapper.cs" />
     <Compile Include="Auth\SecureTokenValidator.cs" />
+    <Compile Include="Auth\Tokeniser.cs" />
     <Compile Include="Auth\UserMapper.cs" />
     <Compile Include="DI\DomainRegistry.cs" />
     <Compile Include="DI\IoC.cs" />

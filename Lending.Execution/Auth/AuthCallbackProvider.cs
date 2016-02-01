@@ -10,15 +10,15 @@ namespace Lending.Execution.Auth
 {
     public class AuthCallbackProvider : IAuthenticationCallbackProvider
     {
-        private readonly string secretKey;
+        private readonly Tokeniser tokeniser;
         private readonly IUserMapper userMapper;
         private readonly IUnitOfWork unitOfWork;
 
-        public AuthCallbackProvider(IUserMapper userMapper, IUnitOfWork unitOfWork, string secretKey)
+        public AuthCallbackProvider(IUserMapper userMapper, IUnitOfWork unitOfWork, Tokeniser tokeniser)
         {
             this.userMapper = userMapper;
             this.unitOfWork = unitOfWork;
-            this.secretKey = secretKey;
+            this.tokeniser = tokeniser;
         }
 
         public dynamic Process(NancyModule nancyModule, AuthenticateCallbackData model)
@@ -28,17 +28,7 @@ namespace Lending.Execution.Auth
              user = userMapper.MapUser(model.AuthenticatedClient)
             );
 
-            var payload = new Dictionary<string, object>
-            {
-                {"Expires", DateTime.UtcNow.AddDays(7)},
-                {"Claims",  new []
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-                }}
-            };
-
-            var token = JsonWebToken.Encode(payload, secretKey, JwtHashAlgorithm.HS256);
+            string token = tokeniser.CreateToken(user.UserName, user.Id);
 
             return new {Token = token};
         }

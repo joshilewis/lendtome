@@ -113,11 +113,16 @@ namespace Lending.Execution.DI
                 .Use<EventHandlerProvider>();
 
             string jwtSecret = ConfigurationManager.AppSettings["jwt_secret"];
-            For<IAuthenticationCallbackProvider>()
+
+            For<Tokeniser>()
                 .AlwaysUnique()
-                .Use<AuthCallbackProvider>()
+                .Use<Tokeniser>()
                 .Ctor<string>()
                 .Is(jwtSecret);
+
+            For<IAuthenticationCallbackProvider>()
+                .AlwaysUnique()
+                .Use<AuthCallbackProvider>();
 
             For<IUserMapper>()
                 .AlwaysUnique()
