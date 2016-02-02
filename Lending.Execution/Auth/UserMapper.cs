@@ -13,12 +13,10 @@ namespace Lending.Execution.Auth
     public class UserMapper : IUserMapper
     {
         private readonly Func<ISession> getSession;
-        private readonly IMessageHandler<OpenLibrary, Result> commandHandler;
 
-        public UserMapper(Func<ISession> sessionFunc, IMessageHandler<OpenLibrary, Result> commandHandler)
+        public UserMapper(Func<ISession> sessionFunc)
         {
             this.getSession = sessionFunc;
-            this.commandHandler = commandHandler;
         }
 
         public AuthenticatedUser MapUser(IAuthenticatedClient client)

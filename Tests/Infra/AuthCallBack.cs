@@ -32,7 +32,7 @@ namespace Tests.Infra
             };
             SaveEntities(authenticatedUser);
 
-            var sut = new UserMapper(() => Session, new OpenLibraryHandler(() => Repository, () => EventRepository));
+            var sut = new UserMapper(() => Session);
             AuthenticatedUser actual = sut.MapUser(authenticatedClient);
 
             actual.ShouldEqual(authenticatedUser);
@@ -60,7 +60,7 @@ namespace Tests.Infra
                 }
             };
 
-            var sut = new UserMapper(() => Session, new OpenLibraryHandler(() => Repository, () => EventRepository));
+            var sut = new UserMapper(() => Session);
             AuthenticatedUser actual = sut.MapUser(authenticatedClient);
 
             actual.ShouldEqual(authenticatedUser);

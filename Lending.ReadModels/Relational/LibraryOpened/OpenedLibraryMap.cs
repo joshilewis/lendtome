@@ -10,6 +10,7 @@ namespace Lending.ReadModels.Relational.LibraryOpened
             Id(x => x.Id)
                 .GeneratedBy.Assigned();
             Map(x => x.Name);
+            Map(x => x.AdministratorId);
         }
     }
 }

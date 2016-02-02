@@ -3,6 +3,7 @@ using System.Linq;
 using Lending.Cqrs;
 using Lending.Cqrs.Query;
 using Lending.Domain.OpenLibrary;
+using Lending.ReadModels.Relational.LibraryOpened;
 using NHibernate;
 
 namespace Lending.ReadModels.Relational.SearchForLibrary

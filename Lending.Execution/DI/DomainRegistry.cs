@@ -9,6 +9,7 @@ using Lending.Cqrs;
 using Lending.Cqrs.Command;
 using Lending.Cqrs.Query;
 using Lending.Domain.AddBookToLibrary;
+using Lending.Domain.OpenLibrary;
 using Lending.Execution.Auth;
 using Lending.Execution.Persistence;
 using Lending.Execution.UnitOfWork;
@@ -128,6 +129,9 @@ namespace Lending.Execution.DI
                 .AlwaysUnique()
                 .Use<UserMapper>();
 
+            For<ICheckIfUserHasOpenedLibrary>()
+                .AlwaysUnique()
+                .Use<UserHasOpenedLibraryQuery>();
         }
 
         private static IEnumerable<IEventHandler> GetEventHandlers(IContext context, Type eventType)

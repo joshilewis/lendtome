@@ -15,6 +15,7 @@ using Lending.Domain.OpenLibrary;
 using Lending.Domain.RequestLink;
 using Lending.Execution.Auth;
 using Lending.ReadModels.Relational.BookAdded;
+using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.LinkAccepted;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;

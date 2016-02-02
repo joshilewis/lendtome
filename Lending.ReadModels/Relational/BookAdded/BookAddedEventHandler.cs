@@ -1,6 +1,7 @@
 ﻿using System;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.OpenLibrary;
+using Lending.ReadModels.Relational.LibraryOpened;
 using NHibernate;
 
 namespace Lending.ReadModels.Relational.BookAdded

@@ -19,12 +19,6 @@ namespace Tests
 {
     public class DefaultTestData
     {
-        public static OpenedLibrary RegisteredUser1 => new OpenedLibrary(Guid.Empty, "Joshua Lewis");
-
-        public static OpenedLibrary RegisteredUser2 => new OpenedLibrary(Guid.Empty, "User2");
-
-        public static OpenedLibrary RegisteredUser3 => new OpenedLibrary(Guid.Empty, "User3");
-
         public static Guid processId = Guid.Empty;
         public static Guid Library1Id = Guid.NewGuid();
         public static Guid Library2Id = Guid.NewGuid();

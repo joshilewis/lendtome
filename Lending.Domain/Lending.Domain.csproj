@@ -49,7 +49,7 @@
     <Compile Include="AddBookToLibrary\AddBookToLibraryHandler.cs" />
     <Compile Include="AddBookToLibrary\BookAddedToLibrary.cs" />
     <Compile Include="Model\Book.cs" />
-    <Compile Include="OpenLibrary\OpenedLibrary.cs" />
+    <Compile Include="OpenLibrary\ICheckIfUserHasOpenedLibrary.cs" />
     <Compile Include="OpenLibrary\OpenLibrary.cs" />
     <Compile Include="OpenLibrary\OpenLibraryHandler.cs" />
     <Compile Include="RemoveBookFromLibrary\BookRemovedFromLibrary.cs" />
