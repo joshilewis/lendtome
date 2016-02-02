@@ -38,7 +38,6 @@ namespace Lending.Execution.Auth
                     new AuthenticationProvider(SequentialGuid.NewGuid(), client.ProviderName, client.UserInformation.Id),
                 });
 
-            Result result = commandHandler.Handle(new OpenLibrary(Guid.NewGuid(), user.Id, SequentialGuid.NewGuid(), user.UserName, user.Id));
             session.Save(user);
             return user;
 

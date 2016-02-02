@@ -24,6 +24,11 @@ namespace Lending.Cqrs.Command
             return new Result(Result.EResultCode.Ok);
         }
 
+        protected virtual Result Created()
+        {
+            return new Result(Result.EResultCode.Created);
+        }
+
         protected virtual Result Fail(string reason)
         {
             throw new InvalidOperationException(reason);

@@ -44,7 +44,7 @@ namespace Tests.Infra
         }
 
         [Test]
-        public void NewUserAuthenticatingShouldCreateNewUserAndNewLibrary()
+        public void NewUserAuthenticatingShouldCreateNewUser()
         {
             var authenticatedUser = new AuthenticatedUser(Guid.NewGuid(), "user1", "Email1", new List<AuthenticationProvider>()
             {

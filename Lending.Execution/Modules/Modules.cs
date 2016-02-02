@@ -2,6 +2,7 @@
 using Lending.Cqrs.Query;
 using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
+using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestLink;
 using Lending.Execution.UnitOfWork;
@@ -53,12 +54,22 @@ namespace Lending.Execution.Modules
         }
 
     }
-
-    public class HomeModule : NancyModule
+    public class OpenLibraryModule : PutModule<OpenLibrary, Result>
     {
-        public HomeModule()
+        public OpenLibraryModule(IUnitOfWork unitOfWork, IMessageHandler<OpenLibrary, Result> messageHandler)
+            : base(unitOfWork, messageHandler, "/libraries/")
         {
-            Get[""] = _ => "Hello World!";
+        }
+
+    }
+
+    public class ListLibrariesModule : GetModule<SearchForLibrary, Result>
+    {
+        public ListLibrariesModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForLibrary, Result> messageHandler)
+            : base(unitOfWork, messageHandler, "/libraries/")
+        {
         }
     }
+
+
 }

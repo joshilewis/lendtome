@@ -15,5 +15,8 @@ namespace Lending.Domain.OpenLibrary
             AdministratorId = administratorId;
         }
 
+        public OpenLibrary()
+        {
+        }
     }
 }

@@ -23,10 +23,11 @@ namespace Tests.Commands
         [Test]
         public void RequestLinkFromLibraryWithPendingRequestShouldFail()
         {
-            Given(Library1Opens, Library2Opens);
+            GivenCommand(OpenLibrary1).IsPUTedTo($"/libraries");
+            GivenCommand(OpenLibrary2).IsPUTedTo($"/libraries");
             GivenCommand(Library1RequestsLinkToLibrary2).IsPUTedTo($"/libraries/{Library1Id}/links/request");
             WhenCommand(Library1Requests2NdLinkToLibrary2).IsPUTedTo($"/libraries/{Library1Id}/links/request");
-            Then(Http400BecauseLinkAlreadyRequested);
+            Then(Http400Because(Library.LinkAlreadyRequested));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
         }
@@ -39,7 +40,8 @@ namespace Tests.Commands
         [Test]
         public void RequestLinkForUnLinkedLibrarysShouldSucceed()
         {
-            Given(Library1Opens, Library2Opens);
+            GivenCommand(OpenLibrary1).IsPUTedTo($"/libraries");
+            GivenCommand(OpenLibrary2).IsPUTedTo($"/libraries");
             WhenCommand(Library1RequestsLinkToLibrary2).IsPUTedTo($"/libraries/{Library1Id}/links/request");
             Then(Http200Ok);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
@@ -54,7 +56,7 @@ namespace Tests.Commands
         [Test]
         public void RequestLinkToNonExistentLibraryShouldFail()
         {
-            Given(Library1Opens);
+            GivenCommand(OpenLibrary1).IsPUTedTo($"/libraries");
             WhenCommand(Library1RequestsLinkToLibrary2).IsPUTedTo($"/libraries/{Library1Id}/links/request");
             Then(Http404BecauseTargetLibraryDoesNotExist);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
@@ -68,10 +70,11 @@ namespace Tests.Commands
         [Test]
         public void RequestLinkToLibraryWithPendingRequestShouldFail()
         {
-            Given(Library1Opens, Library2Opens);
+            GivenCommand(OpenLibrary1).IsPUTedTo($"/libraries");
+            GivenCommand(OpenLibrary2).IsPUTedTo($"/libraries");
             GivenCommand(Library2RequestsLinkToLibrary1).IsPUTedTo($"/libraries/{Library2Id}/links/request");
             WhenCommand(Library1RequestsLinkToLibrary2).IsPUTedTo($"/libraries/{Library1Id}/links/request");
-            Then(Http400BecauseReverseLinkAlreadyRequested);
+            Then(Http400Because(Library.ReverseLinkAlreadyRequested));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestFrom2To1Received);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestedFrom2To1);
         }
@@ -84,11 +87,12 @@ namespace Tests.Commands
         [Test]
         public void RequestLinkToLinkedLibrariesShouldFail()
         {
-            Given(Library1Opens, Library2Opens);
+            GivenCommand(OpenLibrary1).IsPUTedTo($"/libraries");
+            GivenCommand(OpenLibrary2).IsPUTedTo($"/libraries");
             GivenCommand(Library1RequestsLinkToLibrary2).IsPUTedTo($"/libraries/{Library1Id}/links/request");
             GivenCommand(Library2AcceptsLinkFromLibrary1).IsPUTedTo($"/libraries/{Library2Id}/links/accept");
             WhenCommand(Library1Requests2NdLinkToLibrary2).IsPUTedTo($"/libraries/{Library1Id}/links/request");
-            Then(Http400BecauseLibrariesAlreadyLinked);
+            Then(Http400Because(Library.LibrariesAlreadyLinked));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, DefaultTestData.LinkCompleted);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, DefaultTestData.LinkAccepted);
 
@@ -102,16 +106,16 @@ namespace Tests.Commands
         [Test]
         public void RequestLinkToSelfShouldFail()
         {
-            Given(Library1Opens);
+            GivenCommand(OpenLibrary1).IsPUTedTo($"/libraries");
             WhenCommand(Library1RequestsLinkToSelf).IsPUTedTo($"/libraries/{Library1Id}/links/request");
-            Then(Http400BecauseCantLinkToSelf);
+            Then(Http400Because(RequestLinkHandler.CantConnectToSelf));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
         [Test]
         public void UnauthorizedRequestLinkShouldFail()
         {
-            Given(Library1Opens);
+            GivenCommand(OpenLibrary1).IsPUTedTo($"/libraries");
             WhenCommand(UnauthorizedRequestLink).IsPUTedTo($"/libraries/{Library1Id}/links/request");
             Then(Http403BecauseUnauthorized(UnauthorizedRequestLink.UserId, Library1Id, typeof (Library)));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);

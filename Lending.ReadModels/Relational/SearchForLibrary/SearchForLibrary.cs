@@ -13,6 +13,7 @@ namespace Lending.ReadModels.Relational.SearchForLibrary
 
         public SearchForLibrary()
         {
+            SearchString = string.Empty;
         }
     }
 }

@@ -218,8 +218,8 @@ namespace Tests
 
         public static bool ShouldEqual(this HttpResponseMessage actual, HttpResponseMessage expected)
         {
-            Assert.That(expected.StatusCode, Is.EqualTo(actual.StatusCode));
-            Assert.That(expected.ReasonPhrase, Is.EqualTo(actual.ReasonPhrase));
+            Assert.That(actual.StatusCode, Is.EqualTo(expected.StatusCode));
+            Assert.That(actual.ReasonPhrase, Is.EqualTo(expected.ReasonPhrase));
 
             return true;
         }

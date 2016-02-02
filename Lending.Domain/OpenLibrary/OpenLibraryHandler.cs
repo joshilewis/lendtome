@@ -8,6 +8,8 @@ namespace Lending.Domain.OpenLibrary
 {
     public class OpenLibraryHandler : CommandHandler<OpenLibrary, Result>, IAuthenticatedCommandHandler<OpenLibrary, Result>
     {
+        public const string UserAlreadyOpenedLibrary = "User has already opened a library";
+
 
         public OpenLibraryHandler(Func<IRepository> repositoryFunc, Func<IEventRepository> eventRepositoryFunc)
             : base(repositoryFunc, eventRepositoryFunc)
@@ -19,7 +21,7 @@ namespace Lending.Domain.OpenLibrary
             Library library = Library.Open(command.ProcessId, command.AggregateId, command.Name, command.AdministratorId);
             EventRepository.Save(library);
 
-            return Success();
+            return Created();
         }
     }
 }

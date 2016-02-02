@@ -103,5 +103,19 @@ namespace Tests
             TResult actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(GetResponseString);
             actualResult.ShouldEqual(expectedResult);
         }
+
+        protected GetCallBuilder<TResult> AndGETTo<TResult>(string url) where TResult : Result
+        {
+            return new GetCallBuilder<TResult>(url, Client, Tokeniser);
+        }
+
+        protected HttpResponseMessage Http400Because(string reasonPhrase)
+        {
+
+            return new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = reasonPhrase
+            };
+        }
     }
 }
