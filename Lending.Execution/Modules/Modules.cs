@@ -21,7 +21,7 @@ namespace Lending.Execution.Modules
     public class RequestLinkModule: PutModule<RequestLink, Result>
     {
         public RequestLinkModule(IUnitOfWork unitOfWork, IMessageHandler<RequestLink, Result> messageHandler)
-            : base(unitOfWork, messageHandler, "/links/request/")
+            : base(unitOfWork, messageHandler, "/libraries/{AggregateId}/links/request/")
         {
         }
 
@@ -30,7 +30,7 @@ namespace Lending.Execution.Modules
     public class AcceptLinkModule : PutModule<AcceptLink, Result>
     {
         public AcceptLinkModule(IUnitOfWork unitOfWork, IMessageHandler<AcceptLink, Result> messageHandler)
-            : base(unitOfWork, messageHandler, "/links/accept/")
+            : base(unitOfWork, messageHandler, "/libraries/{AggregateId}/links/accept/")
         {
         }
 
@@ -39,7 +39,7 @@ namespace Lending.Execution.Modules
     public class AddBookModule : PutModule<AddBookToLibrary, Result>
     {
         public AddBookModule(IUnitOfWork unitOfWork, IMessageHandler<AddBookToLibrary, Result> messageHandler)
-            : base(unitOfWork, messageHandler, "/books/add")
+            : base(unitOfWork, messageHandler, "/libraries/{AggregateId}/books/add")
         {
         }
 
@@ -48,7 +48,7 @@ namespace Lending.Execution.Modules
     public class RemoveBookModule : PutModule<RemoveBookFromLibrary, Result>
     {
         public RemoveBookModule(IUnitOfWork unitOfWork, IMessageHandler<RemoveBookFromLibrary, Result> messageHandler)
-            : base(unitOfWork, messageHandler, "/books/remove")
+            : base(unitOfWork, messageHandler, "/libraries/{AggregateId}/books/remove")
         {
         }
 

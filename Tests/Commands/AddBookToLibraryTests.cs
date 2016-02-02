@@ -24,7 +24,7 @@ namespace Tests.Commands
         public void AddingNewBookToLibraryShouldSucceed()
         {
             Given(Library1Opens);
-            WhenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
+            WhenCommand(AddBook1ToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
             Then(Http201Created);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
@@ -38,8 +38,8 @@ namespace Tests.Commands
         public void AddingDuplicateBookToLibraryShouldFail()
         {
             Given(Library1Opens);
-            GivenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
-            WhenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
+            GivenCommand(AddBook1ToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
+            WhenCommand(AddBook1ToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
             Then(Http400BecauseBookAlreadyInLibrary1);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
@@ -53,9 +53,9 @@ namespace Tests.Commands
         public void AddingPreviouslyRemovedBookToLibraryShouldSucceed()
         {
             Given(Library1Opens);
-            GivenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
-            GivenCommand(User1RemovesBookFromLibrary).IsPUTedTo("books/remove");
-            WhenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
+            GivenCommand(AddBook1ToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
+            GivenCommand(User1RemovesBookFromLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/remove");
+            WhenCommand(AddBook1ToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
             Then(Http201Created);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary, Book1AddedToUser1Library);
         }
@@ -64,9 +64,8 @@ namespace Tests.Commands
         public void UnauthorizedAddBookAddBookShouldFail()
         {
             Given(Library1Opens);
-            WhenCommand(UnauthorizedAddBookToLibrary).IsPUTedTo("books/add");
-            Then(Http403BecauseUnauthorized(UnauthorizedAddBookToLibrary.UserId,
-                UnauthorizedAddBookToLibrary.AggregateId, typeof(Library)));
+            WhenCommand(UnauthorizedAddBookToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
+            Then(Http403BecauseUnauthorized(UnauthorizedAddBookToLibrary.UserId, Library1Id, typeof (Library)));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 

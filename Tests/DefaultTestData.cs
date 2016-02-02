@@ -45,19 +45,19 @@ namespace Tests
         public static string Author = "Author";
         public static string Isbnnumber = "isbn";
 
-        public static AddBookToLibrary AddBook1ToLibrary = new AddBookToLibrary(processId, Library1Id, Library1Id, Title,
+        public static AddBookToLibrary AddBook1ToLibrary = new AddBookToLibrary(processId, Guid.Empty, Library1Id, Title,
             Author, Isbnnumber);
 
-        public static AddBookToLibrary UnauthorizedAddBookToLibrary = new AddBookToLibrary(processId, Library1Id, Guid.Empty, Title,
+        public static AddBookToLibrary UnauthorizedAddBookToLibrary = new AddBookToLibrary(processId, Guid.Empty, Guid.Empty, Title,
             Author, Isbnnumber);
 
         public static BookAddedToLibrary Book1AddedToUser1Library = new BookAddedToLibrary(processId, Library1Id, Title,
             Author, Isbnnumber);
 
-        public static RemoveBookFromLibrary User1RemovesBookFromLibrary = new RemoveBookFromLibrary(processId, Library1Id,
+        public static RemoveBookFromLibrary User1RemovesBookFromLibrary = new RemoveBookFromLibrary(processId, Guid.Empty,
             Library1Id, Title, Author, Isbnnumber);
 
-        public static RemoveBookFromLibrary UnauthorizedRemoveBook = new RemoveBookFromLibrary(processId, Library1Id,
+        public static RemoveBookFromLibrary UnauthorizedRemoveBook = new RemoveBookFromLibrary(processId, Guid.Empty,
             Guid.Empty, Title, Author, Isbnnumber);
 
         public static BookRemovedFromLibrary Book1RemovedFromLibrary = new BookRemovedFromLibrary(processId, Library1Id,
@@ -88,7 +88,7 @@ namespace Tests
         };
         public static OpenLibrary Library2Opens = new OpenLibrary(processId, Library2Id, Library2Id, "user2", Library2Id);
 
-        public static RequestLink Library1RequestsLinkToLibrary2 = new RequestLink(processId, Library1Id,
+        public static RequestLink Library1RequestsLinkToLibrary2 = new RequestLink(processId, Guid.Empty, 
             Library1Id, Library2Id);
 
         public static LinkRequested LinkRequestedFrom1To2 = new LinkRequested(processId, Library1Id,
@@ -100,10 +100,10 @@ namespace Tests
         public static LinkRequestReceived LinkRequestFrom1To2Received =
             new LinkRequestReceived(processId, Library2Id, Library1Id);
 
-        public static AcceptLink Library2AcceptsLinkFromLibrary1 = new AcceptLink(processId, Library2Id, Library2Id,
+        public static AcceptLink Library2AcceptsLinkFromLibrary1 = new AcceptLink(processId, Guid.Empty, Library2Id,
             Library1Id);
 
-        public static AcceptLink UnauthorizedAcceptLink = new AcceptLink(processId, Library2Id, Guid.Empty, Library1Id);
+        public static AcceptLink UnauthorizedAcceptLink = new AcceptLink(processId, Guid.Empty, Guid.Empty, Library1Id);
 
         public static LinkCompleted LinkCompleted = new LinkCompleted(processId, Library1Id, Library2Id);
         public static LinkAccepted LinkAccepted = new LinkAccepted(processId, Library2Id, Library1Id);
@@ -129,10 +129,10 @@ namespace Tests
             ReasonPhrase = RequestLinkHandler.CantConnectToSelf
         };
 
-        public static RequestLink Library2RequestsLinkToLibrary1 = new RequestLink(processId, Library2Id,
+        public static RequestLink Library2RequestsLinkToLibrary1 = new RequestLink(processId, Guid.Empty,
             Library2Id, Library1Id);
 
-        public static RequestLink Library1Requests2NdLinkToLibrary2 = new RequestLink(processId, Library1Id,
+        public static RequestLink Library1Requests2NdLinkToLibrary2 = new RequestLink(processId, Guid.Empty,
             Library1Id, Library2Id);
 
         public static LinkRequested LinkRequestedFrom2To1 = new LinkRequested(processId, Library2Id,
@@ -141,10 +141,10 @@ namespace Tests
         public static LinkRequestReceived LinkRequestFrom2To1Received =
             new LinkRequestReceived(processId, Library1Id, Library2Id);
 
-        public static RequestLink Library1RequestsLinkToSelf = new RequestLink(processId, Library1Id,
+        public static RequestLink Library1RequestsLinkToSelf = new RequestLink(processId, Guid.Empty,
             Library1Id, Library1Id);
 
-        public static RequestLink UnauthorizedRequestLink = new RequestLink(processId, Library1Id,
+        public static RequestLink UnauthorizedRequestLink = new RequestLink(processId, Guid.Empty,
             Guid.Empty, Library2Id);
 
         public static OpenLibrary JoshuaLewisOpensLibrary = new OpenLibrary(processId, Library1Id, Library1Id,
