@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
@@ -13,13 +11,11 @@ using EventStore.ClientAPI.Embedded;
 using EventStore.Core;
 using JWT;
 using Lending.Cqrs;
-using Lending.Cqrs.Command;
 using Lending.Cqrs.Exceptions;
 using Lending.Cqrs.Query;
 using Lending.Domain;
 using Lending.Domain.OpenLibrary;
 using Lending.Execution;
-using Lending.Execution.Auth;
 using Lending.Execution.DI;
 using Lending.Execution.EventStore;
 using Lending.Execution.UnitOfWork;
@@ -167,27 +163,6 @@ namespace Tests
             return response.Content.ReadAsStringAsync().Result;
         }
 
-    }
-
-    public class PostBuilder
-    {
-        public AuthenticatedCommand Command { get; }
-        public HttpResponseMessage Response { get; private set; }
-        private readonly HttpClient client;
-        private readonly Tokeniser tokeniser;
-
-        public PostBuilder(AuthenticatedCommand command, HttpClient client, Tokeniser tokeniser)
-        {
-            Command = command;
-            this.client = client;
-            this.tokeniser = tokeniser;
-        }
-
-        public void IsPOSTedTo(string url)
-        {
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokeniser.CreateToken("username", Command.UserId));
-            Response = client.PostAsJsonAsync($"https://localhost/api/{url}", Command).Result;
-        }
     }
 
     public class TestUnitOfWork : UnitOfWork

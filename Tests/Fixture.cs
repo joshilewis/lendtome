@@ -47,16 +47,16 @@ namespace Tests
             if (!response.IsSuccessStatusCode) throw new AssertionException("Given HTTP request resulted in an error");
         }
 
-        private PostBuilder whenPostBuilder;
-        protected PostBuilder WhenCommand(AuthenticatedCommand command)
+        private CallBuilder whenCallBuilder;
+        protected CallBuilder WhenCommand(AuthenticatedCommand command)
         {
-            whenPostBuilder = new PostBuilder(command, Client, Tokeniser);
-            return whenPostBuilder;
+            whenCallBuilder = new CallBuilder(command, Client, Tokeniser);
+            return whenCallBuilder;
         }
 
         protected void Then(HttpResponseMessage expectedResponseMessage)
         {
-            whenPostBuilder.Response.ShouldEqual(expectedResponseMessage);
+            whenCallBuilder.Response.ShouldEqual(expectedResponseMessage);
         }
 
         protected HttpResponseMessage Http403BecauseUnauthorized(Guid userId, Guid aggregateId, Type aggregateType)

@@ -160,6 +160,7 @@
     <Compile Include="FixtureWithEventStoreAndNHibernate.cs" />
     <Compile Include="DefaultTestData.cs" />
     <Compile Include="Infra\AuthCallBack.cs" />
+    <Compile Include="CallBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\SearchForBookTests.cs" />
     <Compile Include="Queries\SearchForLibraryTests.cs" />
