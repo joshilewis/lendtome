@@ -7,11 +7,13 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Lending.Cqrs.Command;
+using Lending.Cqrs.Query;
 using Lending.Execution;
 using Lending.Execution.Auth;
 using Lending.Execution.DI;
 using Microsoft.Owin.Testing;
 using NUnit.Framework;
+using ServiceStack.ServiceModel.Serialization;
 using StructureMap;
 
 namespace Tests
@@ -67,6 +69,31 @@ namespace Tests
             };
         }
 
+        protected string GetResponseString;
+        protected Exception ActualException;
+        protected void WhenGetEndpoint(string uri)
+        {
+            try
+            {
+                GetResponseString = HitEndPoint(uri);
+            }
+            catch (Exception exception)
+            {
+                ActualException = exception;
+            }
+        }
 
+        protected string HitEndPoint(string uri)
+        {
+            string path = $"https://localhost/api/{uri}/";
+            var response = Client.GetAsync(path).Result;
+            return response.Content.ReadAsStringAsync().Result;
+        }
+
+        protected void Then<TResult>(Result expectedResult) where TResult : Result
+        {
+            TResult actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(GetResponseString);
+            actualResult.ShouldEqual(expectedResult);
+        }
     }
 }

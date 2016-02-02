@@ -104,7 +104,6 @@ namespace Tests
         }
 
         private Result actualResult;
-        private Exception actualException;
         protected void When(Message message)
         {
             try
@@ -113,19 +112,8 @@ namespace Tests
             }
             catch (Exception exception)
             {
-                actualException = exception;
+                ActualException = exception;
             }
-        }
-
-        protected void Then(Result expectedResult)
-        {
-            actualResult.ShouldEqual(expectedResult);
-        }
-
-        protected void Then<TResult>(Result expectedResult) where TResult : Result
-        {
-            actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(responseString);
-            Then(expectedResult);
         }
 
         protected void Then(Predicate<Result> resultEqualityPredicate)
@@ -143,25 +131,6 @@ namespace Tests
             Assert.That(actualEvents, Is.EquivalentTo(expectedEvents));
         }
 
-        private string responseString;
-        protected void WhenGetEndpoint(string uri)
-        {
-            try
-            {
-                responseString = HitEndPoint(uri);
-            }
-            catch (Exception exception)
-            {
-                actualException = exception;
-            }
-        }
-
-        protected string HitEndPoint(string uri)
-        {
-            string path = $"https://localhost/api/{uri}/";
-            var response = Client.GetAsync(path).Result;
-            return response.Content.ReadAsStringAsync().Result;
-        }
 
     }
 
