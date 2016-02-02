@@ -24,7 +24,7 @@ namespace Tests.Commands
         public void AddingNewBookToLibraryShouldSucceed()
         {
             Given(Library1Opens);
-            WhenCommand(AddBook1ToLibrary).IsPOSTedTo("books/add");
+            WhenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
             Then(Http201Created);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
@@ -39,7 +39,7 @@ namespace Tests.Commands
         {
             Given(Library1Opens);
             Given(AddBook1ToLibrary, "books/add");
-            WhenCommand(AddBook1ToLibrary).IsPOSTedTo("books/add");
+            WhenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
             Then(Http400BecauseBookAlreadyInLibrary1);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
@@ -55,7 +55,7 @@ namespace Tests.Commands
             Given(Library1Opens);
             Given(AddBook1ToLibrary, "books/add");
             Given(User1RemovesBookFromLibrary, "books/remove");
-            WhenCommand(AddBook1ToLibrary).IsPOSTedTo("books/add");
+            WhenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
             Then(Http201Created);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary, Book1AddedToUser1Library);
         }
@@ -64,7 +64,7 @@ namespace Tests.Commands
         public void UnauthorizedAddBookAddBookShouldFail()
         {
             Given(Library1Opens);
-            WhenCommand(UnauthorizedAddBookToLibrary).IsPOSTedTo("books/add");
+            WhenCommand(UnauthorizedAddBookToLibrary).IsPUTedTo("books/add");
             Then(Http403BecauseUnauthorized(UnauthorizedAddBookToLibrary.UserId,
                 UnauthorizedAddBookToLibrary.AggregateId, typeof(Library)));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);

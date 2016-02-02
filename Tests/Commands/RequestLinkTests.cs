@@ -27,7 +27,7 @@ namespace Tests.Commands
         {
             Given(Library1Opens, Library2Opens);
             Given(Library1RequestsLinkToLibrary2, RequestLinkPath);
-            WhenCommand(Library1Requests2NdLinkToLibrary2).IsPOSTedTo(RequestLinkPath);
+            WhenCommand(Library1Requests2NdLinkToLibrary2).IsPUTedTo(RequestLinkPath);
             Then(Http400BecauseLinkAlreadyRequested);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
@@ -42,7 +42,7 @@ namespace Tests.Commands
         public void RequestLinkForUnLinkedLibrarysShouldSucceed()
         {
             Given(Library1Opens, Library2Opens);
-            WhenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo(RequestLinkPath);
+            WhenCommand(Library1RequestsLinkToLibrary2).IsPUTedTo(RequestLinkPath);
             Then(Http200Ok);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
@@ -57,7 +57,7 @@ namespace Tests.Commands
         public void RequestLinkToNonExistentLibraryShouldFail()
         {
             Given(Library1Opens);
-            WhenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo(RequestLinkPath);
+            WhenCommand(Library1RequestsLinkToLibrary2).IsPUTedTo(RequestLinkPath);
             Then(Http404BecauseTargetLibraryDoesNotExist);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
@@ -72,7 +72,7 @@ namespace Tests.Commands
         {
             Given(Library1Opens, Library2Opens);
             Given(Library2RequestsLinkToLibrary1, RequestLinkPath);
-            WhenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo(RequestLinkPath);
+            WhenCommand(Library1RequestsLinkToLibrary2).IsPUTedTo(RequestLinkPath);
             Then(Http400BecauseReverseLinkAlreadyRequested);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestFrom2To1Received);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestedFrom2To1);
@@ -89,7 +89,7 @@ namespace Tests.Commands
             Given(Library1Opens, Library2Opens);
             Given(Library1RequestsLinkToLibrary2, RequestLinkPath);
             Given(Library2AcceptsLinkFromLibrary1, "links/accept");
-            WhenCommand(Library1Requests2NdLinkToLibrary2).IsPOSTedTo(RequestLinkPath);
+            WhenCommand(Library1Requests2NdLinkToLibrary2).IsPUTedTo(RequestLinkPath);
             Then(Http400BecauseLibrariesAlreadyLinked);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, DefaultTestData.LinkCompleted);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, DefaultTestData.LinkAccepted);
@@ -105,7 +105,7 @@ namespace Tests.Commands
         public void RequestLinkToSelfShouldFail()
         {
             Given(Library1Opens);
-            WhenCommand(Library1RequestsLinkToSelf).IsPOSTedTo(RequestLinkPath);
+            WhenCommand(Library1RequestsLinkToSelf).IsPUTedTo(RequestLinkPath);
             Then(Http400BecauseCantLinkToSelf);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
@@ -114,7 +114,7 @@ namespace Tests.Commands
         public void UnauthorizedRequestLinkShouldFail()
         {
             Given(Library1Opens);
-            WhenCommand(UnauthorizedRequestLink).IsPOSTedTo(RequestLinkPath);
+            WhenCommand(UnauthorizedRequestLink).IsPUTedTo(RequestLinkPath);
             Then(Http403BecauseUnauthorized(UnauthorizedRequestLink.UserId,
                 UnauthorizedRequestLink.AggregateId, typeof (Library)));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);

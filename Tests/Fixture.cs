@@ -43,7 +43,7 @@ namespace Tests
         protected void Given(AuthenticatedCommand command, string url)
         {
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Tokeniser.CreateToken("username", command.UserId));
-            HttpResponseMessage response = Client.PostAsJsonAsync($"https://localhost/api/{url}", command).Result;
+            HttpResponseMessage response = Client.PutAsJsonAsync($"https://localhost/api/{url}", command).Result;
             if (!response.IsSuccessStatusCode) throw new AssertionException("Given HTTP request resulted in an error");
         }
 
