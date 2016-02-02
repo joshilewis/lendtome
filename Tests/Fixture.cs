@@ -42,16 +42,24 @@ namespace Tests
             server.Dispose();
         }
 
-        protected void Given(AuthenticatedCommand command, string url)
+        private readonly List<CallBuilder> givenCalls = new List<CallBuilder>();
+
+        protected CallBuilder GivenCommand(AuthenticatedCommand command)
         {
-            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Tokeniser.CreateToken("username", command.UserId));
-            HttpResponseMessage response = Client.PutAsJsonAsync($"https://localhost/api/{url}", command).Result;
-            if (!response.IsSuccessStatusCode) throw new AssertionException("Given HTTP request resulted in an error");
+            var callBuilder = new CallBuilder(command, Client, Tokeniser);
+            givenCalls.Add(callBuilder);
+            return callBuilder;
         }
 
         private CallBuilder whenCallBuilder;
         protected CallBuilder WhenCommand(AuthenticatedCommand command)
         {
+            if (givenCalls.Any(x => x.Exception != null))
+            {
+                throw new AssertionException(
+                    $"The following Given calls failed: {givenCalls.Where(x => x.Exception != null).Select(x => $"{x.Command} to {x.Url}")}");
+            }
+
             whenCallBuilder = new CallBuilder(command, Client, Tokeniser);
             return whenCallBuilder;
         }

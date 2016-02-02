@@ -24,7 +24,7 @@ namespace Tests.Commands
         public void RemoveBookInLibraryShouldSucceed()
         {
             Given(Library1Opens);
-            Given(AddBook1ToLibrary, "books/add");
+            GivenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
             WhenCommand(User1RemovesBookFromLibrary).IsPUTedTo("books/remove");
             Then(Http200Ok);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary);
@@ -48,7 +48,7 @@ namespace Tests.Commands
         public void UnauthorizedRemoveBookInLibraryShouldFail()
         {
             Given(Library1Opens);
-            Given(AddBook1ToLibrary, "books/add");
+            GivenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
             WhenCommand(UnauthorizedRemoveBook).IsPUTedTo("books/remove");
             Then(Http403BecauseUnauthorized(UnauthorizedRemoveBook.UserId, UnauthorizedRemoveBook.AggregateId,
                 typeof (Library)));

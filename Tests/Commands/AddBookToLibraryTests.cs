@@ -38,7 +38,7 @@ namespace Tests.Commands
         public void AddingDuplicateBookToLibraryShouldFail()
         {
             Given(Library1Opens);
-            Given(AddBook1ToLibrary, "books/add");
+            GivenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
             WhenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
             Then(Http400BecauseBookAlreadyInLibrary1);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
@@ -53,8 +53,8 @@ namespace Tests.Commands
         public void AddingPreviouslyRemovedBookToLibraryShouldSucceed()
         {
             Given(Library1Opens);
-            Given(AddBook1ToLibrary, "books/add");
-            Given(User1RemovesBookFromLibrary, "books/remove");
+            GivenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
+            GivenCommand(User1RemovesBookFromLibrary).IsPUTedTo("books/remove");
             WhenCommand(AddBook1ToLibrary).IsPUTedTo("books/add");
             Then(Http201Created);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary, Book1AddedToUser1Library);

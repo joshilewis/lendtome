@@ -13,6 +13,7 @@ namespace Tests
         public Exception Exception { get; private set; }
         private readonly HttpClient client;
         private readonly Tokeniser tokeniser;
+        public string Url { get; private set; }
 
         public CallBuilder(AuthenticatedCommand command, HttpClient client, Tokeniser tokeniser)
         {
@@ -23,6 +24,7 @@ namespace Tests
 
         public void IsPOSTedTo(string url)
         {
+            Url = url;
             try
             {
                 client.DefaultRequestHeaders.Authorization =
