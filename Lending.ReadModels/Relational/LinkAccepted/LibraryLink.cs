@@ -1,4 +1,5 @@
 using System;
+using Lending.ReadModels.Relational.LibraryOpened;
 
 namespace Lending.ReadModels.Relational.LinkAccepted
 {
@@ -6,14 +7,14 @@ namespace Lending.ReadModels.Relational.LinkAccepted
     {
         public virtual long Id { get; protected set; }
         public virtual Guid ProcessId { get; protected set; }
-        public virtual Guid RequestingLibraryId { get; protected set; }
-        public virtual Guid AcceptingLibraryId { get; protected set; }
+        public virtual OpenedLibrary RequestingLibrary { get; protected set; }
+        public virtual OpenedLibrary AcceptingLibrary { get; protected set; }
 
-        public LibraryLink(Guid processId, Guid requestingLibraryId, Guid acceptingLibraryId)
+        public LibraryLink(Guid processId, OpenedLibrary requestingLibrary, OpenedLibrary acceptingLibrary)
         {
             ProcessId = processId;
-            RequestingLibraryId = requestingLibraryId;
-            AcceptingLibraryId = acceptingLibraryId;
+            RequestingLibrary = requestingLibrary;
+            AcceptingLibrary = acceptingLibrary;
         }
 
         protected LibraryLink(){ }

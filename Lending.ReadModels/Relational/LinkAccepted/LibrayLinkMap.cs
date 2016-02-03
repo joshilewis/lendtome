@@ -10,9 +10,11 @@ namespace Lending.ReadModels.Relational.LinkAccepted
                 .GeneratedBy.Native();
 
             Map(x => x.ProcessId);
-            Map(x => x.RequestingLibraryId)
+            References(x => x.RequestingLibrary)
+                .Column("RequestingLibraryId")
                 .UniqueKey("UK_RequestingLibraryId_AcceptingLibraryId");
-            Map(x => x.AcceptingLibraryId)
+            References(x => x.AcceptingLibrary)
+                .Column("AcceptingLibraryId")
                 .UniqueKey("UK_RequestingLibraryId_AcceptingLibraryId");
         }
     }

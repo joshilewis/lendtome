@@ -14,6 +14,7 @@ using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestLink;
 using Lending.Execution.Auth;
+using Lending.ReadModels.Relational.LibraryOpened;
 
 namespace Tests
 {
@@ -36,6 +37,9 @@ namespace Tests
         public static OpenLibrary OpenLibrary4 = new OpenLibrary(processId, Library4Id, Library4Id, "user4", Library4Id);
         public static OpenLibrary OpenLibrary5 = new OpenLibrary(processId, Library5Id, Library5Id, "user5", Library5Id);
         public static OpenLibrary OpenLibrary6 = new OpenLibrary(processId, Library6Id, Library6Id, "user6", Library6Id);
+
+        public static OpenedLibrary OpenedLibrary1 = new OpenedLibrary(Guid.Empty, OpenLibrary1.Name, OpenLibrary1.AdministratorId);
+        public static OpenedLibrary OpenedLibrary2 = new OpenedLibrary(Guid.Empty, OpenLibrary2.Name, OpenLibrary2.AdministratorId);
 
         public static LibraryOpened Library1Opened = new LibraryOpened(processId, Library1Id, OpenLibrary1.Name,
             OpenLibrary1.AdministratorId);

@@ -105,9 +105,9 @@ namespace Tests
             resultEqualityPredicate(actualResult);
         }
 
-        protected GetCallBuilder<TResult> AndGETTo<TResult>(string url) where TResult : Result
+        protected GetCallBuilder<TPayload> AndGETTo<TPayload>(string url)
         {
-            return new GetCallBuilder<TResult>(Client, Tokeniser, url);
+            return new GetCallBuilder<TPayload>(Client, Tokeniser, url);
         }
 
         protected HttpResponseMessage Http400Because(string reasonPhrase)

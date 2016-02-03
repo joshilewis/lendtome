@@ -17,6 +17,7 @@ using Lending.Execution.Auth;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.LinkAccepted;
+using Lending.ReadModels.Relational.LinkRequested;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -113,7 +114,7 @@ namespace Tests
 
         public static bool ShouldEqual(this OpenedLibrary actual, OpenedLibrary expected)
         {
-            Assert.That(actual.Id, Is.EqualTo(expected.Id));
+            Assert.That(actual.AdministratorId, Is.EqualTo(expected.AdministratorId));
             Assert.That(actual.Name, Is.EqualTo(expected.Name));
 
             return true;
@@ -166,9 +167,9 @@ namespace Tests
 
         public static bool ShouldEqual(this LibraryLink actual, LibraryLink expected)
         {
-            Assert.That(actual.ProcessId, Is.EqualTo(expected.ProcessId));
-            Assert.That(actual.RequestingLibraryId, Is.EqualTo(expected.RequestingLibraryId));
-            Assert.That(actual.AcceptingLibraryId, Is.EqualTo(expected.AcceptingLibraryId));
+            actual.RequestingLibrary.ShouldEqual(expected.RequestingLibrary);
+            actual.AcceptingLibrary.ShouldEqual(expected.AcceptingLibrary);
+
             return true;
         }
 
@@ -225,10 +226,41 @@ namespace Tests
             return true;
         }
 
+        public static bool ShouldEqual(this RequestedLink actual, RequestedLink expected)
+        {
+            actual.RequestingLibrary.ShouldEqual(actual.RequestingLibrary);
+            actual.TargetLibrary.ShouldEqual(actual.TargetLibrary);
+
+            return true;
+        }
+
+        public static bool ShouldEqual(this RequestedLink[] actual, RequestedLink[] expected)
+        {
+            Assert.That(actual, Is.EquivalentTo(expected).Using((IEqualityComparer<RequestedLink>) new ValueEqualityComparer()));
+
+            return true;
+        }
+
+        public static bool ShouldEqual(this LibraryLink[] actual, LibraryLink[] expected)
+        {
+            Assert.That(actual, Is.EquivalentTo(expected).Using((IEqualityComparer<LibraryLink>)new ValueEqualityComparer()));
+
+            return true;
+        }
+
+        public static bool ShouldEqual(this OpenedLibrary[] actual, OpenedLibrary[] expected)
+        {
+            Assert.That(actual, Is.EquivalentTo(expected).Using((IEqualityComparer<OpenedLibrary>)new ValueEqualityComparer()));
+
+            return true;
+        }
+
     }
 
     public class ValueEqualityComparer : IEqualityComparer<OpenedLibrary>,
-        IEqualityComparer<AuthenticationProvider>
+        IEqualityComparer<AuthenticationProvider>,
+        IEqualityComparer<LibraryLink>,
+        IEqualityComparer<RequestedLink>
     {
         public bool Equals(OpenedLibrary x, OpenedLibrary y)
         {
@@ -280,5 +312,24 @@ namespace Tests
             throw new NotImplementedException();
         }
 
+        public bool Equals(LibraryLink x, LibraryLink y)
+        {
+            return y.ShouldEqual(x);
+        }
+
+        public int GetHashCode(LibraryLink obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(RequestedLink x, RequestedLink y)
+        {
+            return y.ShouldEqual(x);
+        }
+
+        public int GetHashCode(RequestedLink obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

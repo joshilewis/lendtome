@@ -12,10 +12,10 @@ using ServiceStack.ServiceModel.Serialization;
 
 namespace Tests
 {
-    public class GetCallBuilder<TResult> : CallBuilder where TResult : Result
+    public class GetCallBuilder<TPayload> : CallBuilder
     {
         public string Url { get; private set; }
-        public TResult Result { get; private set; }
+        public Result<TPayload> Result { get; private set; }
         public Guid UserId { get; private set; }
 
         public GetCallBuilder(HttpClient client, Tokeniser tokeniser, string url)
@@ -25,27 +25,27 @@ namespace Tests
             UserId = Guid.Empty;
         }
 
-        public GetCallBuilder<TResult> As(Guid userId)
+        public GetCallBuilder<TPayload> As(Guid userId)
         {
             UserId = userId;
             return this;
         } 
         
-        public void Returns(TResult expectedResult) 
+        public void Returns(Predicate<TPayload> assertionPredicate) 
         {
-            var response = Client.GetAsync($"https://localhost/api/{Url}").Result;
             if (UserId != Guid.Empty)
             {
                 Client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(Tokeniser.CreateToken("username", UserId));
             }
 
+            var response = Client.GetAsync($"https://localhost/api/{Url}").Result;
             if (!response.IsSuccessStatusCode)
                 throw new AssertionException(
                     $"GET call to '{Url}' was not successful, response code is {response.StatusCode}, reason {response.ReasonPhrase}");
             string getResponseString = response.Content.ReadAsStringAsync().Result;
-            TResult actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(getResponseString);
-            actualResult.ShouldEqual(expectedResult);
+            Result<TPayload> actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<Result<TPayload>>(getResponseString);
+            assertionPredicate(actualResult.Payload);
         }
     }
 }
