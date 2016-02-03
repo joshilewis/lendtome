@@ -6,6 +6,7 @@ using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestLink;
 using Lending.Execution.UnitOfWork;
+using Lending.ReadModels.Relational.ListLibraries;
 using Lending.ReadModels.Relational.SearchForBook;
 using Lending.ReadModels.Relational.SearchForLibrary;
 using Nancy;
@@ -64,9 +65,9 @@ namespace Lending.Execution.Modules
 
     }
 
-    public class ListLibrariesModule : GetModule<SearchForLibrary, Result>
+    public class ListLibrariesModule : AuthenticatedGetModule<ListLibraries, Result>
     {
-        public ListLibrariesModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForLibrary, Result> messageHandler)
+        public ListLibrariesModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraries, Result> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/")
         {
         }

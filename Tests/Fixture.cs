@@ -92,7 +92,6 @@ namespace Tests
 
             if (userId.HasValue)
             {
-
                 Client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(Tokeniser.CreateToken("username", userId.Value));
             }

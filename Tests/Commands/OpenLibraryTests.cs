@@ -45,5 +45,16 @@ namespace Tests.Commands
                 ));
         }
 
+        [Test]
+        public void ListLibrariesShouldShowOnlyLibrariesAdministeredByUser()
+        {
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3).ArePOSTedTo("/libraries");
+            WhenGetEndpoint("/libraries/", Library2Id);
+            Then<Result<OpenedLibrary[]>>(x => x.ShouldEqual(new Result<OpenedLibrary[]>(new[]
+            {
+                new OpenedLibrary(Library2Id, Library2Opened.Name, Library2Id),
+            })));
+        }
+
     }
 }
