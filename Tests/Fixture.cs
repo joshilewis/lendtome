@@ -42,17 +42,17 @@ namespace Tests
             server.Dispose();
         }
 
-        private readonly List<CallBuilder> givenCalls = new List<CallBuilder>();
+        private readonly List<PostCallBuilder> givenCalls = new List<PostCallBuilder>();
 
-        protected CallBuilder GivenCommand(AuthenticatedCommand command)
+        protected PostCallBuilder GivenCommand(AuthenticatedCommand command)
         {
-            var callBuilder = new CallBuilder(command, Client, Tokeniser);
+            var callBuilder = new PostCallBuilder(Client, Tokeniser, command);
             givenCalls.Add(callBuilder);
             return callBuilder;
         }
 
-        private CallBuilder whenCallBuilder;
-        protected CallBuilder WhenCommand(AuthenticatedCommand command)
+        private PostCallBuilder whenPostCallBuilder;
+        protected PostCallBuilder WhenCommand(AuthenticatedCommand command)
         {
             if (givenCalls.Any(x => x.Exception != null))
             {
@@ -60,13 +60,13 @@ namespace Tests
                     $"The following Given calls failed: {givenCalls.Where(x => x.Exception != null).Select(x => $"{x.Command} to {x.Url}")}");
             }
 
-            whenCallBuilder = new CallBuilder(command, Client, Tokeniser);
-            return whenCallBuilder;
+            whenPostCallBuilder = new PostCallBuilder(Client, Tokeniser, command);
+            return whenPostCallBuilder;
         }
 
         protected void Then(HttpResponseMessage expectedResponseMessage)
         {
-            whenCallBuilder.Response.ShouldEqual(expectedResponseMessage);
+            whenPostCallBuilder.Response.ShouldEqual(expectedResponseMessage);
         }
 
         protected HttpResponseMessage Http403BecauseUnauthorized(Guid userId, Guid aggregateId, Type aggregateType)
@@ -106,7 +106,7 @@ namespace Tests
 
         protected GetCallBuilder<TResult> AndGETTo<TResult>(string url) where TResult : Result
         {
-            return new GetCallBuilder<TResult>(url, Client, Tokeniser);
+            return new GetCallBuilder<TResult>(Client, Tokeniser, url);
         }
 
         protected HttpResponseMessage Http400Because(string reasonPhrase)

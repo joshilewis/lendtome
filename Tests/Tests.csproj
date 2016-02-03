@@ -149,6 +149,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CallBuilder.cs" />
     <Compile Include="Commands\OpenLibraryTests.cs" />
     <Compile Include="ContainerTests.cs" />
     <Compile Include="Commands\AcceptLinkTests.cs" />
@@ -162,7 +163,7 @@
     <Compile Include="DefaultTestData.cs" />
     <Compile Include="GetCallBuilder.cs" />
     <Compile Include="Infra\AuthCallBack.cs" />
-    <Compile Include="CallBuilder.cs" />
+    <Compile Include="PostCallBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\SearchForBookTests.cs" />
     <Compile Include="Queries\SearchForLibraryTests.cs" />
