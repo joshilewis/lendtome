@@ -63,6 +63,8 @@
     <Compile Include="Relational\LinkAccepted\LibraryLink.cs" />
     <Compile Include="Relational\LinkAccepted\LibrayLinkMap.cs" />
     <Compile Include="Relational\LibraryOpened\OpenedLibraryMap.cs" />
+    <Compile Include="Relational\ListLibraries\ListLibrariesHandler.cs" />
+    <Compile Include="Relational\ListLibraries\ListLibraries.cs" />
     <Compile Include="Relational\SearchForBook\BookSearchResult.cs" />
     <Compile Include="Relational\SearchForBook\SearchForBook.cs" />
     <Compile Include="Relational\SearchForBook\SearchForBookHandler.cs" />
@@ -83,9 +85,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Relational\ListLibraries\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
