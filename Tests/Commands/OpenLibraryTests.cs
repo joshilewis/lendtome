@@ -21,7 +21,7 @@ namespace Tests.Commands
         public void OpenLibraryForUserWithNoLibrariesShouldOpenNewLibrary()
         {
             //Given();
-            WhenCommand(OpenLibrary1).IsPUTedTo("/libraries");
+            WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             Then(Http201Created);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
             AndGETTo<Result<OpenedLibrary[]>>("/libraries/").Returns(new Result<OpenedLibrary[]>(new[]
@@ -34,8 +34,8 @@ namespace Tests.Commands
         [Test]
         public void OpenLibraryForUserWithAnOpenLibraryShouldFailBecauseLibraryAlreadyOpened()
         {
-            GivenCommand(OpenLibrary1).IsPUTedTo("/libraries");
-            WhenCommand(OpenLibrary1).IsPUTedTo("/libraries");
+            GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
+            WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             Then(Http400Because(OpenLibraryHandler.UserAlreadyOpenedLibrary));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
             AndGETTo<Result<OpenedLibrary[]>>("/libraries/").Returns(new Result<OpenedLibrary[]>(new[]

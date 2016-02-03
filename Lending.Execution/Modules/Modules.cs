@@ -20,7 +20,7 @@ namespace Lending.Execution.Modules
         }
     }
 
-    public class RequestLinkModule: PutModule<RequestLink, Result>
+    public class RequestLinkModule: PostModule<RequestLink, Result>
     {
         public RequestLinkModule(IUnitOfWork unitOfWork, IMessageHandler<RequestLink, Result> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/{AggregateId}/links/request/")
@@ -29,7 +29,7 @@ namespace Lending.Execution.Modules
 
     }
 
-    public class AcceptLinkModule : PutModule<AcceptLink, Result>
+    public class AcceptLinkModule : PostModule<AcceptLink, Result>
     {
         public AcceptLinkModule(IUnitOfWork unitOfWork, IMessageHandler<AcceptLink, Result> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/{AggregateId}/links/accept/")
@@ -38,7 +38,7 @@ namespace Lending.Execution.Modules
 
     }
 
-    public class AddBookModule : PutModule<AddBookToLibrary, Result>
+    public class AddBookModule : PostModule<AddBookToLibrary, Result>
     {
         public AddBookModule(IUnitOfWork unitOfWork, IMessageHandler<AddBookToLibrary, Result> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/{AggregateId}/books/add")
@@ -47,7 +47,7 @@ namespace Lending.Execution.Modules
 
     }
 
-    public class RemoveBookModule : PutModule<RemoveBookFromLibrary, Result>
+    public class RemoveBookModule : PostModule<RemoveBookFromLibrary, Result>
     {
         public RemoveBookModule(IUnitOfWork unitOfWork, IMessageHandler<RemoveBookFromLibrary, Result> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/{AggregateId}/books/remove")
@@ -55,7 +55,7 @@ namespace Lending.Execution.Modules
         }
 
     }
-    public class OpenLibraryModule : PutModule<OpenLibrary, Result>
+    public class OpenLibraryModule : PostModule<OpenLibrary, Result>
     {
         public OpenLibraryModule(IUnitOfWork unitOfWork, IMessageHandler<OpenLibrary, Result> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/")

@@ -22,10 +22,10 @@ namespace Tests.Commands
         [Test]
         public void AcceptLinkForUnconnectedLibrarysWithAPendingRequestShouldSucceed()
         {
-            GivenCommand(OpenLibrary1).IsPUTedTo($"/libraries");
-            GivenCommand(OpenLibrary2).IsPUTedTo($"/libraries");
-            GivenCommand(Library1RequestsLinkToLibrary2).IsPUTedTo($"/libraries/{Library1Id}/links/request");
-            WhenCommand(Library2AcceptsLinkFromLibrary1).IsPUTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
+            GivenCommand(OpenLibrary2).IsPOSTedTo($"/libraries");
+            GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
+            WhenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             Then(Http200Ok);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, DefaultTestData.LinkCompleted);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, DefaultTestData.LinkAccepted);
@@ -39,9 +39,9 @@ namespace Tests.Commands
         [Test]
         public void AcceptLinkWithNoPendingRequestShouldFail()
         {
-            GivenCommand(OpenLibrary1).IsPUTedTo($"/libraries");
-            GivenCommand(OpenLibrary2).IsPUTedTo($"/libraries");
-            WhenCommand(Library2AcceptsLinkFromLibrary1).IsPUTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
+            GivenCommand(OpenLibrary2).IsPOSTedTo($"/libraries");
+            WhenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             Then(Http400Because(Library.NoPendingLinkRequest));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened);
@@ -55,11 +55,11 @@ namespace Tests.Commands
         [Test]
         public void AcceptLinkForLinkedLibrariesShouldFail()
         {
-            GivenCommand(OpenLibrary1).IsPUTedTo($"/libraries");
-            GivenCommand(OpenLibrary2).IsPUTedTo($"/libraries");
-            GivenCommand(Library1RequestsLinkToLibrary2).IsPUTedTo($"/libraries/{Library1Id}/links/request");
-            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPUTedTo($"/libraries/{Library2Id}/links/accept");
-            WhenCommand(Library2AcceptsLinkFromLibrary1).IsPUTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
+            GivenCommand(OpenLibrary2).IsPOSTedTo($"/libraries");
+            GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            WhenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             Then(Http400Because(Library.LibrariesAlreadyLinked));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, DefaultTestData.LinkCompleted);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, DefaultTestData.LinkAccepted);
@@ -68,10 +68,10 @@ namespace Tests.Commands
         [Test]
         public void AcceptLinkByUnauthorizedUserShouldFail()
         {
-            GivenCommand(OpenLibrary1).IsPUTedTo($"/libraries");
-            GivenCommand(OpenLibrary2).IsPUTedTo($"/libraries");
-            GivenCommand(Library1RequestsLinkToLibrary2).IsPUTedTo($"/libraries/{Library1Id}/links/request");
-            WhenCommand(UnauthorizedAcceptLink).IsPUTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
+            GivenCommand(OpenLibrary2).IsPOSTedTo($"/libraries");
+            GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
+            WhenCommand(UnauthorizedAcceptLink).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             Then(Http403BecauseUnauthorized(UnauthorizedAcceptLink.UserId, Library2Id, typeof (Library)));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);

@@ -24,26 +24,11 @@ namespace Tests
 
         public void IsPOSTedTo(string url)
         {
-            Url = url;
             try
             {
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(tokeniser.CreateToken("username", Command.UserId));
                 Response = client.PostAsJsonAsync($"https://localhost/api/{url}", Command).Result;
-            }
-            catch (Exception exception)
-            {
-                Exception = exception;
-            }
-        }
-
-        public void IsPUTedTo(string url)
-        {
-            try
-            {
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue(tokeniser.CreateToken("username", Command.UserId));
-                Response = client.PutAsJsonAsync($"https://localhost/api/{url}", Command).Result;
             }
             catch (Exception exception)
             {

@@ -26,9 +26,12 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[] { });
 
-            Given(Library1Opened, Library2Opened, Link1To2Accepted);
-            When(new SearchForBook(Library1Id, ExtremeProgrammingExplained));
-            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
+            GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
+            GivenCommand(OpenLibrary2).IsPOSTedTo("/libraries/");
+            GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request/");
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept/");
+            WhenGetEndpoint("books/Extreme Programming Explained");
+            Then<Result<BookSearchResult[]>>(expectedResult);
         }
 
         /// <summary>

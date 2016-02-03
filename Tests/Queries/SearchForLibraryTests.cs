@@ -21,10 +21,10 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchShouldReturnThatUser()
         {
-            GivenCommand(JoshuaLewisOpensLibrary).IsPUTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPUTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPUTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
             WhenGetEndpoint("libraries/Lew");
             Then<Result<OpenedLibrary[]>>((new Result<OpenedLibrary[]>(new[]
             {
@@ -44,10 +44,10 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchWithWrongCaseShouldReturnThatUser()
         {
-            GivenCommand(JoshuaLewisOpensLibrary).IsPUTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPUTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPUTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
             WhenGetEndpoint("libraries/lEw");
             Then<Result<OpenedLibrary[]>>((new Result<OpenedLibrary[]>(new[]
             {
@@ -67,10 +67,10 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithNoMatchesShouldReturnEmptyList()
         {
-            GivenCommand(JoshuaLewisOpensLibrary).IsPUTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPUTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPUTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
             WhenGetEndpoint("libraries/Pet");
             Then<Result<OpenedLibrary[]>>(new Result<OpenedLibrary[]>(new OpenedLibrary[]
             {
@@ -90,10 +90,10 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithTwoMatchsShouldReturnTwoLibraries()
         {
-            GivenCommand(JoshuaLewisOpensLibrary).IsPUTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPUTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPUTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
             WhenGetEndpoint("libraries/Jos");
             Then<Result<OpenedLibrary[]>>((new Result<OpenedLibrary[]>(new[]
             {
