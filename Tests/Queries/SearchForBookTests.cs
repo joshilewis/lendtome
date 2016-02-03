@@ -24,14 +24,14 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookNotOwnedByAnyConnectionShouldReturnEmptyList()
         {
-            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[] { });
+            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[] {});
 
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
             GivenCommand(OpenLibrary2).IsPOSTedTo("/libraries/");
             GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request/");
             GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept/");
             WhenGetEndpoint("books/Extreme Programming Explained");
-            Then<Result<BookSearchResult[]>>(expectedResult);
+            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
         }
 
         /// <summary>
@@ -42,11 +42,11 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithNoConnectionsShouldFail()
         {
-            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[] { });
+            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[] {});
 
-            Given(Library1Opened);
-            When(new SearchForBook(Library1Id, ExtremeProgrammingExplained));
-            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
+            GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
+            WhenGetEndpoint("books/Extreme Programming Explained");
+            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
 
         }
 
@@ -63,15 +63,21 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(Library2Id, Library2Opened.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library4Id, Library4Opened.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck),
             });
 
-            Given(Library1Opened, Library2Opened, Library3Opened, Library4Opened, 
-                Link1To2Accepted, Link1To3Accepted, Link1To4Accepted,
-                xpeByKbAddTo4, xpeByKbAddTo2, tddByKbAddTo3);
-            When(new SearchForBook(Library1Id, ExtremeProgrammingExplained));
-            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4).ArePOSTedTo("/libraries/");
+            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4)
+                .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
+            GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
+            GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
+            GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
+            GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
+            WhenGetEndpoint("books/Extreme Programming Explained", Library1Id);
+            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
 
         }
 
@@ -90,16 +96,26 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(Library2Id, Library2Opened.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library4Id, Library4Opened.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library5Id, Library5Opened.Name, ExtremeSnowboardStunts, SomeSkiier), 
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library5Id, OpenLibrary5.Name, ExtremeSnowboardStunts, SomeSkiier),
             });
 
-            Given(Library1Opened, Library2Opened, Library3Opened, Library4Opened, Library5Opened, 
-                Link1To2Accepted, Link1To3Accepted, Link1To4Accepted, Link1To5Accepted,
-                xpeByKbAddTo4, xpeByKbAddTo2, tddByKbAddTo3, essBySSAddTo5);
-            When(new SearchForBook(Library1Id, "Extreme"));
-            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
+                .ArePOSTedTo("/libraries/");
+            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+                Library1RequestsLinkToLibrary5)
+                .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
+            GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
+            GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
+            GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
+            GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
+            GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
+            GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
+            WhenGetEndpoint("books/Extreme", Library1Id);
+            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
 
         }
 
@@ -118,17 +134,26 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(Library2Id, Library2Opened.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library3Id, Library3Opened.Name, TestDrivenDevelopment, KentBeck),
-                new BookSearchResult(Library4Id, Library4Opened.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck),
+                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck),
             });
 
-            Given(Library1Opened, Library2Opened, Library3Opened, Library4Opened, Library5Opened,
-                Link1To2Accepted, Link1To3Accepted, Link1To4Accepted, Link1To5Accepted,
-                xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5);
-            When(new SearchForBook(Library1Id, KentBeck));
-            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
-
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
+                .ArePOSTedTo("/libraries/");
+            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+                Library1RequestsLinkToLibrary5)
+                .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
+            GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
+            GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
+            GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
+            GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
+            GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
+            GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
+            WhenGetEndpoint("books/Kent Beck", Library1Id);
+            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
         }
 
         /// <summary>
@@ -147,18 +172,29 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(Library2Id, Library2Opened.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library3Id, Library3Opened.Name, TestDrivenDevelopment, KentBeck),
-                new BookSearchResult(Library4Id, Library4Opened.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library6Id, Library6Opened.Name, BeckAMusicalMaestro, SomeAuthor),
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck),
+                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor),
             });
 
-            Given(Library1Opened, Library2Opened, Library3Opened, Library4Opened, Library5Opened, Library6Opened,
-                Link1To2Accepted, Link1To3Accepted, Link1To4Accepted, Link1To5Accepted, Link1To6Accepted,
-                xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5, bBySAAddTo6);
-            When(new SearchForBook(Library1Id, "Beck"));
-            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
-
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
+                .ArePOSTedTo("/libraries/");
+            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+                Library1RequestsLinkToLibrary5, Library1RequestsLinkToLibrary6)
+                .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
+            GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
+            GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
+            GivenCommand(Library6AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library6Id}/links/accept");
+            GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
+            GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
+            GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
+            GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
+            GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
+            WhenGetEndpoint("books/Beck", Library1Id);
+            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
         }
 
         /// <summary>
@@ -177,16 +213,27 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(Library2Id, Library2Opened.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library3Id, Library3Opened.Name, TestDrivenDevelopment, KentBeck),
-                new BookSearchResult(Library6Id, Library6Opened.Name, BeckAMusicalMaestro, SomeAuthor),
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck),
+                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor),
             });
 
-            Given(Library1Opened, Library2Opened, Library3Opened, Library4Opened, Library5Opened, Library6Opened,
-                Link1To2Accepted, Link1To3Accepted, Link1To5Accepted, Link1To6Accepted,
-                xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5, bBySAAddTo6);
-            When(new SearchForBook(Library1Id, "Beck"));
-            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
+                .ArePOSTedTo("/libraries/");
+            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+                Library1RequestsLinkToLibrary5, Library1RequestsLinkToLibrary6)
+                .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
+            GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
+            GivenCommand(Library6AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library6Id}/links/accept");
+            GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
+            GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
+            GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
+            GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
+            GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
+            WhenGetEndpoint("books/Beck", Library1Id);
+            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
 
         }
 
@@ -203,20 +250,35 @@ namespace Tests.Queries
         /// 'User3':("Test-Driven Development", "Kent Beck"), 'User6':("Beck: A Musical Maestro", "Some Author"))
         /// </summary>
         [Test]
-        public void SearchingForBookWithManyMatchingTitlesAndAuthorsInManyLibrariesShouldReturnAllOwnersAndBooksExceptRemovedBooks()
+        public void
+            SearchingForBookWithManyMatchingTitlesAndAuthorsInManyLibrariesShouldReturnAllOwnersAndBooksExceptRemovedBooks
+            ()
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(Library2Id, Library2Opened.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library3Id, Library3Opened.Name, TestDrivenDevelopment, KentBeck),
-                new BookSearchResult(Library6Id, Library6Opened.Name, BeckAMusicalMaestro, SomeAuthor),
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck),
+                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor),
             });
 
-            Given(Library1Opened, Library2Opened, Library3Opened, Library4Opened, Library5Opened, Library6Opened,
-                Link1To2Accepted, Link1To3Accepted, Link1To4Accepted, Link1To5Accepted, Link1To6Accepted,
-                xpeByKbAddTo2, tddByKbAddTo3, xpeByKbAddTo4, essBySSAddTo5, bBySAAddTo6, xpeByKbRemoveFrom4);
-            When(new SearchForBook(Library1Id, "Beck"));
-            Then(x => ((Result<BookSearchResult[]>)x).ShouldEqual(expectedResult));
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
+                .ArePOSTedTo("/libraries/");
+            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+                Library1RequestsLinkToLibrary5, Library1RequestsLinkToLibrary6)
+                .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
+            GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
+            GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
+            GivenCommand(Library6AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library6Id}/links/accept");
+            GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
+            GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
+            GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
+            GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
+            GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
+            GivenCommand(Lib4RemovesXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/remove/");
+            WhenGetEndpoint("books/Beck", Library1Id);
+            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
 
         }
 

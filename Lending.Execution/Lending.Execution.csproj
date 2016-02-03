@@ -170,6 +170,7 @@
     <Compile Include="IEventHandlerProvider.cs" />
     <Compile Include="InMemoryEventConsumer.cs" />
     <Compile Include="InMemoryEventEmitter.cs" />
+    <Compile Include="Modules\AuthenticatedGetModule.cs" />
     <Compile Include="Modules\GetModule.cs" />
     <Compile Include="Modules\PutModule.cs" />
     <Compile Include="Modules\PostModule.cs" />

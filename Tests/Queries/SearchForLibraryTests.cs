@@ -26,9 +26,9 @@ namespace Tests.Queries
             GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
             WhenGetEndpoint("libraries/Lew");
-            Then<Result<OpenedLibrary[]>>((new Result<OpenedLibrary[]>(new[]
+            Then<Result<OpenedLibrary[]>>(x => x.ShouldEqual(new Result<OpenedLibrary[]>(new[]
             {
-                new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id), 
+                new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id),
             })));
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
@@ -49,7 +49,7 @@ namespace Tests.Queries
             GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
             WhenGetEndpoint("libraries/lEw");
-            Then<Result<OpenedLibrary[]>>((new Result<OpenedLibrary[]>(new[]
+            Then<Result<OpenedLibrary[]>>(x => x.ShouldEqual(new Result<OpenedLibrary[]>(new[]
             {
                 new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id),
             })));
@@ -72,9 +72,9 @@ namespace Tests.Queries
             GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
             WhenGetEndpoint("libraries/Pet");
-            Then<Result<OpenedLibrary[]>>(new Result<OpenedLibrary[]>(new OpenedLibrary[]
+            Then<Result<OpenedLibrary[]>>(x => x.ShouldEqual(new Result<OpenedLibrary[]>(new OpenedLibrary[]
             {
-            }));
+            })));
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
@@ -95,7 +95,7 @@ namespace Tests.Queries
             GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
             WhenGetEndpoint("libraries/Jos");
-            Then<Result<OpenedLibrary[]>>((new Result<OpenedLibrary[]>(new[]
+            Then<Result<OpenedLibrary[]>>(x => x.ShouldEqual(new Result<OpenedLibrary[]>(new[]
             {
                 new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id),
                 new OpenedLibrary(Library3Id, JosieDoeLibraryOpened.Name, Library3Id),

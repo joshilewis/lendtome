@@ -163,6 +163,7 @@
     <Compile Include="DefaultTestData.cs" />
     <Compile Include="GetCallBuilder.cs" />
     <Compile Include="Infra\AuthCallBack.cs" />
+    <Compile Include="MultiPostCallBuilder.cs" />
     <Compile Include="PostCallBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\SearchForBookTests.cs" />

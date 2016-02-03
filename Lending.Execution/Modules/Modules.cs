@@ -72,10 +72,10 @@ namespace Lending.Execution.Modules
         }
     }
 
-    public class SearchBookModule : GetModule<SearchForBook, Result>
+    public class SearchForBookModule : AuthenticatedGetModule<SearchForBook, Result>
     {
-        public SearchBookModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForBook, Result> messageHandler)
-            : base(unitOfWork, messageHandler, "/books/{SearchString}")
+        public SearchForBookModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<SearchForBook, Result> queryHandler)
+            : base(unitOfWork, queryHandler, "/books/{SearchString}")
         {
         }
     }

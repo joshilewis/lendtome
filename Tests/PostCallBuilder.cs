@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Lending.Cqrs.Command;
 using Lending.Execution.Auth;
+using NUnit.Framework;
 
 namespace Tests
 {
@@ -11,27 +12,25 @@ namespace Tests
         public AuthenticatedCommand Command { get; }
         public HttpResponseMessage Response { get; private set; }
         public string Url { get; private set; }
+        private readonly bool failIfUnsuccessful;
 
-        public PostCallBuilder(HttpClient client, Tokeniser tokeniser, AuthenticatedCommand command)
+        public PostCallBuilder(HttpClient client, Tokeniser tokeniser, AuthenticatedCommand command, bool failIfUnsuccessful)
             : base(client, tokeniser)
         {
             Command = command;
+            this.failIfUnsuccessful = failIfUnsuccessful;
         }
 
         public void IsPOSTedTo(string url)
         {
-            try
-            {
-                
-                Client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue(Tokeniser.CreateToken("username", Command.UserId));
-                Url = $"https://localhost/api/{url}";
-                Response = Client.PostAsJsonAsync(Url, Command).Result;
-            }
-            catch (Exception exception)
-            {
-                Exception = exception;
-            }
+            Client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue(Tokeniser.CreateToken("username", Command.UserId));
+            Url = $"https://localhost/api/{url}";
+            Response = Client.PostAsJsonAsync(Url, Command).Result;
+            if (failIfUnsuccessful && !Response.IsSuccessStatusCode)
+                throw new AssertionException(
+                    $"POST call to '{Url}' was not successful, response code is {Response.StatusCode}, reason {Response.ReasonPhrase}");
+
         }
     }
 }

@@ -72,6 +72,7 @@ namespace Lending.Execution.DI
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedCommandHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
             });
 

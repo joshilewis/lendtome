@@ -33,4 +33,5 @@ namespace Lending.Cqrs
             return (TResult) Handle((TMessage) message);
         }
     }
+
 }

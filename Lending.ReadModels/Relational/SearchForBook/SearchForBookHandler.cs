@@ -11,7 +11,7 @@ using NHibernate.Criterion;
 
 namespace Lending.ReadModels.Relational.SearchForBook
 {
-    public class SearchForBookHandler : MessageHandler<SearchForBook, Result>, IQueryHandler<SearchForBook, Result>
+    public class SearchForBookHandler : MessageHandler<SearchForBook, Result>, IAuthenticatedQueryHandler<SearchForBook, Result>
     {
         public const string UserHasNoConnection = "User has no connections";
 

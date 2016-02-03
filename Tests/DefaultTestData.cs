@@ -31,6 +31,11 @@ namespace Tests
         public static HttpResponseMessage Http200Ok = new HttpResponseMessage(HttpStatusCode.OK);
 
         public static OpenLibrary OpenLibrary1 = new OpenLibrary(processId, Library1Id, Library1Id, "library1", Library1Id);
+        public static OpenLibrary OpenLibrary2 = new OpenLibrary(processId, Library2Id, Library2Id, "user2", Library2Id);
+        public static OpenLibrary OpenLibrary3 = new OpenLibrary(processId, Library3Id, Library3Id, "user3", Library3Id);
+        public static OpenLibrary OpenLibrary4 = new OpenLibrary(processId, Library4Id, Library4Id, "user4", Library4Id);
+        public static OpenLibrary OpenLibrary5 = new OpenLibrary(processId, Library5Id, Library5Id, "user5", Library5Id);
+        public static OpenLibrary OpenLibrary6 = new OpenLibrary(processId, Library6Id, Library6Id, "user6", Library6Id);
 
         public static LibraryOpened Library1Opened = new LibraryOpened(processId, Library1Id, OpenLibrary1.Name,
             OpenLibrary1.AdministratorId);
@@ -57,10 +62,16 @@ namespace Tests
         public static BookRemovedFromLibrary Book1RemovedFromLibrary = new BookRemovedFromLibrary(processId, Library1Id,
             Title, Author, Isbnnumber);
 
-        public static OpenLibrary OpenLibrary2 = new OpenLibrary(processId, Library2Id, Library2Id, "user2", Library2Id);
-
         public static RequestLink Library1RequestsLinkToLibrary2 = new RequestLink(processId, Guid.Empty, 
             Library1Id, Library2Id);
+        public static RequestLink Library1RequestsLinkToLibrary3 = new RequestLink(processId, Guid.Empty,
+            Library1Id, Library3Id);
+        public static RequestLink Library1RequestsLinkToLibrary4 = new RequestLink(processId, Guid.Empty,
+            Library1Id, Library4Id);
+        public static RequestLink Library1RequestsLinkToLibrary5 = new RequestLink(processId, Guid.Empty,
+            Library1Id, Library5Id);
+        public static RequestLink Library1RequestsLinkToLibrary6 = new RequestLink(processId, Guid.Empty,
+            Library1Id, Library6Id);
 
         public static LinkRequested LinkRequestedFrom1To2 = new LinkRequested(processId, Library1Id,
             Library2Id);
@@ -72,6 +83,14 @@ namespace Tests
             new LinkRequestReceived(processId, Library2Id, Library1Id);
 
         public static AcceptLink Library2AcceptsLinkFromLibrary1 = new AcceptLink(processId, Guid.Empty, Library2Id,
+            Library1Id);
+        public static AcceptLink Library3AcceptsLinkFromLibrary1 = new AcceptLink(processId, Guid.Empty, Library3Id,
+            Library1Id);
+        public static AcceptLink Library4AcceptsLinkFromLibrary1 = new AcceptLink(processId, Guid.Empty, Library4Id,
+            Library1Id);
+        public static AcceptLink Library5AcceptsLinkFromLibrary1 = new AcceptLink(processId, Guid.Empty, Library5Id,
+            Library1Id);
+        public static AcceptLink Library6AcceptsLinkFromLibrary1 = new AcceptLink(processId, Guid.Empty, Library6Id,
             Library1Id);
 
         public static AcceptLink UnauthorizedAcceptLink = new AcceptLink(processId, Guid.Empty, Guid.Empty, Library1Id);
@@ -143,22 +162,17 @@ namespace Tests
         public static LinkAccepted Link1To5Accepted = new LinkAccepted(processId, Library5Id, Library1Id);
         public static LinkAccepted Link1To6Accepted = new LinkAccepted(processId, Library6Id, Library1Id);
 
-        public static BookAddedToLibrary xpeByKbAddTo2 = new BookAddedToLibrary(processId, Library2Id,
+        public static AddBookToLibrary Lib2AddsXpeByKb = new AddBookToLibrary(processId, Library2Id, Library2Id,
             ExtremeProgrammingExplained, KentBeck, Isbn);
-
-        public static BookAddedToLibrary xpeByKbAddTo4 = new BookAddedToLibrary(processId, Library4Id,
-            ExtremeProgrammingExplained, KentBeck, Isbn);
-
-        public static BookAddedToLibrary tddByKbAddTo3 = new BookAddedToLibrary(processId, Library3Id,
+        public static AddBookToLibrary Lib3AddsTddByKb = new AddBookToLibrary(processId, Library3Id, Library3Id,
             TestDrivenDevelopment, KentBeck, Isbn);
-
-        public static BookAddedToLibrary essBySSAddTo5 = new BookAddedToLibrary(processId, Library5Id,
+        public static AddBookToLibrary Lib4AddsXpeByKb = new AddBookToLibrary(processId, Library4Id, Library4Id,
+            ExtremeProgrammingExplained, KentBeck, Isbn);
+        public static AddBookToLibrary Lib5AddsEssBySs = new AddBookToLibrary(processId, Library5Id, Library5Id,
             ExtremeSnowboardStunts, SomeSkiier, Isbn);
-
-        public static BookAddedToLibrary bBySAAddTo6 = new BookAddedToLibrary(processId, Library6Id, BeckAMusicalMaestro,
-            SomeAuthor, Isbn);
-
-        public static BookRemovedFromLibrary xpeByKbRemoveFrom4 = new BookRemovedFromLibrary(processId, Library4Id,
+        public static AddBookToLibrary Lib6AddsBBySA = new AddBookToLibrary(processId, Library6Id, Library6Id,
+            BeckAMusicalMaestro, SomeAuthor, Isbn);
+        public static RemoveBookFromLibrary Lib4RemovesXpeByKb = new RemoveBookFromLibrary(processId, Library4Id, Library4Id,
             ExtremeProgrammingExplained, KentBeck, Isbn);
 
     }

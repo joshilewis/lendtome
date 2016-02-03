@@ -42,25 +42,20 @@ namespace Tests
             server.Dispose();
         }
 
-        private readonly List<PostCallBuilder> givenCalls = new List<PostCallBuilder>();
-
         protected PostCallBuilder GivenCommand(AuthenticatedCommand command)
         {
-            var callBuilder = new PostCallBuilder(Client, Tokeniser, command);
-            givenCalls.Add(callBuilder);
-            return callBuilder;
+            return new PostCallBuilder(Client, Tokeniser, command, true);
+        }
+
+        protected MultiPostCallBuilder GivenCommands(params AuthenticatedCommand[] commands)
+        {
+            return new MultiPostCallBuilder(Client, Tokeniser, commands);
         }
 
         private PostCallBuilder whenPostCallBuilder;
         protected PostCallBuilder WhenCommand(AuthenticatedCommand command)
         {
-            if (givenCalls.Any(x => x.Exception != null))
-            {
-                throw new AssertionException(
-                    $"The following Given calls failed: {givenCalls.Where(x => x.Exception != null).Select(x => $"{x.Command} to {x.Url}")}");
-            }
-
-            whenPostCallBuilder = new PostCallBuilder(Client, Tokeniser, command);
+            whenPostCallBuilder = new PostCallBuilder(Client, Tokeniser, command, false);
             return whenPostCallBuilder;
         }
 
@@ -79,11 +74,11 @@ namespace Tests
 
         protected string GetResponseString;
         protected Exception ActualException;
-        protected void WhenGetEndpoint(string uri)
+        protected void WhenGetEndpoint(string uri, Guid? userId = null)
         {
             try
             {
-                GetResponseString = HitEndPoint(uri);
+                GetResponseString = HitEndPoint(uri, userId);
             }
             catch (Exception exception)
             {
@@ -91,17 +86,24 @@ namespace Tests
             }
         }
 
-        protected string HitEndPoint(string uri)
+        protected string HitEndPoint(string uri, Guid? userId)
         {
             string path = $"https://localhost/api/{uri}/";
+
+            if (userId.HasValue)
+            {
+
+                Client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue(Tokeniser.CreateToken("username", userId.Value));
+            }
             var response = Client.GetAsync(path).Result;
             return response.Content.ReadAsStringAsync().Result;
         }
 
-        protected void Then<TResult>(Result expectedResult) where TResult : Result
+        protected void Then<TResult>(Predicate<TResult> resultEqualityPredicate) where TResult : Result
         {
             TResult actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(GetResponseString);
-            actualResult.ShouldEqual(expectedResult);
+            resultEqualityPredicate(actualResult);
         }
 
         protected GetCallBuilder<TResult> AndGETTo<TResult>(string url) where TResult : Result
