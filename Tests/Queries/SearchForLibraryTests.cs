@@ -21,7 +21,10 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchShouldReturnThatUser()
         {
-            Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
+            GivenCommand(JoshuaLewisOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPUTedTo("/libraries");
             WhenGetEndpoint("libraries/Lew");
             Then<Result<OpenedLibrary[]>>((new Result<OpenedLibrary[]>(new[]
             {
@@ -41,7 +44,10 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchWithWrongCaseShouldReturnThatUser()
         {
-            Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
+            GivenCommand(JoshuaLewisOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPUTedTo("/libraries");
             WhenGetEndpoint("libraries/lEw");
             Then<Result<OpenedLibrary[]>>((new Result<OpenedLibrary[]>(new[]
             {
@@ -61,7 +67,10 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithNoMatchesShouldReturnEmptyList()
         {
-            Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
+            GivenCommand(JoshuaLewisOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPUTedTo("/libraries");
             WhenGetEndpoint("libraries/Pet");
             Then<Result<OpenedLibrary[]>>(new Result<OpenedLibrary[]>(new OpenedLibrary[]
             {
@@ -81,7 +90,10 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithTwoMatchsShouldReturnTwoLibraries()
         {
-            Given(JoshuaLewisOpensLibrary, SuzaanHepburnOpensLibrary, JosieDoeOpensLibrary, AudreyHepburnOpensLibrary);
+            GivenCommand(JoshuaLewisOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPUTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPUTedTo("/libraries");
             WhenGetEndpoint("libraries/Jos");
             Then<Result<OpenedLibrary[]>>((new Result<OpenedLibrary[]>(new[]
             {

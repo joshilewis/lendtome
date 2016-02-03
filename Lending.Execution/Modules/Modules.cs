@@ -6,14 +6,15 @@ using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestLink;
 using Lending.Execution.UnitOfWork;
+using Lending.ReadModels.Relational.SearchForBook;
 using Lending.ReadModels.Relational.SearchForLibrary;
 using Nancy;
 
 namespace Lending.Execution.Modules
 {
-    public class SearchForUserModule : GetModule<SearchForLibrary, Result>
+    public class SearchForLibraryModule : GetModule<SearchForLibrary, Result>
     {
-        public SearchForUserModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForLibrary, Result> messageHandler)
+        public SearchForLibraryModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForLibrary, Result> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/{searchstring}")
         {
         }
@@ -67,6 +68,14 @@ namespace Lending.Execution.Modules
     {
         public ListLibrariesModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForLibrary, Result> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/")
+        {
+        }
+    }
+
+    public class SearchBookModule : GetModule<SearchForBook, Result>
+    {
+        public SearchBookModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForBook, Result> messageHandler)
+            : base(unitOfWork, messageHandler, "/books/{SearchString}")
         {
         }
     }

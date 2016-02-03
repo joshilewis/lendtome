@@ -7,6 +7,7 @@ namespace Lending.ReadModels.Relational.SearchForBook
     public class SearchForBook : Query, IAuthenticated
     {
         public string SearchString { get; set; }
+        public Guid UserId { get; set; }
 
         public SearchForBook(Guid userId, string searchString)
         {
@@ -14,6 +15,8 @@ namespace Lending.ReadModels.Relational.SearchForBook
             UserId = userId;
         }
 
-        public Guid UserId { get; set; }
+        public SearchForBook()
+        {
+        }
     }
 }
