@@ -93,11 +93,6 @@ namespace Tests
 
         protected IEventRepository EventRepository => Container.GetInstance<IEventRepository>();
 
-        protected void Given(params Message[] messages)
-        {
-            Result result = HandleMessages(messages);
-        }
-
         protected void Given(params Event[] events)
         {
             HandleEvents(events);

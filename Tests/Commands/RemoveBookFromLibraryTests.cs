@@ -23,7 +23,7 @@ namespace Tests.Commands
         [Test]
         public void RemoveBookInLibraryShouldSucceed()
         {
-            Given(OpenLibrary1);
+            GivenCommand(OpenLibrary1).IsPUTedTo("/libraries");
             GivenCommand(AddBook1ToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
             WhenCommand(User1RemovesBookFromLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/remove");
             Then(Http200Ok);
@@ -38,7 +38,7 @@ namespace Tests.Commands
         [Test]
         public void RemoveBookNotInLibraryShouldFail()
         {
-            Given(OpenLibrary1);
+            GivenCommand(OpenLibrary1).IsPUTedTo("/libraries");
             WhenCommand(User1RemovesBookFromLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/remove");
             Then(Http400Because(Library.BookNotInLibrary));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
@@ -47,7 +47,7 @@ namespace Tests.Commands
         [Test]
         public void UnauthorizedRemoveBookInLibraryShouldFail()
         {
-            Given(OpenLibrary1);
+            GivenCommand(OpenLibrary1).IsPUTedTo("/libraries");
             GivenCommand(AddBook1ToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
             WhenCommand(UnauthorizedRemoveBook).IsPUTedTo($"/libraries/{Library1Id}/books/remove");
             Then(Http403BecauseUnauthorized(UnauthorizedRemoveBook.UserId, Library1Id, typeof (Library)));

@@ -23,7 +23,7 @@ namespace Tests.Commands
         [Test]
         public void AddingNewBookToLibraryShouldSucceed()
         {
-            Given(OpenLibrary1);
+            GivenCommand(OpenLibrary1).IsPUTedTo("/libraries");
             WhenCommand(AddBook1ToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
             Then(Http201Created);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
@@ -37,7 +37,7 @@ namespace Tests.Commands
         [Test]
         public void AddingDuplicateBookToLibraryShouldFail()
         {
-            Given(OpenLibrary1);
+            GivenCommand(OpenLibrary1).IsPUTedTo("/libraries");
             GivenCommand(AddBook1ToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
             WhenCommand(AddBook1ToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
             Then(Http400Because(Library.BookAlreadyInLibrary));
@@ -52,7 +52,7 @@ namespace Tests.Commands
         [Test]
         public void AddingPreviouslyRemovedBookToLibraryShouldSucceed()
         {
-            Given(OpenLibrary1);
+            GivenCommand(OpenLibrary1).IsPUTedTo("/libraries");
             GivenCommand(AddBook1ToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
             GivenCommand(User1RemovesBookFromLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/remove");
             WhenCommand(AddBook1ToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
@@ -63,7 +63,7 @@ namespace Tests.Commands
         [Test]
         public void UnauthorizedAddBookAddBookShouldFail()
         {
-            Given(OpenLibrary1);
+            GivenCommand(OpenLibrary1).IsPUTedTo("/libraries");
             WhenCommand(UnauthorizedAddBookToLibrary).IsPUTedTo($"/libraries/{Library1Id}/books/add");
             Then(Http403BecauseUnauthorized(UnauthorizedAddBookToLibrary.UserId, Library1Id, typeof (Library)));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
