@@ -16,19 +16,26 @@
         }
     }
 
-    public class Result<T> : Result
+    public class Result<TPayload> : Result
     {
-        public virtual T Payload { get; protected set; }
+        public virtual TPayload Payload { get; protected set; }
 
-        public Result(T payload)
+        public Result(TPayload payload)
             : base(EResultCode.Ok)
         {
             Payload = payload;
         }
-        public Result(EResultCode code, T payload)
+        public Result(EResultCode code, TPayload payload)
             : base(code)
         {
             Payload = payload;
         }
+
+        public Result()
+            : base(EResultCode.Ok)
+        {
+            Payload = default(TPayload);
+        }
+
     }
 }

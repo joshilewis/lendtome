@@ -24,14 +24,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookNotOwnedByAnyConnectionShouldReturnEmptyList()
         {
-            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[] {});
-
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
             GivenCommand(OpenLibrary2).IsPOSTedTo("/libraries/");
             GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request/");
             GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept/");
             WhenGetEndpoint("books/Extreme Programming Explained");
-            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
+            ThenResponseIs(new Result<BookSearchResult[]>(new BookSearchResult[] {}));
         }
 
         /// <summary>
@@ -42,12 +40,9 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithNoConnectionsShouldFail()
         {
-            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[] {});
-
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
             WhenGetEndpoint("books/Extreme Programming Explained");
-            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
-
+            ThenResponseIs(new Result<BookSearchResult[]>(new BookSearchResult[] {}));
         }
 
         /// <summary>
@@ -77,7 +72,7 @@ namespace Tests.Queries
             GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
             GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
             WhenGetEndpoint("books/Extreme Programming Explained", Library1Id);
-            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
+            ThenResponseIs(expectedResult);
 
         }
 
@@ -115,7 +110,7 @@ namespace Tests.Queries
             GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
             GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
             WhenGetEndpoint("books/Extreme", Library1Id);
-            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
+            ThenResponseIs(expectedResult);
 
         }
 
@@ -153,7 +148,7 @@ namespace Tests.Queries
             GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
             GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
             WhenGetEndpoint("books/Kent Beck", Library1Id);
-            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
+            ThenResponseIs(expectedResult);
         }
 
         /// <summary>
@@ -194,7 +189,7 @@ namespace Tests.Queries
             GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
             GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
             WhenGetEndpoint("books/Beck", Library1Id);
-            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
+            ThenResponseIs(expectedResult);
         }
 
         /// <summary>
@@ -233,7 +228,7 @@ namespace Tests.Queries
             GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
             GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
             WhenGetEndpoint("books/Beck", Library1Id);
-            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
+            ThenResponseIs(expectedResult);
 
         }
 
@@ -278,7 +273,7 @@ namespace Tests.Queries
             GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
             GivenCommand(Lib4RemovesXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/remove/");
             WhenGetEndpoint("books/Beck", Library1Id);
-            Then<Result<BookSearchResult[]>>(x => x.ShouldEqual(expectedResult));
+            ThenResponseIs(expectedResult);
 
         }
 

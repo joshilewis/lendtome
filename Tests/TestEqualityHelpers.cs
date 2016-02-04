@@ -72,7 +72,6 @@ namespace Tests
             return Arg<Guid?>.Matches(x => x.ShouldEqual(expected));
         }
 
-
         public static bool ShouldEqual(this Result actual, Result expected)
         {
             Assert.That(actual.Code, Is.EqualTo(expected.Code));
@@ -255,6 +254,22 @@ namespace Tests
             return true;
         }
 
+        private static readonly Dictionary<Type, Action<object, object>> ValueEqualityActions = new Dictionary<Type, Action<object, object>>()
+        {
+            {typeof(RequestedLink[]), (actual, expected) => ((RequestedLink[])actual).ShouldEqual((RequestedLink[])expected) },
+            {typeof(LibraryLink[]), (actual, expected) => ((LibraryLink[])actual).ShouldEqual((LibraryLink[])expected) },
+            {typeof(OpenedLibrary[]), (actual, expected) => ((OpenedLibrary[])actual).ShouldEqual((OpenedLibrary[])expected) },
+            {typeof(Result<BookSearchResult[]>), (actual, expected) => ((Result<BookSearchResult[]>)actual).ShouldEqual((Result<BookSearchResult[]>)expected) },
+            {typeof(Result<OpenedLibrary[]>), (actual, expected) => ((Result<OpenedLibrary[]>)actual).ShouldEqual((Result<OpenedLibrary[]>)expected) },
+        };
+        public static void CompareValueEquality<T>(T actual, T expected)
+        {
+            if (!ValueEqualityActions.ContainsKey(actual.GetType()))
+            {
+                if (!actual.Equals(expected)) throw new AssertionException("Values are not equal");
+            }
+            ValueEqualityActions[actual.GetType()](actual, expected);
+        }
     }
 
     public class ValueEqualityComparer : IEqualityComparer<OpenedLibrary>,

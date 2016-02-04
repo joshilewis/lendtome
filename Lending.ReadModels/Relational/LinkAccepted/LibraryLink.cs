@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Lending.ReadModels.Relational.LibraryOpened;
 
 namespace Lending.ReadModels.Relational.LinkAccepted
@@ -18,5 +19,6 @@ namespace Lending.ReadModels.Relational.LinkAccepted
         }
 
         protected LibraryLink(){ }
+
     }
 }

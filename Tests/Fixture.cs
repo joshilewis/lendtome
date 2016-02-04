@@ -74,19 +74,8 @@ namespace Tests
 
         protected string GetResponseString;
         protected Exception ActualException;
-        protected void WhenGetEndpoint(string uri, Guid? userId = null)
-        {
-            try
-            {
-                GetResponseString = HitEndPoint(uri, userId);
-            }
-            catch (Exception exception)
-            {
-                ActualException = exception;
-            }
-        }
 
-        protected string HitEndPoint(string uri, Guid? userId)
+        protected void WhenGetEndpoint(string uri, Guid? userId = null)
         {
             string path = $"https://localhost/api/{uri}/";
 
@@ -96,13 +85,13 @@ namespace Tests
                     new AuthenticationHeaderValue(Tokeniser.CreateToken("username", userId.Value));
             }
             var response = Client.GetAsync(path).Result;
-            return response.Content.ReadAsStringAsync().Result;
+            GetResponseString = response.Content.ReadAsStringAsync().Result;
         }
 
-        protected void Then<TResult>(Predicate<TResult> resultEqualityPredicate) where TResult : Result
+        protected void ThenResponseIs<TResult>(TResult expected) where TResult : Result
         {
             TResult actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(GetResponseString);
-            resultEqualityPredicate(actualResult);
+            TestEqualityHelpers.CompareValueEquality(actualResult, expected);
         }
 
         protected GetCallBuilder<TPayload> AndGETTo<TPayload>(string url)

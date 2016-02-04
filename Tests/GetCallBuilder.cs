@@ -31,7 +31,7 @@ namespace Tests
             return this;
         } 
         
-        public void Returns(Predicate<TPayload> assertionPredicate) 
+        public void Returns(TPayload expected)
         {
             if (UserId != Guid.Empty)
             {
@@ -45,7 +45,8 @@ namespace Tests
                     $"GET call to '{Url}' was not successful, response code is {response.StatusCode}, reason {response.ReasonPhrase}");
             string getResponseString = response.Content.ReadAsStringAsync().Result;
             Result<TPayload> actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<Result<TPayload>>(getResponseString);
-            assertionPredicate(actualResult.Payload);
+            TestEqualityHelpers.CompareValueEquality<TPayload>(actualResult.Payload, expected);
         }
+
     }
 }

@@ -105,7 +105,8 @@ namespace Tests
         public static HttpResponseMessage Http404BecauseTargetLibraryDoesNotExist =
             new HttpResponseMessage(HttpStatusCode.NotFound)
             {
-                ReasonPhrase = $"Aggregate '{Library2Id}' (type {typeof (Library).Name}) was not found.",
+                //ReasonPhrase = $"Aggregate '{Library2Id}' (type {typeof (Library).Name}) was not found.",
+                ReasonPhrase = "Not Found"
             };
 
         public static RequestLink Library2RequestsLinkToLibrary1 = new RequestLink(processId, Guid.Empty,
