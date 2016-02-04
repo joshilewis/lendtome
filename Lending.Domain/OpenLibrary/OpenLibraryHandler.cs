@@ -21,10 +21,10 @@ namespace Lending.Domain.OpenLibrary
 
         public override Result Handle(OpenLibrary command)
         {
-            if (checkIfUserHasOpenedLibrary.UserHasOpenedLibrary(command.AdministratorId))
+            if (checkIfUserHasOpenedLibrary.UserHasOpenedLibrary(command.UserId))
                 Fail(UserAlreadyOpenedLibrary);
 
-            Library library = Library.Open(command.ProcessId, command.AggregateId, command.Name, command.AdministratorId);
+            Library library = Library.Open(command.ProcessId, command.UserId, command.Name, command.UserId);
             EventRepository.Save(library);
 
             return Created();

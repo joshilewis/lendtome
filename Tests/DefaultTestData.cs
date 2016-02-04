@@ -31,18 +31,18 @@ namespace Tests
         public static HttpResponseMessage Http201Created = new HttpResponseMessage(HttpStatusCode.Created);
         public static HttpResponseMessage Http200Ok = new HttpResponseMessage(HttpStatusCode.OK);
 
-        public static OpenLibrary OpenLibrary1 = new OpenLibrary(processId, Library1Id, Library1Id, "library1", Library1Id);
-        public static OpenLibrary OpenLibrary2 = new OpenLibrary(processId, Library2Id, Library2Id, "user2", Library2Id);
-        public static OpenLibrary OpenLibrary3 = new OpenLibrary(processId, Library3Id, Library3Id, "user3", Library3Id);
-        public static OpenLibrary OpenLibrary4 = new OpenLibrary(processId, Library4Id, Library4Id, "user4", Library4Id);
-        public static OpenLibrary OpenLibrary5 = new OpenLibrary(processId, Library5Id, Library5Id, "user5", Library5Id);
-        public static OpenLibrary OpenLibrary6 = new OpenLibrary(processId, Library6Id, Library6Id, "user6", Library6Id);
+        public static OpenLibrary OpenLibrary1 = new OpenLibrary(processId, Library1Id, Library1Id, "library1");
+        public static OpenLibrary OpenLibrary2 = new OpenLibrary(processId, Library2Id, Library2Id, "user2");
+        public static OpenLibrary OpenLibrary3 = new OpenLibrary(processId, Library3Id, Library3Id, "user3");
+        public static OpenLibrary OpenLibrary4 = new OpenLibrary(processId, Library4Id, Library4Id, "user4");
+        public static OpenLibrary OpenLibrary5 = new OpenLibrary(processId, Library5Id, Library5Id, "user5");
+        public static OpenLibrary OpenLibrary6 = new OpenLibrary(processId, Library6Id, Library6Id, "user6");
 
-        public static OpenedLibrary OpenedLibrary1 = new OpenedLibrary(Guid.Empty, OpenLibrary1.Name, OpenLibrary1.AdministratorId);
-        public static OpenedLibrary OpenedLibrary2 = new OpenedLibrary(Guid.Empty, OpenLibrary2.Name, OpenLibrary2.AdministratorId);
+        public static OpenedLibrary OpenedLibrary1 = new OpenedLibrary(Guid.Empty, OpenLibrary1.Name, OpenLibrary1.UserId);
+        public static OpenedLibrary OpenedLibrary2 = new OpenedLibrary(Guid.Empty, OpenLibrary2.Name, OpenLibrary2.UserId);
 
         public static LibraryOpened Library1Opened = new LibraryOpened(processId, Library1Id, OpenLibrary1.Name,
-            OpenLibrary1.AdministratorId);
+            OpenLibrary1.UserId);
 
         public static string Title = "Title";
         public static string Author = "Author";
@@ -81,7 +81,7 @@ namespace Tests
             Library2Id);
 
         public static LibraryOpened Library2Opened = new LibraryOpened(processId, Library2Id, OpenLibrary2.Name,
-            OpenLibrary2.AdministratorId);
+            OpenLibrary2.UserId);
 
         public static LinkRequestReceived LinkRequestFrom1To2Received =
             new LinkRequestReceived(processId, Library2Id, Library1Id);
@@ -128,22 +128,15 @@ namespace Tests
             Guid.Empty, Library2Id);
 
         public static OpenLibrary JoshuaLewisOpensLibrary = new OpenLibrary(processId, Library1Id, Library1Id,
-            "Joshua Lewis", Library1Id);
-        public static LibraryOpened JoshuaLewisLibraryOpened = new LibraryOpened(processId, Library1Id, "Joshua Lewis",
-            Library1Id);
+            "Joshua Lewis");
+        public static OpenLibrary SuzaanHepburnOpensLibrary = new OpenLibrary(processId, Library2Id, Library2Id, "Suzaan Hepburn");
+        public static OpenLibrary JosieDoeOpensLibrary = new OpenLibrary(processId, Library3Id, Library3Id, "Josie Doe");
+        public static OpenLibrary AudreyHepburnOpensLibrary = new OpenLibrary(processId, Library4Id, Library4Id, "Audrey Hepburn");
 
-        public static OpenLibrary SuzaanHepburnOpensLibrary = new OpenLibrary(processId, Library2Id, Library2Id,
-            "Suzaan Hepburn", Library2Id);
-        public static OpenLibrary JosieDoeOpensLibrary = new OpenLibrary(processId, Library3Id, Library3Id,
-            "Josie Doe", Library3Id);
-        public static OpenLibrary AudreyHepburnOpensLibrary = new OpenLibrary(processId, Library4Id, Library4Id,
-            "Audrey Hepburn", Library4Id);
-
+        public static LibraryOpened JoshuaLewisLibraryOpened = new LibraryOpened(processId, Library1Id, "Joshua Lewis", Library1Id);
         public static LibraryOpened SuzaanHepburnLibraryOpened = new LibraryOpened(processId, Library2Id, "Suzaan Hepburn",
             Library2Id);
-
         public static LibraryOpened JosieDoeLibraryOpened = new LibraryOpened(processId, Library3Id, "Josie Doe", Library3Id);
-
         public static LibraryOpened AudreyHepburnLibraryOpened = new LibraryOpened(processId, Library4Id,
             "Audrey Hepburn", Library4Id);
 
