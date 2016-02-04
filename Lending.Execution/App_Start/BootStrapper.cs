@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Lending.Cqrs.Exceptions;
@@ -29,24 +30,26 @@ namespace Lending.Execution
             base.ApplicationStartup(container, pipelines);
             pipelines.OnError.AddItemToEndOfPipeline((context, exception) =>
             {
-                if (exception is AggregateNotFoundException) return new NotFoundResponse()
-                {
-                    ReasonPhrase = exception.Message,
-                };
+                HttpStatusCode code = HttpStatusCode.BadRequest;
+                if (exceptionStatusCodeMap.ContainsKey(exception.GetType())) code = exceptionStatusCodeMap[exception.GetType()];
 
-                if (exception is NotAuthorizedException) return new Response()
-                {
-                    StatusCode = HttpStatusCode.Forbidden,
-                    ReasonPhrase = exception.Message,
-                };
+                string reasonPhrase = exception.Message;
+                if (exception is AggregateNotFoundException) reasonPhrase = "Not Found";
 
                 return new Response()
                 {
-                    ReasonPhrase = exception.Message,
-                    StatusCode = HttpStatusCode.BadRequest,
+                    ReasonPhrase = reasonPhrase,
+                    StatusCode = code
                 };
             });
         }
+        private readonly Dictionary<Type, HttpStatusCode> exceptionStatusCodeMap = new Dictionary<Type, HttpStatusCode>()
+        {
+            {typeof(AggregateNotFoundException), HttpStatusCode.NotFound },
+            {typeof(NotAuthorizedException), HttpStatusCode.Forbidden },
+            {typeof(Exception), HttpStatusCode.BadRequest },
+
+        };
 
         protected override void RequestStartup(IContainer container, IPipelines pipelines, NancyContext context)
         {
