@@ -8,19 +8,17 @@ using NHibernate;
 
 namespace Lending.ReadModels.Relational.SearchForLibrary
 {
-    public class SearchForLibraryHandler : MessageHandler<SearchForLibrary, Result>, 
+    public class SearchForLibraryHandler : NHibernateQueryHandler<SearchForLibrary, Result>, 
         IQueryHandler<SearchForLibrary, Result>
     {
-        private readonly Func<ISession> getSession;
-
         public SearchForLibraryHandler(Func<ISession> sessionFunc)
+            : base(sessionFunc)
         {
-            this.getSession = sessionFunc;
         }
 
         public override Result Handle(SearchForLibrary query)
         {
-            OpenedLibrary[] libraries = getSession().QueryOver<OpenedLibrary>()
+            OpenedLibrary[] libraries = Session.QueryOver<OpenedLibrary>()
                 .WhereRestrictionOn(x => x.Name).IsInsensitiveLike("%" + query.SearchString.ToLower() + "%")
                 .List()
                 .ToArray();
