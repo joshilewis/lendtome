@@ -10,20 +10,16 @@ using NHibernate;
 
 namespace Lending.ReadModels.Relational.ListLibraries
 {
-    public class ListLibrariesHandler : MessageHandler<ListLibraries, Result>, IAuthenticatedQueryHandler<ListLibraries, Result>
+    public class ListLibrariesHandler : NHibernateQueryHandler<ListLibraries, Result>, IAuthenticatedQueryHandler<ListLibraries, Result>
     {
-        private readonly Func<ISession> getSession;
-
         public ListLibrariesHandler(Func<ISession> sessionFunc)
+            : base(sessionFunc)
         {
-            this.getSession = sessionFunc;
         }
 
         public override Result Handle(ListLibraries query)
         {
-            ISession session = getSession();
-
-            OpenedLibrary[] libraries = getSession().QueryOver<OpenedLibrary>()
+            OpenedLibrary[] libraries = Session.QueryOver<OpenedLibrary>()
                 .Where(x => x.AdministratorId == query.UserId)
                 .List()
                 .ToArray();

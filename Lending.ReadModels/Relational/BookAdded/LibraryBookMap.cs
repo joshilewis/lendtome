@@ -10,7 +10,8 @@ namespace Lending.ReadModels.Relational.BookAdded
                 .GeneratedBy.Native();
 
             Map(x => x.ProcessId);
-            Map(x => x.LibraryId)
+            References(x => x.Library)
+                .Column("LibraryId")
                 .UniqueKey("UK_Library_Book");
             Map(x => x.LibraryName);
             Map(x => x.Title)

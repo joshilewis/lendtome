@@ -45,7 +45,7 @@ namespace Tests
                     $"GET call to '{Url}' was not successful, response code is {response.StatusCode}, reason {response.ReasonPhrase}");
             string getResponseString = response.Content.ReadAsStringAsync().Result;
             Result<TPayload> actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<Result<TPayload>>(getResponseString);
-            TestEqualityHelpers.CompareValueEquality<TPayload>(actualResult.Payload, expected);
+            TestEqualityHelpers.CompareValueEquality(actualResult.Payload, expected);
         }
 
     }

@@ -6,22 +6,19 @@ using NHibernate;
 
 namespace Lending.ReadModels.Relational.BookAdded
 {
-    public class BookAddedEventHandler : Lending.Cqrs.EventHandler<BookAddedToLibrary>
+    public class BookAddedEventHandler : NHibernateEventHandler<BookAddedToLibrary>
     {
-        private readonly Func<ISession> getSession;
-
         public BookAddedEventHandler(Func<ISession> sessionFunc)
+            : base(sessionFunc)
         {
-            getSession = sessionFunc;
         }
 
         public override void When(BookAddedToLibrary @event)
         {
-            ISession session = getSession();
+            string username = Session.Get<OpenedLibrary>(@event.AggregateId).Name;
+            OpenedLibrary library = Session.Get<OpenedLibrary>(@event.AggregateId);
 
-            string username = session.Get<OpenedLibrary>(@event.AggregateId).Name;
-
-            session.Save(new LibraryBook(@event.ProcessId, @event.AggregateId, username, @event.Title, @event.Author,
+            Session.Save(new LibraryBook(@event.ProcessId, library, username, @event.Title, @event.Author,
                 @event.Isbn));
         }
     }

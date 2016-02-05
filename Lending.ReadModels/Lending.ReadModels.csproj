@@ -66,6 +66,8 @@
     <Compile Include="Relational\LinkRequested\RequestedLink.cs" />
     <Compile Include="Relational\LinkRequested\LinkRequestedHandler.cs" />
     <Compile Include="Relational\LinkRequested\RequestLinkMap.cs" />
+    <Compile Include="Relational\ListLibraryBooks\ListLibraryBooks.cs" />
+    <Compile Include="Relational\ListLibraryBooks\ListLibraryBooksHandler.cs" />
     <Compile Include="Relational\ListLibraries\ListLibrariesHandler.cs" />
     <Compile Include="Relational\ListLibraries\ListLibraries.cs" />
     <Compile Include="Relational\ListLibrayLinks\ListLibraryLinks.cs" />

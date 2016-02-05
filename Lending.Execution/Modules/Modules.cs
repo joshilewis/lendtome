@@ -7,6 +7,7 @@ using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestLink;
 using Lending.Execution.UnitOfWork;
 using Lending.ReadModels.Relational.ListLibraries;
+using Lending.ReadModels.Relational.ListLibraryBooks;
 using Lending.ReadModels.Relational.ListLibrayLinks;
 using Lending.ReadModels.Relational.ListReceivedLinks;
 using Lending.ReadModels.Relational.ListRequestedLinks;
@@ -87,7 +88,7 @@ namespace Lending.Execution.Modules
     public class ListRequestedLinksModule : AuthenticatedGetModule<ListRequestedLinks, Result>
     {
         public ListRequestedLinksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListRequestedLinks, Result> queryHandler)
-            : base(unitOfWork, queryHandler, "/libraries/links/sent")
+            : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/links/sent")
         {
         }
     }
@@ -95,7 +96,7 @@ namespace Lending.Execution.Modules
     public class ListReceivedLinksModule : AuthenticatedGetModule<ListReceivedLinks, Result>
     {
         public ListReceivedLinksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListReceivedLinks, Result> queryHandler)
-            : base(unitOfWork, queryHandler, "/libraries/links/received")
+            : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/links/received")
         {
         }
     }
@@ -103,7 +104,15 @@ namespace Lending.Execution.Modules
     public class ListLibraryLinksModule : AuthenticatedGetModule<ListLibraryLinks, Result>
     {
         public ListLibraryLinksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraryLinks, Result> queryHandler)
-            : base(unitOfWork, queryHandler, "/libraries/links/")
+            : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/links/")
+        {
+        }
+    }
+
+    public class ListLibraryBooksModule : AuthenticatedGetModule<ListLibraryBooks, Result>
+    {
+        public ListLibraryBooksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraryBooks, Result> queryHandler)
+            : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/books/")
         {
         }
     }

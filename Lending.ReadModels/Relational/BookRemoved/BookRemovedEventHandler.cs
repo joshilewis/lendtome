@@ -9,27 +9,24 @@ using NHibernate;
 
 namespace Lending.ReadModels.Relational.BookRemoved
 {
-    public class BookRemovedEventHandler : Lending.Cqrs.EventHandler<BookRemovedFromLibrary>
+    public class BookRemovedEventHandler : NHibernateEventHandler<BookRemovedFromLibrary>
     {
-        private readonly Func<ISession> getSession;
-
         public BookRemovedEventHandler(Func<ISession> sessionFunc)
+            : base(sessionFunc)
         {
-            this.getSession = sessionFunc;
         }
 
         public override void When(BookRemovedFromLibrary @event)
         {
-            ISession session = getSession();
-
-            LibraryBook bookToRemove = session.QueryOver<LibraryBook>()
-                .Where(x => x.LibraryId == @event.AggregateId)
+            LibraryBook bookToRemove = Session.QueryOver<LibraryBook>()
                 .Where(x => x.Title == @event.Title)
                 .Where(x => x.Author == @event.Author)
                 .Where(x => x.Isbn == @event.Isbn)
+                .JoinQueryOver(x => x.Library)
+                .Where(x => x.Id == @event.AggregateId)
                 .SingleOrDefault();
 
-            session.Delete(bookToRemove);
+            Session.Delete(bookToRemove);
         }
     }
 }

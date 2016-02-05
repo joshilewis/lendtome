@@ -3,6 +3,7 @@ using Lending.Cqrs.Query;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
 using Lending.Domain.RemoveBookFromLibrary;
+using Lending.ReadModels.Relational.BookAdded;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
 
@@ -28,6 +29,7 @@ namespace Tests.Commands
             WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
             Then(Http200Ok);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary);
+            AndGETTo<LibraryBook[]>($"/libraries/{Library1Id}/books/").Returns(new LibraryBook[] {});
         }
 
         /// <summary>
@@ -42,6 +44,7 @@ namespace Tests.Commands
             WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
             Then(Http400Because(Library.BookNotInLibrary));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
+            AndGETTo<LibraryBook[]>($"/libraries/{Library1Id}/books/").Returns(new LibraryBook[] { });
         }
 
         [Test]
@@ -52,6 +55,7 @@ namespace Tests.Commands
             WhenCommand(UnauthorizedRemoveBook).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
             Then(Http403BecauseUnauthorized(UnauthorizedRemoveBook.UserId, Library1Id, typeof (Library)));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
+            AndGETTo<LibraryBook[]>($"/libraries/{Library1Id}/books/").Returns(new LibraryBook[] { });
         }
 
     }

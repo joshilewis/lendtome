@@ -12,26 +12,22 @@ using NHibernate.Criterion;
 
 namespace Lending.ReadModels.Relational.SearchForBook
 {
-    public class SearchForBookHandler : MessageHandler<SearchForBook, Result>, IAuthenticatedQueryHandler<SearchForBook, Result>
+    public class SearchForBookHandler : NHibernateQueryHandler<SearchForBook, Result>, IAuthenticatedQueryHandler<SearchForBook, Result>
     {
         public const string UserHasNoConnection = "User has no connections";
 
-        private readonly Func<ISession> getSession;
-
         public SearchForBookHandler(Func<ISession> sessionFunc)
+            : base(sessionFunc)
         {
-            this.getSession = sessionFunc;
         }
 
         public override Result Handle(SearchForBook message)
         {
-            ISession session = getSession();
-
             LibraryLink libraryLinkAlias = null;
             OpenedLibrary acceptingLibraryAlias = null;
             OpenedLibrary requestingLibraryAlias = null;
 
-            int numberOfConnections = session.QueryOver<LibraryLink>(() => libraryLinkAlias)
+            int numberOfConnections = Session.QueryOver<LibraryLink>(() => libraryLinkAlias)
                 .JoinAlias(x => x.AcceptingLibrary, () => acceptingLibraryAlias)
                 .JoinAlias(x => x.RequestingLibrary, () => requestingLibraryAlias)
                 .Where(() => acceptingLibraryAlias.AdministratorId == message.UserId || requestingLibraryAlias.AdministratorId == message.UserId)
@@ -40,7 +36,7 @@ namespace Lending.ReadModels.Relational.SearchForBook
             if (numberOfConnections == 0)
                 return new Result<BookSearchResult[]>(Result.EResultCode.Ok, new BookSearchResult[] {});
 
-            IEnumerable<LibraryLink> connectedUsers = session.QueryOver<LibraryLink>(() => libraryLinkAlias)
+            IEnumerable<LibraryLink> connectedUsers = Session.QueryOver<LibraryLink>(() => libraryLinkAlias)
                 .JoinAlias(x => x.AcceptingLibrary, () => acceptingLibraryAlias)
                 .JoinAlias(x => x.RequestingLibrary, () => requestingLibraryAlias)
                 .Where(() => requestingLibraryAlias.AdministratorId == message.UserId || acceptingLibraryAlias.AdministratorId == message.UserId)
@@ -51,12 +47,13 @@ namespace Lending.ReadModels.Relational.SearchForBook
             connectedUserIds.AddRange(connectedUsers.Select(x => x.RequestingLibrary.Id));
             connectedUserIds = connectedUserIds.Distinct().ToList();
 
-            BookSearchResult[] payload = session.QueryOver<LibraryBook>()
+            BookSearchResult[] payload = Session.QueryOver<LibraryBook>()
                 .Where(Restrictions.On<LibraryBook>(x => x.Title).IsInsensitiveLike("%" + message.SearchString + "%") ||
                     Restrictions.On<LibraryBook>(x => x.Author).IsInsensitiveLike("%" + message.SearchString + "%"))
-                    .WhereRestrictionOn(x => x.LibraryId).IsIn(connectedUserIds)
+                    .JoinQueryOver(x => x.Library)
+                    .WhereRestrictionOn(x => x.Id).IsIn(connectedUserIds)
                 .List()
-                .Select(x => new BookSearchResult(x.LibraryId, x.LibraryName, x.Title, x.Author))
+                .Select(x => new BookSearchResult(x.Library.Id, x.LibraryName, x.Title, x.Author))
                 .ToArray();
 
             return new Result<BookSearchResult[]>(payload);

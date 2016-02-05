@@ -1,6 +1,8 @@
 ﻿using System;
 using Lending.Cqrs.Query;
 using Lending.Domain.Model;
+using Lending.ReadModels.Relational.LinkAccepted;
+using Lending.ReadModels.Relational.LinkRequested;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
 
@@ -29,6 +31,18 @@ namespace Tests.Commands
             Then(Http200Ok);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, DefaultTestData.LinkCompleted);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, DefaultTestData.LinkAccepted);
+            AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(new RequestedLink[] { });
+            AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(new RequestedLink[] { });
+            AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library1Id)
+                .Returns(new[]
+                {
+                    new LibraryLink(Guid.Empty, OpenedLibrary1, OpenedLibrary2),
+                });
+            AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library2Id)
+                .Returns(new[]
+                {
+                    new LibraryLink(Guid.Empty, OpenedLibrary1, OpenedLibrary2),
+                });
         }
 
         /// <summary>
@@ -45,6 +59,10 @@ namespace Tests.Commands
             Then(Http400Because(Library.NoPendingLinkRequest));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened);
+            AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(new RequestedLink[] { });
+            AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(new RequestedLink[] { });
+            AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(new LibraryLink[]{});
+            AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(new LibraryLink[]{});
         }
 
         /// <summary>
@@ -63,6 +81,18 @@ namespace Tests.Commands
             Then(Http400Because(Library.LibrariesAlreadyLinked));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, DefaultTestData.LinkCompleted);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, DefaultTestData.LinkAccepted);
+            AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(new RequestedLink[] { });
+            AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(new RequestedLink[] { });
+            AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library1Id)
+                .Returns(new[]
+                {
+                    new LibraryLink(Guid.Empty, OpenedLibrary1, OpenedLibrary2),
+                });
+            AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library2Id)
+                .Returns(new[]
+                {
+                    new LibraryLink(Guid.Empty, OpenedLibrary1, OpenedLibrary2),
+                });
         }
 
         [Test]
@@ -75,6 +105,16 @@ namespace Tests.Commands
             Then(Http403BecauseUnauthorized(UnauthorizedAcceptLink.UserId, Library2Id, typeof (Library)));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
+            AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(new[]
+            {
+                new RequestedLink(Guid.Empty, OpenedLibrary2, OpenedLibrary1),
+            });
+            AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(new[]
+            {
+                new RequestedLink(Guid.Empty, OpenedLibrary2, OpenedLibrary1),
+            });
+            AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(new LibraryLink[] { });
+            AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(new LibraryLink[] { });
         }
 
     }

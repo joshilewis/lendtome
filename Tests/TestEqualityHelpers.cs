@@ -174,13 +174,19 @@ namespace Tests
 
         public static bool ShouldEqual(this LibraryBook actual, LibraryBook expected)
         {
-            Assert.That(actual.ProcessId, Is.EqualTo(expected.ProcessId));
-            Assert.That(actual.LibraryId, Is.EqualTo(expected.LibraryId));
+            actual.Library.ShouldEqual(expected.Library);
             Assert.That(actual.Title, Is.EqualTo(expected.Title));
             Assert.That(actual.Author, Is.EqualTo(expected.Author));
             Assert.That(actual.Isbn, Is.EqualTo(expected.Isbn));
             return true;
         }
+        public static bool ShouldEqual(this LibraryBook[] actual, LibraryBook[] expected)
+        {
+            Assert.That(actual, Is.EquivalentTo(expected).Using((IEqualityComparer<LibraryBook>)new ValueEqualityComparer()));
+
+            return true;
+        }
+
 
         public static bool ShouldEqual(this Result<BookSearchResult[]> actual, Result<BookSearchResult[]> expected)
         {
@@ -261,6 +267,7 @@ namespace Tests
             {typeof(OpenedLibrary[]), (actual, expected) => ((OpenedLibrary[])actual).ShouldEqual((OpenedLibrary[])expected) },
             {typeof(Result<BookSearchResult[]>), (actual, expected) => ((Result<BookSearchResult[]>)actual).ShouldEqual((Result<BookSearchResult[]>)expected) },
             {typeof(Result<OpenedLibrary[]>), (actual, expected) => ((Result<OpenedLibrary[]>)actual).ShouldEqual((Result<OpenedLibrary[]>)expected) },
+            {typeof(LibraryBook[]), (actual, expected) => ((LibraryBook[])actual).ShouldEqual((LibraryBook[])expected) },
         };
         public static void CompareValueEquality<T>(T actual, T expected)
         {
@@ -275,7 +282,8 @@ namespace Tests
     public class ValueEqualityComparer : IEqualityComparer<OpenedLibrary>,
         IEqualityComparer<AuthenticationProvider>,
         IEqualityComparer<LibraryLink>,
-        IEqualityComparer<RequestedLink>
+        IEqualityComparer<RequestedLink>,
+        IEqualityComparer<LibraryBook>
     {
         public bool Equals(OpenedLibrary x, OpenedLibrary y)
         {
@@ -343,6 +351,16 @@ namespace Tests
         }
 
         public int GetHashCode(RequestedLink obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(LibraryBook x, LibraryBook y)
+        {
+            return y.ShouldEqual(x);
+        }
+
+        public int GetHashCode(LibraryBook obj)
         {
             throw new NotImplementedException();
         }
