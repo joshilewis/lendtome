@@ -58,8 +58,8 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
+                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
             });
 
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4).ArePOSTedTo("/libraries/");
@@ -91,9 +91,9 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library5Id, OpenLibrary5.Name, ExtremeSnowboardStunts, SomeSkiier),
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
+                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
+                new BookSearchResult(Library5Id, OpenLibrary5.Name, ExtremeSnowboardStunts, SomeSkiier, Isbn),
             });
 
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
@@ -129,9 +129,9 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck),
-                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck),
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
+                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn),
+                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
             });
 
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
@@ -167,10 +167,10 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck),
-                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor),
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
+                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn),
+                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
+                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn),
             });
 
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
@@ -208,9 +208,9 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck),
-                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor),
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
+                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn),
+                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn),
             });
 
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
@@ -251,9 +251,9 @@ namespace Tests.Queries
         {
             var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
             {
-                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck),
-                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck),
-                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor),
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
+                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn),
+                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn),
             });
 
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)

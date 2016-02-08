@@ -246,6 +246,13 @@ namespace Tests
             return true;
         }
 
+        public static bool ShouldEqual(this BookSearchResult[] actual, BookSearchResult[] expected)
+        {
+            Assert.That(actual, Is.EquivalentTo(expected));
+
+            return true;
+        }
+
         public static bool ShouldEqual(this LibraryLink[] actual, LibraryLink[] expected)
         {
             Assert.That(actual, Is.EquivalentTo(expected).Using((IEqualityComparer<LibraryLink>)new ValueEqualityComparer()));
@@ -268,6 +275,7 @@ namespace Tests
             {typeof(Result<BookSearchResult[]>), (actual, expected) => ((Result<BookSearchResult[]>)actual).ShouldEqual((Result<BookSearchResult[]>)expected) },
             {typeof(Result<OpenedLibrary[]>), (actual, expected) => ((Result<OpenedLibrary[]>)actual).ShouldEqual((Result<OpenedLibrary[]>)expected) },
             {typeof(LibraryBook[]), (actual, expected) => ((LibraryBook[])actual).ShouldEqual((LibraryBook[])expected) },
+            {typeof(BookSearchResult[]), (actual, expected) => ((BookSearchResult[])actual).ShouldEqual((BookSearchResult[])expected) },
         };
         public static void CompareValueEquality<T>(T actual, T expected)
         {

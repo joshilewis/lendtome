@@ -2,6 +2,7 @@
 using System.Linq;
 using Lending.Cqrs.Query;
 using Lending.ReadModels.Relational.BookAdded;
+using Lending.ReadModels.Relational.SearchForBook;
 using NHibernate;
 
 namespace Lending.ReadModels.Relational.ListLibraryBooks
@@ -20,7 +21,9 @@ namespace Lending.ReadModels.Relational.ListLibraryBooks
                 .List()
                 .ToArray();
 
-            return new Result<LibraryBook[]>(libraryBooks);
+            return new Result<BookSearchResult[]>(libraryBooks
+                .Select(x => new BookSearchResult(x.Library.Id, x.LibraryName, x.Title, x.Author, x.Isbn))
+                .ToArray());
         }
     }
 }
