@@ -18,9 +18,13 @@ namespace Tests.Commands
     public class RequestLinkTests : FixtureWithEventStoreAndNHibernate
     {
         /// <summary>
-        /// GIVEN Library1 is Open AND Library2 is Open AND they are not Linked AND there is an existing Link Eequest from Library1 to Library2
+        /// GIVEN Library1 is Open AND Library2 is Open AND they are not Linked AND there is an existing Link Request from Library1 to Library2
         /// WHEN Library1 requests to Link to Library2
-        /// THEN no request is created AND Library1 is informed that the request failed because a Link Request exists and is Pending
+        /// THEN HTTP400 is returned because a Link Request between Library1 and Library2 already exists
+        /// AND the Link Request Sent to Library2 appears in Library1's Sent Link Requests
+        /// AND the Link Request Received from Library1 appears in Library2's Received Link Requests
+        /// AND nothing appears in Library1's Links
+        /// AND nothing appears in Library2's Links
         /// </summary>
         [Test]
         public void RequestLinkFromLibraryWithPendingRequestShouldFail()
@@ -47,7 +51,11 @@ namespace Tests.Commands
         /// <summary>
         /// GIVEN Library1 is Open AND Library2 is Open AND they are not Linked AND there are no Link Requests between them
         /// WHEN Library1 Requests a Link to Library2
-        /// THEN the Request is created AND Library2 is informed of the Link Request
+        /// THEN HTTP200 is returned
+        /// AND the Link Request Sent to Library2 appears in Library1's Sent Link Requests
+        /// AND the Link Request Received from Library1 appears in Library2's Received Link Requests
+        /// AND nothing appears in Library1's Links
+        /// AND nothing appears in Library2's Links
         /// </summary>
         [Test]
         public void RequestLinkForUnLinkedLibrarysShouldSucceed()
@@ -72,8 +80,10 @@ namespace Tests.Commands
 
         /// <summary>
         /// GIVEN Library1 is Open AND Library2 is not Open
-        ///WHEN Library1 Requests to Link to Library2
-        ///THEN no request is created AND Library1 is notified that the request failed because there is no such Library
+        /// WHEN Library1 Requests to Link to Library2
+        /// THEN HTTP404 is returned because Library2 does not exist
+        /// AND nothing appears in Library1's Sent Link Requests
+        /// AND nothing appears in Library1's Links
         /// </summary>
         [Test]
         public void RequestLinkToNonExistentLibraryShouldFail()
@@ -88,8 +98,12 @@ namespace Tests.Commands
 
         /// <summary>
         /// GIVEN Library1 is Open AND Library2 is Open AND they are not Linked AND there is an existing Link Request from Library2 to Library1
-        ///WHEN Library1 Requests to Link to Library2
-        ///THEN no request is created AND Library1 is informed that the request failed because a Link Request exists AND is pending
+        /// WHEN Library1 Requests to Link to Library2
+        /// THEN HTTP400 is returned because a Link Request was Sent from Library2 to Library1
+        /// AND the Link Request Received from Library2 appears in Library1's Received Link Requests
+        /// AND the Link Request Sent to Library1 appears in Library2's Sent Link Requests
+        /// AND nothing appears in Library1's Links
+        /// AND nothing appears in Library2's Links
         /// </summary>
         [Test]
         public void RequestLinkToLibraryWithPendingRequestShouldFail()
@@ -115,8 +129,12 @@ namespace Tests.Commands
 
         /// <summary>
         /// GIVEN Library1 is Open AND Library2 is Open AND they are already Linked
-        ///WHEN Library1 Requests to Link to Library2
-        ///THEN no request is created AND Library1 is informed that the request failed because they are already Linked
+        /// WHEN Library1 Requests to Link to Library2
+        /// THEN HTTP400 because Library1 is already Linked to Library2
+        /// AND nothing appears in Library1's Sent Link Requests
+        /// AND nothing appears in Library2's Received Link Requests
+        /// AND Library2 appears in Library1's Links
+        /// AND Library1 appears in Library2's Links
         /// </summary>
         [Test]
         public void RequestLinkToLinkedLibrariesShouldFail()
@@ -145,9 +163,11 @@ namespace Tests.Commands
         }
 
         /// <summary>
-        /// GIVEN Library1 exists
-        ///WHEN Library1 requests a connection to Library1
-        ///THEN no request is created AND Library1 is informed that the request failed because they can't connect to themselves
+        /// GIVEN Library1 is Open
+        /// WHEN Library1 Requests a Link to Library1
+        /// THEN HTTP400 because Library1 can't Link to itself
+        /// AND nothing appears in Library1's Sent Link Requests
+        /// AND nothing appears in Library1s Links
         /// </summary>
         [Test]
         public void RequestLinkToSelfShouldFail()

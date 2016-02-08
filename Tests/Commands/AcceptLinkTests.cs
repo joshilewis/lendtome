@@ -10,16 +10,20 @@ namespace Tests.Commands
 {
     /// <summary>
     /// https://github.com/joshilewis/lending/issues/7
-    /// As a Library I want to Accept a Requested Link from another Library So that we can see each other's Books.
+    /// As a Library I want to Accept a Link Request from another Library So that we can see each other's Books.
     /// </summary>
     [TestFixture]
     public class AcceptLinkTests : FixtureWithEventStoreAndNHibernate
     {
 
         /// <summary>
-        /// GIVEN Library1 AND Library2 are Open AND they are not Linked AND Library1 has requested to Link to Library2
-        ///WHEN Library2 accepts the Link Request from Library1
-        ///THEN Library1 and Library2 are connected
+        /// GIVEN Library1 AND Library2 are Open AND they are not Linked AND Library1 has Requested to Link to Library2
+        /// WHEN Library2 Accepts the Link Request from Library1
+        /// THEN HTTP200 is Returned
+        /// AND nothing appears in Library1's Sent Link Requests
+        /// AND nothing appears in Library2's Received Link Requests
+        /// AND Library2 appears in Library1's Links
+        /// AND Library1 appears in Library2's Links
         /// </summary>
         [Test]
         public void AcceptLinkForUnconnectedLibrarysWithAPendingRequestShouldSucceed()
@@ -46,9 +50,13 @@ namespace Tests.Commands
         }
 
         /// <summary>
-        ///GIVEN Library1 AND Library2 are Open AND they are not Linked AND there are no Link Requests between them
-        ///WHEN Library2 accepts the Link Request from Library1
-        ///THEN No Link is made and Library2 is informed that the acceptance failed because there is no Link Request between them
+        /// GIVEN Library1 AND Library2 are Open AND they are not Linked AND there are no Link Requests between them
+        /// WHEN Library2 accepts the Link Request from Library1
+        /// THEN HTTP400 is returned because there are no Link Requests between Library1 and Library2
+        /// AND nothing appears in Library1's Sent Link Requests
+        /// AND nothing appears in Library2's Received Link Requests
+        /// AND nothing appears in Library1's Links
+        /// AND nothing appears in Library2's Links
         /// </summary>
         [Test]
         public void AcceptLinkWithNoPendingRequestShouldFail()
@@ -66,9 +74,13 @@ namespace Tests.Commands
         }
 
         /// <summary>
-        ///GIVEN Library1 AND Library2 are open AND they are Linked
-        ///WHEN Library2 accepts the Link Request from Library1
-        ///THEN No Link is made and Library2 is informed that the acceptance failed because they are already Linked
+        /// GIVEN Library1 AND Library2 are open AND they are Linked
+        /// WHEN Library2 accepts a Link Request from Library1
+        /// THEN HTTP400 is returned because the Libraries are already Linked
+        /// AND nothing appears in Library1's Sent Link Requests
+        /// AND nothing appears in Library2's Received Link Requests
+        /// AND Library2 appears in Library1's Links
+        /// AND Library1 appears in Library2's Links
         /// </summary>
         [Test]
         public void AcceptLinkForLinkedLibrariesShouldFail()

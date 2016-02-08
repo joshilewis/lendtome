@@ -17,9 +17,10 @@ namespace Tests.Commands
     public class RemoveBookFromLibraryTests : FixtureWithEventStoreAndNHibernate
     {
         /// <summary>
-        /// GIVEN 'User1' is a Registered User AND Book 'Book1' is in User1's Library 
-        /// WHEN User1 Removes Book1 from her Library
-        /// THEN Book1 is Removed from User1's Library
+        /// GIVEN Library1 is Open and Book1 is Added to Library1
+        /// WHEN Book1 is Removed from Library1
+        /// THEN HTTP200 is returned 
+        /// AND nothing appears in Library1's Books
         /// </summary>
         [Test]
         public void RemoveBookInLibraryShouldSucceed()
@@ -33,9 +34,10 @@ namespace Tests.Commands
         }
 
         /// <summary>
-        /// GIVEN 'User1' is a Registered user AND Book1 is not in User1's Library
-        /// WHEN User1 Removes Book1 from her Library
-        /// THEN User1 is notified that Book1 is not in her Library        
+        /// GIVEN Library1 is Open and Book1 has not been Added to Library1
+        /// WHEN Book1 is Removed from Library1
+        /// THEN HTTP400 is returned because Book1 is not in Library1
+        /// AND nothing appears in Library1's Books
         /// </summary>
         [Test]
         public void RemoveBookNotInLibraryShouldFail()
