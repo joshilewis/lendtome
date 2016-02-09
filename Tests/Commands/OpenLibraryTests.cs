@@ -23,9 +23,9 @@ namespace Tests.Commands
             //Given();
             WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             Then(Http201Created);
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
             AndGETTo<OpenedLibrary[]>("/libraries/")
                 .Returns(new[] {new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id),});
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
         [Test]
@@ -34,9 +34,9 @@ namespace Tests.Commands
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             Then(Http400Because(OpenLibraryHandler.UserAlreadyOpenedLibrary));
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
             AndGETTo<OpenedLibrary[]>("/libraries/")
                 .Returns(new[] {new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id),});
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
         [Test]

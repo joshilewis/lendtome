@@ -33,8 +33,6 @@ namespace Tests.Commands
             GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             WhenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             Then(Http200Ok);
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, DefaultTestData.LinkCompleted);
-            AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, DefaultTestData.LinkAccepted);
             AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(new RequestedLink[] { });
             AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(new RequestedLink[] { });
             AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library1Id)
@@ -47,6 +45,8 @@ namespace Tests.Commands
                 {
                     new LibraryLink(Guid.Empty, OpenedLibrary1, OpenedLibrary2),
                 });
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, DefaultTestData.LinkCompleted);
+            AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, DefaultTestData.LinkAccepted);
         }
 
         /// <summary>
@@ -65,12 +65,12 @@ namespace Tests.Commands
             GivenCommand(OpenLibrary2).IsPOSTedTo($"/libraries");
             WhenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             Then(Http400Because(Library.NoPendingLinkRequest));
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
-            AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened);
             AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(new RequestedLink[] { });
             AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(new RequestedLink[] { });
             AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(new LibraryLink[]{});
             AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(new LibraryLink[]{});
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
+            AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened);
         }
 
         /// <summary>
@@ -91,8 +91,6 @@ namespace Tests.Commands
             GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             WhenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             Then(Http400Because(Library.LibrariesAlreadyLinked));
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, DefaultTestData.LinkCompleted);
-            AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, DefaultTestData.LinkAccepted);
             AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(new RequestedLink[] { });
             AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(new RequestedLink[] { });
             AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library1Id)
@@ -105,6 +103,8 @@ namespace Tests.Commands
                 {
                     new LibraryLink(Guid.Empty, OpenedLibrary1, OpenedLibrary2),
                 });
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, DefaultTestData.LinkCompleted);
+            AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, DefaultTestData.LinkAccepted);
         }
 
         [Test]
@@ -115,8 +115,6 @@ namespace Tests.Commands
             GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             WhenCommand(UnauthorizedAcceptLink).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             Then(Http403BecauseUnauthorized(UnauthorizedAcceptLink.UserId, Library2Id, typeof (Library)));
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
-            AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
             AndGETTo<RequestedLink[]>($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(new[]
             {
                 new RequestedLink(Guid.Empty, OpenedLibrary2, OpenedLibrary1),
@@ -127,6 +125,8 @@ namespace Tests.Commands
             });
             AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(new LibraryLink[] { });
             AndGETTo<LibraryLink[]>($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(new LibraryLink[] { });
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
+            AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
         }
 
     }

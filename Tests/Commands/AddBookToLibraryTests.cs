@@ -29,12 +29,12 @@ namespace Tests.Commands
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             WhenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             Then(Http201Created);
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
             AndGETTo<BookSearchResult[]>($"/libraries/{Library1Id}/books/").Returns(new[]
             {
                 new BookSearchResult(OpenLibrary1.AggregateId, OpenLibrary1.Name, AddBook1ToLibrary.Title,
                     AddBook1ToLibrary.Author, AddBook1ToLibrary.Isbn),
             });
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
 
         /// <summary>
@@ -50,12 +50,12 @@ namespace Tests.Commands
             GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             WhenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             Then(Http400Because(Library.BookAlreadyInLibrary));
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
             AndGETTo<BookSearchResult[]>($"/libraries/{Library1Id}/books/").Returns(new[]
             {
                 new BookSearchResult(OpenLibrary1.AggregateId, OpenLibrary1.Name, AddBook1ToLibrary.Title,
                     AddBook1ToLibrary.Author, AddBook1ToLibrary.Isbn),
             });
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
 
         /// <summary>
@@ -72,12 +72,12 @@ namespace Tests.Commands
             GivenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
             WhenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             Then(Http201Created);
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary, Book1AddedToUser1Library);
             AndGETTo<BookSearchResult[]>($"/libraries/{Library1Id}/books/").Returns(new[]
             {
                 new BookSearchResult(OpenLibrary1.AggregateId, OpenLibrary1.Name, AddBook1ToLibrary.Title,
                     AddBook1ToLibrary.Author, AddBook1ToLibrary.Isbn),
             });
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary, Book1AddedToUser1Library);
         }
 
         [Test]
@@ -86,8 +86,8 @@ namespace Tests.Commands
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             WhenCommand(UnauthorizedAddBookToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             Then(Http403BecauseUnauthorized(UnauthorizedAddBookToLibrary.UserId, Library1Id, typeof (Library)));
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
             AndGETTo<BookSearchResult[]>($"/libraries/{Library1Id}/books/").Returns(new BookSearchResult[] {});
+            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
     }
