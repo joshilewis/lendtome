@@ -23,8 +23,8 @@ namespace Tests.Commands
             //Given();
             WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             Then(Http201Created);
-            AndGETTo<OpenedLibrary[]>("/libraries/")
-                .Returns(new[] {new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id),});
+            AndGETTo("/libraries/")
+                .Returns(new Result<OpenedLibrary[]>(new[] {new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id),}));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
@@ -34,8 +34,8 @@ namespace Tests.Commands
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             Then(Http400Because(OpenLibraryHandler.UserAlreadyOpenedLibrary));
-            AndGETTo<OpenedLibrary[]>("/libraries/")
-                .Returns(new[] {new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id),});
+            AndGETTo("/libraries/")
+                .Returns(new Result<OpenedLibrary[]>(new[] {new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id),}));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
@@ -43,7 +43,7 @@ namespace Tests.Commands
         public void ListLibrariesShouldShowOnlyLibrariesAdministeredByUser()
         {
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3).ArePOSTedTo("/libraries");
-            WhenGetEndpoint("/libraries/", Library2Id);
+            WhenGetEndpoint("/libraries/").As(Library2Id);
             ThenResponseIs(new Result<OpenedLibrary[]>(new[] {new OpenedLibrary(Library2Id, Library2Opened.Name, Library2Id),}));
         }
 

@@ -28,7 +28,7 @@ namespace Tests.Queries
             GivenCommand(OpenLibrary2).IsPOSTedTo("/libraries/");
             GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request/");
             GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept/");
-            WhenGetEndpoint("books/Extreme Programming Explained");
+            WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
             ThenResponseIs(new Result<BookSearchResult[]>(new BookSearchResult[] {}));
         }
 
@@ -41,7 +41,7 @@ namespace Tests.Queries
         public void SearchingForBookWithNoConnectionsShouldFail()
         {
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
-            WhenGetEndpoint("books/Extreme Programming Explained");
+            WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
             ThenResponseIs(new Result<BookSearchResult[]>(new BookSearchResult[] {}));
         }
 
@@ -71,7 +71,7 @@ namespace Tests.Queries
             GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
             GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
             GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
-            WhenGetEndpoint("books/Extreme Programming Explained", Library1Id);
+            WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
             ThenResponseIs(expectedResult);
 
         }
@@ -109,7 +109,7 @@ namespace Tests.Queries
             GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
             GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
             GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
-            WhenGetEndpoint("books/Extreme", Library1Id);
+            WhenGetEndpoint("books/Extreme").As(Library1Id);
             ThenResponseIs(expectedResult);
 
         }
@@ -147,7 +147,7 @@ namespace Tests.Queries
             GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
             GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
             GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
-            WhenGetEndpoint("books/Kent Beck", Library1Id);
+            WhenGetEndpoint("books/Kent Beck").As(Library1Id);
             ThenResponseIs(expectedResult);
         }
 
@@ -188,7 +188,7 @@ namespace Tests.Queries
             GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
             GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
             GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
-            WhenGetEndpoint("books/Beck", Library1Id);
+            WhenGetEndpoint("books/Beck").As(Library1Id);
             ThenResponseIs(expectedResult);
         }
 
@@ -227,7 +227,7 @@ namespace Tests.Queries
             GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
             GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
             GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
-            WhenGetEndpoint("books/Beck", Library1Id);
+            WhenGetEndpoint("books/Beck").As(Library1Id);
             ThenResponseIs(expectedResult);
 
         }
@@ -272,7 +272,7 @@ namespace Tests.Queries
             GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
             GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
             GivenCommand(Lib4RemovesXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/remove/");
-            WhenGetEndpoint("books/Beck", Library1Id);
+            WhenGetEndpoint("books/Beck").As(Library1Id);
             ThenResponseIs(expectedResult);
 
         }

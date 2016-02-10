@@ -269,13 +269,11 @@ namespace Tests
 
         private static readonly Dictionary<Type, Action<object, object>> ValueEqualityActions = new Dictionary<Type, Action<object, object>>()
         {
-            {typeof(RequestedLink[]), (actual, expected) => ((RequestedLink[])actual).ShouldEqual((RequestedLink[])expected) },
-            {typeof(LibraryLink[]), (actual, expected) => ((LibraryLink[])actual).ShouldEqual((LibraryLink[])expected) },
-            {typeof(OpenedLibrary[]), (actual, expected) => ((OpenedLibrary[])actual).ShouldEqual((OpenedLibrary[])expected) },
-            {typeof(Result<BookSearchResult[]>), (actual, expected) => ((Result<BookSearchResult[]>)actual).ShouldEqual((Result<BookSearchResult[]>)expected) },
+            {typeof(Result<RequestedLink[]>), (actual, expected) => ((Result<RequestedLink[]>)actual).ShouldEqual((Result<RequestedLink[]>)expected) },
+            {typeof(Result<LibraryLink[]>), (actual, expected) => ((Result<LibraryLink[]>)actual).ShouldEqual((Result<LibraryLink[]>)expected) },
             {typeof(Result<OpenedLibrary[]>), (actual, expected) => ((Result<OpenedLibrary[]>)actual).ShouldEqual((Result<OpenedLibrary[]>)expected) },
-            {typeof(LibraryBook[]), (actual, expected) => ((LibraryBook[])actual).ShouldEqual((LibraryBook[])expected) },
-            {typeof(BookSearchResult[]), (actual, expected) => ((BookSearchResult[])actual).ShouldEqual((BookSearchResult[])expected) },
+            {typeof(Result<BookSearchResult[]>), (actual, expected) => ((Result<BookSearchResult[]>)actual).ShouldEqual((Result<BookSearchResult[]>)expected) },
+            {typeof(Result<LibraryBook[]>), (actual, expected) => ((Result<LibraryBook[]>)actual).ShouldEqual((Result<LibraryBook[]>)expected) },
         };
         public static void CompareValueEquality<T>(T actual, T expected)
         {

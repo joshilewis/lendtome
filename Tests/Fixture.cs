@@ -75,28 +75,22 @@ namespace Tests
         protected string GetResponseString;
         protected Exception ActualException;
 
-        protected void WhenGetEndpoint(string uri, Guid? userId = null)
-        {
-            string path = $"https://localhost/api/{uri}/";
+        private GetCallBuilder whenGetCallBuilder;
 
-            if (userId.HasValue)
-            {
-                Client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue(Tokeniser.CreateToken("username", userId.Value));
-            }
-            var response = Client.GetAsync(path).Result;
-            GetResponseString = response.Content.ReadAsStringAsync().Result;
+        protected GetCallBuilder WhenGetEndpoint(string uri, Guid? userId = null)
+        {
+            whenGetCallBuilder = new GetCallBuilder(Client, Tokeniser, uri);
+            return whenGetCallBuilder;
         }
 
         protected void ThenResponseIs<TResult>(TResult expected) where TResult : Result
         {
-            TResult actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(GetResponseString);
-            TestEqualityHelpers.CompareValueEquality(actualResult, expected);
+            whenGetCallBuilder.Returns<TResult>(expected);
         }
 
-        protected GetCallBuilder<TPayload> AndGETTo<TPayload>(string url)
+        protected GetCallBuilder AndGETTo(string url)
         {
-            return new GetCallBuilder<TPayload>(Client, Tokeniser, url);
+            return new GetCallBuilder(Client, Tokeniser, url);
         }
 
         protected HttpResponseMessage Http400Because(string reasonPhrase)

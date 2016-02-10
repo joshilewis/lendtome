@@ -12,31 +12,30 @@ using ServiceStack.ServiceModel.Serialization;
 
 namespace Tests
 {
-    public class GetCallBuilder<TPayload> : CallBuilder
+    public class GetCallBuilder : CallBuilder
     {
         public string Url { get; private set; }
-        public Result<TPayload> Result { get; private set; }
-        public Guid UserId { get; private set; }
+        public Guid? UserId { get; private set; }
 
         public GetCallBuilder(HttpClient client, Tokeniser tokeniser, string url)
             : base(client, tokeniser)
         {
             Url = url;
-            UserId = Guid.Empty;
+            UserId = null;
         }
 
-        public GetCallBuilder<TPayload> As(Guid userId)
+        public GetCallBuilder As(Guid userId)
         {
             UserId = userId;
             return this;
         } 
         
-        public void Returns(TPayload expected)
+        public void Returns<TResult>(TResult expected) where TResult : Result
         {
-            if (UserId != Guid.Empty)
+            if (UserId.HasValue)
             {
                 Client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue(Tokeniser.CreateToken("username", UserId));
+                    new AuthenticationHeaderValue(Tokeniser.CreateToken("username", UserId.Value));
             }
 
             var response = Client.GetAsync($"https://localhost/api/{Url}").Result;
@@ -44,8 +43,8 @@ namespace Tests
                 throw new AssertionException(
                     $"GET call to '{Url}' was not successful, response code is {response.StatusCode}, reason {response.ReasonPhrase}");
             string getResponseString = response.Content.ReadAsStringAsync().Result;
-            Result<TPayload> actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<Result<TPayload>>(getResponseString);
-            TestEqualityHelpers.CompareValueEquality(actualResult.Payload, expected);
+            TResult actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(getResponseString);
+            TestEqualityHelpers.CompareValueEquality(actualResult, expected);
         }
 
     }

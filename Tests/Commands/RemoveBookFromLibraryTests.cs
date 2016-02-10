@@ -29,7 +29,8 @@ namespace Tests.Commands
             GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
             Then(Http200Ok);
-            AndGETTo<LibraryBook[]>($"/libraries/{Library1Id}/books/").Returns(new LibraryBook[] {});
+            AndGETTo($"/libraries/{Library1Id}/books/")
+                .Returns(new Result<LibraryBook[]>(new LibraryBook[] {}));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary);
         }
 
@@ -45,7 +46,7 @@ namespace Tests.Commands
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
             Then(Http400Because(Library.BookNotInLibrary));
-            AndGETTo<LibraryBook[]>($"/libraries/{Library1Id}/books/").Returns(new LibraryBook[] { });
+            AndGETTo($"/libraries/{Library1Id}/books/").Returns(new Result<LibraryBook[]>(new LibraryBook[] { }));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
@@ -56,7 +57,7 @@ namespace Tests.Commands
             GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             WhenCommand(UnauthorizedRemoveBook).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
             Then(Http403BecauseUnauthorized(UnauthorizedRemoveBook.UserId, Library1Id, typeof (Library)));
-            AndGETTo<LibraryBook[]>($"/libraries/{Library1Id}/books/").Returns(new LibraryBook[] { });
+            AndGETTo($"/libraries/{Library1Id}/books/").Returns(new Result<LibraryBook[]>(new LibraryBook[] { }));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
 
