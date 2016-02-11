@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using Lending.Cqrs.Command;
+using Joshilewis.Cqrs.Command;
 using Lending.Execution.Auth;
 using Microsoft.Owin.Testing;
 

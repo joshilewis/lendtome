@@ -1,5 +1,4 @@
 ﻿using System;
-using Lending.Cqrs.Query;
 using Lending.Domain.Model;
 using Lending.ReadModels.Relational.LinkAccepted;
 using Lending.ReadModels.Relational.LinkRequested;

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lending.Cqrs;
-using Lending.Cqrs.Query;
+using Joshilewis.Cqrs;
+using Joshilewis.Cqrs.Query;
 using NHibernate;
 
 namespace Lending.ReadModels.Relational

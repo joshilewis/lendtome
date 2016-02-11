@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
-using Lending.Cqrs;
+using Joshilewis.Cqrs;
 using Lending.Domain;
 using ServiceStack.Text;
 

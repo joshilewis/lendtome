@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
-using Lending.Cqrs;
-using Lending.Cqrs.Query;
+using Joshilewis.Cqrs.Query;
 using Lending.Domain.OpenLibrary;
 using Lending.ReadModels.Relational.LibraryOpened;
 using NHibernate;

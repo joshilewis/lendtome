@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using EventStore.ClientAPI;
-using Lending.Cqrs;
+using Joshilewis.Cqrs;
 using Lending.Domain;
 using Lending.Execution.EventStore;
 using Newtonsoft.Json;

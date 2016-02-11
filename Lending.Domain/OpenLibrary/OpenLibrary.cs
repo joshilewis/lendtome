@@ -1,5 +1,5 @@
 ﻿using System;
-using Lending.Cqrs.Command;
+using Joshilewis.Cqrs.Command;
 
 namespace Lending.Domain.OpenLibrary
 {

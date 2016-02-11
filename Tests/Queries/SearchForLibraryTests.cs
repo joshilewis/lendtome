@@ -1,5 +1,4 @@
 using System;
-using Lending.Cqrs.Query;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.ReadModels.Relational.LibraryOpened;

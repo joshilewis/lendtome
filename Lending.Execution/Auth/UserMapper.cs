@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Lending.Cqrs;
-using Lending.Cqrs.Command;
-using Lending.Cqrs.Query;
 using Lending.Domain.OpenLibrary;
 using Nancy.SimpleAuthentication;
 using NHibernate;

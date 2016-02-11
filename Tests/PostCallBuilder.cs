@@ -1,7 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Lending.Cqrs.Command;
+using Joshilewis.Cqrs.Command;
 using Lending.Execution.Auth;
 using NUnit.Framework;
 

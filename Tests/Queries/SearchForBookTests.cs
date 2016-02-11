@@ -1,5 +1,4 @@
 ﻿using System;
-using Lending.Cqrs.Query;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.ReadModels.Relational.SearchForBook;

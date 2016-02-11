@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Joshilewis.Infrastructure.DI;
 using Lending.Execution;
 using Lending.Execution.DI;
 using Lending.Execution.Persistence;
@@ -26,7 +27,7 @@ namespace Shell
         static void Main(string[] args)
         {
 
-            IContainer container = IoC.Initialize(new ShellRegistry());
+            IContainer container = IoC.Initialize<LendingContainer>(new ShellRegistry());
 
             var url = "http://+:8083";
 

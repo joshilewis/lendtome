@@ -1,7 +1,7 @@
 using System;
-using Lending.Cqrs;
-using Lending.Cqrs.Command;
-using Lending.Cqrs.Query;
+using Joshilewis.Cqrs;
+using Joshilewis.Cqrs.Command;
+using Joshilewis.Cqrs.Query;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 

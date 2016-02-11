@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lending.Cqrs;
+using Joshilewis.Cqrs;
 using Lending.Domain;
 
 namespace Lending.Execution

@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Lending.Cqrs.Query;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.ReadModels.Relational.LibraryOpened;

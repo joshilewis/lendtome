@@ -1,6 +1,5 @@
 using System;
-using Lending.Cqrs;
-using Lending.Cqrs.Query;
+using Joshilewis.Cqrs.Query;
 
 namespace Lending.ReadModels.Relational.SearchForBook
 {

@@ -1,4 +1,5 @@
-﻿using Lending.Execution.DI;
+﻿using Joshilewis.Infrastructure.DI;
+using Lending.Execution.DI;
 using StructureMap;
 
 namespace Tests.FixtureExtensions
@@ -9,7 +10,7 @@ namespace Tests.FixtureExtensions
 
         public static void SetUpDependcyProvision(Registry registry)
         {
-            container = IoC.Initialize(registry);
+            container = IoC.Initialize<LendingContainer>(registry);
         }
 
         public static IContainer Container => container;

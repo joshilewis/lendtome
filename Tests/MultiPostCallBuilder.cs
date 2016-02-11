@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Lending.Cqrs.Command;
+using Joshilewis.Cqrs.Command;
 using Lending.Execution.Auth;
 using Nancy;
 using NUnit.Framework;

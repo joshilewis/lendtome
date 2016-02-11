@@ -638,9 +638,13 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lending.Cqrs\Lending.Cqrs.csproj">
+    <ProjectReference Include="..\Joshilewis.Cqrs\Joshishilewis.Cqrs.csproj">
       <Project>{1b28c9a2-4759-4b29-a773-77fba448069b}</Project>
-      <Name>Lending.Cqrs</Name>
+      <Name>Joshishilewis.Cqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Joshilewis.Infrastructure\Joshilewis.Infrastructure.csproj">
+      <Project>{64be32ba-9279-400c-93e9-fb0c6d2a9a0a}</Project>
+      <Name>Joshilewis.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\Lending.Domain\Lending.Domain.csproj">
       <Project>{4fe3afd5-ff4c-4fa6-990a-c7f9cce9441f}</Project>

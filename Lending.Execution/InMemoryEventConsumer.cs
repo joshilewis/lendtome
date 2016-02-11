@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lending.Cqrs;
+using Joshilewis.Cqrs;
 using Lending.Domain;
 using Lending.Execution.UnitOfWork;
 using NHibernate;

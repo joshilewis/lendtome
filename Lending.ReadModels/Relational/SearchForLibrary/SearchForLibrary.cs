@@ -1,4 +1,4 @@
-using Lending.Cqrs.Query;
+using Joshilewis.Cqrs.Query;
 
 namespace Lending.ReadModels.Relational.SearchForLibrary
 {

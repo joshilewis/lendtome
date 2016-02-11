@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Lending.Cqrs.Query;
+using Joshilewis.Cqrs.Query;
 using Lending.Execution.Auth;
 using NUnit.Framework;
 using ServiceStack.ServiceModel.Serialization;

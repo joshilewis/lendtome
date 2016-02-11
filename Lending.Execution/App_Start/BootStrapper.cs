@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using Lending.Cqrs.Exceptions;
+using Joshilewis.Cqrs.Exceptions;
+using Joshilewis.Infrastructure.DI;
 using Lending.Execution.Auth;
 using Lending.Execution.DI;
 using Nancy;

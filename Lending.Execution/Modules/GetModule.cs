@@ -1,5 +1,5 @@
-﻿using Lending.Cqrs;
-using Lending.Cqrs.Query;
+﻿using Joshilewis.Cqrs;
+using Joshilewis.Cqrs.Query;
 using Lending.Execution.UnitOfWork;
 using Nancy;
 using Nancy.ModelBinding;

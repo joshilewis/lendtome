@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Net;
-using Lending.Cqrs.Exceptions;
-using Lending.Cqrs.Query;
 using Lending.Domain.Model;
 using Lending.Domain.RequestLink;
 using Lending.ReadModels.Relational.LinkAccepted;

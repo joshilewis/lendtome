@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Lending.Cqrs;
-using Lending.Cqrs.Command;
-using Lending.Cqrs.Exceptions;
-using Lending.Cqrs.Query;
+using Joshilewis.Cqrs;
+using Joshilewis.Cqrs.Exceptions;
+using Joshilewis.Cqrs.Query;
 using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.OpenLibrary;

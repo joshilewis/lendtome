@@ -1,5 +1,5 @@
-﻿using Lending.Cqrs;
-using Lending.Cqrs.Query;
+﻿using Joshilewis.Cqrs;
+using Joshilewis.Cqrs.Query;
 using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.OpenLibrary;

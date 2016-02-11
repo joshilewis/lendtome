@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Lending.Cqrs;
+using Joshilewis.Cqrs;
 using Lending.Domain;
 
 namespace Lending.Execution

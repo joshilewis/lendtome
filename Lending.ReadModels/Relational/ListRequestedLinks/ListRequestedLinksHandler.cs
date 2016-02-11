@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Lending.Cqrs.Query;
+using Joshilewis.Cqrs.Query;
 using Lending.ReadModels.Relational.LinkRequested;
 using NHibernate;
 

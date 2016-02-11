@@ -1,5 +1,5 @@
 ﻿using System;
-using Lending.Cqrs;
+using Joshilewis.Cqrs;
 
 namespace Lending.Domain.RequestLink
 {

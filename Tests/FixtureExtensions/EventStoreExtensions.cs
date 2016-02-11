@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.Core;
-using Lending.Cqrs;
+using Joshilewis.Cqrs;
 using NUnit.Framework;
 using static Tests.FixtureExtensions.DIExtensions;
 namespace Tests.FixtureExtensions

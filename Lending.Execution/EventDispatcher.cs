@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Lending.Cqrs;
+using Joshilewis.Cqrs;
 
 namespace Lending.Execution
 {

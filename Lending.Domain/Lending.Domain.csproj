@@ -64,9 +64,9 @@
     <Compile Include="Model\Library.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Lending.Cqrs\Lending.Cqrs.csproj">
+    <ProjectReference Include="..\Joshilewis.Cqrs\Joshishilewis.Cqrs.csproj">
       <Project>{1b28c9a2-4759-4b29-a773-77fba448069b}</Project>
-      <Name>Lending.Cqrs</Name>
+      <Name>Joshishilewis.Cqrs</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

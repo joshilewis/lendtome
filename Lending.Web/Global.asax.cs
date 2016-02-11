@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Joshilewis.Infrastructure.DI;
 using Lending.Web.App_Start;
 using Lending.Web.DependencyResolution;
 using log4net.Config;
@@ -25,7 +26,7 @@ namespace Lending.Web
             XmlConfigurator.Configure();
             LogManager.LogFactory = new ServiceStack.Logging.Log4Net.Log4NetFactory(true);
 
-            IoC.Initialize(new WebRegistry());
+            IoC.Initialize<LendingContainer>(new WebRegistry());
 
             //AppHost.Start(new StructureMapContainerAdapter(Container));
             

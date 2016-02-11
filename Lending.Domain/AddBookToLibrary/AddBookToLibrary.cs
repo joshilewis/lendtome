@@ -1,6 +1,5 @@
 using System;
-using Lending.Cqrs;
-using Lending.Cqrs.Command;
+using Joshilewis.Cqrs.Command;
 
 namespace Lending.Domain.AddBookToLibrary
 {

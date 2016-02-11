@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
-using Lending.Cqrs;
+using Joshilewis.Infrastructure.DI;
 using Lending.Domain;
 using Lending.Execution.DI;
 using Lending.Execution.EventStore;
@@ -23,7 +23,7 @@ namespace Tests
         [Test]
         public void Test()
         {
-            IContainer container = IoC.Initialize(new WebRegistry());
+            IContainer container = IoC.Initialize<LendingContainer>(new WebRegistry());
 
             container.AssertConfigurationIsValid();
 
