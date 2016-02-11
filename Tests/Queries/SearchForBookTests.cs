@@ -4,7 +4,7 @@ using Lending.Domain.RemoveBookFromLibrary;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
-using static Tests.FixtureExtensions.ApiExtensions;
+using static Joshilewis.Testing.Helpers.ApiExtensions;
 
 namespace Tests.Queries
 {

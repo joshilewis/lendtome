@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Joshilewis.Cqrs;
 
-namespace Lending.Execution
+namespace Joshilewis.Infrastructure.EventRouting
 {
     public class EventDispatcher
     {

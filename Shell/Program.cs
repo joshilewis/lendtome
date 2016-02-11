@@ -9,7 +9,6 @@ using Joshilewis.Infrastructure.DI;
 using Lending.Execution;
 using Lending.Execution.DI;
 using Lending.Execution.Persistence;
-using Lending.Execution.UnitOfWork;
 using Microsoft.Owin.Hosting;
 using Nancy.Hosting.Self;
 //using Nancy.Hosting.Self;

@@ -26,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joshilewis.Infrastructure", "Joshilewis.Infrastructure\Joshilewis.Infrastructure.csproj", "{64BE32BA-9279-400C-93E9-FB0C6D2A9A0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joshilewis.Testing", "Joshilewis.Testing\Joshilewis.Testing.csproj", "{18B5BD37-28B5-45B1-A346-4FA4E331AAB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +66,10 @@ Global
 		{64BE32BA-9279-400C-93E9-FB0C6D2A9A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64BE32BA-9279-400C-93E9-FB0C6D2A9A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64BE32BA-9279-400C-93E9-FB0C6D2A9A0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18B5BD37-28B5-45B1-A346-4FA4E331AAB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18B5BD37-28B5-45B1-A346-4FA4E331AAB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18B5BD37-28B5-45B1-A346-4FA4E331AAB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18B5BD37-28B5-45B1-A346-4FA4E331AAB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,5 +77,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1B28C9A2-4759-4B29-A773-77FBA448069B} = {A5B6319F-9323-4C12-A686-ACBAF8B4C2B6}
 		{64BE32BA-9279-400C-93E9-FB0C6D2A9A0A} = {A5B6319F-9323-4C12-A686-ACBAF8B4C2B6}
+		{18B5BD37-28B5-45B1-A346-4FA4E331AAB6} = {A5B6319F-9323-4C12-A686-ACBAF8B4C2B6}
 	EndGlobalSection
 EndGlobal

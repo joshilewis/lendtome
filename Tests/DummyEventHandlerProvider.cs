@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Joshilewis.Cqrs;
+using Joshilewis.Infrastructure.EventRouting;
 using Lending.Execution;
 
 namespace Tests

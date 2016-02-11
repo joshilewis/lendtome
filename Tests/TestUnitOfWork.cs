@@ -1,6 +1,7 @@
 using EventStore.ClientAPI;
+using Joshilewis.Infrastructure.EventRouting;
+using Joshilewis.Infrastructure.UnitOfWork;
 using Lending.Execution;
-using Lending.Execution.UnitOfWork;
 using NHibernate;
 
 namespace Tests

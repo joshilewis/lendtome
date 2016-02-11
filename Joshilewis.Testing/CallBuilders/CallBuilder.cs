@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net.Http;
-using Lending.Execution.Auth;
+using Joshilewis.Infrastructure.Auth;
 
-namespace Tests
+namespace Joshilewis.Testing.CallBuilders
 {
     public abstract class CallBuilder
     {

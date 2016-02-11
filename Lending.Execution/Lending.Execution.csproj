@@ -157,19 +157,10 @@
     <Compile Include="Auth\CustomUserIdentity.cs" />
     <Compile Include="Auth\IUserMapper.cs" />
     <Compile Include="Auth\SecureTokenValidator.cs" />
-    <Compile Include="Auth\Tokeniser.cs" />
     <Compile Include="Auth\UserMapper.cs" />
     <Compile Include="DI\DomainRegistry.cs" />
     <Compile Include="DI\LendingContainer.cs" />
     <Compile Include="DI\StructureMapContainerAdapter.cs" />
-    <Compile Include="EventDispatcher.cs" />
-    <Compile Include="EventHandlerProvider.cs" />
-    <Compile Include="EventStore\EventExtensions.cs" />
-    <Compile Include="EventStore\EventStoreEventRepository.cs" />
-    <Compile Include="IEventEmitter.cs" />
-    <Compile Include="IEventHandlerProvider.cs" />
-    <Compile Include="InMemoryEventConsumer.cs" />
-    <Compile Include="InMemoryEventEmitter.cs" />
     <Compile Include="Modules\AuthenticatedGetModule.cs" />
     <Compile Include="Modules\GetModule.cs" />
     <Compile Include="Modules\PutModule.cs" />
@@ -178,11 +169,7 @@
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="Persistence\NHibernateRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EventRepository.cs" />
     <Compile Include="SequentialGuid.cs" />
-    <Compile Include="UnitOfWork\IUnitOfWork.cs" />
-    <Compile Include="UnitOfWork\UnitOfWork.cs" />
-    <Compile Include="UnitOfWork\UnitOfWorkHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Joshilewis.Cqrs\Joshishilewis.Cqrs.csproj">

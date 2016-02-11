@@ -5,8 +5,8 @@ using Lending.Domain.RemoveBookFromLibrary;
 using Lending.ReadModels.Relational.BookAdded;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
-using static Tests.FixtureExtensions.ApiExtensions;
-using static Tests.FixtureExtensions.EventStoreExtensions;
+using static Joshilewis.Testing.Helpers.ApiExtensions;
+using static Joshilewis.Testing.Helpers.EventStoreExtensions;
 
 namespace Tests.Commands
 {

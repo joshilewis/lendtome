@@ -9,8 +9,6 @@ using EventStore.ClientAPI.SystemData;
 using Joshilewis.Infrastructure.DI;
 using Lending.Domain;
 using Lending.Execution.DI;
-using Lending.Execution.EventStore;
-using Lending.Execution.UnitOfWork;
 using Lending.Web.DependencyResolution;
 using NUnit.Framework;
 using StructureMap;

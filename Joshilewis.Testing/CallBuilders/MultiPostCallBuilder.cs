@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using Joshilewis.Cqrs.Command;
-using Lending.Execution.Auth;
-using Nancy;
+using Joshilewis.Infrastructure.Auth;
 using NUnit.Framework;
 
-namespace Tests
+namespace Joshilewis.Testing.CallBuilders
 {
     public class MultiPostCallBuilder : CallBuilder
     {

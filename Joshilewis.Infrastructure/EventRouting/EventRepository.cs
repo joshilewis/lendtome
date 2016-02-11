@@ -2,9 +2,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Joshilewis.Cqrs;
-using Lending.Domain;
 
-namespace Lending.Execution
+namespace Joshilewis.Infrastructure.EventRouting
 {
     public abstract class EventRepository : IEventRepository, IDisposable
     {

@@ -2,8 +2,8 @@
 using Joshilewis.Cqrs;
 using Joshilewis.Cqrs.Command;
 using Joshilewis.Cqrs.Query;
+using Joshilewis.Infrastructure.UnitOfWork;
 using Lending.Execution.Auth;
-using Lending.Execution.UnitOfWork;
 using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Security;

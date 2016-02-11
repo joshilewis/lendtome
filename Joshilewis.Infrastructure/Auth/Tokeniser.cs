@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using JWT;
 
-namespace Lending.Execution.Auth
+namespace Joshilewis.Infrastructure.Auth
 {
     public class Tokeniser
     {

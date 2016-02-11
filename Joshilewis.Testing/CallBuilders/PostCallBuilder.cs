@@ -1,11 +1,11 @@
-using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Joshilewis.Cqrs.Command;
-using Lending.Execution.Auth;
+using Joshilewis.Infrastructure.Auth;
 using NUnit.Framework;
+using System.Net.Http.Formatting;
 
-namespace Tests
+namespace Joshilewis.Testing.CallBuilders
 {
     public class PostCallBuilder : CallBuilder
     {
@@ -18,7 +18,7 @@ namespace Tests
             : base(client, tokeniser)
         {
             Command = command;
-            failIfUnsuccessful = failIfUnsuccessful;
+            this.failIfUnsuccessful = failIfUnsuccessful;
         }
 
         public void IsPOSTedTo(string url)

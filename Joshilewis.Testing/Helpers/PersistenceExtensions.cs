@@ -1,29 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Joshilewis.Cqrs;
-using Lending.Execution.UnitOfWork;
+﻿using Joshilewis.Cqrs;
+using Joshilewis.Infrastructure.UnitOfWork;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
-using static Tests.FixtureExtensions.DIExtensions;
 
-namespace Tests.FixtureExtensions
+namespace Joshilewis.Testing.Helpers
 {
     public static class PersistenceExtensions
     {
-        private static Configuration Configuration => Container.GetInstance<Configuration>();
-        private static IRepository Repository => Container.GetInstance<IRepository>();
-        public static ISession Session => Container.GetInstance<ISession>();
+        private static Configuration Configuration => DIExtensions.Container.GetInstance<Configuration>();
+        private static IRepository Repository => DIExtensions.Container.GetInstance<IRepository>();
+        public static ISession Session => DIExtensions.Container.GetInstance<ISession>();
 
         public static void SetUpPersistence()
         {
             new SchemaExport(Configuration)
                 .Execute(true, true, false);
 
-            Container.GetInstance<IUnitOfWork>().Begin();
+            DIExtensions.Container.GetInstance<IUnitOfWork>().Begin();
         }
 
         public static void TearDownPersistence()
@@ -38,7 +32,7 @@ namespace Tests.FixtureExtensions
 
         public static void CommitTransaction()
         {
-            Container.GetInstance<IUnitOfWork>().Commit();
+            DIExtensions.Container.GetInstance<IUnitOfWork>().Commit();
         }
 
         public static void SaveEntities(params object[] entitiesToSave)

@@ -1,17 +1,15 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using EventStore.ClientAPI;
 using Joshilewis.Cqrs;
 using Joshilewis.Cqrs.Exceptions;
-using Lending.Domain;
+using Joshilewis.Infrastructure.EventRouting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ServiceStack.Text;
 
-namespace Lending.Execution.EventStore
+namespace Joshilewis.Infrastructure.EventStore
 {
     public class EventStoreEventRepository : EventRepository
     {
@@ -124,7 +122,7 @@ namespace Lending.Execution.EventStore
         private static EventData ToEventData(Guid eventId, object evnt, IDictionary<string, object> headers)
         {
             var serializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
-            var data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(evnt, serializerSettings));
+            var data = Encoding.UTF8.GetBytes((string) JsonConvert.SerializeObject(evnt, serializerSettings));
 
             var eventHeaders = new Dictionary<string, object>(headers)
             {
@@ -132,7 +130,7 @@ namespace Lending.Execution.EventStore
                     EventClrTypeHeader, evnt.GetType().AssemblyQualifiedName
                 }
             };
-            var metadata = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(eventHeaders, serializerSettings));
+            var metadata = Encoding.UTF8.GetBytes((string) JsonConvert.SerializeObject(eventHeaders, serializerSettings));
             var typeName = evnt.GetType().Name;
 
             return new EventData(eventId, typeName, true, data, metadata);

@@ -1,14 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Joshilewis.Cqrs;
-using Lending.Domain;
-using Lending.Execution.UnitOfWork;
-using NHibernate;
+﻿using Joshilewis.Cqrs;
 
-namespace Lending.Execution
+namespace Joshilewis.Infrastructure.EventRouting
 {
     public class InMemoryEventConsumer
     {

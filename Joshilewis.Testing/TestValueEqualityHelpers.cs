@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using NUnit.Framework;
 
-namespace Tests
+namespace Joshilewis.Testing
 {
     public static class TestValueEqualityHelpers
     {
@@ -22,5 +23,15 @@ namespace Tests
             }
             valueEqualityActions[actual.GetType()](actual, expected);
         }
+
+        public static bool ShouldEqual(this HttpResponseMessage actual, HttpResponseMessage expected)
+        {
+            Assert.That(actual.StatusCode, Is.EqualTo(expected.StatusCode));
+            Assert.That(actual.ReasonPhrase, Is.EqualTo(expected.ReasonPhrase));
+
+            return true;
+        }
+
+
     }
 }

@@ -2,10 +2,11 @@ using System;
 using System.Net;
 using System.Net.Http;
 using Joshilewis.Cqrs.Command;
-using Lending.Execution.Auth;
+using Joshilewis.Infrastructure.Auth;
+using Joshilewis.Testing.CallBuilders;
 using Microsoft.Owin.Testing;
 
-namespace Tests.FixtureExtensions
+namespace Joshilewis.Testing.Helpers
 {
     public static class ApiExtensions
     {

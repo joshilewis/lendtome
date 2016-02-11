@@ -1,5 +1,5 @@
 ﻿using System.Configuration;
-using Lending.Execution.UnitOfWork;
+using Joshilewis.Infrastructure.UnitOfWork;
 using StructureMap;
 
 namespace Shell

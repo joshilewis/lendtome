@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Joshilewis.Cqrs.Query;
+using Joshilewis.Testing;
 using Lending.Execution;
 using Lending.Execution.Auth;
 using Lending.Execution.DI;
@@ -19,10 +20,10 @@ using Microsoft.Owin.Testing;
 using NUnit.Framework;
 using ServiceStack.ServiceModel.Serialization;
 using StructureMap;
-using static Tests.FixtureExtensions.DIExtensions;
-using static Tests.FixtureExtensions.ApiExtensions;
-using static Tests.FixtureExtensions.EventStoreExtensions;
-using static Tests.FixtureExtensions.PersistenceExtensions;
+using static Joshilewis.Testing.Helpers.DIExtensions;
+using static Joshilewis.Testing.Helpers.ApiExtensions;
+using static Joshilewis.Testing.Helpers.EventStoreExtensions;
+using static Joshilewis.Testing.Helpers.PersistenceExtensions;
 
 namespace Tests
 {
@@ -44,7 +45,7 @@ namespace Tests
         [SetUp]
         public virtual void SetUp()
         {
-            SetUpDependcyProvision(new TestRegistry());
+            SetUpDependcyProvision<LendingContainer>(new TestRegistry());
             SetUpOwinServer<Startup>();
             SetUpEventStore();
             SetUpPersistence();

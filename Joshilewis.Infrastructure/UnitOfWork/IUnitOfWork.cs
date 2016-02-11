@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using Joshilewis.Cqrs;
-using Lending.Domain;
 using NHibernate;
 
-namespace Lending.Execution.UnitOfWork
+namespace Joshilewis.Infrastructure.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {

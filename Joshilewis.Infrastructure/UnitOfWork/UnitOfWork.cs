@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Linq;
 using System.Net;
-using System.Text;
 using EventStore.ClientAPI;
 using Joshilewis.Cqrs;
-using Lending.Domain;
-using Lending.Execution.EventStore;
-using Newtonsoft.Json;
+using Joshilewis.Infrastructure.EventRouting;
+using Joshilewis.Infrastructure.EventStore;
 using NHibernate;
 using NHibernate.Context;
-using ServiceStack.Text;
 
-namespace Lending.Execution.UnitOfWork
+namespace Joshilewis.Infrastructure.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -27,7 +22,7 @@ namespace Lending.Execution.UnitOfWork
 
         public UnitOfWork(ISessionFactory sessionFactory, string eventStoreIpAddress, IEventEmitter eventEmitter,
             EventDispatcher eventDispatcher)
-            : this(sessionFactory, EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), 1113)), eventEmitter, eventDispatcher)
+            : this(sessionFactory, (IEventStoreConnection) EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), 1113)), eventEmitter, eventDispatcher)
         {
         }
 

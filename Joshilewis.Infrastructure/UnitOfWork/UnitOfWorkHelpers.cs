@@ -1,7 +1,8 @@
 ﻿using System;
+
 //using ServiceStack.Logging;
 
-namespace Lending.Execution.UnitOfWork
+namespace Joshilewis.Infrastructure.UnitOfWork
 {
     public static class UnitOfWorkHelpers
     {

@@ -186,7 +186,6 @@ namespace Tests
             return true;
         }
 
-
         public static bool ShouldEqual(this Result<BookSearchResult[]> actual, Result<BookSearchResult[]> expected)
         {
             Assert.That(actual.Payload, Is.EquivalentTo(expected.Payload));
@@ -218,14 +217,6 @@ namespace Tests
             Assert.That(actual.GetType(), Is.EqualTo(expected.GetType()));
             Assert.That(actual.Message, Is.EqualTo(expected.Message));
             Assert.That(actual.Data, Is.EqualTo(expected.Data));
-
-            return true;
-        }
-
-        public static bool ShouldEqual(this HttpResponseMessage actual, HttpResponseMessage expected)
-        {
-            Assert.That(actual.StatusCode, Is.EqualTo(expected.StatusCode));
-            Assert.That(actual.ReasonPhrase, Is.EqualTo(expected.ReasonPhrase));
 
             return true;
         }
