@@ -16,11 +16,11 @@ namespace Tests.Commands
     /// </summary>
     public class AddBookToLibraryTests : FixtureWithEventStoreAndNHibernate
     {
-        private readonly Result<BookSearchResult[]> bookSearchResults = new Result<BookSearchResult[]>(new[]
+        private readonly BookSearchResult[] bookSearchResults =
         {
             new BookSearchResult(OpenLibrary1.AggregateId, OpenLibrary1.Name, AddBook1ToLibrary.Title,
                 AddBook1ToLibrary.Author, AddBook1ToLibrary.Isbn),
-        });
+        };
 
         /// <summary>
         /// GIVEN Library1 is Open
@@ -79,8 +79,7 @@ namespace Tests.Commands
             this.GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             this.WhenCommand(UnauthorizedAddBookToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             this.Then(this.Http403BecauseUnauthorized(UnauthorizedAddBookToLibrary.UserId, Library1Id, typeof (Library)));
-            this.AndGETTo($"/libraries/{Library1Id}/books/")
-                .Returns(new Result<BookSearchResult[]>(new BookSearchResult[] {}));
+            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(new BookSearchResult[] {});
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 

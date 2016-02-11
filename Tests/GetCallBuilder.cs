@@ -28,9 +28,14 @@ namespace Tests
         {
             UserId = userId;
             return this;
-        } 
-        
-        public void Returns<TResult>(TResult expected) where TResult : Result
+        }
+
+        public void Returns<TPayload>(TPayload expected)
+        {
+            ReturnsResult<Result<TPayload>>(new Result<TPayload>(expected));
+        }
+
+        private void ReturnsResult<TResult>(TResult expected) where TResult : Result
         {
             if (UserId.HasValue)
             {

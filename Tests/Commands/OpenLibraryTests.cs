@@ -23,8 +23,7 @@ namespace Tests.Commands
             //Given();
             this.WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             this.Then(Http201Created);
-            this.AndGETTo("/libraries/")
-                .Returns(new Result<OpenedLibrary[]>(new[] {new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id),}));
+            this.AndGETTo("/libraries/").Returns(new[] {new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id)});
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
@@ -34,8 +33,7 @@ namespace Tests.Commands
             this.GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             this.WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             this.Then(this.Http400Because(OpenLibraryHandler.UserAlreadyOpenedLibrary));
-            this.AndGETTo("/libraries/")
-                .Returns(new Result<OpenedLibrary[]>(new[] {new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id),}));
+            this.AndGETTo("/libraries/").Returns(new[] {new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id)});
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
@@ -44,7 +42,7 @@ namespace Tests.Commands
         {
             this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3).ArePOSTedTo("/libraries");
             this.WhenGetEndpoint("/libraries/").As(Library2Id);
-            this.ThenResponseIs(new Result<OpenedLibrary[]>(new[] {new OpenedLibrary(Library2Id, Library2Opened.Name, Library2Id),}));
+            this.ThenResponseIs(new[] {new OpenedLibrary(Library2Id, Library2Opened.Name, Library2Id),});
         }
 
     }

@@ -72,9 +72,9 @@ namespace Tests
             return whenGetCallBuilder;
         }
 
-        public static void ThenResponseIs<TResult>(this Fixture fixture, TResult expected) where TResult : Result
+        public static void ThenResponseIs<TPayload>(this Fixture fixture, TPayload expected)
         {
-            whenGetCallBuilder.Returns<TResult>(expected);
+            whenGetCallBuilder.Returns(expected);
         }
 
         public static GetCallBuilder AndGETTo(this Fixture fixture, string url)

@@ -15,15 +15,14 @@ namespace Tests.Commands
     [TestFixture]
     public class AcceptLinkTests : FixtureWithEventStoreAndNHibernate
     {
-        private readonly Result<LibraryLink[]> linkFrom1To2 = new Result<LibraryLink[]>(new[]
+        private readonly LibraryLink[] linkFrom1To2 =
         {
             new LibraryLink(Guid.Empty, OpenedLibrary1, OpenedLibrary2),
-        });
+        };
 
-        private readonly Result<LibraryLink[]> emptyLibraryLinks = new Result<LibraryLink[]>(new LibraryLink[] {});
+        private readonly LibraryLink[] emptyLibraryLinks = {};
 
-        private readonly Result<RequestedLink[]> emptyRequestedLinks =
-            new Result<RequestedLink[]>(new RequestedLink[] {});
+        private readonly RequestedLink[] emptyRequestedLinks = {};
 
         /// <summary>
         /// GIVEN Library1 AND Library2 are Open AND they are not Linked AND Library1 has Requested to Link to Library2
@@ -110,10 +109,10 @@ namespace Tests.Commands
             this.GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             this.WhenCommand(UnauthorizedAcceptLink).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             this.Then(this.Http403BecauseUnauthorized(UnauthorizedAcceptLink.UserId, Library2Id, typeof (Library)));
-            var requestedLinks = new Result<RequestedLink[]>(new[]
+            var requestedLinks = new[]
             {
                 new RequestedLink(Guid.Empty, OpenedLibrary2, OpenedLibrary1),
-            });
+            };
             this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(requestedLinks);
             this.AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(requestedLinks);
             this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(emptyLibraryLinks);

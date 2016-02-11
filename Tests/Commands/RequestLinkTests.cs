@@ -17,13 +17,13 @@ namespace Tests.Commands
     [TestFixture]
     public class RequestLinkTests : FixtureWithEventStoreAndNHibernate
     {
-        private readonly Result<LibraryLink[]> emptyLibraryLinks = new Result<LibraryLink[]>(new LibraryLink[] { });
-        private readonly Result<RequestedLink[]> emptyRequestLinks = new Result<RequestedLink[]>(new RequestedLink[] { });
+        private readonly LibraryLink[] emptyLibraryLinks = { };
+        private readonly RequestedLink[] emptyRequestLinks = { };
 
-        private readonly Result<RequestedLink[]> listOfRequestedLinksWithFrom1To2 = new Result<RequestedLink[]>(new[]
+        private readonly RequestedLink[] listOfRequestedLinksWithFrom1To2 =
         {
             new RequestedLink(Guid.Empty, OpenedLibrary1, OpenedLibrary2),
-        });
+        };
 
         /// <summary>
         /// GIVEN Library1 is Open AND Library2 is Open AND they are not Linked AND there is an existing Link Request from Library1 to Library2
@@ -109,14 +109,14 @@ namespace Tests.Commands
             this.GivenCommand(Library2RequestsLinkToLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/request");
             this.WhenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             this.Then(this.Http400Because(Library.ReverseLinkAlreadyRequested));
-            this.AndGETTo($"/libraries/{Library1Id}/links/received").As(Library1Id).Returns(new Result<RequestedLink[]>(new[]
+            this.AndGETTo($"/libraries/{Library1Id}/links/received").As(Library1Id).Returns(new[]
             {
                 new RequestedLink(Guid.Empty, OpenedLibrary2, OpenedLibrary1),
-            }));
-            this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library2Id).Returns(new Result<RequestedLink[]>(new[]
+            });
+            this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library2Id).Returns(new[]
             {
                 new RequestedLink(Guid.Empty, OpenedLibrary2, OpenedLibrary1),
-            }));
+            });
             this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(emptyLibraryLinks);
             this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(emptyLibraryLinks);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestFrom2To1Received);
@@ -143,10 +143,10 @@ namespace Tests.Commands
             this.Then(this.Http400Because(Library.LibrariesAlreadyLinked));
             this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(emptyRequestLinks);
             this.AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(emptyRequestLinks);
-            var linkFrom1To2 = new Result<LibraryLink[]>(new LibraryLink[]
+            var linkFrom1To2 = new []
             {
                 new LibraryLink(Guid.Empty, OpenedLibrary1, OpenedLibrary2), 
-            });
+            };
             this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(linkFrom1To2);
             this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(linkFrom1To2);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, LinkCompleted);

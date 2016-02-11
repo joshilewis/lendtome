@@ -29,7 +29,7 @@ namespace Tests.Queries
             this.GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request/");
             this.GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept/");
             this.WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
-            this.ThenResponseIs(new Result<BookSearchResult[]>(new BookSearchResult[] {}));
+            this.ThenResponseIs(new BookSearchResult[] {});
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Tests.Queries
         {
             this.GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
             this.WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
-            this.ThenResponseIs(new Result<BookSearchResult[]>(new BookSearchResult[] {}));
+            this.ThenResponseIs(new BookSearchResult[] {});
         }
 
         /// <summary>
@@ -56,11 +56,11 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithSingleMatchingTitleInManyLibrariesShouldReturnAllOwners()
         {
-            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
+            var expectedResult = new[]
             {
                 new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
-            });
+            };
 
             this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4).ArePOSTedTo("/libraries/");
             this.GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4)
@@ -89,12 +89,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithManyMatchingTitlesInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
-            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
+            var expectedResult = new []
             {
                 new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library5Id, OpenLibrary5.Name, ExtremeSnowboardStunts, SomeSkiier, Isbn),
-            });
+            };
 
             this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
                 .ArePOSTedTo("/libraries/");
@@ -127,12 +127,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithSingleMatchingAuthorInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
-            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
+            var expectedResult = new []
             {
                 new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn),
                 new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
-            });
+            };
 
             this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
                 .ArePOSTedTo("/libraries/");
@@ -165,13 +165,13 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithManyMatchingTitlesAndAuthorsInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
-            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
+            var expectedResult = new []
             {
                 new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn),
                 new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn),
-            });
+            };
 
             this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
                 .ArePOSTedTo("/libraries/");
@@ -206,12 +206,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithManyMatchesShouldExcludeUnconnectedLibraries()
         {
-            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
+            var expectedResult = new []
             {
                 new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn),
                 new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn),
-            });
+            };
 
             this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
                 .ArePOSTedTo("/libraries/");
@@ -249,16 +249,17 @@ namespace Tests.Queries
             SearchingForBookWithManyMatchingTitlesAndAuthorsInManyLibrariesShouldReturnAllOwnersAndBooksExceptRemovedBooks
             ()
         {
-            var expectedResult = new Result<BookSearchResult[]>(new BookSearchResult[]
+            var expectedResult = new[]
             {
                 new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn),
                 new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn),
-            });
+            };
 
             this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
                 .ArePOSTedTo("/libraries/");
-            this.GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+            this.GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3,
+                Library1RequestsLinkToLibrary4,
                 Library1RequestsLinkToLibrary5, Library1RequestsLinkToLibrary6)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
             this.GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
