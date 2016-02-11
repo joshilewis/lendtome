@@ -21,12 +21,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchShouldReturnThatUser()
         {
-            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            WhenGetEndpoint("libraries/Lew");
-            ThenResponseIs(new Result<OpenedLibrary[]>(new[]
+            this.GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            this.GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            this.GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            this.GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            this.WhenGetEndpoint("libraries/Lew");
+            this.ThenResponseIs(new Result<OpenedLibrary[]>(new[]
             {
                 new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id),
             }));
@@ -44,12 +44,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchWithWrongCaseShouldReturnThatUser()
         {
-            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            WhenGetEndpoint("libraries/lEw");
-            ThenResponseIs(new Result<OpenedLibrary[]>(new[]
+            this.GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            this.GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            this.GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            this.GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            this.WhenGetEndpoint("libraries/lEw");
+            this.ThenResponseIs(new Result<OpenedLibrary[]>(new[]
             {
                 new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id),
             }));
@@ -67,12 +67,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithNoMatchesShouldReturnEmptyList()
         {
-            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            WhenGetEndpoint("libraries/Pet");
-            ThenResponseIs(new Result<OpenedLibrary[]>(new OpenedLibrary[] {}));
+            this.GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            this.GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            this.GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            this.GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            this.WhenGetEndpoint("libraries/Pet");
+            this.ThenResponseIs(new Result<OpenedLibrary[]>(new OpenedLibrary[] {}));
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
@@ -88,12 +88,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithTwoMatchsShouldReturnTwoLibraries()
         {
-            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            WhenGetEndpoint("libraries/Jos");
-            ThenResponseIs(new Result<OpenedLibrary[]>(new[]
+            this.GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            this.GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            this.GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            this.GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            this.WhenGetEndpoint("libraries/Jos");
+            this.ThenResponseIs(new Result<OpenedLibrary[]>(new[]
             {
                 new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id),
                 new OpenedLibrary(Library3Id, JosieDoeLibraryOpened.Name, Library3Id),

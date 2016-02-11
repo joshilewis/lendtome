@@ -158,6 +158,8 @@
     <Compile Include="Commands\RequestLinkTests.cs" />
     <Compile Include="DummyEventHandlerProvider.cs" />
     <Compile Include="Fixture.cs" />
+    <Compile Include="FixtureApiExtensions.cs" />
+    <Compile Include="FixtureExtensions.cs" />
     <Compile Include="FixtureWithEventStore.cs" />
     <Compile Include="FixtureWithEventStoreAndNHibernate.cs" />
     <Compile Include="DefaultTestData.cs" />

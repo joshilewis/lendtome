@@ -21,85 +21,19 @@ namespace Tests
     [TestFixture]
     public abstract class Fixture
     {
-        protected IContainer Container;
-        protected HttpClient Client;
-        protected Tokeniser Tokeniser => Container.GetInstance<Tokeniser>();
-
-        private TestServer server;
-
         [SetUp]
         public virtual void SetUp()
         {
-            Container = IoC.Initialize(new TestRegistry());
+            this.SetupContainer(new TestRegistry());
+            this.SetUpOwinServer<Startup>();
 
-            server = TestServer.Create<Startup>();
-            Client = server.HttpClient;
         }
 
         [TearDown]
         public virtual void TearDown()
         {
-            server.Dispose();
+            this.TearDownOwinServer();
         }
 
-        protected PostCallBuilder GivenCommand(AuthenticatedCommand command)
-        {
-            return new PostCallBuilder(Client, Tokeniser, command, true);
-        }
-
-        protected MultiPostCallBuilder GivenCommands(params AuthenticatedCommand[] commands)
-        {
-            return new MultiPostCallBuilder(Client, Tokeniser, commands);
-        }
-
-        private PostCallBuilder whenPostCallBuilder;
-        protected PostCallBuilder WhenCommand(AuthenticatedCommand command)
-        {
-            whenPostCallBuilder = new PostCallBuilder(Client, Tokeniser, command, false);
-            return whenPostCallBuilder;
-        }
-
-        protected void Then(HttpResponseMessage expectedResponseMessage)
-        {
-            whenPostCallBuilder.Response.ShouldEqual(expectedResponseMessage);
-        }
-
-        protected HttpResponseMessage Http403BecauseUnauthorized(Guid userId, Guid aggregateId, Type aggregateType)
-        {
-            return new HttpResponseMessage(HttpStatusCode.Forbidden)
-            {
-                ReasonPhrase = $"User {userId} is not authorized for {aggregateType} {aggregateId}"
-            };
-        }
-
-        protected string GetResponseString;
-        protected Exception ActualException;
-
-        private GetCallBuilder whenGetCallBuilder;
-
-        protected GetCallBuilder WhenGetEndpoint(string uri, Guid? userId = null)
-        {
-            whenGetCallBuilder = new GetCallBuilder(Client, Tokeniser, uri);
-            return whenGetCallBuilder;
-        }
-
-        protected void ThenResponseIs<TResult>(TResult expected) where TResult : Result
-        {
-            whenGetCallBuilder.Returns<TResult>(expected);
-        }
-
-        protected GetCallBuilder AndGETTo(string url)
-        {
-            return new GetCallBuilder(Client, Tokeniser, url);
-        }
-
-        protected HttpResponseMessage Http400Because(string reasonPhrase)
-        {
-
-            return new HttpResponseMessage(HttpStatusCode.BadRequest)
-            {
-                ReasonPhrase = reasonPhrase
-            };
-        }
     }
 }

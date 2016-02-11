@@ -38,10 +38,10 @@ namespace Tests
     [TestFixture]
     public abstract class FixtureWithEventStoreAndNHibernate : FixtureWithEventStore
     {
-        protected Configuration Configuration => Container.GetInstance<Configuration>();
-        protected ISessionFactory SessionFactory => Container.GetInstance<ISessionFactory>();
-        protected IRepository Repository => Container.GetInstance<IRepository>();
-        protected ISession Session => Container.GetInstance<ISession>();
+        protected Configuration Configuration => this.GetContainer().GetInstance<Configuration>();
+        protected ISessionFactory SessionFactory => this.GetContainer().GetInstance<ISessionFactory>();
+        protected IRepository Repository => this.GetContainer().GetInstance<IRepository>();
+        protected ISession Session => this.GetContainer().GetInstance<ISession>();
 
         [SetUp]
         public override void SetUp()
@@ -51,7 +51,7 @@ namespace Tests
             new SchemaExport(Configuration)
                 .Execute(true, true, false);
 
-            Container.GetInstance<IUnitOfWork>().Begin();
+            this.GetContainer().GetInstance<IUnitOfWork>().Begin();
 
         }
 
@@ -69,14 +69,7 @@ namespace Tests
 
         protected void CommitTransaction()
         {
-            Container.GetInstance<IUnitOfWork>().Commit();
-        }
-
-        protected override void CommitTransactionAndOpenNew()
-        {
-            CommitTransaction();
-
-            Container.GetInstance<IUnitOfWork>().Begin();
+            this.GetContainer().GetInstance<IUnitOfWork>().Commit();
         }
 
         protected void SaveEntities(params object[] entitiesToSave)
