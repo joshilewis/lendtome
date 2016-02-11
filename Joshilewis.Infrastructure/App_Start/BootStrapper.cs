@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using Joshilewis.Cqrs.Exceptions;
+using Joshilewis.Infrastructure.Auth;
 using Joshilewis.Infrastructure.DI;
-using Lending.Execution.Auth;
-using Lending.Execution.DI;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.StructureMap;
@@ -14,7 +13,7 @@ using Nancy.Owin;
 using Nancy.Responses.Negotiation;
 using StructureMap;
 
-namespace Lending.Execution
+namespace Joshilewis.Infrastructure
 {
     public class BootStrapper : StructureMapNancyBootstrapper
     {

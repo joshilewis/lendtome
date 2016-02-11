@@ -5,7 +5,7 @@ using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Security;
 
-namespace Lending.Execution.Modules
+namespace Joshilewis.Infrastructure.Nancy
 {
     public abstract class GetModule<TMessage, TResult> : NancyModule where TMessage : Message where TResult : Result
     {

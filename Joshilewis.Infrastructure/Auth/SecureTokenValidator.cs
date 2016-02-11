@@ -5,7 +5,7 @@ using System.Security.Claims;
 using JWT;
 using Owin.StatelessAuth;
 
-namespace Lending.Execution.Auth
+namespace Joshilewis.Infrastructure.Auth
 {
     public class SecureTokenValidator : ITokenValidator
     {

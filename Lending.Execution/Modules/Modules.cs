@@ -1,5 +1,6 @@
 ﻿using Joshilewis.Cqrs;
 using Joshilewis.Cqrs.Query;
+using Joshilewis.Infrastructure.Nancy;
 using Joshilewis.Infrastructure.UnitOfWork;
 using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;

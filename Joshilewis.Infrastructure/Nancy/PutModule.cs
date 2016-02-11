@@ -2,13 +2,13 @@
 using Joshilewis.Cqrs;
 using Joshilewis.Cqrs.Command;
 using Joshilewis.Cqrs.Query;
+using Joshilewis.Infrastructure.Auth;
 using Joshilewis.Infrastructure.UnitOfWork;
-using Lending.Execution.Auth;
 using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Security;
 
-namespace Lending.Execution.Modules
+namespace Joshilewis.Infrastructure.Nancy
 {
     public abstract class PutModule<TMessage, TResult> : NancyModule where TMessage : AuthenticatedCommand where TResult : Result
     {

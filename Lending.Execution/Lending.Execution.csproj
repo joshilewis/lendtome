@@ -148,26 +148,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\BootStrapper.cs" />
     <Compile Include="Auth\AuthCallbackProvider.cs" />
     <Compile Include="Auth\AuthenticatedUser.cs" />
     <Compile Include="Auth\AuthenticatedUserMap.cs" />
     <Compile Include="Auth\AuthenticationProvider.cs" />
     <Compile Include="Auth\AuthenticationProviderMap.cs" />
-    <Compile Include="Auth\CustomUserIdentity.cs" />
     <Compile Include="Auth\IUserMapper.cs" />
-    <Compile Include="Auth\SecureTokenValidator.cs" />
     <Compile Include="Auth\UserMapper.cs" />
     <Compile Include="DI\DomainRegistry.cs" />
     <Compile Include="DI\LendingContainer.cs" />
-    <Compile Include="DI\StructureMapContainerAdapter.cs" />
-    <Compile Include="Modules\AuthenticatedGetModule.cs" />
-    <Compile Include="Modules\GetModule.cs" />
-    <Compile Include="Modules\PutModule.cs" />
-    <Compile Include="Modules\PostModule.cs" />
     <Compile Include="Modules\Modules.cs" />
-    <Compile Include="App_Start\Startup.cs" />
-    <Compile Include="Persistence\NHibernateRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SequentialGuid.cs" />
   </ItemGroup>

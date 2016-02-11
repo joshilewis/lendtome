@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Joshilewis.Infrastructure.Auth;
 using Joshilewis.Infrastructure.UnitOfWork;
-using JWT;
 using Nancy;
 using Nancy.SimpleAuthentication;
 

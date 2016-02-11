@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Joshilewis.Cqrs.Query;
+using Joshilewis.Infrastructure;
 using Joshilewis.Testing;
 using Lending.Execution;
 using Lending.Execution.DI;

@@ -1,10 +1,10 @@
 ﻿using System.Configuration;
-using Lending.Execution.Auth;
+using Joshilewis.Infrastructure.Auth;
 using Microsoft.Owin.Extensions;
 using Owin;
 using Owin.StatelessAuth;
 
-namespace Lending.Execution
+namespace Joshilewis.Infrastructure
 {
     public class Startup
     {

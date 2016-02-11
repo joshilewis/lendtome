@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Nancy.Security;
 
-namespace Lending.Execution.Auth
+namespace Joshilewis.Infrastructure.Auth
 {
     public class CustomUserIdentity : IUserIdentity
     {

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Joshilewis.Cqrs.Query;
+﻿using Joshilewis.Cqrs.Query;
+using Joshilewis.Infrastructure.Auth;
 using Joshilewis.Infrastructure.UnitOfWork;
-using Lending.Execution.Auth;
 using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Security;
 
-namespace Lending.Execution.Modules
+namespace Joshilewis.Infrastructure.Nancy
 {
     public abstract class AuthenticatedGetModule<TQuery, TResult> : NancyModule where TQuery : AuthenticatedQuery where TResult : Result
     {
