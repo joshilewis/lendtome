@@ -5,7 +5,7 @@ using Lending.Domain.RequestLink;
 using Lending.ReadModels.Relational.LinkAccepted;
 using Lending.ReadModels.Relational.LinkRequested;
 using NUnit.Framework;
-using static Tests.DefaultTestData;
+using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
 

@@ -3,7 +3,7 @@ using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
-using static Tests.DefaultTestData;
+using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 
 namespace Tests.Queries

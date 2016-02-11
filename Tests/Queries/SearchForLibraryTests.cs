@@ -4,7 +4,7 @@ using Lending.Domain.OpenLibrary;
 using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.SearchForLibrary;
 using NUnit.Framework;
-using static Tests.DefaultTestData;
+using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
 
