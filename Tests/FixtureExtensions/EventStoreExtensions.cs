@@ -14,23 +14,23 @@ namespace Tests.FixtureExtensions
     {
         public static void SetUpEventStore()
         {
-            GetContainer().GetInstance<ClusterVNode>().Start();
-            GetContainer().GetInstance<IEventStoreConnection>().ConnectAsync().Wait();
+            Container.GetInstance<ClusterVNode>().Start();
+            Container.GetInstance<IEventStoreConnection>().ConnectAsync().Wait();
 
         }
 
         public static void TearDownEventStore()
         {
-            GetContainer().GetInstance<IEventStoreConnection>().Close();
-            GetContainer().GetInstance<IEventStoreConnection>().Dispose();
-            GetContainer().GetInstance<ClusterVNode>().Stop();
+            Container.GetInstance<IEventStoreConnection>().Close();
+            Container.GetInstance<IEventStoreConnection>().Dispose();
+            Container.GetInstance<ClusterVNode>().Stop();
 
         }
 
-        private static IEventRepository EventRepository => GetContainer().GetInstance<IEventRepository>();
         public static void AndEventsSavedForAggregate<TAggregate>(Guid aggregateId, params Event[] expectedEvents) where TAggregate : Aggregate
         {
-            IEnumerable<Event> actualEvents = EventRepository.GetEventsForAggregate<TAggregate>(aggregateId);
+            IEventRepository eventRepository = Container.GetInstance<IEventRepository>();
+            IEnumerable<Event> actualEvents = eventRepository.GetEventsForAggregate<TAggregate>(aggregateId);
             foreach (Event @event in actualEvents)
             {
                 @event.ProcessId = Guid.Empty;

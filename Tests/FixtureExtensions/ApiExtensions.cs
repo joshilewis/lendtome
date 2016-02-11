@@ -25,7 +25,7 @@ namespace Tests.FixtureExtensions
 
         private static Tokeniser GetTokeniser()
         {
-            return DIExtensions.GetContainer().GetInstance<Tokeniser>();
+            return DIExtensions.Container.GetInstance<Tokeniser>();
         }
 
         public static PostCallBuilder GivenCommand(AuthenticatedCommand command)

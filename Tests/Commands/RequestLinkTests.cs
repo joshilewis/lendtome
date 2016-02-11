@@ -17,7 +17,7 @@ namespace Tests.Commands
     /// https://github.com/joshilewis/lending/issues/6
     /// </summary>
     [TestFixture]
-    public class RequestLinkTests : FixtureWithEventStoreAndNHibernate
+    public class RequestLinkTests : Fixture
     {
         private readonly RequestedLink requestedLinkFrom1To2 = new RequestedLink(Guid.Empty, OpenedLibrary1,
             OpenedLibrary2);

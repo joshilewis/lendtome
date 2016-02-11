@@ -15,7 +15,7 @@ namespace Tests.Commands
     /// As a Library I want to Accept a Link Request from another Library So that we can see each other's Books.
     /// </summary>
     [TestFixture]
-    public class AcceptLinkTests : FixtureWithEventStoreAndNHibernate
+    public class AcceptLinkTests : Fixture
     {
         private readonly LibraryLink linkFrom1To2 = new LibraryLink(Guid.Empty, OpenedLibrary1, OpenedLibrary2);
 

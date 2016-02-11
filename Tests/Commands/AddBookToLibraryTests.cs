@@ -16,7 +16,7 @@ namespace Tests.Commands
     /// https://github.com/joshilewis/lending/issues/9
     /// As a User I want to Add Books to my Library so that my Books can be searched by Linked Libraries
     /// </summary>
-    public class AddBookToLibraryTests : FixtureWithEventStoreAndNHibernate
+    public class AddBookToLibraryTests : Fixture
     {
         private readonly BookSearchResult bookSearchResult = new BookSearchResult(OpenLibrary1.AggregateId,
             OpenLibrary1.Name, AddBook1ToLibrary.Title, AddBook1ToLibrary.Author, AddBook1ToLibrary.Isbn);

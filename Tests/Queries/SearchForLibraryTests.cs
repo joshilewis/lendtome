@@ -12,7 +12,7 @@ using static Tests.FixtureExtensions.EventStoreExtensions;
 namespace Tests.Queries
 {
     [TestFixture]
-    public class SearchForLibraryTests: FixtureWithEventStoreAndNHibernate
+    public class SearchForLibraryTests: Fixture
     {
 
         /// <summary>

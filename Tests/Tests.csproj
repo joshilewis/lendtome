@@ -161,7 +161,7 @@
     <Compile Include="FixtureExtensions\ApiExtensions.cs" />
     <Compile Include="FixtureExtensions\DIExtensions.cs" />
     <Compile Include="FixtureExtensions\EventStoreExtensions.cs" />
-    <Compile Include="FixtureWithEventStoreAndNHibernate.cs" />
+    <Compile Include="FixtureExtensions\PersistenceExtensions.cs" />
     <Compile Include="DefaultTestData.cs" />
     <Compile Include="GetCallBuilder.cs" />
     <Compile Include="Infra\AuthCallBack.cs" />

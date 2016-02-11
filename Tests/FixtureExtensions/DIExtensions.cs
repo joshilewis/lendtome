@@ -12,10 +12,6 @@ namespace Tests.FixtureExtensions
             container = IoC.Initialize(registry);
         }
 
-        public static IContainer GetContainer()
-        {
-            return container;
-        }
-
+        public static IContainer Container => container;
     }
 }

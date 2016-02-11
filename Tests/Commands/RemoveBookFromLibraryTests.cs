@@ -16,7 +16,7 @@ namespace Tests.Commands
     /// As a User I want to Remove Books from my Collection so that my Connections can see that I no longer own the book.
     /// </summary>
     [TestFixture]
-    public class RemoveBookFromLibraryTests : FixtureWithEventStoreAndNHibernate
+    public class RemoveBookFromLibraryTests : Fixture
     {
         private readonly LibraryBook[] emptyLibraryBookCollection = { };
 

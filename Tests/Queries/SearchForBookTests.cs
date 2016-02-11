@@ -13,7 +13,7 @@ namespace Tests.Queries
     /// As a User I want to Search for Books in my Connections' Libraries so that I can find out if any of my Connections have the Book 
     /// I want to Borrow.
     /// </summary>
-    public class SearchForBookTests : FixtureWithEventStoreAndNHibernate
+    public class SearchForBookTests : Fixture
     {
 
         /// <summary>

@@ -8,11 +8,12 @@ using Lending.Execution.Auth;
 using Nancy.SimpleAuthentication;
 using NUnit.Framework;
 using SimpleAuthentication.Core;
+using static Tests.FixtureExtensions.PersistenceExtensions;
 
 namespace Tests.Infra
 {
     [TestFixture]
-    public class AuthCallBack : FixtureWithEventStoreAndNHibernate
+    public class AuthCallBack : Fixture
     {
         [Test]
         public void ExistingUserAuthenticatingShouldUseExistingUser()

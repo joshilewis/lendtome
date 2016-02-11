@@ -18,6 +18,7 @@ using StructureMap;
 using static Tests.FixtureExtensions.DIExtensions;
 using static Tests.FixtureExtensions.ApiExtensions;
 using static Tests.FixtureExtensions.EventStoreExtensions;
+using static Tests.FixtureExtensions.PersistenceExtensions;
 
 namespace Tests
 {
@@ -30,11 +31,13 @@ namespace Tests
             SetUpDependcyProvision(new TestRegistry());
             SetUpOwinServer<Startup>();
             SetUpEventStore();
+            SetUpPersistence();
         }
 
         [TearDown]
         public virtual void TearDown()
         {
+            TearDownPersistence();
             TearDownEventStore();
             TearDownOwinServer();
         }

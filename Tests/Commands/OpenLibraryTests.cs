@@ -17,7 +17,7 @@ using static Tests.FixtureExtensions.EventStoreExtensions;
 namespace Tests.Commands
 {
     [TestFixture]
-    public class OpenLibraryTests : FixtureWithEventStoreAndNHibernate
+    public class OpenLibraryTests : Fixture
     {
         [Test]
         public void OpenLibraryForUserWithNoLibrariesShouldOpenNewLibrary()
