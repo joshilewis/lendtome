@@ -24,11 +24,6 @@ namespace Tests
             server.Dispose();
         }
 
-        public static HttpClient GetHttpClient(this Fixture fixture)
-        {
-            return client;
-        }
-
         public static Tokeniser GetTokeniser(this Fixture fixture)
         {
             return fixture.GetContainer().GetInstance<Tokeniser>();
@@ -36,18 +31,18 @@ namespace Tests
 
         public static PostCallBuilder GivenCommand(this Fixture fixture, AuthenticatedCommand command)
         {
-            return new PostCallBuilder(GetHttpClient(fixture), GetTokeniser(fixture), command, true);
+            return new PostCallBuilder(client, GetTokeniser(fixture), command, true);
         }
 
         public static MultiPostCallBuilder GivenCommands(this Fixture fixture, params AuthenticatedCommand[] commands)
         {
-            return new MultiPostCallBuilder(GetHttpClient(fixture), GetTokeniser(fixture), commands);
+            return new MultiPostCallBuilder(client, GetTokeniser(fixture), commands);
         }
 
         private static PostCallBuilder whenPostCallBuilder;
         public static PostCallBuilder WhenCommand(this Fixture fixture, AuthenticatedCommand command)
         {
-            whenPostCallBuilder = new PostCallBuilder(GetHttpClient(fixture), GetTokeniser(fixture), command, false);
+            whenPostCallBuilder = new PostCallBuilder(client, GetTokeniser(fixture), command, false);
             return whenPostCallBuilder;
         }
 
@@ -68,18 +63,18 @@ namespace Tests
 
         public static GetCallBuilder WhenGetEndpoint(this Fixture fixture, string uri)
         {
-            whenGetCallBuilder = new GetCallBuilder(fixture.GetHttpClient(), fixture.GetTokeniser(), uri);
+            whenGetCallBuilder = new GetCallBuilder(client, fixture.GetTokeniser(), uri);
             return whenGetCallBuilder;
         }
 
-        public static void ThenResponseIs<TPayload>(this Fixture fixture, TPayload expected)
+        public static void ThenResponseIs<TPayload>(this Fixture fixture, params TPayload[] expected)
         {
             whenGetCallBuilder.Returns(expected);
         }
 
         public static GetCallBuilder AndGETTo(this Fixture fixture, string url)
         {
-            return new GetCallBuilder(fixture.GetHttpClient(), fixture.GetTokeniser(), url);
+            return new GetCallBuilder(client, fixture.GetTokeniser(), url);
         }
 
         public static HttpResponseMessage Http400Because(this Fixture fixture, string reasonPhrase)

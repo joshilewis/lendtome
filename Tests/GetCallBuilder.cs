@@ -30,9 +30,9 @@ namespace Tests
             return this;
         }
 
-        public void Returns<TPayload>(TPayload expected)
+        public void Returns<TPayload>(params TPayload[] expected)
         {
-            ReturnsResult<Result<TPayload>>(new Result<TPayload>(expected));
+            ReturnsResult<Result<TPayload[]>>(new Result<TPayload[]>(expected));
         }
 
         private void ReturnsResult<TResult>(TResult expected) where TResult : Result

@@ -16,11 +16,8 @@ namespace Tests.Commands
     /// </summary>
     public class AddBookToLibraryTests : FixtureWithEventStoreAndNHibernate
     {
-        private readonly BookSearchResult[] bookSearchResults =
-        {
-            new BookSearchResult(OpenLibrary1.AggregateId, OpenLibrary1.Name, AddBook1ToLibrary.Title,
-                AddBook1ToLibrary.Author, AddBook1ToLibrary.Isbn),
-        };
+        private readonly BookSearchResult bookSearchResult = new BookSearchResult(OpenLibrary1.AggregateId,
+            OpenLibrary1.Name, AddBook1ToLibrary.Title, AddBook1ToLibrary.Author, AddBook1ToLibrary.Isbn);
 
         /// <summary>
         /// GIVEN Library1 is Open
@@ -34,7 +31,7 @@ namespace Tests.Commands
             this.GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             this.WhenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             this.Then(Http201Created);
-            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(bookSearchResults);
+            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(bookSearchResult);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
 
@@ -51,7 +48,7 @@ namespace Tests.Commands
             this.GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             this.WhenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             this.Then(this.Http400Because(Library.BookAlreadyInLibrary));
-            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(bookSearchResults);
+            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(bookSearchResult);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
 
@@ -69,7 +66,7 @@ namespace Tests.Commands
             this.GivenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
             this.WhenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             this.Then(Http201Created);
-            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(bookSearchResults);
+            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(bookSearchResult);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary, Book1AddedToUser1Library);
         }
 

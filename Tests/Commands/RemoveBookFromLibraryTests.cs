@@ -16,6 +16,8 @@ namespace Tests.Commands
     [TestFixture]
     public class RemoveBookFromLibraryTests : FixtureWithEventStoreAndNHibernate
     {
+        private readonly LibraryBook[] emptyLibraryBookCollection = { };
+
         /// <summary>
         /// GIVEN Library1 is Open and Book1 is Added to Library1
         /// WHEN Book1 is Removed from Library1
@@ -29,7 +31,7 @@ namespace Tests.Commands
             this.GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             this.WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
             this.Then(Http200Ok);
-            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(new LibraryBook[] {});
+            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(emptyLibraryBookCollection);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary);
         }
 
@@ -45,7 +47,7 @@ namespace Tests.Commands
             this.GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             this.WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
             this.Then(this.Http400Because(Library.BookNotInLibrary));
-            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(new LibraryBook[] { });
+            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(emptyLibraryBookCollection);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
@@ -56,7 +58,7 @@ namespace Tests.Commands
             this.GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             this.WhenCommand(UnauthorizedRemoveBook).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
             this.Then(this.Http403BecauseUnauthorized(UnauthorizedRemoveBook.UserId, Library1Id, typeof (Library)));
-            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(new LibraryBook[] { });
+            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(emptyLibraryBookCollection);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
 
