@@ -173,6 +173,7 @@
     <Compile Include="TestEqualityHelpers.cs" />
     <Compile Include="TestRegistry.cs" />
     <Compile Include="TestUnitOfWork.cs" />
+    <Compile Include="TestValueEqualityHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lending.Cqrs\Lending.Cqrs.csproj">

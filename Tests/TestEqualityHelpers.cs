@@ -267,22 +267,6 @@ namespace Tests
             return true;
         }
 
-        private static readonly Dictionary<Type, Action<object, object>> ValueEqualityActions = new Dictionary<Type, Action<object, object>>()
-        {
-            {typeof(Result<RequestedLink[]>), (actual, expected) => ((Result<RequestedLink[]>)actual).ShouldEqual((Result<RequestedLink[]>)expected) },
-            {typeof(Result<LibraryLink[]>), (actual, expected) => ((Result<LibraryLink[]>)actual).ShouldEqual((Result<LibraryLink[]>)expected) },
-            {typeof(Result<OpenedLibrary[]>), (actual, expected) => ((Result<OpenedLibrary[]>)actual).ShouldEqual((Result<OpenedLibrary[]>)expected) },
-            {typeof(Result<BookSearchResult[]>), (actual, expected) => ((Result<BookSearchResult[]>)actual).ShouldEqual((Result<BookSearchResult[]>)expected) },
-            {typeof(Result<LibraryBook[]>), (actual, expected) => ((Result<LibraryBook[]>)actual).ShouldEqual((Result<LibraryBook[]>)expected) },
-        };
-        public static void CompareValueEquality<T>(T actual, T expected)
-        {
-            if (!ValueEqualityActions.ContainsKey(actual.GetType()))
-            {
-                if (!actual.Equals(expected)) throw new AssertionException("Values are not equal");
-            }
-            ValueEqualityActions[actual.GetType()](actual, expected);
-        }
     }
 
     public class ValueEqualityComparer : IEqualityComparer<OpenedLibrary>,

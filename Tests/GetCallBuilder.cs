@@ -32,7 +32,7 @@ namespace Tests
 
         public void Returns<TPayload>(params TPayload[] expected)
         {
-            ReturnsResult<Result<TPayload[]>>(new Result<TPayload[]>(expected));
+            ReturnsResult(new Result<TPayload[]>(expected));
         }
 
         private void ReturnsResult<TResult>(TResult expected) where TResult : Result
@@ -49,7 +49,7 @@ namespace Tests
                     $"GET call to '{Url}' was not successful, response code is {response.StatusCode}, reason {response.ReasonPhrase}");
             string getResponseString = response.Content.ReadAsStringAsync().Result;
             TResult actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(getResponseString);
-            TestEqualityHelpers.CompareValueEquality(actualResult, expected);
+            TestValueEqualityHelpers.CompareValueEquality(actualResult, expected);
         }
 
     }
