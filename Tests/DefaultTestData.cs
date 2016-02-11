@@ -15,6 +15,8 @@ using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestLink;
 using Lending.Execution.Auth;
 using Lending.ReadModels.Relational.LibraryOpened;
+using Lending.ReadModels.Relational.LinkAccepted;
+using Lending.ReadModels.Relational.LinkRequested;
 
 namespace Tests
 {
@@ -173,5 +175,8 @@ namespace Tests
         public static RemoveBookFromLibrary Lib4RemovesXpeByKb = new RemoveBookFromLibrary(processId, Library4Id, Library4Id,
             ExtremeProgrammingExplained, KentBeck, Isbn);
 
+        public static LibraryLink[] EmptyLibraryLinks = { };
+
+        public static RequestedLink[] EmptyRequestedLinks = { };
     }
 }

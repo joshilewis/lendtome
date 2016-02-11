@@ -17,9 +17,6 @@ namespace Tests.Commands
     [TestFixture]
     public class RequestLinkTests : FixtureWithEventStoreAndNHibernate
     {
-        private readonly LibraryLink[] emptyLibraryLinks = { };
-        private readonly RequestedLink[] emptyRequestLinks = { };
-
         private readonly RequestedLink requestedLinkFrom1To2 = new RequestedLink(Guid.Empty, OpenedLibrary1,
             OpenedLibrary2);
 
@@ -42,8 +39,8 @@ namespace Tests.Commands
             this.Then(this.Http400Because(Library.LinkAlreadyRequested));
             this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(requestedLinkFrom1To2);
             this.AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(requestedLinkFrom1To2);
-            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(emptyLibraryLinks);
-            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(emptyLibraryLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyLibraryLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(EmptyLibraryLinks);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
         }
@@ -66,8 +63,8 @@ namespace Tests.Commands
             this.Then(Http200Ok);
             this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(requestedLinkFrom1To2);
             this.AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(requestedLinkFrom1To2);
-            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(emptyLibraryLinks);
-            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(emptyLibraryLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyLibraryLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(EmptyLibraryLinks);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
         }
@@ -85,8 +82,8 @@ namespace Tests.Commands
             this.GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
             this.WhenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             this.Then(Http404BecauseTargetLibraryDoesNotExist);
-            this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(emptyRequestLinks);
-            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(emptyLibraryLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyRequestedLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyLibraryLinks);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
@@ -110,8 +107,8 @@ namespace Tests.Commands
             var requestedLinkFrom2To1 = new RequestedLink(Guid.Empty, OpenedLibrary2, OpenedLibrary1);
             this.AndGETTo($"/libraries/{Library1Id}/links/received").As(Library1Id).Returns(requestedLinkFrom2To1);
             this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library2Id).Returns(requestedLinkFrom2To1);
-            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(emptyLibraryLinks);
-            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(emptyLibraryLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyLibraryLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(EmptyLibraryLinks);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestFrom2To1Received);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestedFrom2To1);
         }
@@ -134,8 +131,8 @@ namespace Tests.Commands
             this.GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             this.WhenCommand(Library1Requests2NdLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             this.Then(this.Http400Because(Library.LibrariesAlreadyLinked));
-            this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(emptyRequestLinks);
-            this.AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(emptyRequestLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyRequestedLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(EmptyRequestedLinks);
             var linkFrom1To2 = new LibraryLink(Guid.Empty, OpenedLibrary1, OpenedLibrary2);
             this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(linkFrom1To2);
             this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(linkFrom1To2);
@@ -157,8 +154,8 @@ namespace Tests.Commands
             this.GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
             this.WhenCommand(Library1RequestsLinkToSelf).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             this.Then(this.Http400Because(RequestLinkHandler.CantConnectToSelf));
-            this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(emptyRequestLinks);
-            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(emptyLibraryLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyRequestedLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyLibraryLinks);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
@@ -168,8 +165,8 @@ namespace Tests.Commands
             this.GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
             this.WhenCommand(UnauthorizedRequestLink).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             this.Then(this.Http403BecauseUnauthorized(UnauthorizedRequestLink.UserId, Library1Id, typeof (Library)));
-            this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(emptyRequestLinks);
-            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(emptyLibraryLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyRequestedLinks);
+            this.AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyLibraryLinks);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
     }
