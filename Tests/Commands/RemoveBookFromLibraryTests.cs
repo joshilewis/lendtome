@@ -6,6 +6,7 @@ using Lending.Domain.RemoveBookFromLibrary;
 using Lending.ReadModels.Relational.BookAdded;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
+using static Tests.FixtureApiExtensions;
 
 namespace Tests.Commands
 {
@@ -27,11 +28,11 @@ namespace Tests.Commands
         [Test]
         public void RemoveBookInLibraryShouldSucceed()
         {
-            this.GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
-            this.GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
-            this.WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
-            this.Then(Http200Ok);
-            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(emptyLibraryBookCollection);
+            GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
+            GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
+            WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
+            Then(Http200Ok);
+            AndGETTo($"/libraries/{Library1Id}/books/").Returns(emptyLibraryBookCollection);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library, Book1RemovedFromLibrary);
         }
 
@@ -44,21 +45,21 @@ namespace Tests.Commands
         [Test]
         public void RemoveBookNotInLibraryShouldFail()
         {
-            this.GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
-            this.WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
-            this.Then(this.Http400Because(Library.BookNotInLibrary));
-            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(emptyLibraryBookCollection);
+            GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
+            WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
+            Then(Http400Because(Library.BookNotInLibrary));
+            AndGETTo($"/libraries/{Library1Id}/books/").Returns(emptyLibraryBookCollection);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
         [Test]
         public void UnauthorizedRemoveBookInLibraryShouldFail()
         {
-            this.GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
-            this.GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
-            this.WhenCommand(UnauthorizedRemoveBook).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
-            this.Then(this.Http403BecauseUnauthorized(UnauthorizedRemoveBook.UserId, Library1Id, typeof (Library)));
-            this.AndGETTo($"/libraries/{Library1Id}/books/").Returns(emptyLibraryBookCollection);
+            GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
+            GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
+            WhenCommand(UnauthorizedRemoveBook).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
+            Then(Http403BecauseUnauthorized(UnauthorizedRemoveBook.UserId, Library1Id, typeof (Library)));
+            AndGETTo($"/libraries/{Library1Id}/books/").Returns(emptyLibraryBookCollection);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, Book1AddedToUser1Library);
         }
 

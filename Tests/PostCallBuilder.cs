@@ -18,7 +18,7 @@ namespace Tests
             : base(client, tokeniser)
         {
             Command = command;
-            this.failIfUnsuccessful = failIfUnsuccessful;
+            failIfUnsuccessful = failIfUnsuccessful;
         }
 
         public void IsPOSTedTo(string url)

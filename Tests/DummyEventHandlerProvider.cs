@@ -11,7 +11,7 @@ namespace Tests
 
         public DummyEventHandlerProvider()
         {
-            this.eventHandlerMap = new Dictionary<Type, HashSet<IEventHandler>>();
+            eventHandlerMap = new Dictionary<Type, HashSet<IEventHandler>>();
         }
 
         public IEnumerable<IEventHandler> GetEventHandlers(Type type)

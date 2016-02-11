@@ -5,6 +5,7 @@ using Lending.Domain.RemoveBookFromLibrary;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
+using static Tests.FixtureApiExtensions;
 
 namespace Tests.Queries
 {
@@ -24,12 +25,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookNotOwnedByAnyConnectionShouldReturnEmptyList()
         {
-            this.GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
-            this.GivenCommand(OpenLibrary2).IsPOSTedTo("/libraries/");
-            this.GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request/");
-            this.GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept/");
-            this.WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
-            this.ThenResponseIs(new BookSearchResult[] {});
+            GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
+            GivenCommand(OpenLibrary2).IsPOSTedTo("/libraries/");
+            GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request/");
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept/");
+            WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
+            ThenResponseIs(new BookSearchResult[] {});
         }
 
         /// <summary>
@@ -40,9 +41,9 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithNoConnectionsShouldFail()
         {
-            this.GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
-            this.WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
-            this.ThenResponseIs(new BookSearchResult[] {});
+            GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
+            WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
+            ThenResponseIs(new BookSearchResult[] {});
         }
 
         /// <summary>
@@ -56,17 +57,17 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithSingleMatchingTitleInManyLibrariesShouldReturnAllOwners()
         {
-            this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4).ArePOSTedTo("/libraries/");
-            this.GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4)
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4).ArePOSTedTo("/libraries/");
+            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
-            this.GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
-            this.GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
-            this.GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
-            this.GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
-            this.GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
-            this.GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
-            this.WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
-            this.ThenResponseIs(
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
+            GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
+            GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
+            GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
+            GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
+            WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
+            ThenResponseIs(
                 new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn));
 
@@ -85,21 +86,21 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithManyMatchingTitlesInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
-            this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
                 .ArePOSTedTo("/libraries/");
-            this.GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
                 Library1RequestsLinkToLibrary5)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
-            this.GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
-            this.GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
-            this.GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
-            this.GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
-            this.GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
-            this.GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
-            this.GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
-            this.GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
-            this.WhenGetEndpoint("books/Extreme").As(Library1Id);
-            this.ThenResponseIs(
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
+            GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
+            GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
+            GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
+            GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
+            GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
+            GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
+            WhenGetEndpoint("books/Extreme").As(Library1Id);
+            ThenResponseIs(
                 new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library5Id, OpenLibrary5.Name, ExtremeSnowboardStunts, SomeSkiier, Isbn));
@@ -119,21 +120,21 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithSingleMatchingAuthorInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
-            this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
                 .ArePOSTedTo("/libraries/");
-            this.GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
                 Library1RequestsLinkToLibrary5)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
-            this.GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
-            this.GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
-            this.GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
-            this.GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
-            this.GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
-            this.GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
-            this.GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
-            this.GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
-            this.WhenGetEndpoint("books/Kent Beck").As(Library1Id);
-            this.ThenResponseIs(
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
+            GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
+            GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
+            GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
+            GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
+            GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
+            GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
+            WhenGetEndpoint("books/Kent Beck").As(Library1Id);
+            ThenResponseIs(
                 new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn),
                 new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn));
@@ -153,23 +154,23 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithManyMatchingTitlesAndAuthorsInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
-            this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
                 .ArePOSTedTo("/libraries/");
-            this.GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
                 Library1RequestsLinkToLibrary5, Library1RequestsLinkToLibrary6)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
-            this.GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
-            this.GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
-            this.GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
-            this.GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
-            this.GivenCommand(Library6AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library6Id}/links/accept");
-            this.GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
-            this.GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
-            this.GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
-            this.GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
-            this.GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
-            this.WhenGetEndpoint("books/Beck").As(Library1Id);
-            this.ThenResponseIs(
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
+            GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
+            GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
+            GivenCommand(Library6AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library6Id}/links/accept");
+            GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
+            GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
+            GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
+            GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
+            GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
+            WhenGetEndpoint("books/Beck").As(Library1Id);
+            ThenResponseIs(
                 new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn),
                 new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
@@ -190,22 +191,22 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithManyMatchesShouldExcludeUnconnectedLibraries()
         {
-            this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
                 .ArePOSTedTo("/libraries/");
-            this.GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
                 Library1RequestsLinkToLibrary5, Library1RequestsLinkToLibrary6)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
-            this.GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
-            this.GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
-            this.GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
-            this.GivenCommand(Library6AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library6Id}/links/accept");
-            this.GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
-            this.GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
-            this.GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
-            this.GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
-            this.GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
-            this.WhenGetEndpoint("books/Beck").As(Library1Id);
-            this.ThenResponseIs(
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
+            GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
+            GivenCommand(Library6AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library6Id}/links/accept");
+            GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
+            GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
+            GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
+            GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
+            GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
+            WhenGetEndpoint("books/Beck").As(Library1Id);
+            ThenResponseIs(
                 new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn),
                 new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn));
@@ -229,25 +230,25 @@ namespace Tests.Queries
             SearchingForBookWithManyMatchingTitlesAndAuthorsInManyLibrariesShouldReturnAllOwnersAndBooksExceptRemovedBooks
             ()
         {
-            this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
                 .ArePOSTedTo("/libraries/");
-            this.GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3,
+            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3,
                 Library1RequestsLinkToLibrary4,
                 Library1RequestsLinkToLibrary5, Library1RequestsLinkToLibrary6)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
-            this.GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
-            this.GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
-            this.GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
-            this.GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
-            this.GivenCommand(Library6AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library6Id}/links/accept");
-            this.GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
-            this.GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
-            this.GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
-            this.GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
-            this.GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
-            this.GivenCommand(Lib4RemovesXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/remove/");
-            this.WhenGetEndpoint("books/Beck").As(Library1Id);
-            this.ThenResponseIs(
+            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
+            GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
+            GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
+            GivenCommand(Library6AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library6Id}/links/accept");
+            GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
+            GivenCommand(Lib3AddsTddByKb).IsPOSTedTo($"/libraries/{Library3Id}/books/add/");
+            GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
+            GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
+            GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
+            GivenCommand(Lib4RemovesXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/remove/");
+            WhenGetEndpoint("books/Beck").As(Library1Id);
+            ThenResponseIs(
                 new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn),
                 new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn),
                 new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn));

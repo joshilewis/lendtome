@@ -6,6 +6,7 @@ using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.SearchForLibrary;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
+using static Tests.FixtureApiExtensions;
 
 namespace Tests.Queries
 {
@@ -21,12 +22,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchShouldReturnThatUser()
         {
-            this.GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            this.GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            this.GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            this.GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            this.WhenGetEndpoint("libraries/Lew");
-            this.ThenResponseIs(new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id));
+            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            WhenGetEndpoint("libraries/Lew");
+            ThenResponseIs(new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id));
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
@@ -41,12 +42,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchWithWrongCaseShouldReturnThatUser()
         {
-            this.GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            this.GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            this.GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            this.GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            this.WhenGetEndpoint("libraries/lEw");
-            this.ThenResponseIs(new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id));
+            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            WhenGetEndpoint("libraries/lEw");
+            ThenResponseIs(new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id));
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
@@ -61,12 +62,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithNoMatchesShouldReturnEmptyList()
         {
-            this.GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            this.GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            this.GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            this.GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            this.WhenGetEndpoint("libraries/Pet");
-            this.ThenResponseIs(new OpenedLibrary[] {});
+            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            WhenGetEndpoint("libraries/Pet");
+            ThenResponseIs(new OpenedLibrary[] {});
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
@@ -82,12 +83,12 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithTwoMatchsShouldReturnTwoLibraries()
         {
-            this.GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            this.GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            this.GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            this.GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            this.WhenGetEndpoint("libraries/Jos");
-            this.ThenResponseIs(
+            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            WhenGetEndpoint("libraries/Jos");
+            ThenResponseIs(
                 new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id),
                 new OpenedLibrary(Library3Id, JosieDoeLibraryOpened.Name, Library3Id));
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);

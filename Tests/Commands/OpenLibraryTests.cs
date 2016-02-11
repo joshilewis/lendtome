@@ -11,6 +11,7 @@ using Lending.Domain.OpenLibrary;
 using Lending.ReadModels.Relational.LibraryOpened;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
+using static Tests.FixtureApiExtensions;
 
 namespace Tests.Commands
 {
@@ -21,28 +22,28 @@ namespace Tests.Commands
         public void OpenLibraryForUserWithNoLibrariesShouldOpenNewLibrary()
         {
             //Given();
-            this.WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
-            this.Then(Http201Created);
-            this.AndGETTo("/libraries/").Returns(new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id));
+            WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
+            Then(Http201Created);
+            AndGETTo("/libraries/").Returns(new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
         [Test]
         public void OpenLibraryForUserWithAnOpenLibraryShouldFailBecauseLibraryAlreadyOpened()
         {
-            this.GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
-            this.WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
-            this.Then(this.Http400Because(OpenLibraryHandler.UserAlreadyOpenedLibrary));
-            this.AndGETTo("/libraries/").Returns(new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id));
+            GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
+            WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
+            Then(Http400Because(OpenLibraryHandler.UserAlreadyOpenedLibrary));
+            AndGETTo("/libraries/").Returns(new OpenedLibrary(Library1Id, Library1Opened.Name, Library1Id));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
         [Test]
         public void ListLibrariesShouldShowOnlyLibrariesAdministeredByUser()
         {
-            this.GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3).ArePOSTedTo("/libraries");
-            this.WhenGetEndpoint("/libraries/").As(Library2Id);
-            this.ThenResponseIs(new OpenedLibrary(Library2Id, Library2Opened.Name, Library2Id));
+            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3).ArePOSTedTo("/libraries");
+            WhenGetEndpoint("/libraries/").As(Library2Id);
+            ThenResponseIs(new OpenedLibrary(Library2Id, Library2Opened.Name, Library2Id));
         }
 
     }

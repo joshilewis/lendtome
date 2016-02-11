@@ -29,6 +29,7 @@ using StructureMap;
 using StructureMap.Graph;
 using StructureMap.Web;
 using HttpStatusCode = System.Net.HttpStatusCode;
+using static Tests.FixtureExtensions;
 
 namespace Tests
 {
@@ -42,20 +43,20 @@ namespace Tests
         {
             base.SetUp();
 
-            this.GetContainer().GetInstance<ClusterVNode>().Start();
-            this.GetContainer().GetInstance<IEventStoreConnection>().ConnectAsync().Wait();
+            GetContainer().GetInstance<ClusterVNode>().Start();
+            GetContainer().GetInstance<IEventStoreConnection>().ConnectAsync().Wait();
 
         }
 
         public override void TearDown()
         {
-            this.GetContainer().GetInstance<IEventStoreConnection>().Close();
-            this.GetContainer().GetInstance<IEventStoreConnection>().Dispose();
-            this.GetContainer().GetInstance<ClusterVNode>().Stop();
+            GetContainer().GetInstance<IEventStoreConnection>().Close();
+            GetContainer().GetInstance<IEventStoreConnection>().Dispose();
+            GetContainer().GetInstance<ClusterVNode>().Stop();
             base.TearDown();
         }
 
-        protected IEventRepository EventRepository => this.GetContainer().GetInstance<IEventRepository>();
+        protected IEventRepository EventRepository => GetContainer().GetInstance<IEventRepository>();
 
         protected void AndEventsSavedForAggregate<TAggregate>(Guid aggregateId, params Event[] expectedEvents) where TAggregate : Aggregate        {
             IEnumerable<Event> actualEvents = EventRepository.GetEventsForAggregate<TAggregate>(aggregateId);

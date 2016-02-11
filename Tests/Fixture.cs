@@ -15,6 +15,8 @@ using Microsoft.Owin.Testing;
 using NUnit.Framework;
 using ServiceStack.ServiceModel.Serialization;
 using StructureMap;
+using static Tests.FixtureExtensions;
+using static Tests.FixtureApiExtensions;
 
 namespace Tests
 {
@@ -24,15 +26,15 @@ namespace Tests
         [SetUp]
         public virtual void SetUp()
         {
-            this.SetupContainer(new TestRegistry());
-            this.SetUpOwinServer<Startup>();
+            SetupContainer(new TestRegistry());
+            SetUpOwinServer<Startup>();
 
         }
 
         [TearDown]
         public virtual void TearDown()
         {
-            this.TearDownOwinServer();
+            TearDownOwinServer();
         }
 
     }

@@ -30,6 +30,7 @@ using ServiceStack.ServiceModel.Serialization;
 using StructureMap;
 using StructureMap.Graph;
 using Configuration = NHibernate.Cfg.Configuration;
+using static Tests.FixtureExtensions;
 
 namespace Tests
 {
@@ -38,10 +39,10 @@ namespace Tests
     [TestFixture]
     public abstract class FixtureWithEventStoreAndNHibernate : FixtureWithEventStore
     {
-        protected Configuration Configuration => this.GetContainer().GetInstance<Configuration>();
-        protected ISessionFactory SessionFactory => this.GetContainer().GetInstance<ISessionFactory>();
-        protected IRepository Repository => this.GetContainer().GetInstance<IRepository>();
-        protected ISession Session => this.GetContainer().GetInstance<ISession>();
+        protected Configuration Configuration => GetContainer().GetInstance<Configuration>();
+        protected ISessionFactory SessionFactory => GetContainer().GetInstance<ISessionFactory>();
+        protected IRepository Repository => GetContainer().GetInstance<IRepository>();
+        protected ISession Session => GetContainer().GetInstance<ISession>();
 
         [SetUp]
         public override void SetUp()
@@ -51,7 +52,7 @@ namespace Tests
             new SchemaExport(Configuration)
                 .Execute(true, true, false);
 
-            this.GetContainer().GetInstance<IUnitOfWork>().Begin();
+            GetContainer().GetInstance<IUnitOfWork>().Begin();
 
         }
 
@@ -69,7 +70,7 @@ namespace Tests
 
         protected void CommitTransaction()
         {
-            this.GetContainer().GetInstance<IUnitOfWork>().Commit();
+            GetContainer().GetInstance<IUnitOfWork>().Commit();
         }
 
         protected void SaveEntities(params object[] entitiesToSave)

@@ -12,12 +12,12 @@ namespace Tests
     {
         private static IContainer container;
 
-        public static void SetupContainer(this Fixture fixture, Registry registry)
+        public static void SetupContainer(Registry registry)
         {
             container = IoC.Initialize(registry);
         }
 
-        public static IContainer GetContainer(this Fixture fixture)
+        public static IContainer GetContainer()
         {
             return container;
         }
