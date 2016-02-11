@@ -12,6 +12,7 @@ using Lending.ReadModels.Relational.LibraryOpened;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
 using static Tests.FixtureExtensions.ApiExtensions;
+using static Tests.FixtureExtensions.EventStoreExtensions;
 
 namespace Tests.Commands
 {

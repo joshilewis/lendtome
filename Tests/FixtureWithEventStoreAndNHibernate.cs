@@ -37,7 +37,7 @@ namespace Tests
     [ExclusivelyUses("Database")]
     [NUnit.Framework.Category("Persistence")]
     [TestFixture]
-    public abstract class FixtureWithEventStoreAndNHibernate : FixtureWithEventStore
+    public abstract class FixtureWithEventStoreAndNHibernate : Fixture
     {
         protected Configuration Configuration => GetContainer().GetInstance<Configuration>();
         protected ISessionFactory SessionFactory => GetContainer().GetInstance<ISessionFactory>();

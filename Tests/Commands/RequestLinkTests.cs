@@ -9,6 +9,7 @@ using Lending.ReadModels.Relational.LinkRequested;
 using NUnit.Framework;
 using static Tests.DefaultTestData;
 using static Tests.FixtureExtensions.ApiExtensions;
+using static Tests.FixtureExtensions.EventStoreExtensions;
 
 namespace Tests.Commands
 {

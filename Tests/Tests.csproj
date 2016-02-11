@@ -160,7 +160,7 @@
     <Compile Include="Fixture.cs" />
     <Compile Include="FixtureExtensions\ApiExtensions.cs" />
     <Compile Include="FixtureExtensions\DIExtensions.cs" />
-    <Compile Include="FixtureWithEventStore.cs" />
+    <Compile Include="FixtureExtensions\EventStoreExtensions.cs" />
     <Compile Include="FixtureWithEventStoreAndNHibernate.cs" />
     <Compile Include="DefaultTestData.cs" />
     <Compile Include="GetCallBuilder.cs" />
@@ -172,6 +172,7 @@
     <Compile Include="Queries\SearchForLibraryTests.cs" />
     <Compile Include="TestEqualityHelpers.cs" />
     <Compile Include="TestRegistry.cs" />
+    <Compile Include="TestUnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lending.Cqrs\Lending.Cqrs.csproj">

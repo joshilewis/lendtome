@@ -17,6 +17,7 @@ using ServiceStack.ServiceModel.Serialization;
 using StructureMap;
 using static Tests.FixtureExtensions.DIExtensions;
 using static Tests.FixtureExtensions.ApiExtensions;
+using static Tests.FixtureExtensions.EventStoreExtensions;
 
 namespace Tests
 {
@@ -26,14 +27,15 @@ namespace Tests
         [SetUp]
         public virtual void SetUp()
         {
-            SetupContainer(new TestRegistry());
+            SetUpDependcyProvision(new TestRegistry());
             SetUpOwinServer<Startup>();
-
+            SetUpEventStore();
         }
 
         [TearDown]
         public virtual void TearDown()
         {
+            TearDownEventStore();
             TearDownOwinServer();
         }
 
