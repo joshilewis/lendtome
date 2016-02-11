@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lending.Execution.DI;
+﻿using Lending.Execution.DI;
 using StructureMap;
 
-namespace Tests
+namespace Tests.FixtureExtensions
 {
-    public static class FixtureExtensions
+    public static class DIExtensions
     {
         private static IContainer container;
 

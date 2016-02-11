@@ -29,7 +29,7 @@ using StructureMap;
 using StructureMap.Graph;
 using StructureMap.Web;
 using HttpStatusCode = System.Net.HttpStatusCode;
-using static Tests.FixtureExtensions;
+using static Tests.FixtureExtensions.DIExtensions;
 
 namespace Tests
 {

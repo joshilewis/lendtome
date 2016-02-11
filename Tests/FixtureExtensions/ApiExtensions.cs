@@ -2,14 +2,12 @@ using System;
 using System.Net;
 using System.Net.Http;
 using Lending.Cqrs.Command;
-using Lending.Cqrs.Query;
 using Lending.Execution.Auth;
 using Microsoft.Owin.Testing;
-using static Tests.FixtureExtensions;
 
-namespace Tests
+namespace Tests.FixtureExtensions
 {
-    public static class FixtureApiExtensions
+    public static class ApiExtensions
     {
         private static TestServer server;
         private static HttpClient client;
@@ -27,7 +25,7 @@ namespace Tests
 
         private static Tokeniser GetTokeniser()
         {
-            return GetContainer().GetInstance<Tokeniser>();
+            return DIExtensions.GetContainer().GetInstance<Tokeniser>();
         }
 
         public static PostCallBuilder GivenCommand(AuthenticatedCommand command)

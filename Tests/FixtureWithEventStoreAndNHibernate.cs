@@ -30,7 +30,7 @@ using ServiceStack.ServiceModel.Serialization;
 using StructureMap;
 using StructureMap.Graph;
 using Configuration = NHibernate.Cfg.Configuration;
-using static Tests.FixtureExtensions;
+using static Tests.FixtureExtensions.DIExtensions;
 
 namespace Tests
 {

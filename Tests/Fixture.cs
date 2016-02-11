@@ -15,8 +15,8 @@ using Microsoft.Owin.Testing;
 using NUnit.Framework;
 using ServiceStack.ServiceModel.Serialization;
 using StructureMap;
-using static Tests.FixtureExtensions;
-using static Tests.FixtureApiExtensions;
+using static Tests.FixtureExtensions.DIExtensions;
+using static Tests.FixtureExtensions.ApiExtensions;
 
 namespace Tests
 {
