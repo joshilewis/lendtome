@@ -3,7 +3,6 @@ using System.Net.Http.Headers;
 using Joshilewis.Cqrs.Command;
 using Joshilewis.Infrastructure.Auth;
 using NUnit.Framework;
-using System.Net.Http.Formatting;
 
 namespace Joshilewis.Testing.CallBuilders
 {
