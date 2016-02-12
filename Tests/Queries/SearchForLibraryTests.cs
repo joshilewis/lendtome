@@ -2,6 +2,7 @@ using System;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.ReadModels.Relational.LibraryOpened;
+using Lending.ReadModels.Relational.ListLibrayLinks;
 using Lending.ReadModels.Relational.SearchForLibrary;
 using NUnit.Framework;
 using static Tests.TestData;
@@ -13,6 +14,7 @@ namespace Tests.Queries
     [TestFixture]
     public class SearchForLibraryTests: Fixture
     {
+        private readonly LibrarySearchResult joshuaLewisLibraryResult = new LibrarySearchResult(Library1Id, JoshuaLewisLibraryOpened.Name);
 
         /// <summary>
         /// GIVEN Libraries with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have been Opened 
@@ -27,7 +29,7 @@ namespace Tests.Queries
             GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
             WhenGetEndpoint("libraries/Lew");
-            ThenResponseIs(new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id));
+            ThenResponseIs(joshuaLewisLibraryResult);
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
@@ -47,7 +49,7 @@ namespace Tests.Queries
             GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
             WhenGetEndpoint("libraries/lEw");
-            ThenResponseIs(new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id));
+            ThenResponseIs(joshuaLewisLibraryResult);
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
@@ -67,7 +69,7 @@ namespace Tests.Queries
             GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
             WhenGetEndpoint("libraries/Pet");
-            ThenResponseIs(new OpenedLibrary[] {});
+            ThenResponseIs(new LibrarySearchResult[] {});
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
@@ -89,8 +91,8 @@ namespace Tests.Queries
             GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
             WhenGetEndpoint("libraries/Jos");
             ThenResponseIs(
-                new OpenedLibrary(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Id),
-                new OpenedLibrary(Library3Id, JosieDoeLibraryOpened.Name, Library3Id));
+                joshuaLewisLibraryResult,
+                new LibrarySearchResult(Library3Id, JosieDoeLibraryOpened.Name));
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);

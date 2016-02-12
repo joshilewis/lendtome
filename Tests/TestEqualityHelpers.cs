@@ -17,6 +17,7 @@ using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.LinkAccepted;
 using Lending.ReadModels.Relational.LinkRequested;
+using Lending.ReadModels.Relational.ListLibrayLinks;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -70,6 +71,15 @@ namespace Tests
         }
 
         public static bool ShouldEqual(this Result<BookSearchResult[]> actual, Result<BookSearchResult[]> expected)
+        {
+            Assert.That(actual.Payload, Is.EquivalentTo(expected.Payload));
+
+            ((Result)actual).ShouldEqual(expected);
+
+            return true;
+        }
+
+        public static bool ShouldEqual(this Result<LibrarySearchResult[]> actual, Result<LibrarySearchResult[]> expected)
         {
             Assert.That(actual.Payload, Is.EquivalentTo(expected.Payload));
 

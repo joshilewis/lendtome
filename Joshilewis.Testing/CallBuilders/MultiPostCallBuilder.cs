@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Joshilewis.Cqrs.Command;
 using Joshilewis.Infrastructure.Auth;
@@ -25,6 +27,8 @@ namespace Joshilewis.Testing.CallBuilders
             {
                 Client.DefaultRequestHeaders.Authorization =new AuthenticationHeaderValue(Tokeniser.CreateToken("username", command.UserId));
                 HttpResponseMessage response = Client.PostAsJsonAsync(Url, command).Result;
+                Console.WriteLine("POST to {0} with body {1} returned status {2} with reason {3}", url,
+                    Serialize(new JsonMediaTypeFormatter(), command), response.StatusCode, response.ReasonPhrase);
                 if (!response.IsSuccessStatusCode)
                     throw new AssertionException(
                         $"POST call to '{Url}' was not successful, response code is {response.StatusCode}, reason {response.ReasonPhrase}");

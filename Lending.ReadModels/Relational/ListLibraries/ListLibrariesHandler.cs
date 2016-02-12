@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Joshilewis.Cqrs.Query;
 using Lending.ReadModels.Relational.LibraryOpened;
+using Lending.ReadModels.Relational.ListLibrayLinks;
 using NHibernate;
 
 namespace Lending.ReadModels.Relational.ListLibraries
@@ -18,12 +19,12 @@ namespace Lending.ReadModels.Relational.ListLibraries
 
         public override Result Handle(ListLibraries query)
         {
-            OpenedLibrary[] libraries = Session.QueryOver<OpenedLibrary>()
+            IEnumerable<OpenedLibrary> libraries = Session.QueryOver<OpenedLibrary>()
                 .Where(x => x.AdministratorId == query.UserId)
-                .List()
-                .ToArray();
+                .List();
 
-            return new Result<OpenedLibrary[]>(libraries);
+            return new Result<LibrarySearchResult[]>(libraries.Select(x => new LibrarySearchResult(x.Id, x.Name))
+                .ToArray());
         }
     }
 }

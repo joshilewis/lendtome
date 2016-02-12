@@ -70,6 +70,7 @@
     <Compile Include="Relational\ListLibraryBooks\ListLibraryBooksHandler.cs" />
     <Compile Include="Relational\ListLibraries\ListLibrariesHandler.cs" />
     <Compile Include="Relational\ListLibraries\ListLibraries.cs" />
+    <Compile Include="Relational\ListLibrayLinks\LibrarySearchResult.cs" />
     <Compile Include="Relational\ListLibrayLinks\ListLibraryLinks.cs" />
     <Compile Include="Relational\ListLibrayLinks\ListLibrayLinksHandler.cs" />
     <Compile Include="Relational\ListReceivedLinks\ListReceivedLinks.cs" />

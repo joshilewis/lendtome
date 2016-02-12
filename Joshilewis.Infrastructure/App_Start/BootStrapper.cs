@@ -9,6 +9,7 @@ using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.StructureMap;
 using Nancy.Diagnostics;
+using Nancy.Extensions;
 using Nancy.Owin;
 using Nancy.Responses.Negotiation;
 using StructureMap;

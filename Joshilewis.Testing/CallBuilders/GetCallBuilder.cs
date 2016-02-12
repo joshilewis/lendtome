@@ -44,6 +44,7 @@ namespace Joshilewis.Testing.CallBuilders
                 throw new AssertionException(
                     $"GET call to '{Url}' was not successful, response code is {response.StatusCode}, reason {response.ReasonPhrase}");
             string getResponseString = response.Content.ReadAsStringAsync().Result;
+            Console.WriteLine("Response for GET {0} is {1}", Url, getResponseString);
             TResult actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(getResponseString);
             TestValueEqualityHelpers.CompareValueEquality(actualResult, expected);
         }

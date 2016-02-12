@@ -3,6 +3,7 @@ using System.Linq;
 using Joshilewis.Cqrs.Query;
 using Lending.Domain.OpenLibrary;
 using Lending.ReadModels.Relational.LibraryOpened;
+using Lending.ReadModels.Relational.ListLibrayLinks;
 using NHibernate;
 
 namespace Lending.ReadModels.Relational.SearchForLibrary
@@ -17,12 +18,13 @@ namespace Lending.ReadModels.Relational.SearchForLibrary
 
         public override Result Handle(SearchForLibrary query)
         {
-            OpenedLibrary[] libraries = Session.QueryOver<OpenedLibrary>()
+            LibrarySearchResult[] libraries = Session.QueryOver<OpenedLibrary>()
                 .WhereRestrictionOn(x => x.Name).IsInsensitiveLike("%" + query.SearchString.ToLower() + "%")
                 .List()
+                .Select(x => new LibrarySearchResult(x.Id, x.Name))
                 .ToArray();
 
-            return new Result<OpenedLibrary[]>(libraries);
+            return new Result<LibrarySearchResult[]>(libraries);
         }
     }
 }

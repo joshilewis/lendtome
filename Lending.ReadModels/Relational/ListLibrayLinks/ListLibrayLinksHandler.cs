@@ -25,11 +25,16 @@ namespace Lending.ReadModels.Relational.ListLibrayLinks
             OpenedLibrary acceptingLibraryAlias = null;
             OpenedLibrary requestingLibraryAlias = null;
 
-            return new Result<LibraryLink[]>(Session.QueryOver<LibraryLink>(() => libraryLinkAlias)
+            return new Result<LibrarySearchResult[]>(Session.QueryOver<LibraryLink>(() => libraryLinkAlias)
                 .JoinAlias(x => x.AcceptingLibrary, () => acceptingLibraryAlias)
                 .JoinAlias(x => x.RequestingLibrary, () => requestingLibraryAlias)
                 .Where(() => acceptingLibraryAlias.AdministratorId == query.UserId || requestingLibraryAlias.AdministratorId == query.UserId)
                 .List()
+                .Select(x =>
+                {
+                    if (x.AcceptingLibrary.Id == query.UserId) return new LibrarySearchResult(x.RequestingLibrary.Id, x.RequestingLibrary.Name);
+                    return new LibrarySearchResult(x.AcceptingLibrary.Id, x.AcceptingLibrary.Name);
+                })
                 .ToArray());
         }
     }

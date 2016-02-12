@@ -2,6 +2,7 @@
 using Lending.Domain.Model;
 using Lending.ReadModels.Relational.LinkAccepted;
 using Lending.ReadModels.Relational.LinkRequested;
+using Lending.ReadModels.Relational.ListLibrayLinks;
 using NUnit.Framework;
 using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
@@ -38,8 +39,8 @@ namespace Tests.Commands
             Then(Http200Ok);
             AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyRequestedLinks);
             AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(EmptyRequestedLinks);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(linkFrom1To2);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(linkFrom1To2);
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(new LibrarySearchResult(Library2Id, OpenLibrary2.Name));
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(new LibrarySearchResult(Library1Id, OpenLibrary1.Name));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, TestData.LinkCompleted);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, TestData.LinkAccepted);
         }

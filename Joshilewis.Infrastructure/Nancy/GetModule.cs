@@ -12,16 +12,12 @@ namespace Joshilewis.Infrastructure.Nancy
         private readonly IUnitOfWork unitOfWork;
         private readonly IMessageHandler<TMessage, TResult> messageHandler;
 
-        protected GetModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler, string path, bool secure = false)
+        protected GetModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler, string path)
         {
             this.unitOfWork = unitOfWork;
             this.messageHandler = messageHandler;
 
             this.RequiresHttps();
-            if (secure)
-            {
-                this.RequiresAuthentication();
-            }
 
             Get[path] = _ =>
             {
