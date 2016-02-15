@@ -119,58 +119,49 @@ namespace Lending.Domain.Model
             throw new NotAuthorizedException(userId, Id, GetType());
         }
 
-        public Result RequestLink(Guid processId, Guid desinationLibraryId)
+        public void RequestLink(Guid processId, Guid desinationLibraryId)
         {
-            if (PendingLinkRequests.Contains(desinationLibraryId)) return Fail(LinkAlreadyRequested);
-            if (ReceivedLinkRequests.Contains(desinationLibraryId)) return Fail(ReverseLinkAlreadyRequested);
-            if(LinkedLibraries.Contains(desinationLibraryId)) return Fail(LibrariesAlreadyLinked);
+            if (PendingLinkRequests.Contains(desinationLibraryId)) Fail(LinkAlreadyRequested);
+            if (ReceivedLinkRequests.Contains(desinationLibraryId)) Fail(ReverseLinkAlreadyRequested);
+            if(LinkedLibraries.Contains(desinationLibraryId)) Fail(LibrariesAlreadyLinked);
 
             RaiseEvent(new LinkRequested(processId, Id, desinationLibraryId));
-            return Created();
         }
 
-        public Result InitiateLinkAcceptance(Guid processId, Guid sourceLibraryId)
+        public void InitiateLinkAcceptance(Guid processId, Guid sourceLibraryId)
         {
-            if (ReceivedLinkRequests.Contains(sourceLibraryId)) return Fail(ReverseLinkAlreadyRequested);
-            if (LinkedLibraries.Contains(sourceLibraryId)) return Fail(LibrariesAlreadyLinked);
+            if (ReceivedLinkRequests.Contains(sourceLibraryId)) Fail(ReverseLinkAlreadyRequested);
+            if (LinkedLibraries.Contains(sourceLibraryId)) Fail(LibrariesAlreadyLinked);
 
             RaiseEvent(new LinkRequestReceived(processId, Id, sourceLibraryId));
-            return Success();
         }
 
-        public Result AcceptLink(Guid processId, Guid requestingLibraryId)
+        public void AcceptLink(Guid processId, Guid requestingLibraryId)
         {
-            if (LinkedLibraries.Contains(requestingLibraryId)) return Fail(LibrariesAlreadyLinked);
-            if (!ReceivedLinkRequests.Contains(requestingLibraryId)) return Fail(NoPendingLinkRequest);
+            if (LinkedLibraries.Contains(requestingLibraryId)) Fail(LibrariesAlreadyLinked);
+            if (!ReceivedLinkRequests.Contains(requestingLibraryId)) Fail(NoPendingLinkRequest);
 
             RaiseEvent(new LinkAccepted(processId, Id, requestingLibraryId));
-
-            return Success();
         }
 
-        public Result CompleteLink(Guid processId, Guid acceptingLibraryId)
+        public void CompleteLink(Guid processId, Guid acceptingLibraryId)
         {
-            if (LinkedLibraries.Contains(acceptingLibraryId)) return Fail(LibrariesAlreadyLinked);
-            if (!PendingLinkRequests.Contains(acceptingLibraryId)) return Fail(LinkNotRequested);
+            if (LinkedLibraries.Contains(acceptingLibraryId)) Fail(LibrariesAlreadyLinked);
+            if (!PendingLinkRequests.Contains(acceptingLibraryId)) Fail(LinkNotRequested);
 
             RaiseEvent(new LinkCompleted(processId, Id, acceptingLibraryId));
-
-            return Success();
         }
 
-        public Result AddBookToLibrary(Guid processId, string title, string author, string isbn)
+        public void AddBookToLibrary(Guid processId, string title, string author, string isbn)
         {
-            if (Books.Contains(new Book(title, author, isbn))) return Fail(BookAlreadyInLibrary);
+            if (Books.Contains(new Book(title, author, isbn))) Fail(BookAlreadyInLibrary);
             RaiseEvent(new BookAddedToLibrary(processId, Id, title, author, isbn));
-            return Created();
         }
 
-        public Result RemoveBookFromLibrary(Guid processId, string title, string author, string isbn)
+        public void RemoveBookFromLibrary(Guid processId, string title, string author, string isbn)
         {
-            if (!Books.Contains(new Book(title, author, isbn))) return Fail(BookNotInLibrary);
+            if (!Books.Contains(new Book(title, author, isbn))) Fail(BookNotInLibrary);
             RaiseEvent(new BookRemovedFromLibrary(processId, Id, title, author, isbn));
-
-            return Success();
         }
     }
 }

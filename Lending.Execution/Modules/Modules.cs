@@ -28,7 +28,7 @@ namespace Lending.Execution.Modules
         }
     }
 
-    public class RequestLinkModule: PostModule<RequestLink, Result>
+    public class RequestLinkModule: PostModule<RequestLink>
     {
         public RequestLinkModule(IUnitOfWork unitOfWork, ICommandHandler<RequestLink> commandHandler)
             : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/links/request/")
@@ -37,7 +37,7 @@ namespace Lending.Execution.Modules
 
     }
 
-    public class AcceptLinkModule : PostModule<AcceptLink, Result>
+    public class AcceptLinkModule : PostModule<AcceptLink>
     {
         public AcceptLinkModule(IUnitOfWork unitOfWork, ICommandHandler<AcceptLink> commandHandler)
             : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/links/accept/")
@@ -46,7 +46,7 @@ namespace Lending.Execution.Modules
 
     }
 
-    public class AddBookModule : PostModule<AddBookToLibrary, Result>
+    public class AddBookModule : PostModule<AddBookToLibrary>
     {
         public AddBookModule(IUnitOfWork unitOfWork, ICommandHandler<AddBookToLibrary> commandHandler)
             : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/books/add")
@@ -55,7 +55,7 @@ namespace Lending.Execution.Modules
 
     }
 
-    public class RemoveBookModule : PostModule<RemoveBookFromLibrary, Result>
+    public class RemoveBookModule : PostModule<RemoveBookFromLibrary>
     {
         public RemoveBookModule(IUnitOfWork unitOfWork, ICommandHandler<RemoveBookFromLibrary> commandHandler)
             : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/books/remove")
@@ -63,7 +63,7 @@ namespace Lending.Execution.Modules
         }
 
     }
-    public class OpenLibraryModule : PostModule<OpenLibrary, Result>
+    public class OpenLibraryModule : PostModule<OpenLibrary>
     {
         public OpenLibraryModule(IUnitOfWork unitOfWork, ICommandHandler<OpenLibrary> commandHandler)
             : base(unitOfWork, commandHandler, "/libraries/")

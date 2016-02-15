@@ -69,7 +69,7 @@
     <Compile Include="Query\IAuthenticatedQueryHandler.cs" />
     <Compile Include="Query\IQueryHandler.cs" />
     <Compile Include="Query\Query.cs" />
-    <Compile Include="Query\Result.cs" />
+    <Compile Include="Query\EResultCode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

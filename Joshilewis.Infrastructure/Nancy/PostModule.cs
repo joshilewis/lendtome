@@ -10,7 +10,7 @@ using Nancy.Security;
 
 namespace Joshilewis.Infrastructure.Nancy
 {
-    public abstract class PostModule<TMessage, TResult> : NancyModule where TMessage : AuthenticatedCommand where TResult : Result
+    public abstract class PostModule<TMessage> : NancyModule where TMessage : AuthenticatedCommand
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly ICommandHandler<TMessage> commandHandler;

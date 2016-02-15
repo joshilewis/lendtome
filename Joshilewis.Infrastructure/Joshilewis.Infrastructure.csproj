@@ -119,7 +119,6 @@
     <Compile Include="Nancy\AuthenticatedGetModule.cs" />
     <Compile Include="Nancy\GetModule.cs" />
     <Compile Include="Nancy\PostModule.cs" />
-    <Compile Include="Nancy\PutModule.cs" />
     <Compile Include="Persistence\NHibernateRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />

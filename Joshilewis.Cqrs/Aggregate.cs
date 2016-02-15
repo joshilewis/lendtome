@@ -67,17 +67,17 @@ namespace Joshilewis.Cqrs
             return Id.GetHashCode();
         }
 
-        protected virtual Result Success()
+        protected virtual EResultCode Success()
         {
-            return new Result(EResultCode.Ok);
+            return EResultCode.Ok;
         }
 
-        protected virtual Result Created()
+        protected virtual EResultCode Created()
         {
-            return new Result(EResultCode.Created);
+            return EResultCode.Created;
         }
 
-        protected virtual Result Fail(string reason)
+        protected virtual EResultCode Fail(string reason)
         {
             throw new InvalidOperationException(reason);
         }
