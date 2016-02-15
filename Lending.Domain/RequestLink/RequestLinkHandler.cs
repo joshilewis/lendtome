@@ -9,7 +9,7 @@ namespace Lending.Domain.RequestLink
 {
     public class RequestLinkHandler : AuthenticatedCommandHandler<RequestLink>
     {
-        public const string CantConnectToSelf = "You can't connect to yourself";
+        public const string CantConnectToSelf = "You can't link to yourself";
 
         public RequestLinkHandler(Func<IEventRepository> eventRepositoryFunc)
             : base(eventRepositoryFunc)
