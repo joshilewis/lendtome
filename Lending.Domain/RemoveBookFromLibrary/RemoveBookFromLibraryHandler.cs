@@ -6,14 +6,14 @@ using Lending.Domain.Model;
 
 namespace Lending.Domain.RemoveBookFromLibrary
 {
-    public class RemoveBookFromLibraryHandler : AuthenticatedCommandHandler<RemoveBookFromLibrary, Result>
+    public class RemoveBookFromLibraryHandler : AuthenticatedCommandHandler<RemoveBookFromLibrary>
     {
-        public RemoveBookFromLibraryHandler(Func<IRepository> repositoryFunc, Func<IEventRepository> eventRepositoryFunc)
-            : base(repositoryFunc, eventRepositoryFunc)
+        public RemoveBookFromLibraryHandler(Func<IEventRepository> eventRepositoryFunc)
+            : base(eventRepositoryFunc)
         {
         }
 
-        public override Result Handle(RemoveBookFromLibrary command)
+        public override EResultCode Handle(RemoveBookFromLibrary command)
         {
             Library library = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
             library.CheckUserAuthorized(command.UserId);

@@ -2,7 +2,7 @@
 
 namespace Joshilewis.Cqrs
 {
-    public interface IAuthenticatedMessageHandler<in TMessage, out TResult> : IMessageHandler<TMessage, TResult> where TMessage : Message, IAuthenticated
+    public interface IAuthenticatedMessageHandler<in TMessage> : IMessageHandler<TMessage, EResultCode> where TMessage : Message, IAuthenticated
     {
     }
 }

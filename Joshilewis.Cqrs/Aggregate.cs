@@ -69,12 +69,12 @@ namespace Joshilewis.Cqrs
 
         protected virtual Result Success()
         {
-            return new Result(Result.EResultCode.Ok);
+            return new Result(EResultCode.Ok);
         }
 
         protected virtual Result Created()
         {
-            return new Result(Result.EResultCode.Created);
+            return new Result(EResultCode.Created);
         }
 
         protected virtual Result Fail(string reason)

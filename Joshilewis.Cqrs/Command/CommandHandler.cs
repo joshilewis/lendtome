@@ -3,31 +3,29 @@ using Joshilewis.Cqrs.Query;
 
 namespace Joshilewis.Cqrs.Command
 {
-    public abstract class CommandHandler<TMessage, TResult> : MessageHandler<TMessage, TResult>, 
-        ICommandHandler<TMessage, TResult> where TMessage : Command where TResult : Result
+    public abstract class CommandHandler<TMessage> : MessageHandler<TMessage, EResultCode>, 
+        ICommandHandler<TMessage> where TMessage : Command
     {
-        private readonly Func<IRepository> getRepository;
         private readonly Func<IEventRepository> getEventRepository;
 
-        protected CommandHandler(Func<IRepository> repositoryFunc, Func<IEventRepository> eventRepositoryFunc)
+        protected CommandHandler(Func<IEventRepository> eventRepositoryFunc)
         {
-            this.getRepository = repositoryFunc;
             this.getEventRepository = eventRepositoryFunc;
         }
 
         protected IEventRepository EventRepository => getEventRepository();
 
-        protected virtual Result Success()
+        protected virtual EResultCode Success()
         {
-            return new Result(Result.EResultCode.Ok);
+            return EResultCode.Ok;
         }
 
-        protected virtual Result Created()
+        protected virtual EResultCode Created()
         {
-            return new Result(Result.EResultCode.Created);
+            return EResultCode.Created;
         }
 
-        protected virtual Result Fail(string reason)
+        protected virtual EResultCode Fail(string reason)
         {
             throw new InvalidOperationException(reason);
         }

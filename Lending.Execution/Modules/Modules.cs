@@ -1,4 +1,5 @@
 ﻿using Joshilewis.Cqrs;
+using Joshilewis.Cqrs.Command;
 using Joshilewis.Cqrs.Query;
 using Joshilewis.Infrastructure.Nancy;
 using Joshilewis.Infrastructure.UnitOfWork;
@@ -29,8 +30,8 @@ namespace Lending.Execution.Modules
 
     public class RequestLinkModule: PostModule<RequestLink, Result>
     {
-        public RequestLinkModule(IUnitOfWork unitOfWork, IMessageHandler<RequestLink, Result> messageHandler)
-            : base(unitOfWork, messageHandler, "/libraries/{AggregateId}/links/request/")
+        public RequestLinkModule(IUnitOfWork unitOfWork, ICommandHandler<RequestLink> commandHandler)
+            : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/links/request/")
         {
         }
 
@@ -38,8 +39,8 @@ namespace Lending.Execution.Modules
 
     public class AcceptLinkModule : PostModule<AcceptLink, Result>
     {
-        public AcceptLinkModule(IUnitOfWork unitOfWork, IMessageHandler<AcceptLink, Result> messageHandler)
-            : base(unitOfWork, messageHandler, "/libraries/{AggregateId}/links/accept/")
+        public AcceptLinkModule(IUnitOfWork unitOfWork, ICommandHandler<AcceptLink> commandHandler)
+            : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/links/accept/")
         {
         }
 
@@ -47,8 +48,8 @@ namespace Lending.Execution.Modules
 
     public class AddBookModule : PostModule<AddBookToLibrary, Result>
     {
-        public AddBookModule(IUnitOfWork unitOfWork, IMessageHandler<AddBookToLibrary, Result> messageHandler)
-            : base(unitOfWork, messageHandler, "/libraries/{AggregateId}/books/add")
+        public AddBookModule(IUnitOfWork unitOfWork, ICommandHandler<AddBookToLibrary> commandHandler)
+            : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/books/add")
         {
         }
 
@@ -56,16 +57,16 @@ namespace Lending.Execution.Modules
 
     public class RemoveBookModule : PostModule<RemoveBookFromLibrary, Result>
     {
-        public RemoveBookModule(IUnitOfWork unitOfWork, IMessageHandler<RemoveBookFromLibrary, Result> messageHandler)
-            : base(unitOfWork, messageHandler, "/libraries/{AggregateId}/books/remove")
+        public RemoveBookModule(IUnitOfWork unitOfWork, ICommandHandler<RemoveBookFromLibrary> commandHandler)
+            : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/books/remove")
         {
         }
 
     }
     public class OpenLibraryModule : PostModule<OpenLibrary, Result>
     {
-        public OpenLibraryModule(IUnitOfWork unitOfWork, IMessageHandler<OpenLibrary, Result> messageHandler)
-            : base(unitOfWork, messageHandler, "/libraries/")
+        public OpenLibraryModule(IUnitOfWork unitOfWork, ICommandHandler<OpenLibrary> commandHandler)
+            : base(unitOfWork, commandHandler, "/libraries/")
         {
         }
 

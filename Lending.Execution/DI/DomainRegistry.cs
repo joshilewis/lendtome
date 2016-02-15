@@ -69,13 +69,13 @@ namespace Lending.Execution.DI
                 scanner.AssemblyContainingType<Command>();
                 scanner.AssemblyContainingType<AddBookToLibrary>();
                 scanner.AssemblyContainingType<SearchForLibrary>();
-                scanner.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IQueryHandler<,>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IMessageHandler<,>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<,>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedCommandHandler<,>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<,>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedCommandHandler<>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IEventHandler<>));
             });
 

@@ -8,11 +8,11 @@
         {
             Code = code;
         }
+    }
 
-        public enum EResultCode
-        {
-            Ok = 200,
-            Created = 201,
-        }
+    public enum EResultCode
+    {
+        Ok = 200,
+        Created = 201,
     }
 }

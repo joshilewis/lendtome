@@ -13,12 +13,12 @@ namespace Joshilewis.Infrastructure.Nancy
     public abstract class PostModule<TMessage, TResult> : NancyModule where TMessage : AuthenticatedCommand where TResult : Result
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IMessageHandler<TMessage, TResult> messageHandler;
+        private readonly ICommandHandler<TMessage> commandHandler;
 
-        protected PostModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler, string path)
+        protected PostModule(IUnitOfWork unitOfWork, ICommandHandler<TMessage> commandHandler, string path)
         {
             this.unitOfWork = unitOfWork;
-            this.messageHandler = messageHandler;
+            this.commandHandler = commandHandler;
 
             this.RequiresAuthentication();
             this.RequiresHttps();
@@ -31,15 +31,15 @@ namespace Joshilewis.Infrastructure.Nancy
                 message.UserId = user.Id;
                 message.ProcessId = Guid.NewGuid();
 
-                Result result = default(Result);
+                EResultCode resultCode = default(EResultCode);
                 unitOfWork.DoInTransaction(() =>
                 {
-                    result = messageHandler.Handle(message);
+                    resultCode = commandHandler.Handle(message);
                 });
 
                 return new Response()
                 {
-                    StatusCode = (HttpStatusCode) result.Code,
+                    StatusCode = (HttpStatusCode) resultCode,
                 };
 
             };

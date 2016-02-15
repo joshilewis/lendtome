@@ -3,11 +3,11 @@ using Joshilewis.Cqrs.Query;
 
 namespace Joshilewis.Cqrs.Command
 {
-    public abstract class AuthenticatedCommandHandler<TRequest, TResult> : CommandHandler<TRequest, TResult>, 
-        IAuthenticatedCommandHandler<TRequest, TResult> where TRequest : AuthenticatedCommand where TResult : Result
+    public abstract class AuthenticatedCommandHandler<TRequest> : CommandHandler<TRequest>, 
+        IAuthenticatedCommandHandler<TRequest> where TRequest : AuthenticatedCommand
     {
-        protected AuthenticatedCommandHandler(Func<IRepository> repositoryFunc, Func<IEventRepository> eventRepositoryFunc)
-            : base(repositoryFunc, eventRepositoryFunc)
+        protected AuthenticatedCommandHandler(Func<IEventRepository> eventRepositoryFunc)
+            : base(eventRepositoryFunc)
         {
         }
     }

@@ -7,25 +7,25 @@ using Lending.Domain.OpenLibrary;
 
 namespace Lending.Domain.RequestLink
 {
-    public class RequestLinkHandler : AuthenticatedCommandHandler<RequestLink, Result>
+    public class RequestLinkHandler : AuthenticatedCommandHandler<RequestLink>
     {
         public const string CantConnectToSelf = "You can't connect to yourself";
 
-        public RequestLinkHandler(Func<IRepository> repositoryFunc, Func<IEventRepository> eventRepositoryFunc)
-            : base(repositoryFunc, eventRepositoryFunc)
+        public RequestLinkHandler(Func<IEventRepository> eventRepositoryFunc)
+            : base(eventRepositoryFunc)
         {
         }
 
-        public override Result Handle(RequestLink command)
+        public override EResultCode Handle(RequestLink command)
         {
             if (command.TargetLibraryId == command.AggregateId) return Fail(CantConnectToSelf);
 
             Library library = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
             library.CheckUserAuthorized(command.UserId);
-            Result  result = library.RequestLink(command.ProcessId, command.TargetLibraryId);
+            library.RequestLink(command.ProcessId, command.TargetLibraryId);
 
             Library targetLibrary = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.TargetLibraryId));
-            result = targetLibrary.InitiateLinkAcceptance(command.ProcessId, command.AggregateId);
+            targetLibrary.InitiateLinkAcceptance(command.ProcessId, command.AggregateId);
 
             EventRepository.Save(library);
             EventRepository.Save(targetLibrary);
