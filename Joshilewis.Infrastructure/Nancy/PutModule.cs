@@ -39,7 +39,7 @@ namespace Joshilewis.Infrastructure.Nancy
 
                 return new Response()
                 {
-                    StatusCode = (HttpStatusCode) result.Code,
+                    StatusCode = HttpStatusCode.OK,
                 };
 
             };

@@ -17,8 +17,8 @@ namespace Tests.Commands
     [TestFixture]
     public class AcceptLinkTests : Fixture
     {
-        private readonly LibraryLink linkFrom1To2 = new LibraryLink(Guid.Empty, OpenedLibrary1, OpenedLibrary2);
-
+        private readonly LibrarySearchResult library2SearchResult = new LibrarySearchResult(Library2Id, OpenedLibrary2.Name);
+        private readonly LibrarySearchResult library1SearchResult = new LibrarySearchResult(Library1Id, OpenedLibrary1.Name);
 
         /// <summary>
         /// GIVEN Library1 AND Library2 are Open AND they are not Linked AND Library1 has Requested to Link to Library2
@@ -89,8 +89,8 @@ namespace Tests.Commands
             Then(Http400Because(Library.LibrariesAlreadyLinked));
             AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyRequestedLinks);
             AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(EmptyRequestedLinks);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(linkFrom1To2);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(linkFrom1To2);
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(library2SearchResult);
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(library1SearchResult);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, TestData.LinkCompleted);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, TestData.LinkAccepted);
         }

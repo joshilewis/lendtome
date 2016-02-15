@@ -15,8 +15,6 @@ namespace Joshilewis.Cqrs.Command
             this.getEventRepository = eventRepositoryFunc;
         }
 
-        protected IRepository Session => getRepository();
-
         protected IEventRepository EventRepository => getEventRepository();
 
         protected virtual Result Success()

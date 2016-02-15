@@ -27,28 +27,10 @@ namespace Tests
 {
     public static class TestEqualityHelpers
     {
-        public static bool ShouldEqual(this Result actual, Result expected)
-        {
-            Assert.That(actual.Code, Is.EqualTo(expected.Code));
-
-            return true;
-        }
-
         public static bool ShouldEqual(this OpenedLibrary actual, OpenedLibrary expected)
         {
             Assert.That(actual.AdministratorId, Is.EqualTo(expected.AdministratorId));
             Assert.That(actual.Name, Is.EqualTo(expected.Name));
-
-            return true;
-        }
-
-        public static bool ShouldEqual(this Result<OpenedLibrary[]> actual, Result<OpenedLibrary[]> expected)
-        {
-            Assert.That(actual.Payload,
-                Is.EquivalentTo(expected.Payload)
-                    .Using((IEqualityComparer<OpenedLibrary>) new ValueEqualityComparer()));
-
-            ((Result) actual).ShouldEqual(expected);
 
             return true;
         }
@@ -67,24 +49,6 @@ namespace Tests
             Assert.That(actual.Title, Is.EqualTo(expected.Title));
             Assert.That(actual.Author, Is.EqualTo(expected.Author));
             Assert.That(actual.Isbn, Is.EqualTo(expected.Isbn));
-            return true;
-        }
-
-        public static bool ShouldEqual(this Result<BookSearchResult[]> actual, Result<BookSearchResult[]> expected)
-        {
-            Assert.That(actual.Payload, Is.EquivalentTo(expected.Payload));
-
-            ((Result)actual).ShouldEqual(expected);
-
-            return true;
-        }
-
-        public static bool ShouldEqual(this Result<LibrarySearchResult[]> actual, Result<LibrarySearchResult[]> expected)
-        {
-            Assert.That(actual.Payload, Is.EquivalentTo(expected.Payload));
-
-            ((Result)actual).ShouldEqual(expected);
-
             return true;
         }
 

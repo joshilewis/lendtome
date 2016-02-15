@@ -28,10 +28,10 @@ namespace Joshilewis.Testing.CallBuilders
 
         public void Returns<TPayload>(params TPayload[] expected)
         {
-            ReturnsResult(new Result<TPayload[]>(expected));
+            ReturnsResult(expected);
         }
 
-        private void ReturnsResult<TResult>(TResult expected) where TResult : Result
+        private void ReturnsResult<TResult>(TResult expected)
         {
             if (UserId.HasValue)
             {

@@ -24,14 +24,12 @@ namespace Tests
     {
         static Fixture()
         {
-            TestValueEqualityHelpers.SetValueEqualityActions(new Dictionary<Type, Action<object, object>>()
-            {
-                {typeof(Result<RequestedLink[]>), (actual, expected) => ((Result<RequestedLink[]>)actual).ShouldEqual((Result<RequestedLink[]>)expected) },
-                {typeof(Result<LibraryLink[]>), (actual, expected) => ((Result<LibraryLink[]>)actual).ShouldEqual((Result<LibraryLink[]>)expected) },
-                {typeof(Result<LibrarySearchResult[]>), (actual, expected) => ((Result<LibrarySearchResult[]>)actual).ShouldEqual((Result<LibrarySearchResult[]>)expected) },
-                {typeof(Result<BookSearchResult[]>), (actual, expected) => ((Result<BookSearchResult[]>)actual).ShouldEqual((Result<BookSearchResult[]>)expected) },
-                {typeof(Result<LibraryBook[]>), (actual, expected) => ((Result<LibraryBook[]>)actual).ShouldEqual((Result<LibraryBook[]>)expected) },
-            });
+            TestValueEqualityHelpers.SetValueEqualityActions(
+                new EqualityAction<RequestedLink[]>((a, e) =>Assert.That(a,Is.EquivalentTo(e).Using((IEqualityComparer<RequestedLink>) new ValueEqualityComparer()))),
+                new EqualityAction<LibraryLink[]>((a, e) =>Assert.That(a,Is.EquivalentTo(e).Using((IEqualityComparer<LibraryLink>) new ValueEqualityComparer()))),
+                new EqualityAction<LibrarySearchResult[]>((a, e) => Assert.That(a, Is.EquivalentTo(e))),
+                new EqualityAction<BookSearchResult[]>((a, e) => Assert.That(a, Is.EquivalentTo(e))),
+                new EqualityAction<LibraryBook[]>((a, e) =>Assert.That(a,Is.EquivalentTo(e).Using((IEqualityComparer<LibraryBook>) new ValueEqualityComparer()))));
         }
 
         [SetUp]
@@ -52,4 +50,6 @@ namespace Tests
         }
 
     }
+
+
 }

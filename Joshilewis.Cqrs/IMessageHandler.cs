@@ -8,7 +8,7 @@ namespace Joshilewis.Cqrs
         object Handle(object message);
     }
 
-    public interface IMessageHandler<in TMessage, out TResult> : IMessageHandler where TMessage : Message where TResult : Result
+    public interface IMessageHandler<in TMessage, out TResult> : IMessageHandler where TMessage : Message
     {
         TResult Handle(TMessage message);
     }
@@ -18,7 +18,7 @@ namespace Joshilewis.Cqrs
         public abstract object Handle(object message);
     }
 
-    public abstract class MessageHandler<TMessage, TResult> : MessageHandler, IMessageHandler<TMessage, TResult> where TMessage : Message where TResult : Result
+    public abstract class MessageHandler<TMessage, TResult> : MessageHandler, IMessageHandler<TMessage, TResult> where TMessage : Message
     {
         public abstract TResult Handle(TMessage message);
 

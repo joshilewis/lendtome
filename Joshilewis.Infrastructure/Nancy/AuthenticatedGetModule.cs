@@ -7,7 +7,7 @@ using Nancy.Security;
 
 namespace Joshilewis.Infrastructure.Nancy
 {
-    public abstract class AuthenticatedGetModule<TQuery, TResult> : NancyModule where TQuery : AuthenticatedQuery where TResult : Result
+    public abstract class AuthenticatedGetModule<TQuery, TResult> : NancyModule where TQuery : AuthenticatedQuery
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IAuthenticatedQueryHandler<TQuery, TResult> queryHandler;
@@ -26,7 +26,7 @@ namespace Joshilewis.Infrastructure.Nancy
                 TQuery query = this.Bind<TQuery>();
                 query.UserId = user.Id;
 
-                Result response = default(Result);
+                TResult response = default(TResult);
                 unitOfWork.DoInTransaction(() =>
                 {
                     response = queryHandler.Handle(query);

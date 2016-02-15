@@ -11,7 +11,7 @@ using NHibernate.Criterion;
 
 namespace Lending.ReadModels.Relational.SearchForBook
 {
-    public class SearchForBookHandler : NHibernateQueryHandler<SearchForBook, Result>, IAuthenticatedQueryHandler<SearchForBook, Result>
+    public class SearchForBookHandler : NHibernateQueryHandler<SearchForBook, BookSearchResult[]>, IAuthenticatedQueryHandler<SearchForBook, BookSearchResult[]>
     {
         public const string UserHasNoConnection = "User has no connections";
 
@@ -20,7 +20,7 @@ namespace Lending.ReadModels.Relational.SearchForBook
         {
         }
 
-        public override Result Handle(SearchForBook message)
+        public override BookSearchResult[] Handle(SearchForBook message)
         {
             LibraryLink libraryLinkAlias = null;
             OpenedLibrary acceptingLibraryAlias = null;
@@ -32,8 +32,7 @@ namespace Lending.ReadModels.Relational.SearchForBook
                 .Where(() => acceptingLibraryAlias.AdministratorId == message.UserId || requestingLibraryAlias.AdministratorId == message.UserId)
                 .RowCount();
 
-            if (numberOfConnections == 0)
-                return new Result<BookSearchResult[]>(Result.EResultCode.Ok, new BookSearchResult[] {});
+            if (numberOfConnections == 0) return new BookSearchResult[] {};
 
             IEnumerable<LibraryLink> connectedUsers = Session.QueryOver<LibraryLink>(() => libraryLinkAlias)
                 .JoinAlias(x => x.AcceptingLibrary, () => acceptingLibraryAlias)
@@ -55,7 +54,7 @@ namespace Lending.ReadModels.Relational.SearchForBook
                 .Select(x => new BookSearchResult(x.Library.Id, x.LibraryName, x.Title, x.Author, x.Isbn))
                 .ToArray();
 
-            return new Result<BookSearchResult[]>(payload);
+            return payload;
         }
 
     }

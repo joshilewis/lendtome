@@ -17,6 +17,7 @@ using Lending.Domain.OpenLibrary;
 using Lending.Execution.Auth;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.LibraryOpened;
+using Lending.ReadModels.Relational.ListLibrayLinks;
 using Lending.ReadModels.Relational.SearchForLibrary;
 using Nancy.SimpleAuthentication;
 using NHibernate.Context;
@@ -104,7 +105,7 @@ namespace Lending.Execution.DI
             For<Func<Type, IEnumerable<IEventHandler>>>()
                 .Use<Func<Type, IEnumerable<IEventHandler>>>(context => eventType => GetEventHandlers(context, eventType));
 
-            For<IMessageHandler<SearchForLibrary, Result>>()
+            For<IMessageHandler<SearchForLibrary, LibrarySearchResult[]>>()
                 .AlwaysUnique()
                 .Use<SearchForLibraryHandler>();
 

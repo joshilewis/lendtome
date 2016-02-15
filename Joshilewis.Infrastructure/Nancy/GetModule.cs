@@ -7,7 +7,7 @@ using Nancy.Security;
 
 namespace Joshilewis.Infrastructure.Nancy
 {
-    public abstract class GetModule<TMessage, TResult> : NancyModule where TMessage : Message where TResult : Result
+    public abstract class GetModule<TMessage, TResult> : NancyModule where TMessage : Message
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMessageHandler<TMessage, TResult> messageHandler;
@@ -23,7 +23,7 @@ namespace Joshilewis.Infrastructure.Nancy
             {
                 TMessage request = this.Bind<TMessage>();
 
-                Result response = default(Result);
+                TResult response = default(TResult);
                 unitOfWork.DoInTransaction(() =>
                 {
                     response = messageHandler.Handle(request);

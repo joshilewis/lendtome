@@ -7,13 +7,13 @@ using NHibernate;
 
 namespace Lending.ReadModels.Relational.ListLibraryBooks
 {
-    public class ListLibraryBooksHandler : NHibernateQueryHandler<ListLibraryBooks, Result>, IAuthenticatedQueryHandler<ListLibraryBooks, Result>
+    public class ListLibraryBooksHandler : NHibernateQueryHandler<ListLibraryBooks, BookSearchResult[]>, IAuthenticatedQueryHandler<ListLibraryBooks, BookSearchResult[]>
     {
         public ListLibraryBooksHandler(Func<ISession> sessionFunc) : base(sessionFunc)
         {
         }
 
-        public override Result Handle(ListLibraryBooks query)
+        public override BookSearchResult[] Handle(ListLibraryBooks query)
         {
             LibraryBook[] libraryBooks = Session.QueryOver<LibraryBook>()
                 .JoinQueryOver(x => x.Library)
@@ -21,9 +21,9 @@ namespace Lending.ReadModels.Relational.ListLibraryBooks
                 .List()
                 .ToArray();
 
-            return new Result<BookSearchResult[]>(libraryBooks
+            return libraryBooks
                 .Select(x => new BookSearchResult(x.Library.Id, x.LibraryName, x.Title, x.Author, x.Isbn))
-                .ToArray());
+                .ToArray();
         }
     }
 }
