@@ -10,14 +10,14 @@ using NHibernate;
 
 namespace Lending.ReadModels.Relational.ListLibraries
 {
-    public class ListLibrariesHandler : NHibernateQueryHandler<ListLibraries, LibrarySearchResult[]>, IAuthenticatedQueryHandler<ListLibraries, LibrarySearchResult[]>
+    public class ListLibrariesHandler : NHibernateQueryHandler<ListLibraries>, IAuthenticatedQueryHandler<ListLibraries>
     {
         public ListLibrariesHandler(Func<ISession> sessionFunc)
             : base(sessionFunc)
         {
         }
 
-        public override LibrarySearchResult[] Handle(ListLibraries query)
+        public override object Handle(ListLibraries query)
         {
             IEnumerable<OpenedLibrary> libraries = Session.QueryOver<OpenedLibrary>()
                 .Where(x => x.AdministratorId == query.UserId)

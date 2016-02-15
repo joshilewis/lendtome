@@ -14,7 +14,7 @@ namespace Lending.Domain.AddBookToLibrary
         {
         }
 
-        public override EResultCode Handle(AddBookToLibrary command)
+        public override object Handle(AddBookToLibrary command)
         {
             Library library = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
             library.CheckUserAuthorized(command.UserId);

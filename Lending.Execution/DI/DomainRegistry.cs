@@ -70,8 +70,8 @@ namespace Lending.Execution.DI
                 scanner.AssemblyContainingType<AddBookToLibrary>();
                 scanner.AssemblyContainingType<SearchForLibrary>();
                 scanner.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(IQueryHandler<,>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(IMessageHandler<,>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IQueryHandler<>));
+                scanner.ConnectImplementationsToTypesClosing(typeof(IMessageHandler<>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedMessageHandler<>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(IAuthenticatedCommandHandler<>));
                 scanner.ConnectImplementationsToTypesClosing(typeof(AuthenticatedCommandHandler<>));
@@ -105,7 +105,7 @@ namespace Lending.Execution.DI
             For<Func<Type, IEnumerable<IEventHandler>>>()
                 .Use<Func<Type, IEnumerable<IEventHandler>>>(context => eventType => GetEventHandlers(context, eventType));
 
-            For<IMessageHandler<SearchForLibrary, LibrarySearchResult[]>>()
+            For<IMessageHandler<SearchForLibrary>>()
                 .AlwaysUnique()
                 .Use<SearchForLibraryHandler>();
 

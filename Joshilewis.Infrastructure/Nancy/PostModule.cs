@@ -34,7 +34,7 @@ namespace Joshilewis.Infrastructure.Nancy
                 EResultCode resultCode = default(EResultCode);
                 unitOfWork.DoInTransaction(() =>
                 {
-                    resultCode = commandHandler.Handle(message);
+                    resultCode = (EResultCode) commandHandler.Handle(message);
                 });
 
                 return new Response()

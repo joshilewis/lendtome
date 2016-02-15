@@ -1,6 +1,6 @@
 ﻿namespace Joshilewis.Cqrs.Query
 {
-    public interface IAuthenticatedQueryHandler<in TQuery, out TResult> : IQueryHandler<TQuery, TResult>
+    public interface IAuthenticatedQueryHandler<in TQuery> : IQueryHandler<TQuery>
         where TQuery : Query, IAuthenticated
     {
     }

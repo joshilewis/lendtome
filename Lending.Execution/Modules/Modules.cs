@@ -22,7 +22,7 @@ namespace Lending.Execution.Modules
 {
     public class SearchForLibraryModule : GetModule<SearchForLibrary, LibrarySearchResult[]>
     {
-        public SearchForLibraryModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForLibrary, LibrarySearchResult[]> messageHandler)
+        public SearchForLibraryModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForLibrary> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/{searchstring}")
         {
         }
@@ -72,49 +72,49 @@ namespace Lending.Execution.Modules
 
     }
 
-    public class ListLibrariesModule : AuthenticatedGetModule<ListLibraries, LibrarySearchResult[]>
+    public class ListLibrariesModule : AuthenticatedGetModule<ListLibraries>
     {
-        public ListLibrariesModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraries, LibrarySearchResult[]> messageHandler)
+        public ListLibrariesModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraries> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/")
         {
         }
     }
 
-    public class SearchForBookModule : AuthenticatedGetModule<SearchForBook, BookSearchResult[]>
+    public class SearchForBookModule : AuthenticatedGetModule<SearchForBook>
     {
-        public SearchForBookModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<SearchForBook, BookSearchResult[]> queryHandler)
+        public SearchForBookModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<SearchForBook> queryHandler)
             : base(unitOfWork, queryHandler, "/books/{SearchString}")
         {
         }
     }
 
-    public class ListRequestedLinksModule : AuthenticatedGetModule<ListRequestedLinks, RequestedLink[]>
+    public class ListRequestedLinksModule : AuthenticatedGetModule<ListRequestedLinks>
     {
-        public ListRequestedLinksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListRequestedLinks, RequestedLink[]> queryHandler)
+        public ListRequestedLinksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListRequestedLinks> queryHandler)
             : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/links/sent")
         {
         }
     }
 
-    public class ListReceivedLinksModule : AuthenticatedGetModule<ListReceivedLinks, RequestedLink[]>
+    public class ListReceivedLinksModule : AuthenticatedGetModule<ListReceivedLinks>
     {
-        public ListReceivedLinksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListReceivedLinks, RequestedLink[]> queryHandler)
+        public ListReceivedLinksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListReceivedLinks> queryHandler)
             : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/links/received")
         {
         }
     }
 
-    public class ListLibraryLinksModule : AuthenticatedGetModule<ListLibraryLinks, LibrarySearchResult[]>
+    public class ListLibraryLinksModule : AuthenticatedGetModule<ListLibraryLinks>
     {
-        public ListLibraryLinksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraryLinks, LibrarySearchResult[]> queryHandler)
+        public ListLibraryLinksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraryLinks> queryHandler)
             : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/links/")
         {
         }
     }
 
-    public class ListLibraryBooksModule : AuthenticatedGetModule<ListLibraryBooks, BookSearchResult[]>
+    public class ListLibraryBooksModule : AuthenticatedGetModule<ListLibraryBooks>
     {
-        public ListLibraryBooksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraryBooks, BookSearchResult[]> queryHandler)
+        public ListLibraryBooksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraryBooks> queryHandler)
             : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/books/")
         {
         }

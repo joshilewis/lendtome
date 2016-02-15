@@ -16,7 +16,7 @@ namespace Lending.Domain.RequestLink
         {
         }
 
-        public override EResultCode Handle(RequestLink command)
+        public override object Handle(RequestLink command)
         {
             if (command.TargetLibraryId == command.AggregateId) return Fail(CantConnectToSelf);
 

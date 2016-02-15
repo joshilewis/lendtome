@@ -11,15 +11,15 @@ using NHibernate;
 
 namespace Lending.ReadModels.Relational.ListLibrayLinks
 {
-    public class ListLibrayLinksHandler : NHibernateQueryHandler<ListLibraryLinks, LibrarySearchResult[]>,
-        IAuthenticatedQueryHandler<ListLibraryLinks, LibrarySearchResult[]>
+    public class ListLibrayLinksHandler : NHibernateQueryHandler<ListLibraryLinks>,
+        IAuthenticatedQueryHandler<ListLibraryLinks>
     {
         public ListLibrayLinksHandler(Func<ISession> sessionFunc)
             : base(sessionFunc)
         {
         }
 
-        public override LibrarySearchResult[] Handle(ListLibraryLinks query)
+        public override object Handle(ListLibraryLinks query)
         {
             LibraryLink libraryLinkAlias = null;
             OpenedLibrary acceptingLibraryAlias = null;
@@ -28,11 +28,15 @@ namespace Lending.ReadModels.Relational.ListLibrayLinks
             return Session.QueryOver<LibraryLink>(() => libraryLinkAlias)
                 .JoinAlias(x => x.AcceptingLibrary, () => acceptingLibraryAlias)
                 .JoinAlias(x => x.RequestingLibrary, () => requestingLibraryAlias)
-                .Where(() => acceptingLibraryAlias.AdministratorId == query.UserId || requestingLibraryAlias.AdministratorId == query.UserId)
+                .Where(
+                    () =>
+                        acceptingLibraryAlias.AdministratorId == query.UserId ||
+                        requestingLibraryAlias.AdministratorId == query.UserId)
                 .List()
                 .Select(x =>
                 {
-                    if (x.AcceptingLibrary.Id == query.UserId) return new LibrarySearchResult(x.RequestingLibrary.Id, x.RequestingLibrary.Name);
+                    if (x.AcceptingLibrary.Id == query.UserId)
+                        return new LibrarySearchResult(x.RequestingLibrary.Id, x.RequestingLibrary.Name);
                     return new LibrarySearchResult(x.AcceptingLibrary.Id, x.AcceptingLibrary.Name);
                 })
                 .ToArray();

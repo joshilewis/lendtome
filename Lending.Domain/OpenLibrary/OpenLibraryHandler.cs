@@ -19,7 +19,7 @@ namespace Lending.Domain.OpenLibrary
             this.checkIfUserHasOpenedLibrary = checkIfUserHasOpenedLibrary;
         }
 
-        public override EResultCode Handle(OpenLibrary command)
+        public override object Handle(OpenLibrary command)
         {
             if (checkIfUserHasOpenedLibrary.UserHasOpenedLibrary(command.UserId))
                 Fail(UserAlreadyOpenedLibrary);

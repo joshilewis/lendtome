@@ -7,12 +7,12 @@ using Nancy.Security;
 
 namespace Joshilewis.Infrastructure.Nancy
 {
-    public abstract class AuthenticatedGetModule<TQuery, TResult> : NancyModule where TQuery : AuthenticatedQuery
+    public abstract class AuthenticatedGetModule<TQuery> : NancyModule where TQuery : AuthenticatedQuery
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IAuthenticatedQueryHandler<TQuery, TResult> queryHandler;
+        private readonly IAuthenticatedQueryHandler<TQuery> queryHandler;
 
-        protected AuthenticatedGetModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<TQuery, TResult> queryHandler, string path)
+        protected AuthenticatedGetModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<TQuery> queryHandler, string path)
         {
             this.unitOfWork = unitOfWork;
             this.queryHandler = queryHandler;
@@ -26,7 +26,7 @@ namespace Joshilewis.Infrastructure.Nancy
                 TQuery query = this.Bind<TQuery>();
                 query.UserId = user.Id;
 
-                TResult response = default(TResult);
+                object response = null;
                 unitOfWork.DoInTransaction(() =>
                 {
                     response = queryHandler.Handle(query);

@@ -10,9 +10,9 @@ namespace Joshilewis.Infrastructure.Nancy
     public abstract class GetModule<TMessage, TResult> : NancyModule where TMessage : Message
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IMessageHandler<TMessage, TResult> messageHandler;
+        private readonly IMessageHandler<TMessage> messageHandler;
 
-        protected GetModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage, TResult> messageHandler, string path)
+        protected GetModule(IUnitOfWork unitOfWork, IMessageHandler<TMessage> messageHandler, string path)
         {
             this.unitOfWork = unitOfWork;
             this.messageHandler = messageHandler;
@@ -23,7 +23,7 @@ namespace Joshilewis.Infrastructure.Nancy
             {
                 TMessage request = this.Bind<TMessage>();
 
-                TResult response = default(TResult);
+                object response = null;
                 unitOfWork.DoInTransaction(() =>
                 {
                     response = messageHandler.Handle(request);

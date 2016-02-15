@@ -9,8 +9,8 @@ using NHibernate;
 
 namespace Lending.ReadModels.Relational
 {
-    public abstract class NHibernateQueryHandler<TMessage, TResult> : MessageHandler<TMessage, TResult>,
-        IQueryHandler<TMessage, TResult> where TMessage : Query
+    public abstract class NHibernateQueryHandler<TMessage> : MessageHandler<TMessage>,
+        IQueryHandler<TMessage> where TMessage : Query
     {
         private readonly Func<ISession> getSession;
 

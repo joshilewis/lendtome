@@ -11,7 +11,7 @@ using NHibernate.Criterion;
 
 namespace Lending.ReadModels.Relational.SearchForBook
 {
-    public class SearchForBookHandler : NHibernateQueryHandler<SearchForBook, BookSearchResult[]>, IAuthenticatedQueryHandler<SearchForBook, BookSearchResult[]>
+    public class SearchForBookHandler : NHibernateQueryHandler<SearchForBook>, IAuthenticatedQueryHandler<SearchForBook>
     {
         public const string UserHasNoConnection = "User has no connections";
 
@@ -20,7 +20,7 @@ namespace Lending.ReadModels.Relational.SearchForBook
         {
         }
 
-        public override BookSearchResult[] Handle(SearchForBook message)
+        public override object Handle(SearchForBook message)
         {
             LibraryLink libraryLinkAlias = null;
             OpenedLibrary acceptingLibraryAlias = null;

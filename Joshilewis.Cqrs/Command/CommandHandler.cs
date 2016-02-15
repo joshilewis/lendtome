@@ -3,7 +3,7 @@ using Joshilewis.Cqrs.Query;
 
 namespace Joshilewis.Cqrs.Command
 {
-    public abstract class CommandHandler<TMessage> : MessageHandler<TMessage, EResultCode>, 
+    public abstract class CommandHandler<TMessage> : MessageHandler<TMessage>, 
         ICommandHandler<TMessage> where TMessage : Command
     {
         private readonly Func<IEventRepository> getEventRepository;

@@ -13,7 +13,7 @@ namespace Lending.Domain.AcceptLink
         {
         }
 
-        public override EResultCode Handle(AcceptLink command)
+        public override object Handle(AcceptLink command)
         {
             Library acceptingLibrary = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
             acceptingLibrary.CheckUserAuthorized(command.UserId);

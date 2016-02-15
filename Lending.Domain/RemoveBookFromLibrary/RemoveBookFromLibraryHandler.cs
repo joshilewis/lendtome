@@ -13,7 +13,7 @@ namespace Lending.Domain.RemoveBookFromLibrary
         {
         }
 
-        public override EResultCode Handle(RemoveBookFromLibrary command)
+        public override object Handle(RemoveBookFromLibrary command)
         {
             Library library = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
             library.CheckUserAuthorized(command.UserId);

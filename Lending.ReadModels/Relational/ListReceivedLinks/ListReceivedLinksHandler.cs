@@ -6,14 +6,14 @@ using NHibernate;
 
 namespace Lending.ReadModels.Relational.ListReceivedLinks
 {
-    public class ListReceivedLinksHandler : NHibernateQueryHandler<ListReceivedLinks, RequestedLink[]>, IAuthenticatedQueryHandler<ListReceivedLinks, RequestedLink[]>
+    public class ListReceivedLinksHandler : NHibernateQueryHandler<ListReceivedLinks>, IAuthenticatedQueryHandler<ListReceivedLinks>
     {
         public ListReceivedLinksHandler(Func<ISession> sessionFunc)
             : base(sessionFunc)
         {
         }
 
-        public override RequestedLink[] Handle(ListReceivedLinks query)
+        public override object Handle(ListReceivedLinks query)
         {
             return Session.QueryOver<RequestedLink>()
                 .JoinQueryOver(x => x.TargetLibrary)
