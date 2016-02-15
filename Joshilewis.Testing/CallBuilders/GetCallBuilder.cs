@@ -26,12 +26,7 @@ namespace Joshilewis.Testing.CallBuilders
             return this;
         }
 
-        public void Returns<TPayload>(params TPayload[] expected)
-        {
-            ReturnsResult(expected);
-        }
-
-        private void ReturnsResult<TResult>(TResult expected)
+        public void Returns<TResult>(params TResult[] expected)
         {
             if (UserId.HasValue)
             {
@@ -45,8 +40,8 @@ namespace Joshilewis.Testing.CallBuilders
                     $"GET call to '{Url}' was not successful, response code is {response.StatusCode}, reason {response.ReasonPhrase}");
             string getResponseString = response.Content.ReadAsStringAsync().Result;
             Console.WriteLine("Response for GET {0} is {1}", Url, getResponseString);
-            TResult actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult>(getResponseString);
-            TestValueEqualityHelpers.CompareValueEquality(actualResult, expected);
+            TResult[] actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult[]>(getResponseString);
+            Assert.That(actualResult, Is.EquivalentTo(expected));
         }
 
     }

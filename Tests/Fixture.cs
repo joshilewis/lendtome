@@ -23,14 +23,6 @@ namespace Tests
     [TestFixture]
     public abstract class Fixture
     {
-        static Fixture()
-        {
-            TestValueEqualityHelpers.SetValueEqualityActions(
-                new EqualityAction<LibrarySearchResult[]>((actual, expected) => Assert.That(actual, Is.EquivalentTo(expected))),
-                new EqualityAction<BookSearchResult[]>((actual, expected) => Assert.That(actual, Is.EquivalentTo(expected)))
-                );
-        }
-
         [SetUp]
         public virtual void SetUp()
         {
