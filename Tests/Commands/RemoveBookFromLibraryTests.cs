@@ -3,6 +3,7 @@ using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.ReadModels.Relational.BookAdded;
+using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
@@ -17,7 +18,7 @@ namespace Tests.Commands
     [TestFixture]
     public class RemoveBookFromLibraryTests : Fixture
     {
-        private readonly LibraryBook[] emptyLibraryBookCollection = { };
+        private readonly BookSearchResult[] emptyLibraryBookCollection = { };
 
         /// <summary>
         /// GIVEN Library1 is Open and Book1 is Added to Library1

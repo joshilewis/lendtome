@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
-using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestLink;
-using Lending.Execution.Auth;
 using Lending.ReadModels.Relational.LibraryOpened;
-using Lending.ReadModels.Relational.LinkAccepted;
-using Lending.ReadModels.Relational.LinkRequested;
+using Lending.ReadModels.Relational.ListLibrayLinks;
 
 namespace Tests
 {
@@ -28,18 +21,23 @@ namespace Tests
         public static Guid Library5Id = Guid.NewGuid();
         public static Guid Library6Id = Guid.NewGuid();
 
+        public static string Library1Name = "library1";
+        public static string Library2Name = "library2";
+        public static string Library3Name = "library3";
+        public static string Library4Name = "library4";
+        public static string Library5Name = "library5";
+        public static string Library6Name = "library6";
+
+
         public static HttpResponseMessage Http201Created = new HttpResponseMessage(HttpStatusCode.Created);
         public static HttpResponseMessage Http200Ok = new HttpResponseMessage(HttpStatusCode.OK);
 
-        public static OpenLibrary OpenLibrary1 = new OpenLibrary(ProcessId, Library1Id, Library1Id, "library1");
-        public static OpenLibrary OpenLibrary2 = new OpenLibrary(ProcessId, Library2Id, Library2Id, "user2");
-        public static OpenLibrary OpenLibrary3 = new OpenLibrary(ProcessId, Library3Id, Library3Id, "user3");
-        public static OpenLibrary OpenLibrary4 = new OpenLibrary(ProcessId, Library4Id, Library4Id, "user4");
-        public static OpenLibrary OpenLibrary5 = new OpenLibrary(ProcessId, Library5Id, Library5Id, "user5");
-        public static OpenLibrary OpenLibrary6 = new OpenLibrary(ProcessId, Library6Id, Library6Id, "user6");
-
-        public static OpenedLibrary OpenedLibrary1 = new OpenedLibrary(Guid.Empty, OpenLibrary1.Name, OpenLibrary1.UserId);
-        public static OpenedLibrary OpenedLibrary2 = new OpenedLibrary(Guid.Empty, OpenLibrary2.Name, OpenLibrary2.UserId);
+        public static OpenLibrary OpenLibrary1 = new OpenLibrary(ProcessId, Library1Id, Library1Id, Library1Name);
+        public static OpenLibrary OpenLibrary2 = new OpenLibrary(ProcessId, Library2Id, Library2Id, Library2Name);
+        public static OpenLibrary OpenLibrary3 = new OpenLibrary(ProcessId, Library3Id, Library3Id, Library3Name);
+        public static OpenLibrary OpenLibrary4 = new OpenLibrary(ProcessId, Library4Id, Library4Id, Library4Name);
+        public static OpenLibrary OpenLibrary5 = new OpenLibrary(ProcessId, Library5Id, Library5Id, Library5Name);
+        public static OpenLibrary OpenLibrary6 = new OpenLibrary(ProcessId, Library6Id, Library6Id, Library6Name);
 
         public static LibraryOpened Library1Opened = new LibraryOpened(ProcessId, Library1Id, OpenLibrary1.Name,
             OpenLibrary1.UserId);
@@ -173,8 +171,7 @@ namespace Tests
         public static RemoveBookFromLibrary Lib4RemovesXpeByKb = new RemoveBookFromLibrary(ProcessId, Library4Id, Library4Id,
             ExtremeProgrammingExplained, KentBeck, Isbn);
 
-        public static LibraryLink[] EmptyLibraryLinks = { };
+        public static LibrarySearchResult[] EmptyList = { };
 
-        public static RequestedLink[] EmptyRequestedLinks = { };
     }
 }

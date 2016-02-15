@@ -18,8 +18,8 @@ namespace Tests.Commands
     [TestFixture]
     public class RequestLinkTests : Fixture
     {
-        private readonly RequestedLink requestedLinkFrom1To2 = new RequestedLink(Guid.Empty, OpenedLibrary1,
-            OpenedLibrary2);
+        private readonly LibrarySearchResult library1 = new LibrarySearchResult(Library1Id, Library1Name);
+        private readonly LibrarySearchResult library2 = new LibrarySearchResult(Library2Id, Library2Name);
 
         /// <summary>
         /// GIVEN Library1 is Open AND Library2 is Open AND they are not Linked AND there is an existing Link Request from Library1 to Library2
@@ -38,10 +38,10 @@ namespace Tests.Commands
             GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             WhenCommand(Library1Requests2NdLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             Then(Http400Because(Library.LinkAlreadyRequested));
-            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(requestedLinkFrom1To2);
-            AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(requestedLinkFrom1To2);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyLibraryLinks);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(EmptyLibraryLinks);
+            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(library2);
+            AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(library1);
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyList);
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(EmptyList);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
         }
@@ -62,10 +62,10 @@ namespace Tests.Commands
             GivenCommand(OpenLibrary2).IsPOSTedTo("/libraries");
             WhenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             Then(Http200Ok);
-            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(requestedLinkFrom1To2);
-            AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(requestedLinkFrom1To2);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyLibraryLinks);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(EmptyLibraryLinks);
+            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(library2);
+            AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(new LibrarySearchResult(Library1Id, Library1Name));
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyList);
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(EmptyList);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received);
         }
@@ -83,8 +83,8 @@ namespace Tests.Commands
             GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
             WhenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             Then(Http404BecauseTargetLibraryDoesNotExist);
-            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyRequestedLinks);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyLibraryLinks);
+            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyList);
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyList);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
@@ -105,11 +105,10 @@ namespace Tests.Commands
             GivenCommand(Library2RequestsLinkToLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/request");
             WhenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             Then(Http400Because(Library.ReverseLinkAlreadyRequested));
-            var requestedLinkFrom2To1 = new RequestedLink(Guid.Empty, OpenedLibrary2, OpenedLibrary1);
-            AndGETTo($"/libraries/{Library1Id}/links/received").As(Library1Id).Returns(requestedLinkFrom2To1);
-            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library2Id).Returns(requestedLinkFrom2To1);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyLibraryLinks);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(EmptyLibraryLinks);
+            AndGETTo($"/libraries/{Library1Id}/links/received").As(Library1Id).Returns(library2);
+            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library2Id).Returns(library1);
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyList);
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(EmptyList);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestFrom2To1Received);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestedFrom2To1);
         }
@@ -132,9 +131,9 @@ namespace Tests.Commands
             GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             WhenCommand(Library1Requests2NdLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             Then(Http400Because(Library.LibrariesAlreadyLinked));
-            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyRequestedLinks);
-            AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(EmptyRequestedLinks);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(new LibrarySearchResult(Library2Id, OpenLibrary2.Name));
+            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyList);
+            AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(EmptyList);
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(library2);
             AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(new LibrarySearchResult(Library1Id, OpenLibrary1.Name));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, LinkCompleted);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, LinkAccepted);
@@ -154,8 +153,8 @@ namespace Tests.Commands
             GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
             WhenCommand(Library1RequestsLinkToSelf).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             Then(Http400Because(RequestLinkHandler.CantConnectToSelf));
-            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyRequestedLinks);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyLibraryLinks);
+            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyList);
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyList);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
 
@@ -165,8 +164,8 @@ namespace Tests.Commands
             GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
             WhenCommand(UnauthorizedRequestLink).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             Then(Http403BecauseUnauthorized(UnauthorizedRequestLink.UserId, Library1Id, typeof (Library)));
-            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyRequestedLinks);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyLibraryLinks);
+            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyList);
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyList);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }
     }

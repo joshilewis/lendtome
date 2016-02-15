@@ -10,6 +10,7 @@ using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.LinkAccepted;
 using Lending.ReadModels.Relational.LinkRequested;
 using Lending.ReadModels.Relational.ListLibrayLinks;
+using Lending.ReadModels.Relational.ListRequestedLinks;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 using static Joshilewis.Testing.Helpers.DIExtensions;
@@ -25,11 +26,9 @@ namespace Tests
         static Fixture()
         {
             TestValueEqualityHelpers.SetValueEqualityActions(
-                new EqualityAction<RequestedLink[]>((a, e) =>Assert.That(a,Is.EquivalentTo(e).Using((IEqualityComparer<RequestedLink>) new ValueEqualityComparer()))),
-                new EqualityAction<LibraryLink[]>((a, e) =>Assert.That(a,Is.EquivalentTo(e).Using((IEqualityComparer<LibraryLink>) new ValueEqualityComparer()))),
-                new EqualityAction<LibrarySearchResult[]>((a, e) => Assert.That(a, Is.EquivalentTo(e))),
-                new EqualityAction<BookSearchResult[]>((a, e) => Assert.That(a, Is.EquivalentTo(e))),
-                new EqualityAction<LibraryBook[]>((a, e) =>Assert.That(a,Is.EquivalentTo(e).Using((IEqualityComparer<LibraryBook>) new ValueEqualityComparer()))));
+                new EqualityAction<LibrarySearchResult[]>((actual, expected) => Assert.That(actual, Is.EquivalentTo(expected))),
+                new EqualityAction<BookSearchResult[]>((actual, expected) => Assert.That(actual, Is.EquivalentTo(expected)))
+                );
         }
 
         [SetUp]

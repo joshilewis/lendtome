@@ -2,6 +2,7 @@
 using System.Linq;
 using Joshilewis.Cqrs.Query;
 using Lending.ReadModels.Relational.LinkRequested;
+using Lending.ReadModels.Relational.ListLibrayLinks;
 using NHibernate;
 
 namespace Lending.ReadModels.Relational.ListRequestedLinks
@@ -20,6 +21,7 @@ namespace Lending.ReadModels.Relational.ListRequestedLinks
                 .Where(x => x.Id == query.UserId)
                 .Where(x => x.AdministratorId == query.UserId)
                 .List()
+                .Select(x => new LibrarySearchResult(x.TargetLibrary.Id, x.TargetLibrary.Name))
                 .ToArray();
         }
 
