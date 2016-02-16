@@ -7,7 +7,7 @@ using Nancy.Security;
 
 namespace Joshilewis.Infrastructure.Nancy
 {
-    public abstract class GetModule<TMessage, TResult> : NancyModule where TMessage : Message
+    public abstract class GetModule<TMessage> : NancyModule where TMessage : Message
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMessageHandler<TMessage> messageHandler;

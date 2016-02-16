@@ -20,7 +20,7 @@ using Nancy;
 
 namespace Lending.Execution.Modules
 {
-    public class SearchForLibraryModule : GetModule<SearchForLibrary, LibrarySearchResult[]>
+    public class SearchForLibraryModule : GetModule<SearchForLibrary>
     {
         public SearchForLibraryModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForLibrary> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/{searchstring}")

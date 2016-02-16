@@ -12,7 +12,6 @@ using Lending.Web.App_Start;
 using Lending.Web.DependencyResolution;
 using log4net.Config;
 using Lending.Execution.DI;
-using ServiceStack.Logging;
 using StructureMap;
 
 namespace Lending.Web
@@ -24,7 +23,7 @@ namespace Lending.Web
         protected void Application_Start()
         {
             XmlConfigurator.Configure();
-            LogManager.LogFactory = new ServiceStack.Logging.Log4Net.Log4NetFactory(true);
+            //LogManager.LogFactory = new ServiceStack.Logging.Log4Net.Log4NetFactory(true);
 
             IoC.Initialize<LendingContainer>(new WebRegistry());
 

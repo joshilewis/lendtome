@@ -3,8 +3,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Joshilewis.Cqrs.Query;
 using Joshilewis.Infrastructure.Auth;
+using Newtonsoft.Json;
 using NUnit.Framework;
-using ServiceStack.ServiceModel.Serialization;
 
 namespace Joshilewis.Testing.CallBuilders
 {
@@ -40,7 +40,7 @@ namespace Joshilewis.Testing.CallBuilders
                     $"GET call to '{Url}' was not successful, response code is {response.StatusCode}, reason {response.ReasonPhrase}");
             string getResponseString = response.Content.ReadAsStringAsync().Result;
             Console.WriteLine("Response for GET {0} is {1}", Url, getResponseString);
-            TResult[] actualResult = JsonDataContractDeserializer.Instance.DeserializeFromString<TResult[]>(getResponseString);
+            TResult[] actualResult = JsonConvert.DeserializeObject<TResult[]>(getResponseString);
             Assert.That(actualResult, Is.EquivalentTo(expected));
         }
 
