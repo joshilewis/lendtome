@@ -41,6 +41,10 @@ angular.module('lendtome', [
                 templateUrl: '/app/signin.html',
                 controller: 'authController'
             })
+            .when('/library', {
+                templateUrl: '/app/library.html',
+                controller: 'libraryController'
+            })
             .otherwise(
             {
                 templateUrl: '/app/home.html',
@@ -61,7 +65,6 @@ angular.module('lendtome', [
 
         $authProvider.twitter({
             url: '/authentication/authenticatecallback?providerkey=twitter',
-            clientId: '75779369919.apps.googleusercontent.com',
         });
 
         $authProvider.baseUrl = '/api/';

@@ -37,19 +37,28 @@ lendtomeControllers.controller('googleBooksController', ['$scope', 'googleBookDe
 
   }]);
 
-lendtomeControllers.controller('authController', ['$scope', '$auth', 'SatellizerStorage', '$location',
-  function ($scope, $auth, storage, $location) {
-
-      $scope.libraries = 
+lendtomeControllers.controller('authController', ['$scope', '$auth', 'SatellizerStorage', '$location', '$rootScope',
+  function ($scope, $auth, storage, $location, $rootScope) {
 
       $scope.authenticate = function (provider) {
           $auth.authenticate(provider).then(function() {
               var payload = $auth.getPayload();
               storage.set('userName', payload.Claims[0].Value);
               storage.set('userId', payload.Claims[1].Value);
-              $location.path('/');
+              $rootScope.$emit("authController.SignedIn");
+              $location.path('/library');
           });
       };
+  }]);
 
+lendtomeControllers.controller('libraryController', ['$scope', 'library', '$location',
+  function ($scope, library, $location) {
+      $scope.libraries = library.query();
 
+      $scope.openLibrary = function (libraryName) {
+          var command = { Name: libraryName };
+          library.save(command, function () {
+              $location('/library');
+          });
+      }
   }]);
