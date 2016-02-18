@@ -21,3 +21,14 @@ lendtomeServices.factory('googleBookDetails', [
     }
 ]);
 
+lendtomeServices.factory('library', [
+    '$resource',
+    function ($resource) {
+        return $resource('/api/libraries/:libraryId/', {libraryId : '@id'}, {
+            query: { method: 'GET', params: {}, isArray: true }
+        });
+    }
+]);
+
+
+

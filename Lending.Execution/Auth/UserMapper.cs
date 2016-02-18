@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Lending.Domain.OpenLibrary;
-using Nancy.SimpleAuthentication;
 using NHibernate;
 using SimpleAuthentication.Core;
 

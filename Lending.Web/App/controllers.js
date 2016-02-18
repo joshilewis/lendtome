@@ -36,3 +36,20 @@ lendtomeControllers.controller('googleBooksController', ['$scope', 'googleBookDe
 
 
   }]);
+
+lendtomeControllers.controller('authController', ['$scope', '$auth', 'SatellizerStorage', '$location',
+  function ($scope, $auth, storage, $location) {
+
+      $scope.libraries = 
+
+      $scope.authenticate = function (provider) {
+          $auth.authenticate(provider).then(function() {
+              var payload = $auth.getPayload();
+              storage.set('userName', payload.Claims[0].Value);
+              storage.set('userId', payload.Claims[1].Value);
+              $location.path('/');
+          });
+      };
+
+
+  }]);

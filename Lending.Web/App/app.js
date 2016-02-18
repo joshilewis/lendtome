@@ -15,6 +15,7 @@ angular.module('lendtome', [
     'lendtomeServices',
     //'app.directives',
     'lendtomeControllers',
+    'satellizer',
     'ui.bootstrap',
     'ui.bootstrap.collapse', 
     'ui.bootstrap.dropdownToggle'
@@ -22,7 +23,7 @@ angular.module('lendtome', [
 
     // Gets executed during the provider registrations and configuration phase. Only providers and constants can be
     // injected here. This is to prevent accidental instantiation of services before they have been fully configured.
-    .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+    .config(['$routeProvider', '$locationProvider', '$authProvider', function ($routeProvider, $locationProvider, $authProvider) {
 
         // UI States, URL Routing & Mapping. For more info see: https://github.com/angular-ui/ui-router
         // ------------------------------------------------------------------------------------------------------------
@@ -37,7 +38,8 @@ angular.module('lendtome', [
                 controller: 'googleBooksController'
             })
             .when('/signin', {
-                templateUrl: '/app/signin.html'
+                templateUrl: '/app/signin.html',
+                controller: 'authController'
             })
             .otherwise(
             {
@@ -46,6 +48,31 @@ angular.module('lendtome', [
 
         $locationProvider.html5Mode(true);
 
+        $authProvider.facebook({
+            clientId: '663064230418689',
+            url: '/authentication/authenticatecallback?providerkey=facebook',
+            //redirectUri: 'https://lend-to.me/api/authentication/authenticatecallback?providerkey=facebook',
+        });
+
+        $authProvider.google({
+            url: '/authentication/authenticatecallback?providerkey=google',
+            clientId: '75779369919.apps.googleusercontent.com',
+        });
+
+        $authProvider.twitter({
+            url: '/authentication/authenticatecallback?providerkey=twitter',
+            clientId: '75779369919.apps.googleusercontent.com',
+        });
+
+        $authProvider.baseUrl = '/api/';
+        $authProvider.loginUrl = '/signin';
+        $authProvider.signupUrl = '/signin';
+        $authProvider.unlinkUrl = '/auth/unlink/';
+        $authProvider.tokenName = 'token';
+        $authProvider.tokenPrefix = 'satellizer';
+        $authProvider.authHeader = 'Authorization';
+        $authProvider.authToken = '';
+        $authProvider.storageType = 'localStorage';
     }])
 
     // Gets executed after the injector is created and are used to kickstart the application. Only instances and constants

@@ -1,4 +1,3 @@
-using Nancy.SimpleAuthentication;
 using SimpleAuthentication.Core;
 
 namespace Lending.Execution.Auth

@@ -19,7 +19,6 @@ using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.ListLibrayLinks;
 using Lending.ReadModels.Relational.SearchForLibrary;
-using Nancy.SimpleAuthentication;
 using NHibernate.Context;
 using StructureMap;
 

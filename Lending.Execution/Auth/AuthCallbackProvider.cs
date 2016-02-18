@@ -4,7 +4,6 @@ using System.Security.Claims;
 using Joshilewis.Infrastructure.Auth;
 using Joshilewis.Infrastructure.UnitOfWork;
 using Nancy;
-using Nancy.SimpleAuthentication;
 
 namespace Lending.Execution.Auth
 {

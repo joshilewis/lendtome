@@ -1,10 +1,10 @@
-﻿    <h3>Please select an authentication method below</h3>
-    <form action="api/authentication/redirect/twitter" method="POST">
-        <input type="submit" value="Twitter" />
-    </form>
-    <form action="api/authentication/redirect/facebook" method="POST">
-        <input type="submit" value="Facebook" />
-    </form>
-    <form action="api/authentication/redirect/google" method="POST">
-        <input type="submit" value="Google" />
-    </form>
+﻿<div ng-controller="authController">
+    <br/>
+    <br/>
+
+    <button ng-click="authenticate('facebook')">Sign in with Facebook</button><br/>
+    <button ng-click="authenticate('google')">Sign in with Google</button><br/>
+    <button ng-click="authenticate('twitter')">Sign in with Twitter</button>
+
+    
+</div>
