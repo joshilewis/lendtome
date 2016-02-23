@@ -43,25 +43,29 @@ lendtomeControllers.controller('authController', ['$scope', '$auth', 'Satellizer
       $scope.authenticate = function (provider) {
           $auth.authenticate(provider).then(function() {
               var payload = $auth.getPayload();
-              storage.set('userName', payload.Claims[0].Value);
+              var userName = payload.Claims[0].Value;
+              storage.set('userName', userName);
               storage.set('userId', payload.Claims[1].Value);
-              $rootScope.$emit("authController.SignedIn");
-              $rootScope.$broadcast('signinSuccess');
               $rootScope.isAuthenticated = true;
-              $rootScope.userName = payload.Claims[0].Value;
-              $location.path('/libraries');
+              $rootScope.userName = userName;
+              $location.path('/books');
           });
       };
   }]);
 
-lendtomeControllers.controller('libraryController', ['$scope', 'library', '$location',
-  function ($scope, library, $location) {
+lendtomeControllers.controller('libraryController', ['$scope', 'library', '$location', 'book',
+  function ($scope, library, $location, book) {
       $scope.libraries = library.query();
+      $scope.books = book.query();
 
       $scope.openLibrary = function (libraryName) {
           var command = { Name: libraryName };
           library.save(command, function () {
-              $location('/libraries');
+              $location('/books');
           });
       }
+
+      $scope.addFromIsbn = function (isbnNumber) {
+          $location.path('/addisbn/' + isbnNumber);
+      };
   }]);

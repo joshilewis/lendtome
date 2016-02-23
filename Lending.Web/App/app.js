@@ -41,8 +41,8 @@ angular.module('lendtome', [
                 templateUrl: '/app/signin.html',
                 controller: 'authController'
             })
-            .when('/libraries', {
-                templateUrl: '/app/libraries.html',
+            .when('/books', {
+                templateUrl: '/app/books.html',
                 controller: 'libraryController'
             })
             .otherwise(
@@ -80,7 +80,8 @@ angular.module('lendtome', [
 
     // Gets executed after the injector is created and are used to kickstart the application. Only instances and constants
     // can be injected here. This is to prevent further system configuration during application run time.
-    .run(['$templateCache', '$rootScope', '$state', '$stateParams', '$location', function ($templateCache, $rootScope, $state, $stateParams, $location) {
+    .run(['$templateCache', '$rootScope', '$state', '$stateParams', '$location', '$auth',
+        function ($templateCache, $rootScope, $state, $stateParams, $location, auth) {
 
         // <ui-view> contains a pre-rendered template for the current view
         // caching it will prevent a round-trip to a server at the first page load
@@ -99,16 +100,17 @@ angular.module('lendtome', [
         });
 
         $rootScope.$on('$routeChangeStart', function (event, next, current) {
+            $rootScope.isAuthenticated = auth.isAuthenticated();
             switch (next.templateUrl) {
                 case '/app/home.html':
                     break;
             case '/app/signin.html':
-                if ($rootScope.isAuthenticated) {
+                if (auth.isAuthenticated()){
                     $location.path('/');
                 }
                 break;
             default:
-                if (!$rootScope.isAuthenticated) {
+                if (!auth.isAuthenticated()) {
                     $location.path('/signin');
                 }
                 break;

@@ -1,0 +1,26 @@
+﻿<div ng-controller="libraryController">
+    <br/><br/><br/><br/>
+    <div ng-if="libraries.length">
+        <h3>Books in Library {{libraries[0].name}}</h3>
+        <div ng-if="!books.length">You currently have no Books in this Library</div>
+        <div>
+            Add via ISBN: <input type="text" ng-model="isbnNumber" />
+            <button type="submit" ng-click="addFromIsbn(isbnNumber)">Check book</button>
+        </div>
+        <div>
+            <a href="zxing://scan/?ret=http://www.lend-to.me/addisbn/{CODE}">Scan book barcode (Android and iPhone)</a>
+        </div>
+        <div ng-if="books.length">
+            <div ng-repeat="book in books">
+                {{book.title}}<br/>
+            </div>
+        </div>
+    </div>
+    <div ng-if="!libraries.length">
+        You currently don't have any open libraries. You need to Open a Library before you can Add Books<br/>
+        <form>
+            Name of your Library: <input type="text" ng-model="libraryName" /><br />
+            <button ng-click="openLibrary(libraryName)">Open New Library</button>
+        </form>
+    </div>
+</div>
