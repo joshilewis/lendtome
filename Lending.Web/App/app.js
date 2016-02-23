@@ -80,7 +80,7 @@ angular.module('lendtome', [
 
     // Gets executed after the injector is created and are used to kickstart the application. Only instances and constants
     // can be injected here. This is to prevent further system configuration during application run time.
-    .run(['$templateCache', '$rootScope', '$state', '$stateParams', function ($templateCache, $rootScope, $state, $stateParams) {
+    .run(['$templateCache', '$rootScope', '$state', '$stateParams', '$location', function ($templateCache, $rootScope, $state, $stateParams, $location) {
 
         // <ui-view> contains a pre-rendered template for the current view
         // caching it will prevent a round-trip to a server at the first page load
@@ -96,5 +96,22 @@ angular.module('lendtome', [
             // Sets the layout name, which can be used to display different layouts (header, footer etc.)
             // based on which page the user is located
             $rootScope.layout = toState.layout;
+        });
+
+        $rootScope.$on('$routeChangeStart', function (event, next, current) {
+            switch (next.templateUrl) {
+                case '/app/home.html':
+                    break;
+            case '/app/signin.html':
+                if ($rootScope.isAuthenticated) {
+                    $location.path('/');
+                }
+                break;
+            default:
+                if (!$rootScope.isAuthenticated) {
+                    $location.path('/signin');
+                }
+                break;
+            }
         });
     }]);
