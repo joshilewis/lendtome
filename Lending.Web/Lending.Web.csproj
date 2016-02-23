@@ -189,7 +189,7 @@
     <Content Include="App\Home.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App\library.html" />
+    <Content Include="App\libraries.html" />
     <Content Include="App\MyItems.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

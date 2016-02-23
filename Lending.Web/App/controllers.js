@@ -46,7 +46,10 @@ lendtomeControllers.controller('authController', ['$scope', '$auth', 'Satellizer
               storage.set('userName', payload.Claims[0].Value);
               storage.set('userId', payload.Claims[1].Value);
               $rootScope.$emit("authController.SignedIn");
-              $location.path('/library');
+              $rootScope.$broadcast('signinSuccess');
+              $rootScope.isAuthenticated = true;
+              $rootScope.userName = payload.Claims[0].Value;
+              $location.path('/libraries');
           });
       };
   }]);
@@ -58,7 +61,7 @@ lendtomeControllers.controller('libraryController', ['$scope', 'library', '$loca
       $scope.openLibrary = function (libraryName) {
           var command = { Name: libraryName };
           library.save(command, function () {
-              $location('/library');
+              $location('/libraries');
           });
       }
   }]);

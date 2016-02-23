@@ -34,24 +34,15 @@
                 </div>
                 <div collapse="navCollapsed" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        @if (Request.IsAuthenticated)
-                        {
-                            <li>
-                                <a href="~/myitems" >My Items</a>
-                            </li>
-                        }            
+                        <li>
+                            <a href="~/libraries" ng-show="isAuthenticated">Libraries</a>
+                        </li>
                     </ul>
                     <div  class=" navbar-right">
                         <ul class="nav navbar-nav ">
                             <li>
-                                @if (Request.IsAuthenticated)
-                                {
-                                    <a href="~/api/auth/logout">@User.Identity.Name</a>
-                                }
-                                else
-                                {
-                                    <a href="~/signin" >Sign In</a>
-                                }
+                                <a href="~/" ng-show="isAuthenticated" ng-click="signout()">{{userName}}</a>
+                                <a href="~/signin" ng-hide="isAuthenticated">Sign In</a>
                             </li>
                         </ul>
                     </div>

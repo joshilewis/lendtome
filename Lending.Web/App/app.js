@@ -41,8 +41,8 @@ angular.module('lendtome', [
                 templateUrl: '/app/signin.html',
                 controller: 'authController'
             })
-            .when('/library', {
-                templateUrl: '/app/library.html',
+            .when('/libraries', {
+                templateUrl: '/app/libraries.html',
                 controller: 'libraryController'
             })
             .otherwise(
