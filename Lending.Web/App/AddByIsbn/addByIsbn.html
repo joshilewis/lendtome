@@ -1,0 +1,11 @@
+﻿<div ng-controller="addByIsbnController">
+    <h3>Add Book</h3>
+    <hr/>
+    Title: {{bookDetails.items[0].volumeInfo.title}}<br/>
+    Creator: {{bookDetails.items[0].volumeInfo.authors[0]}}<br/>
+    Edition: {{bookDetails.items[0].volumeInfo.publishedDate}}<br/>
+
+    <img src="{{bookDetails.items[0].volumeInfo.imageLinks.thumbnail}}"/>
+
+    <button type="submit" ng-click="addNew()">Add this book to your collection</button>
+</div>

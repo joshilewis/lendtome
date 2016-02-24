@@ -34,16 +34,16 @@ angular.module('lendtome', [
                 controller: 'userItemsController'
             })
             .when('/addisbn/:isbnnumber', {
-                templateUrl: '/app/addisbn.html',
-                controller: 'googleBooksController'
+                templateUrl: '/app/addbyisbn/addbyisbn.html',
+                controller: 'addByIsbnController'
             })
             .when('/signin', {
-                templateUrl: '/app/signin.html',
-                controller: 'authController'
+                templateUrl: '/app/signin/signin.html',
+                controller: 'signinController'
             })
             .when('/books', {
-                templateUrl: '/app/books.html',
-                controller: 'libraryController'
+                templateUrl: '/app/books/books.html',
+                controller: 'booksController'
             })
             .otherwise(
             {
