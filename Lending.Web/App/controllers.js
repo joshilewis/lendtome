@@ -57,6 +57,7 @@ lendtomeControllers.controller('libraryController', ['$scope', 'library', '$loca
   function ($scope, library, $location, book) {
       $scope.libraries = library.query();
       $scope.books = book.query();
+      $scope.zxaddress = 'zxing://scan/?ret=' + window.location.protocol + '//' + window.location.host + '/addisbn/{CODE}';
 
       $scope.openLibrary = function (libraryName) {
           var command = { Name: libraryName };

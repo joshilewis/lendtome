@@ -8,7 +8,7 @@
             <button type="submit" ng-click="addFromIsbn(isbnNumber)">Check book</button>
         </div>
         <div>
-            <a href="zxing://scan/?ret=http://www.lend-to.me/addisbn/{CODE}">Scan book barcode (Android and iPhone)</a>
+            <a href={{zxaddress}}>Scan book barcode (Android and iPhone)</a>
         </div>
         <div ng-if="books.length">
             <div ng-repeat="book in books">
