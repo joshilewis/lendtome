@@ -18,7 +18,7 @@ namespace Tests.Commands
     public class AddBookToLibraryTests : Fixture
     {
         private readonly BookSearchResult bookSearchResult = new BookSearchResult(OpenLibrary1.AggregateId,
-            OpenLibrary1.Name, AddBook1ToLibrary.Title, AddBook1ToLibrary.Author, AddBook1ToLibrary.Isbn);
+            OpenLibrary1.Name, AddBook1ToLibrary.Title, AddBook1ToLibrary.Author, AddBook1ToLibrary.Isbn, AddBook1ToLibrary.PublishDate);
 
         /// <summary>
         /// GIVEN Library1 is Open

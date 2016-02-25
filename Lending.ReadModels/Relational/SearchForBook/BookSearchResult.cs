@@ -9,14 +9,17 @@ namespace Lending.ReadModels.Relational.SearchForBook
         public string Title { get; set; }
         public string Author { get; set; }
         public string Isbn { get; set; }
+        public DateTime PublishDate { get; set; }
 
-        public BookSearchResult(Guid libraryId, string libraryName, string title, string author, string isbn)
+
+        public BookSearchResult(Guid libraryId, string libraryName, string title, string author, string isbn, DateTime publishDate)
         {
             LibraryId = libraryId;
             LibraryName = libraryName;
             Title = title;
             Author = author;
             Isbn = isbn;
+            PublishDate = publishDate;
         }
 
         public override bool Equals(object obj)
@@ -31,6 +34,7 @@ namespace Lending.ReadModels.Relational.SearchForBook
                    LibraryName.Equals(other.LibraryName) &&
                    Title.Equals(other.Title) &&
                    Author.Equals(other.Author) &&
+                   PublishDate.Equals(other.PublishDate) &&
                    Isbn.Equals(other.Isbn);
         }
     }

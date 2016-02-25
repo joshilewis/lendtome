@@ -45,15 +45,16 @@ namespace Tests
         public static string Title = "Title";
         public static string Author = "Author";
         public static string Isbnnumber = "isbn";
+        public static DateTime PublishDate = new DateTime(2000, 1, 1);
 
         public static AddBookToLibrary AddBook1ToLibrary = new AddBookToLibrary(ProcessId, Guid.Empty, Library1Id, Title,
-            Author, Isbnnumber);
+            Author, Isbnnumber, PublishDate);
 
         public static AddBookToLibrary UnauthorizedAddBookToLibrary = new AddBookToLibrary(ProcessId, Guid.Empty, Guid.Empty, Title,
-            Author, Isbnnumber);
+            Author, Isbnnumber, PublishDate);
 
         public static BookAddedToLibrary Book1AddedToUser1Library = new BookAddedToLibrary(ProcessId, Library1Id, Title,
-            Author, Isbnnumber);
+            Author, Isbnnumber, PublishDate);
 
         public static RemoveBookFromLibrary User1RemovesBookFromLibrary = new RemoveBookFromLibrary(ProcessId, Guid.Empty,
             Library1Id, Title, Author, Isbnnumber);
@@ -159,15 +160,15 @@ namespace Tests
         public static LinkAccepted Link1To6Accepted = new LinkAccepted(ProcessId, Library6Id, Library1Id);
 
         public static AddBookToLibrary Lib2AddsXpeByKb = new AddBookToLibrary(ProcessId, Library2Id, Library2Id,
-            ExtremeProgrammingExplained, KentBeck, Isbn);
+            ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate);
         public static AddBookToLibrary Lib3AddsTddByKb = new AddBookToLibrary(ProcessId, Library3Id, Library3Id,
-            TestDrivenDevelopment, KentBeck, Isbn);
+            TestDrivenDevelopment, KentBeck, Isbn, PublishDate);
         public static AddBookToLibrary Lib4AddsXpeByKb = new AddBookToLibrary(ProcessId, Library4Id, Library4Id,
-            ExtremeProgrammingExplained, KentBeck, Isbn);
+            ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate);
         public static AddBookToLibrary Lib5AddsEssBySs = new AddBookToLibrary(ProcessId, Library5Id, Library5Id,
-            ExtremeSnowboardStunts, SomeSkiier, Isbn);
+            ExtremeSnowboardStunts, SomeSkiier, Isbn, PublishDate);
         public static AddBookToLibrary Lib6AddsBBySA = new AddBookToLibrary(ProcessId, Library6Id, Library6Id,
-            BeckAMusicalMaestro, SomeAuthor, Isbn);
+            BeckAMusicalMaestro, SomeAuthor, Isbn, PublishDate);
         public static RemoveBookFromLibrary Lib4RemovesXpeByKb = new RemoveBookFromLibrary(ProcessId, Library4Id, Library4Id,
             ExtremeProgrammingExplained, KentBeck, Isbn);
 

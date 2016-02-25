@@ -22,7 +22,7 @@ namespace Lending.ReadModels.Relational.ListLibraryBooks
                 .ToArray();
 
             return libraryBooks
-                .Select(x => new BookSearchResult(x.Library.Id, x.LibraryName, x.Title, x.Author, x.Isbn))
+                .Select(x => new BookSearchResult(x.Library.Id, x.LibraryName, x.Title, x.Author, x.Isbn, x.PublishDate))
                 .ToArray();
         }
     }

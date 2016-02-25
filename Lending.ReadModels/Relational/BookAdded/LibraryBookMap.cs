@@ -20,6 +20,8 @@ namespace Lending.ReadModels.Relational.BookAdded
                 .UniqueKey("UK_Library_Book");
             Map(x => x.Isbn)
                 .UniqueKey("UK_Library_Book");
+            Map(x => x.PublishDate)
+                .UniqueKey("UK_Library_Book");
         }
     }
 }

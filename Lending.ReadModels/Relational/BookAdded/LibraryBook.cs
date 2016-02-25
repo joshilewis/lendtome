@@ -12,8 +12,9 @@ namespace Lending.ReadModels.Relational.BookAdded
         public virtual string Title { get; protected set; }
         public virtual string Author { get; protected set; }
         public virtual string Isbn { get; protected set; }
+        public virtual DateTime PublishDate { get; set; }
 
-        public LibraryBook(Guid processId, OpenedLibrary library, string libraryName, string title, string author, string isbn)
+        public LibraryBook(Guid processId, OpenedLibrary library, string libraryName, string title, string author, string isbn, DateTime publishDate)
         {
             ProcessId = processId;
             Library = library;
@@ -21,8 +22,11 @@ namespace Lending.ReadModels.Relational.BookAdded
             Title = title;
             Author = author;
             Isbn = isbn;
+            PublishDate = publishDate;
         }
 
-        protected LibraryBook() {  }
+        protected LibraryBook()
+        {
+        }
     }
 }

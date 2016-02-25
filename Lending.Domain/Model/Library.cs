@@ -152,10 +152,10 @@ namespace Lending.Domain.Model
             RaiseEvent(new LinkCompleted(processId, Id, acceptingLibraryId));
         }
 
-        public void AddBookToLibrary(Guid processId, string title, string author, string isbn)
+        public void AddBookToLibrary(Guid processId, string title, string author, string isbn, DateTime publishDate)
         {
             if (Books.Contains(new Book(title, author, isbn))) Fail(BookAlreadyInLibrary);
-            RaiseEvent(new BookAddedToLibrary(processId, Id, title, author, isbn));
+            RaiseEvent(new BookAddedToLibrary(processId, Id, title, author, isbn, publishDate));
         }
 
         public void RemoveBookFromLibrary(Guid processId, string title, string author, string isbn)
