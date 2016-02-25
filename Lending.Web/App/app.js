@@ -23,7 +23,7 @@ angular.module('lendtome', [
 
     // Gets executed during the provider registrations and configuration phase. Only providers and constants can be
     // injected here. This is to prevent accidental instantiation of services before they have been fully configured.
-    .config(['$routeProvider', '$locationProvider', '$authProvider', function ($routeProvider, $locationProvider, $authProvider) {
+    .config(['$routeProvider', '$locationProvider', '$authProvider', '$compileProvider', function ($routeProvider, $locationProvider, $authProvider, $compileProvider) {
 
         // UI States, URL Routing & Mapping. For more info see: https://github.com/angular-ui/ui-router
         // ------------------------------------------------------------------------------------------------------------
@@ -51,6 +51,8 @@ angular.module('lendtome', [
             });
 
         $locationProvider.html5Mode(true);
+
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|zxing):/);
 
         $authProvider.facebook({
             clientId: '663064230418689',
@@ -104,7 +106,7 @@ angular.module('lendtome', [
             switch (next.templateUrl) {
                 case '/app/home.html':
                     break;
-            case '/app/signin.html':
+            case '/app/signin/signin.html':
                 if (auth.isAuthenticated()){
                     $location.path('/');
                 }
