@@ -51,7 +51,7 @@ namespace Lending.ReadModels.Relational.SearchForBook
                     .JoinQueryOver(x => x.Library)
                     .WhereRestrictionOn(x => x.Id).IsIn(connectedUserIds)
                 .List()
-                .Select(x => new BookSearchResult(x.Library.Id, x.LibraryName, x.Title, x.Author, x.Isbn, x.PublishDate))
+                .Select(x => new BookSearchResult(x.Library.Id, x.LibraryName, x.Title, x.Author, x.Isbn, x.PublishYear))
                 .ToArray();
 
             return payload;

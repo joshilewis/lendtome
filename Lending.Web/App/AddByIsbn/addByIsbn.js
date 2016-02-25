@@ -6,7 +6,7 @@
             maxResults: '10',
             callback: 'JSON_CALLBACK',
             key: 'AIzaSyDCQ090RphWKV_lBNzq7nthXZRo6Q8QvmU',
-            fields: 'kind,items(volumeInfo/title, volumeInfo/imageLinks, volumeInfo/authors, volumeInfo/publishedDate)'
+            fields: 'kind,items(volumeInfo/title, volumeInfo/imageLinks, volumeInfo/authors, volumeInfo/publishedDate, volumeInfo/industryIdentifiers)'
         },
         {
             get: { method: 'JSONP' }
@@ -14,19 +14,28 @@
     }
 ]);
 
-lendtomeControllers.controller('addByIsbnController', ['$scope', 'googleBookDetails', '$routeParams', 'userItems', '$location',
-  function ($scope, bookDetails, $routeParams, userItems, $location) {
+lendtomeServices.factory('addBook', [
+    '$resource', 'SatellizerStorage',
+    function ($resource, storage) {
+        return $resource('/api/libraries/:libraryId/books/add', { libraryId: storage.get('userId') });
+    }
+]);
+
+
+lendtomeControllers.controller('addByIsbnController', ['$scope', 'googleBookDetails', '$routeParams', 'addBook', '$location',
+  function ($scope, bookDetails, $routeParams, addBook, $location) {
       $scope.isbnNumber = $routeParams.isbnnumber;
       $scope.bookDetails = bookDetails.get({ isbnNumber: $scope.isbnNumber });
 
       $scope.addNew = function () {
-          $scope.userItem = {
-              title: $scope.bookDetails.items[0].volumeInfo.title,
-              creator: $scope.bookDetails.items[0].volumeInfo.authors[0],
-              edition: $scope.bookDetails.items[0].volumeInfo.publishedDate
+          var bookToAdd = {
+              Title: $scope.bookDetails.items[0].volumeInfo.title,
+              Author: $scope.bookDetails.items[0].volumeInfo.authors[0],
+              PublishYear: $scope.bookDetails.items[0].volumeInfo.publishedDate,
+              Isbn: $scope.bookDetails.items[0].volumeInfo.industryIdentifiers[1].identifier
           };
-          userItems.save($scope.userItem);
-          $location.path('/myitems/');
+          addBook.save(bookToAdd);
+          $location.path('/books');
       };
 
 

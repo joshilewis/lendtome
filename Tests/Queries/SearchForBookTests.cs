@@ -67,8 +67,8 @@ namespace Tests.Queries
             GivenCommand(Lib4AddsXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/add/");
             WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
             ThenResponseIs(
-                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate),
-                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate));
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear),
+                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear));
 
         }
 
@@ -100,9 +100,9 @@ namespace Tests.Queries
             GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
             WhenGetEndpoint("books/Extreme").As(Library1Id);
             ThenResponseIs(
-                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate),
-                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate),
-                new BookSearchResult(Library5Id, OpenLibrary5.Name, ExtremeSnowboardStunts, SomeSkiier, Isbn, PublishDate));
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear),
+                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear),
+                new BookSearchResult(Library5Id, OpenLibrary5.Name, ExtremeSnowboardStunts, SomeSkiier, Isbn, PublishYear));
 
         }
 
@@ -134,9 +134,9 @@ namespace Tests.Queries
             GivenCommand(Lib5AddsEssBySs).IsPOSTedTo($"/libraries/{Library5Id}/books/add/");
             WhenGetEndpoint("books/Kent Beck").As(Library1Id);
             ThenResponseIs(
-                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate),
-                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn, PublishDate),
-                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate));
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear),
+                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn, PublishYear),
+                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear));
         }
 
         /// <summary>
@@ -170,10 +170,10 @@ namespace Tests.Queries
             GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
             WhenGetEndpoint("books/Beck").As(Library1Id);
             ThenResponseIs(
-                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate),
-                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn, PublishDate),
-                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate),
-                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn, PublishDate));
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear),
+                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn, PublishYear),
+                new BookSearchResult(Library4Id, OpenLibrary4.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear),
+                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn, PublishYear));
         }
 
         /// <summary>
@@ -206,9 +206,9 @@ namespace Tests.Queries
             GivenCommand(Lib6AddsBBySA).IsPOSTedTo($"/libraries/{Library6Id}/books/add/");
             WhenGetEndpoint("books/Beck").As(Library1Id);
             ThenResponseIs(
-                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate),
-                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn, PublishDate),
-                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn, PublishDate));
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear),
+                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn, PublishYear),
+                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn, PublishYear));
 
         }
 
@@ -248,9 +248,9 @@ namespace Tests.Queries
             GivenCommand(Lib4RemovesXpeByKb).IsPOSTedTo($"/libraries/{Library4Id}/books/remove/");
             WhenGetEndpoint("books/Beck").As(Library1Id);
             ThenResponseIs(
-                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate),
-                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn, PublishDate),
-                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn, PublishDate));
+                new BookSearchResult(Library2Id, OpenLibrary2.Name, ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear),
+                new BookSearchResult(Library3Id, OpenLibrary3.Name, TestDrivenDevelopment, KentBeck, Isbn, PublishYear),
+                new BookSearchResult(Library6Id, OpenLibrary6.Name, BeckAMusicalMaestro, SomeAuthor, Isbn, PublishYear));
 
         }
 

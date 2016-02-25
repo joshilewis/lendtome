@@ -12,7 +12,7 @@
         </div>
         <div ng-if="books.length">
             <div ng-repeat="book in books">
-                {{book.title}}<br/>
+                {{book.title}} by {{book.author}}, {{book.publishedYear}} <button ng-click="removeBook(book.title, book.author, book.isbn, book.publishYear)">Remove</button><br/>
             </div>
         </div>
     </div>

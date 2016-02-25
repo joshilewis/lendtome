@@ -90,12 +90,12 @@ namespace Lending.Domain.Model
 
         protected virtual void When(BookAddedToLibrary @event)
         {
-            Books.Add(new Book(@event.Title, @event.Author, @event.Isbn));
+            Books.Add(new Book(@event.Title, @event.Author, @event.Isbn, @event.PublishYear));
         }
 
         protected virtual void When(BookRemovedFromLibrary @event)
         {
-            Books.Remove(new Book(@event.Title, @event.Author, @event.Isbn));
+            Books.Remove(new Book(@event.Title, @event.Author, @event.Isbn, @event.PublishYear));
         }
 
         protected override List<IEventRoute> EventRoutes => new List<IEventRoute>()
@@ -152,16 +152,16 @@ namespace Lending.Domain.Model
             RaiseEvent(new LinkCompleted(processId, Id, acceptingLibraryId));
         }
 
-        public void AddBookToLibrary(Guid processId, string title, string author, string isbn, DateTime publishDate)
+        public void AddBookToLibrary(Guid processId, string title, string author, string isbn, int publishYear)
         {
-            if (Books.Contains(new Book(title, author, isbn))) Fail(BookAlreadyInLibrary);
-            RaiseEvent(new BookAddedToLibrary(processId, Id, title, author, isbn, publishDate));
+            if (Books.Contains(new Book(title, author, isbn, publishYear))) Fail(BookAlreadyInLibrary);
+            RaiseEvent(new BookAddedToLibrary(processId, Id, title, author, isbn, publishYear));
         }
 
-        public void RemoveBookFromLibrary(Guid processId, string title, string author, string isbn)
+        public void RemoveBookFromLibrary(Guid processId, string title, string author, string isbn, int publishYear)
         {
-            if (!Books.Contains(new Book(title, author, isbn))) Fail(BookNotInLibrary);
-            RaiseEvent(new BookRemovedFromLibrary(processId, Id, title, author, isbn));
+            if (!Books.Contains(new Book(title, author, isbn, publishYear))) Fail(BookNotInLibrary);
+            RaiseEvent(new BookRemovedFromLibrary(processId, Id, title, author, isbn, publishYear));
         }
     }
 }

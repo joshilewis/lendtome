@@ -45,25 +45,25 @@ namespace Tests
         public static string Title = "Title";
         public static string Author = "Author";
         public static string Isbnnumber = "isbn";
-        public static DateTime PublishDate = new DateTime(2000, 1, 1);
+        public static int PublishYear = 2000;
 
         public static AddBookToLibrary AddBook1ToLibrary = new AddBookToLibrary(ProcessId, Guid.Empty, Library1Id, Title,
-            Author, Isbnnumber, PublishDate);
+            Author, Isbnnumber, PublishYear);
 
         public static AddBookToLibrary UnauthorizedAddBookToLibrary = new AddBookToLibrary(ProcessId, Guid.Empty, Guid.Empty, Title,
-            Author, Isbnnumber, PublishDate);
+            Author, Isbnnumber, PublishYear);
 
         public static BookAddedToLibrary Book1AddedToUser1Library = new BookAddedToLibrary(ProcessId, Library1Id, Title,
-            Author, Isbnnumber, PublishDate);
+            Author, Isbnnumber, PublishYear);
 
         public static RemoveBookFromLibrary User1RemovesBookFromLibrary = new RemoveBookFromLibrary(ProcessId, Guid.Empty,
-            Library1Id, Title, Author, Isbnnumber);
+            Library1Id, Title, Author, Isbnnumber, PublishYear);
 
         public static RemoveBookFromLibrary UnauthorizedRemoveBook = new RemoveBookFromLibrary(ProcessId, Guid.Empty,
-            Guid.Empty, Title, Author, Isbnnumber);
+            Guid.Empty, Title, Author, Isbnnumber, PublishYear);
 
         public static BookRemovedFromLibrary Book1RemovedFromLibrary = new BookRemovedFromLibrary(ProcessId, Library1Id,
-            Title, Author, Isbnnumber);
+            Title, Author, Isbnnumber, PublishYear);
 
         public static RequestLink Library1RequestsLinkToLibrary2 = new RequestLink(ProcessId, Guid.Empty, 
             Library1Id, Library2Id);
@@ -160,17 +160,17 @@ namespace Tests
         public static LinkAccepted Link1To6Accepted = new LinkAccepted(ProcessId, Library6Id, Library1Id);
 
         public static AddBookToLibrary Lib2AddsXpeByKb = new AddBookToLibrary(ProcessId, Library2Id, Library2Id,
-            ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate);
+            ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear);
         public static AddBookToLibrary Lib3AddsTddByKb = new AddBookToLibrary(ProcessId, Library3Id, Library3Id,
-            TestDrivenDevelopment, KentBeck, Isbn, PublishDate);
+            TestDrivenDevelopment, KentBeck, Isbn, PublishYear);
         public static AddBookToLibrary Lib4AddsXpeByKb = new AddBookToLibrary(ProcessId, Library4Id, Library4Id,
-            ExtremeProgrammingExplained, KentBeck, Isbn, PublishDate);
+            ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear);
         public static AddBookToLibrary Lib5AddsEssBySs = new AddBookToLibrary(ProcessId, Library5Id, Library5Id,
-            ExtremeSnowboardStunts, SomeSkiier, Isbn, PublishDate);
+            ExtremeSnowboardStunts, SomeSkiier, Isbn, PublishYear);
         public static AddBookToLibrary Lib6AddsBBySA = new AddBookToLibrary(ProcessId, Library6Id, Library6Id,
-            BeckAMusicalMaestro, SomeAuthor, Isbn, PublishDate);
+            BeckAMusicalMaestro, SomeAuthor, Isbn, PublishYear);
         public static RemoveBookFromLibrary Lib4RemovesXpeByKb = new RemoveBookFromLibrary(ProcessId, Library4Id, Library4Id,
-            ExtremeProgrammingExplained, KentBeck, Isbn);
+            ExtremeProgrammingExplained, KentBeck, Isbn, PublishYear);
 
         public static LibrarySearchResult[] EmptyList = { };
 
