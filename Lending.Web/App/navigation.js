@@ -15,6 +15,9 @@ lendtomeControllers.controller('navController',
               $scope.isAuthenticated = true;
               $scope.userName = storage.get('userName');
               $location.path('/books');
+          },
+          function() {
+              $location.path('/autherror');
           });
       };
 

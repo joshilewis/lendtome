@@ -47,6 +47,9 @@ angular.module('lendtome', [
             .when('/authenticating', {
                 templateUrl: '/app/authenticating.html'
             })
+            .when('/autherror', {
+                templateUrl: '/app/autherror.html'
+            })
             .otherwise(
             {
                 templateUrl: '/app/home.html',
@@ -58,8 +61,7 @@ angular.module('lendtome', [
 
         $authProvider.facebook({
             clientId: '663064230418689',
-            url: '/authentication/authenticatecallback?providerkey=facebook',
-            //redirectUri: 'https://lend-to.me/api/authentication/authenticatecallback?providerkey=facebook',
+            url: '/authentication/authenticatecallback?providerkey=facebook'
         });
 
         $authProvider.google({
@@ -108,6 +110,7 @@ angular.module('lendtome', [
             if (next.templateUrl === '/app/home.html') return;
             if (next.templateUrl === '/app/loading.html') return;
             if (next.templateUrl === '/app/authenticating.html') return;
+            if (next.templateUrl === '/app/autherror.html') return;
             if (!auth.isAuthenticated()) {
                 $location.path('/');
             }

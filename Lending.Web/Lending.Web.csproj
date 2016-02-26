@@ -184,6 +184,7 @@
     <Content Include="App\app.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="App\autherror.html" />
     <Content Include="App\Books\books.js" />
     <Content Include="App\controllers.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
