@@ -41,6 +41,12 @@ angular.module('lendtome', [
                 templateUrl: '/app/books/books.html',
                 controller: 'booksController'
             })
+            .when('/loading', {
+                templateUrl: '/app/loading.html'
+            })
+            .when('/authenticating', {
+                templateUrl: '/app/authenticating.html'
+            })
             .otherwise(
             {
                 templateUrl: '/app/home.html',
@@ -100,6 +106,8 @@ angular.module('lendtome', [
         $rootScope.$on('$routeChangeStart', function (event, next, current) {
             $rootScope.isAuthenticated = auth.isAuthenticated();
             if (next.templateUrl === '/app/home.html') return;
+            if (next.templateUrl === '/app/loading.html') return;
+            if (next.templateUrl === '/app/authenticating.html') return;
             if (!auth.isAuthenticated()) {
                 $location.path('/');
             }

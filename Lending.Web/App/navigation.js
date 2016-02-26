@@ -6,6 +6,7 @@ lendtomeControllers.controller('navController',
       $scope.userName = storage.get('userName');
 
       $scope.signin = function (provider) {
+          $location.path('/authenticating');
           $auth.authenticate(provider).then(function () {
               var payload = $auth.getPayload();
               var userName = payload.Claims[0].Value;
@@ -15,12 +16,13 @@ lendtomeControllers.controller('navController',
               $scope.userName = storage.get('userName');
               $location.path('/books');
           });
-
-          $scope.signout = function () {
-              $auth.logout();
-              $scope.isAuthenticated = false;
-              $scope.userName = '';
-              $location.path('/');
-          }
       };
+
+      $scope.signout = function () {
+          $auth.logout();
+          $scope.isAuthenticated = false;
+          $scope.userName = '';
+          $location.path('/');
+      }
+
   }]);

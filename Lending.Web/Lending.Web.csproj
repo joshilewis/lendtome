@@ -192,6 +192,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App\Books\books.html" />
+    <Content Include="App\authenticating.html" />
+    <Content Include="App\loading.html" />
     <Content Include="App\MyItems.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
