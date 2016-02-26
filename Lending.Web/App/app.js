@@ -39,7 +39,7 @@ angular.module('lendtome', [
             })
             .when('/signin', {
                 templateUrl: '/app/signin/signin.html',
-                controller: 'signinController'
+                controller: 'authController'
             })
             .when('/books', {
                 templateUrl: '/app/books/books.html',
