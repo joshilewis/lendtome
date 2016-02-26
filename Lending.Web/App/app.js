@@ -37,10 +37,6 @@ angular.module('lendtome', [
                 templateUrl: '/app/addbyisbn/addbyisbn.html',
                 controller: 'addByIsbnController'
             })
-            .when('/signin', {
-                templateUrl: '/app/signin/signin.html',
-                controller: 'authController'
-            })
             .when('/books', {
                 templateUrl: '/app/books/books.html',
                 controller: 'booksController'
@@ -103,19 +99,9 @@ angular.module('lendtome', [
 
         $rootScope.$on('$routeChangeStart', function (event, next, current) {
             $rootScope.isAuthenticated = auth.isAuthenticated();
-            switch (next.templateUrl) {
-                case '/app/home.html':
-                    break;
-            case '/app/signin/signin.html':
-                if (auth.isAuthenticated()){
-                    $location.path('/');
-                }
-                break;
-            default:
-                if (!auth.isAuthenticated()) {
-                    $location.path('/signin');
-                }
-                break;
+            if (next.templateUrl === '/app/home.html') return;
+            if (!auth.isAuthenticated()) {
+                $location.path('/');
             }
         });
     }]);
