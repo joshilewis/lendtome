@@ -67,6 +67,7 @@ angular.module('lendtome', [
         $authProvider.google({
             url: '/authentication/authenticatecallback?providerkey=google',
             clientId: '75779369919.apps.googleusercontent.com',
+            redirectUri: window.location.origin + '/',
         });
 
         $authProvider.twitter({
