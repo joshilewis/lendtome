@@ -1,6 +1,6 @@
 using System;
 
-namespace Lending.Execution.Auth
+namespace Lending.ReadModels.Relational
 {
     public class AuthenticationProvider
     {

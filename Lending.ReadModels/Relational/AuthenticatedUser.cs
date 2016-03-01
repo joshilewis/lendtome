@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Nancy.Security;
 
-namespace Lending.Execution.Auth
+namespace Lending.ReadModels.Relational
 {
     public class AuthenticatedUser
     {

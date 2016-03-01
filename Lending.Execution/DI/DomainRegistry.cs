@@ -15,6 +15,7 @@ using Joshilewis.Infrastructure.UnitOfWork;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.OpenLibrary;
 using Lending.Execution.Auth;
+using Lending.ReadModels.Relational;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.ListLibrayLinks;

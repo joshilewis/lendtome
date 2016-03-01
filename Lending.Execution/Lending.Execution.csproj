@@ -140,10 +140,6 @@
   <ItemGroup>
     <Compile Include="Auth\AuthCallbackProvider.cs" />
     <Compile Include="Auth\AuthenticateCallbackData.cs" />
-    <Compile Include="Auth\AuthenticatedUser.cs" />
-    <Compile Include="Auth\AuthenticatedUserMap.cs" />
-    <Compile Include="Auth\AuthenticationProvider.cs" />
-    <Compile Include="Auth\AuthenticationProviderMap.cs" />
     <Compile Include="Auth\Caching\CookieCache.cs" />
     <Compile Include="Auth\Caching\SessionCache.cs" />
     <Compile Include="Auth\Code.cs" />

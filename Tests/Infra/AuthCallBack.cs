@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lending.Domain.OpenLibrary;
 using Lending.Execution.Auth;
+using Lending.ReadModels.Relational;
 using NUnit.Framework;
 using SimpleAuthentication.Core;
 using static Joshilewis.Testing.Helpers.PersistenceExtensions;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Joshilewis.Infrastructure.Auth;
 using Joshilewis.Infrastructure.UnitOfWork;
+using Lending.ReadModels.Relational;
 using Nancy;
 
 namespace Lending.Execution.Auth

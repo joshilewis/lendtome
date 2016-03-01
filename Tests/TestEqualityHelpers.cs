@@ -13,6 +13,7 @@ using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.Domain.RequestLink;
 using Lending.Execution.Auth;
+using Lending.ReadModels.Relational;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.LinkAccepted;

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentNHibernate.Mapping;
+﻿using FluentNHibernate.Mapping;
 
-namespace Lending.Execution.Auth
+namespace Lending.ReadModels.Relational
 {
     public class AuthenticationProviderMap : ClassMap<AuthenticationProvider>
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Lending.Domain.OpenLibrary;
+using Lending.ReadModels.Relational;
 using NHibernate;
 using SimpleAuthentication.Core;
 
