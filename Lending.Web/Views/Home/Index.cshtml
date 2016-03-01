@@ -61,8 +61,17 @@
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="#" ng-show="isAuthenticated" ng-click="signout()">{{userName}}</a>
+                        <li class="dropdown" ng-show="isAuthenticated">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>{{userName}}</b> <span class="caret"></span></a>
+                            <ul id="logout-dp" class="dropdown-menu">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a href="#" ng-click="signout()">Sign Out</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>

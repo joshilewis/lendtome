@@ -26,7 +26,7 @@ namespace Lending.Web.App_Start
                 "~/scripts/AngularUI/ui-router.js",
                 "~/scripts/ui-bootstrap-0.10.0.js",
                 "~/scripts/ui-bootstrap-tpls-0.10.0.js",
-                "~/scripts/satellizer.min.js"
+                "~/scripts/satellizer.js"
                 )
                 .IncludeDirectory("~/App", "*.js", true));
         }
