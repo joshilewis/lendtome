@@ -28,7 +28,6 @@ namespace Tests
         public static string Library5Name = "library5";
         public static string Library6Name = "library6";
 
-
         public static HttpResponseMessage Http201Created = new HttpResponseMessage(HttpStatusCode.Created);
         public static HttpResponseMessage Http200Ok = new HttpResponseMessage(HttpStatusCode.OK);
 

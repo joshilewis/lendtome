@@ -17,9 +17,10 @@
         </div>
     </div>
     <div ng-if="!libraries.length">
+        <h3>Hi there {{userName}}, thanks for registering!</h3>
         You currently don't have any open libraries. You need to Open a Library before you can Add Books<br/>
         <form>
-            Name of your Library: <input type="text" ng-model="libraryName" /><br />
+            Name of your Library: {{libraryName}}
             <button ng-click="openLibrary(libraryName)">Open New Library</button>
         </form>
     </div>

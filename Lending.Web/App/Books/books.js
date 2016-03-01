@@ -28,6 +28,8 @@ lendtomeControllers.controller('booksController', [
     function ($scope, library, $location, book, $resource, storage) {
         $scope.libraries = library.query();
         $scope.books = book.query();
+        $scope.userName = storage.get('userName');
+        $scope.libraryName = $scope.userName + "'s Library";
 
         $scope.zxaddress = 'zxing://scan/?ret=' + window.location.protocol + '//' + window.location.host + '/addisbn/{CODE}';
 

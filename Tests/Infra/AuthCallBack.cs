@@ -17,7 +17,7 @@ namespace Tests.Infra
         [Test]
         public void ExistingUserAuthenticatingShouldUseExistingUser()
         {
-            var authenticatedUser = new AuthenticatedUser(Guid.NewGuid(), "user1", "email1", new List<AuthenticationProvider>()
+            var authenticatedUser = new AuthenticatedUser(Guid.NewGuid(), "user1", "email1", "picture", new List<AuthenticationProvider>()
             {
                 new AuthenticationProvider(Guid.NewGuid(), "Facebook", "12345"),
             });
@@ -46,7 +46,7 @@ namespace Tests.Infra
         [Test]
         public void NewUserAuthenticatingShouldCreateNewUser()
         {
-            var authenticatedUser = new AuthenticatedUser(Guid.NewGuid(), "user1", "Email1", new List<AuthenticationProvider>()
+            var authenticatedUser = new AuthenticatedUser(Guid.NewGuid(), "user1", "Email1", "picture", new List<AuthenticationProvider>()
             {
                 new AuthenticationProvider(Guid.NewGuid(), "Facebook", "12345"),
             });
