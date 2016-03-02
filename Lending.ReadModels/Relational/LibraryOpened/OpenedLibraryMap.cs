@@ -11,6 +11,7 @@ namespace Lending.ReadModels.Relational.LibraryOpened
                 .GeneratedBy.Assigned();
             Map(x => x.Name);
             Map(x => x.AdministratorId);
+            Map(x => x.AdministratorPicture);
         }
     }
 }

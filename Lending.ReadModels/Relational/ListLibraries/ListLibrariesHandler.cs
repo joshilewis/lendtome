@@ -23,7 +23,7 @@ namespace Lending.ReadModels.Relational.ListLibraries
                 .Where(x => x.AdministratorId == query.UserId)
                 .List();
 
-            return libraries.Select(x => new LibrarySearchResult(x.Id, x.Name))
+            return libraries.Select(x => new LibrarySearchResult(x.Id, x.Name, x.AdministratorPicture))
                 .ToArray();
         }
     }

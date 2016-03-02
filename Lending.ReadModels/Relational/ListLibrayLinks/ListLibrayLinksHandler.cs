@@ -36,8 +36,8 @@ namespace Lending.ReadModels.Relational.ListLibrayLinks
                 .Select(x =>
                 {
                     if (x.AcceptingLibrary.Id == query.UserId)
-                        return new LibrarySearchResult(x.RequestingLibrary.Id, x.RequestingLibrary.Name);
-                    return new LibrarySearchResult(x.AcceptingLibrary.Id, x.AcceptingLibrary.Name);
+                        return new LibrarySearchResult(x.RequestingLibrary.Id, x.RequestingLibrary.Name, x.RequestingLibrary.AdministratorPicture);
+                    return new LibrarySearchResult(x.AcceptingLibrary.Id, x.AcceptingLibrary.Name, x.AcceptingLibrary.AdministratorPicture);
                 })
                 .ToArray();
         }

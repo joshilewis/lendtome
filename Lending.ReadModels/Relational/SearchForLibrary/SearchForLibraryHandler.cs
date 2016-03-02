@@ -20,7 +20,7 @@ namespace Lending.ReadModels.Relational.SearchForLibrary
             LibrarySearchResult[] libraries = Session.QueryOver<OpenedLibrary>()
                 .WhereRestrictionOn(x => x.Name).IsInsensitiveLike("%" + query.SearchString.ToLower() + "%")
                 .List()
-                .Select(x => new LibrarySearchResult(x.Id, x.Name))
+                .Select(x => new LibrarySearchResult(x.Id, x.Name, x.AdministratorPicture))
                 .ToArray();
             return libraries;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Joshilewis.Testing.Helpers;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.ReadModels.Relational.SearchForBook;
@@ -24,6 +25,7 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookNotOwnedByAnyConnectionShouldReturnEmptyList()
         {
+            PersistenceExtensions.SaveEntities(User1, User2);
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
             GivenCommand(OpenLibrary2).IsPOSTedTo("/libraries/");
             GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request/");
@@ -40,6 +42,7 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithNoConnectionsShouldFail()
         {
+            PersistenceExtensions.SaveEntities(User1);
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
             WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
             ThenResponseIs(new BookSearchResult[] {});
@@ -56,6 +59,7 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithSingleMatchingTitleInManyLibrariesShouldReturnAllOwners()
         {
+            PersistenceExtensions.SaveEntities(User1, User2, User3, User4);
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4).ArePOSTedTo("/libraries/");
             GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
@@ -85,6 +89,7 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithManyMatchingTitlesInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
+            PersistenceExtensions.SaveEntities(User1, User2, User3, User4, User5);
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
                 .ArePOSTedTo("/libraries/");
             GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
@@ -119,6 +124,7 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithSingleMatchingAuthorInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
+            PersistenceExtensions.SaveEntities(User1, User2, User3, User4, User5);
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
                 .ArePOSTedTo("/libraries/");
             GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
@@ -153,6 +159,7 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithManyMatchingTitlesAndAuthorsInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
+            PersistenceExtensions.SaveEntities(User1, User2, User3, User4, User5, User6);
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
                 .ArePOSTedTo("/libraries/");
             GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
@@ -190,6 +197,7 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookWithManyMatchesShouldExcludeUnconnectedLibraries()
         {
+            PersistenceExtensions.SaveEntities(User1, User2, User3, User4, User5, User6);
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
                 .ArePOSTedTo("/libraries/");
             GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
@@ -229,6 +237,7 @@ namespace Tests.Queries
             SearchingForBookWithManyMatchingTitlesAndAuthorsInManyLibrariesShouldReturnAllOwnersAndBooksExceptRemovedBooks
             ()
         {
+            PersistenceExtensions.SaveEntities(User1, User2, User3, User4, User5, User6);
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
                 .ArePOSTedTo("/libraries/");
             GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3,

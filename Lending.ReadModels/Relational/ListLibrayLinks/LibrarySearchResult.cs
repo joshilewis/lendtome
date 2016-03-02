@@ -6,11 +6,13 @@ namespace Lending.ReadModels.Relational.ListLibrayLinks
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Picture { get; set; }
 
-        public LibrarySearchResult(Guid id, string name)
+        public LibrarySearchResult(Guid id, string name, string picture)
         {
             Id = id;
             Name = name;
+            Picture = picture;
         }
 
         public LibrarySearchResult()
@@ -26,7 +28,8 @@ namespace Lending.ReadModels.Relational.ListLibrayLinks
 
             var other = (LibrarySearchResult)obj;
             return Id.Equals(other.Id) &&
-                   Name.Equals(other.Name);
+                   Name.Equals(other.Name) &&
+                   Picture.Equals(other.Picture);
         }
     }
 }

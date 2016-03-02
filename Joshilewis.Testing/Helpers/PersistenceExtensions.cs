@@ -16,18 +16,19 @@ namespace Joshilewis.Testing.Helpers
         {
             new SchemaExport(Configuration)
                 .Execute(true, true, false);
-
-            DIExtensions.Container.GetInstance<IUnitOfWork>().Begin();
         }
 
         public static void TearDownPersistence()
         {
-            CommitTransaction();
-
             //Tear down DB
             new SchemaExport(Configuration)
                 .Execute(false, true, true);
 
+        }
+
+        public static void OpenTransaction()
+        {
+            DIExtensions.Container.GetInstance<IUnitOfWork>().Begin();
         }
 
         public static void CommitTransaction()
@@ -37,10 +38,12 @@ namespace Joshilewis.Testing.Helpers
 
         public static void SaveEntities(params object[] entitiesToSave)
         {
+            OpenTransaction();
             foreach (var entity in entitiesToSave)
             {
                 Repository.Save(entity);
             }
+            CommitTransaction();
         }
 
 

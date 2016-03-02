@@ -1,4 +1,5 @@
 using System;
+using Joshilewis.Testing.Helpers;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.ReadModels.Relational.LibraryOpened;
@@ -14,7 +15,7 @@ namespace Tests.Queries
     [TestFixture]
     public class SearchForLibraryTests: Fixture
     {
-        private readonly LibrarySearchResult joshuaLewisLibraryResult = new LibrarySearchResult(Library1Id, JoshuaLewisLibraryOpened.Name);
+        private readonly LibrarySearchResult joshuaLewisLibraryResult = new LibrarySearchResult(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Picture);
 
         /// <summary>
         /// GIVEN Libraries with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have been Opened 
@@ -24,6 +25,7 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchShouldReturnThatUser()
         {
+            PersistenceExtensions.SaveEntities(User1, User2, User3, User4);
             GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
@@ -44,6 +46,7 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchWithWrongCaseShouldReturnThatUser()
         {
+            PersistenceExtensions.SaveEntities(User1, User2, User3, User4);
             GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
@@ -64,6 +67,7 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithNoMatchesShouldReturnEmptyList()
         {
+            PersistenceExtensions.SaveEntities(User1, User2, User3, User4);
             GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
@@ -85,6 +89,7 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithTwoMatchsShouldReturnTwoLibraries()
         {
+            PersistenceExtensions.SaveEntities(User1, User2, User3, User4);
             GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
             GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
@@ -92,7 +97,7 @@ namespace Tests.Queries
             WhenGetEndpoint("libraries/Jos");
             ThenResponseIs(
                 joshuaLewisLibraryResult,
-                new LibrarySearchResult(Library3Id, JosieDoeLibraryOpened.Name));
+                new LibrarySearchResult(Library3Id, JosieDoeLibraryOpened.Name, Library3Picture));
             AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
             AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);

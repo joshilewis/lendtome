@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using Joshilewis.Testing.Helpers;
 using Lending.Domain.Model;
+using Lending.ReadModels.Relational;
 using Lending.ReadModels.Relational.LinkAccepted;
 using Lending.ReadModels.Relational.LinkRequested;
 using Lending.ReadModels.Relational.ListLibrayLinks;
@@ -18,8 +21,8 @@ namespace Tests.Commands
     [TestFixture]
     public class AcceptLinkTests : Fixture
     {
-        private readonly LibrarySearchResult library2SearchResult = new LibrarySearchResult(Library2Id, Library2Name);
-        private readonly LibrarySearchResult library1SearchResult = new LibrarySearchResult(Library1Id, Library1Name);
+        private readonly LibrarySearchResult library2SearchResult = new LibrarySearchResult(Library2Id, Library2Name, Library2Picture);
+        private readonly LibrarySearchResult library1SearchResult = new LibrarySearchResult(Library1Id, Library1Name, Library1Picture);
 
         /// <summary>
         /// GIVEN Library1 AND Library2 are Open AND they are not Linked AND Library1 has Requested to Link to Library2
@@ -33,6 +36,7 @@ namespace Tests.Commands
         [Test]
         public void AcceptLinkForUnconnectedLibrarysWithAPendingRequestShouldSucceed()
         {
+            PersistenceExtensions.SaveEntities(User1, User2);
             GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
             GivenCommand(OpenLibrary2).IsPOSTedTo($"/libraries");
             GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
@@ -40,8 +44,8 @@ namespace Tests.Commands
             Then(Http200Ok);
             AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(EmptyList);
             AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(EmptyList);
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(new LibrarySearchResult(Library2Id, OpenLibrary2.Name));
-            AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(new LibrarySearchResult(Library1Id, OpenLibrary1.Name));
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(new LibrarySearchResult(Library2Id, Library2Name, Library2Picture));
+            AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(new LibrarySearchResult(Library1Id, Library1Name, Library1Picture));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2, TestData.LinkCompleted);
             AndEventsSavedForAggregate<Library>(Library2Id, Library2Opened, LinkRequestFrom1To2Received, TestData.LinkAccepted);
         }
@@ -58,6 +62,7 @@ namespace Tests.Commands
         [Test]
         public void AcceptLinkWithNoPendingRequestShouldFail()
         {
+            PersistenceExtensions.SaveEntities(User1, User2);
             GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
             GivenCommand(OpenLibrary2).IsPOSTedTo($"/libraries");
             WhenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
@@ -82,6 +87,7 @@ namespace Tests.Commands
         [Test]
         public void AcceptLinkForLinkedLibrariesShouldFail()
         {
+            PersistenceExtensions.SaveEntities(User1, User2);
             GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
             GivenCommand(OpenLibrary2).IsPOSTedTo($"/libraries");
             GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
@@ -99,13 +105,14 @@ namespace Tests.Commands
         [Test]
         public void AcceptLinkByUnauthorizedUserShouldFail()
         {
+            PersistenceExtensions.SaveEntities(User1, User2);
             GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
             GivenCommand(OpenLibrary2).IsPOSTedTo($"/libraries");
             GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");
             WhenCommand(UnauthorizedAcceptLink).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             Then(Http403BecauseUnauthorized(UnauthorizedAcceptLink.UserId, Library2Id, typeof (Library)));
-            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(new LibrarySearchResult(Library2Id, OpenLibrary2.Name));
-            AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(new LibrarySearchResult(Library1Id, OpenLibrary1.Name));
+            AndGETTo($"/libraries/{Library1Id}/links/sent").As(Library1Id).Returns(new LibrarySearchResult(Library2Id, Library2Name, Library2Picture));
+            AndGETTo($"/libraries/{Library1Id}/links/received").As(Library2Id).Returns(new LibrarySearchResult(Library1Id, Library1Name, Library1Picture));
             AndGETTo($"/libraries/{Library1Id}/links/").As(Library1Id).Returns(EmptyList);
             AndGETTo($"/libraries/{Library1Id}/links/").As(Library2Id).Returns(EmptyList);
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened, LinkRequestedFrom1To2);

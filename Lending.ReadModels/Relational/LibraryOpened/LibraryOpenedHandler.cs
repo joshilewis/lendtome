@@ -13,7 +13,9 @@ namespace Lending.ReadModels.Relational.LibraryOpened
 
         public override void When(Domain.OpenLibrary.LibraryOpened @event)
         {
-            OpenedLibrary openedLibrary = new OpenedLibrary(@event.AggregateId, @event.Name, @event.AdministratorId);
+            AuthenticatedUser user = Session.Get<AuthenticatedUser>(@event.AdministratorId);
+
+            OpenedLibrary openedLibrary = new OpenedLibrary(@event.AggregateId, @event.Name, user.Id, user.Picture);
             Session.Save(openedLibrary);
 
         }

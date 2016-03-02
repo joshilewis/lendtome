@@ -1,4 +1,5 @@
 ﻿using System;
+using Joshilewis.Testing.Helpers;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
 using Lending.Domain.RemoveBookFromLibrary;
@@ -29,6 +30,7 @@ namespace Tests.Commands
         [Test]
         public void AddingNewBookToLibraryShouldSucceed()
         {
+            PersistenceExtensions.SaveEntities(User1);
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             WhenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             Then(Http201Created);
@@ -45,6 +47,7 @@ namespace Tests.Commands
         [Test]
         public void AddingDuplicateBookToLibraryShouldFail()
         {
+            PersistenceExtensions.SaveEntities(User1);
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             WhenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
@@ -62,6 +65,7 @@ namespace Tests.Commands
         [Test]
         public void AddingPreviouslyRemovedBookToLibraryShouldSucceed()
         {
+            PersistenceExtensions.SaveEntities(User1);
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             GivenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
@@ -74,6 +78,7 @@ namespace Tests.Commands
         [Test]
         public void UnauthorizedAddBookAddBookShouldFail()
         {
+            PersistenceExtensions.SaveEntities(User1);
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             WhenCommand(UnauthorizedAddBookToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             Then(Http403BecauseUnauthorized(UnauthorizedAddBookToLibrary.UserId, Library1Id, typeof (Library)));

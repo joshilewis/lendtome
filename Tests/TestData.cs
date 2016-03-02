@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using Lending.Domain.AcceptLink;
@@ -6,6 +7,7 @@ using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestLink;
+using Lending.ReadModels.Relational;
 using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.ListLibrayLinks;
 
@@ -28,8 +30,43 @@ namespace Tests
         public static string Library5Name = "library5";
         public static string Library6Name = "library6";
 
+        public static string Library1Picture = "libraryPicture1";
+        public static string Library2Picture = "libraryPicture2";
+        public static string Library3Picture = "libraryPicture3";
+        public static string Library4Picture = "libraryPicture4";
+        public static string Library5Picture = "libraryPicture5";
+        public static string Library6Picture = "libraryPicture6";
+
         public static HttpResponseMessage Http201Created = new HttpResponseMessage(HttpStatusCode.Created);
         public static HttpResponseMessage Http200Ok = new HttpResponseMessage(HttpStatusCode.OK);
+
+        public static AuthenticatedUser User1
+            =>
+                new AuthenticatedUser(Library1Id, Library1Name, "email1", Library1Picture,
+                    new List<AuthenticationProvider>());
+
+        public static AuthenticatedUser User2
+            =>
+                new AuthenticatedUser(Library2Id, Library2Name, "email2", Library2Picture,
+                    new List<AuthenticationProvider>());
+
+        public static AuthenticatedUser User3
+            =>
+                new AuthenticatedUser(Library3Id, Library3Name, "email3", Library3Picture,
+                    new List<AuthenticationProvider>());
+
+        public static AuthenticatedUser User4
+            =>
+                new AuthenticatedUser(Library4Id, Library4Name, "email4", Library4Picture,
+                    new List<AuthenticationProvider>());
+        public static AuthenticatedUser User5
+            =>
+                new AuthenticatedUser(Library5Id, Library5Name, "email5", Library5Picture,
+                    new List<AuthenticationProvider>());
+        public static AuthenticatedUser User6
+            =>
+                new AuthenticatedUser(Library6Id, Library6Name, "email6", Library6Picture,
+                    new List<AuthenticationProvider>());
 
         public static OpenLibrary OpenLibrary1 = new OpenLibrary(ProcessId, Library1Id, Library1Id, Library1Name);
         public static OpenLibrary OpenLibrary2 = new OpenLibrary(ProcessId, Library2Id, Library2Id, Library2Name);

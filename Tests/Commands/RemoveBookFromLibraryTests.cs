@@ -1,4 +1,5 @@
 ﻿using System;
+using Joshilewis.Testing.Helpers;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
 using Lending.Domain.RemoveBookFromLibrary;
@@ -29,6 +30,7 @@ namespace Tests.Commands
         [Test]
         public void RemoveBookInLibraryShouldSucceed()
         {
+            PersistenceExtensions.SaveEntities(User1);
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
@@ -46,6 +48,7 @@ namespace Tests.Commands
         [Test]
         public void RemoveBookNotInLibraryShouldFail()
         {
+            PersistenceExtensions.SaveEntities(User1);
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             WhenCommand(User1RemovesBookFromLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");
             Then(Http400Because(Library.BookNotInLibrary));
@@ -56,6 +59,7 @@ namespace Tests.Commands
         [Test]
         public void UnauthorizedRemoveBookInLibraryShouldFail()
         {
+            PersistenceExtensions.SaveEntities(User1);
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             GivenCommand(AddBook1ToLibrary).IsPOSTedTo($"/libraries/{Library1Id}/books/add");
             WhenCommand(UnauthorizedRemoveBook).IsPOSTedTo($"/libraries/{Library1Id}/books/remove");

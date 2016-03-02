@@ -21,7 +21,7 @@ namespace Lending.ReadModels.Relational.ListRequestedLinks
                 .Where(x => x.Id == query.UserId)
                 .Where(x => x.AdministratorId == query.UserId)
                 .List()
-                .Select(x => new LibrarySearchResult(x.TargetLibrary.Id, x.TargetLibrary.Name))
+                .Select(x => new LibrarySearchResult(x.TargetLibrary.Id, x.TargetLibrary.Name, x.TargetLibrary.AdministratorPicture))
                 .ToArray();
         }
 

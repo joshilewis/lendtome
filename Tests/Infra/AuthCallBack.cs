@@ -61,8 +61,10 @@ namespace Tests.Infra
                 }
             };
 
+            OpenTransaction();
             var sut = new UserMapper(() => Session);
             AuthenticatedUser actual = sut.MapUser(authenticatedClient);
+            CommitTransaction();
 
             actual.ShouldEqual(authenticatedUser);
 
