@@ -17,8 +17,17 @@ namespace Lending.ReadModels.Relational.SearchForLibrary
 
         public override object Handle(SearchForLibrary query)
         {
-            LibrarySearchResult[] libraries = Session.QueryOver<OpenedLibrary>()
-                .WhereRestrictionOn(x => x.Name).IsInsensitiveLike("%" + query.SearchString.ToLower() + "%")
+            var queryOver = Session.QueryOver<OpenedLibrary>()
+                .WhereRestrictionOn(x => x.Name).IsInsensitiveLike("%" + query.SearchString.ToLower() + "%");
+
+
+            if (query.UserId.HasValue) //Authenticated so exclude own Library in result
+            {
+                queryOver = queryOver
+                    .Where(x => x.Id != query.UserId.Value);
+            }
+
+            LibrarySearchResult[] libraries = queryOver
                 .List()
                 .Select(x => new LibrarySearchResult(x.Id, x.Name, x.AdministratorPicture))
                 .ToArray();

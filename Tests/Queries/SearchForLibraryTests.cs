@@ -104,5 +104,27 @@ namespace Tests.Queries
             AndEventsSavedForAggregate<Library>(Library4Id, AudreyHepburnLibraryOpened);
         }
 
+        /// <summary>
+        /// GIVEN Libraries with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have been Opened 
+        /// WHEN I Search for Libraries with the search string 'Jos'
+        /// THEN Libraries 'Joshua Lewis' and 'Josie Doe' get returned
+        /// </summary>
+        [Test]
+        public void SearchingForLibraryThatMatchesSelfShouldExcludeSelfFromResults()
+        {
+            PersistenceExtensions.SaveEntities(User1, User2, User3, User4);
+            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
+            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            WhenGetEndpoint("libraries/Jos").As(Library1Id);
+            ThenResponseIs(
+                new LibrarySearchResult(Library3Id, JosieDoeLibraryOpened.Name, Library3Picture));
+            AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
+            AndEventsSavedForAggregate<Library>(Library4Id, AudreyHepburnLibraryOpened);
+        }
+
     }
 }
