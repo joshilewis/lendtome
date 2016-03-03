@@ -17,6 +17,7 @@ namespace Lending.ReadModels.Relational.ListLibrayLinks
 
         public LibrarySearchResult()
         {
+            Picture = string.Empty;
         }
 
         public override bool Equals(object obj)

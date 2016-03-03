@@ -15,10 +15,12 @@ namespace Lending.ReadModels.Relational.LibraryOpened
             Name = name;
             AdministratorId = administratorId;
             AdministratorPicture = administratorPicture;
+            if (administratorPicture == null) AdministratorPicture = string.Empty;
         }
 
         protected OpenedLibrary()
         {
+            AdministratorPicture=String.Empty;
         }
     }
 }
