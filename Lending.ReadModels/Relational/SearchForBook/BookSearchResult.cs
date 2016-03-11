@@ -37,5 +37,16 @@ namespace Lending.ReadModels.Relational.SearchForBook
                    PublishYear.Equals(other.PublishYear) &&
                    Isbn.Equals(other.Isbn);
         }
+        public override int GetHashCode()
+        {
+            int result = base.GetHashCode();
+            result = (result * 397) ^ LibraryId.GetHashCode();
+            result = (result * 397) ^ LibraryName.GetHashCode();
+            result = (result * 397) ^ Title.GetHashCode();
+            result = (result * 397) ^ Author.GetHashCode();
+            result = (result * 397) ^ Isbn.GetHashCode();
+            result = (result * 397) ^ PublishYear.GetHashCode();
+            return result;
+        }
     }
 }

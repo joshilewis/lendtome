@@ -13,14 +13,14 @@ lendtomeControllers.controller('linksController', [
         $scope.links = link.query();
 
         $scope.search = function(searchTerm) {
-            var librarySearch = $resource('api/libraries/:searchTerm', { searchTerm: '@searchTerm' });
+            var librarySearch = $resource('/api/libraries/:searchTerm', { searchTerm: '@searchTerm' });
             librarySearch.query({ searchTerm: searchTerm }, function(data) {
                 $scope.searchResults = data;
             });
         };
 
         $scope.requestLink = function(targetLibraryId) {
-            var linkRequest = $resource('api/libraries/:libraryId/links/request', { libraryId: storage.get('userId') });
+            var linkRequest = $resource('/api/libraries/:libraryId/links/request', { libraryId: storage.get('userId') });
             linkRequest.save({
                 TargetLibraryId: targetLibraryId
             }, function(data, error) {

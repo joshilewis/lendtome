@@ -28,5 +28,13 @@ namespace Joshilewis.Cqrs
 
         }
 
+        public override int GetHashCode()
+        {
+            int result = base.GetHashCode();
+            result = (result * 397) ^ Id.GetHashCode();
+            result = (result * 397) ^ AggregateId.GetHashCode();
+            result = (result * 397) ^ ProcessId.GetHashCode();
+            return result;
+        }
     }
 }

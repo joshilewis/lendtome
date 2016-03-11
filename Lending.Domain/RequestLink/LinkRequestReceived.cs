@@ -26,5 +26,9 @@ namespace Lending.Domain.RequestLink
 
         }
 
+        public override int GetHashCode()
+        {
+            return (base.GetHashCode() * 397) ^ RequestingLibraryId.GetHashCode();
+        }
     }
 }

@@ -29,5 +29,12 @@ namespace Lending.Domain.OpenLibrary
                    AdministratorId.Equals(other.AdministratorId);
         }
 
+        public override int GetHashCode()
+        {
+            int result = base.GetHashCode();
+            result = (result * 397) ^ Name.GetHashCode();
+            result = (result * 397) ^ AdministratorId.GetHashCode();
+            return result;
+        }
     }
 }

@@ -24,5 +24,10 @@ namespace Lending.Domain.AcceptLink
             var other = (LinkAccepted)obj;
             return RequestingLibraryId.Equals(other.RequestingLibraryId);
         }
+
+        public override int GetHashCode()
+        {
+            return (base.GetHashCode() * 397) ^ RequestingLibraryId.GetHashCode();
+        }
     }
 }

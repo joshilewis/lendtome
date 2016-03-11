@@ -32,5 +32,14 @@ namespace Lending.ReadModels.Relational.ListLibrayLinks
                    Name.Equals(other.Name) &&
                    Picture.Equals(other.Picture);
         }
+
+        public override int GetHashCode()
+        {
+            int result = base.GetHashCode();
+            result = (result * 397) ^ Id.GetHashCode();
+            result = (result * 397) ^ Name.GetHashCode();
+            result = (result * 397) ^ Picture.GetHashCode();
+            return result;
+        }
     }
 }
