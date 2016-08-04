@@ -15,6 +15,7 @@ angular.module('lendtome', [
     'lendtomeServices',
     //'app.directives',
     'lendtomeControllers',
+    'satellizer',
     'ui.bootstrap',
     'ui.bootstrap.collapse', 
     'ui.bootstrap.dropdownToggle'
@@ -22,7 +23,7 @@ angular.module('lendtome', [
 
     // Gets executed during the provider registrations and configuration phase. Only providers and constants can be
     // injected here. This is to prevent accidental instantiation of services before they have been fully configured.
-    .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+    .config(['$routeProvider', '$locationProvider', '$authProvider', '$compileProvider', function ($routeProvider, $locationProvider, $authProvider, $compileProvider) {
 
         // UI States, URL Routing & Mapping. For more info see: https://github.com/angular-ui/ui-router
         // ------------------------------------------------------------------------------------------------------------
@@ -33,11 +34,25 @@ angular.module('lendtome', [
                 controller: 'userItemsController'
             })
             .when('/addisbn/:isbnnumber', {
-                templateUrl: '/app/addisbn.html',
-                controller: 'googleBooksController'
+                templateUrl: '/app/addbyisbn/addbyisbn.html',
+                controller: 'addByIsbnController'
             })
-            .when('/signin', {
-                templateUrl: '/app/signin.html'
+            .when('/books', {
+                templateUrl: '/app/books/books.html',
+                controller: 'booksController'
+            })
+            .when('/links', {
+                templateUrl: '/app/links/links.html',
+                controller: 'linksController'
+            })
+            .when('/loading', {
+                templateUrl: '/app/loading.html'
+            })
+            .when('/authenticating', {
+                templateUrl: '/app/authenticating.html'
+            })
+            .when('/autherror', {
+                templateUrl: '/app/autherror.html'
             })
             .otherwise(
             {
@@ -46,11 +61,38 @@ angular.module('lendtome', [
 
         $locationProvider.html5Mode(true);
 
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|zxing):/);
+
+        $authProvider.facebook({
+            clientId: '663064230418689',
+            url: '/authentication/authenticatecallback?providerkey=facebook'
+        });
+
+        $authProvider.google({
+            url: '/authentication/authenticatecallback?providerkey=google',
+            clientId: '75779369919.apps.googleusercontent.com',
+            redirectUri: window.location.origin + '/',
+        });
+
+        $authProvider.twitter({
+            url: '/authentication/authenticatecallback?providerkey=twitter',
+        });
+
+        $authProvider.baseUrl = '/api/';
+        $authProvider.loginUrl = '/signin';
+        $authProvider.signupUrl = '/signin';
+        $authProvider.unlinkUrl = '/auth/unlink/';
+        $authProvider.tokenName = 'token';
+        $authProvider.tokenPrefix = 'satellizer';
+        $authProvider.authHeader = 'Authorization';
+        $authProvider.authToken = '';
+        $authProvider.storageType = 'localStorage';
     }])
 
     // Gets executed after the injector is created and are used to kickstart the application. Only instances and constants
     // can be injected here. This is to prevent further system configuration during application run time.
-    .run(['$templateCache', '$rootScope', '$state', '$stateParams', function ($templateCache, $rootScope, $state, $stateParams) {
+    .run(['$templateCache', '$rootScope', '$state', '$stateParams', '$location', '$auth',
+        function ($templateCache, $rootScope, $state, $stateParams, $location, auth) {
 
         // <ui-view> contains a pre-rendered template for the current view
         // caching it will prevent a round-trip to a server at the first page load
@@ -66,5 +108,16 @@ angular.module('lendtome', [
             // Sets the layout name, which can be used to display different layouts (header, footer etc.)
             // based on which page the user is located
             $rootScope.layout = toState.layout;
+        });
+
+        $rootScope.$on('$routeChangeStart', function (event, next, current) {
+            $rootScope.isAuthenticated = auth.isAuthenticated();
+            if (next.templateUrl === '/app/home.html') return;
+            if (next.templateUrl === '/app/loading.html') return;
+            if (next.templateUrl === '/app/authenticating.html') return;
+            if (next.templateUrl === '/app/autherror.html') return;
+            if (!auth.isAuthenticated()) {
+                $location.path('/');
+            }
         });
     }]);

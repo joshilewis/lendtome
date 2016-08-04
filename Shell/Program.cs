@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Lending.Core;
-using Lending.Execution.Persistence;
-using Lending.Execution.WebServices;
+using Joshilewis.Infrastructure;
+using Joshilewis.Infrastructure.DI;
+using Lending.Execution;
+using Lending.Execution.DI;
+using Microsoft.Owin.Hosting;
+using Nancy.Hosting.Self;
 //using Nancy.Hosting.Self;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
+using SimpleAuthentication.Core.Providers;
 using StructureMap;
+using StructureMap.Graph;
 using Environment = System.Environment;
 
 namespace Shell
@@ -19,36 +25,17 @@ namespace Shell
     {
         static void Main(string[] args)
         {
-            ObjectFactory.Initialize(x =>
-            {
-                x.Scan(y =>
-                {
-                    y.WithDefaultConventions();
-                    y.LookForRegistries();
-                    //y.AssembliesFromPath(Environment.CurrentDirectory, a => a.FullName.StartsWith("Lending"));
-                    y.AssembliesFromPath(Environment.CurrentDirectory, Blah);
-                });
 
+            IContainer container = IoC.Initialize<LendingContainer>(new ShellRegistry());
 
-            });
+            var url = "http://+:8083";
 
-            ObjectFactory.AssertConfigurationIsValid();
-            string blah = ObjectFactory.WhatDoIHave();
+            var webapp = WebApp.Start<Startup>(url);
+            Console.WriteLine("Running on {0}", url);
+            Console.WriteLine("Press enter to exit");
+            Console.ReadLine();
+            webapp.Dispose();
 
-            SchemaUpdater.UpdateSchema();
-
-            //using (var host = new NancyHost(new Uri("http://localhost:8080")))
-            //{
-            //    host.Start();
-            //    Console.WriteLine("Nancy has started");
-            //    Console.ReadLine();
-            //} 
-
-
-            var host = new AppHost();
-            host.Init();
-            host.Start("http://localhost:8085/");
-            Console.WriteLine("Listening, GO!");
             Console.ReadLine();
         }
 

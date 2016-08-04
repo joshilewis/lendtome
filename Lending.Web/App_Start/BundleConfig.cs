@@ -11,7 +11,10 @@ namespace Lending.Web.App_Start
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new StyleBundle("~/content/css/app").Include("~/content/bootstrap.css"));
+            bundles.Add(new StyleBundle("~/content/css/app").Include(
+                "~/content/bootstrap.css",
+                "~/content/font-awesome.css"
+                ));
 
             bundles.Add(new ScriptBundle("~/js/jquery").Include("~/scripts/jquery-{version}.js"));
 
@@ -23,12 +26,9 @@ namespace Lending.Web.App_Start
                 "~/scripts/AngularUI/ui-router.js",
                 "~/scripts/ui-bootstrap-0.10.0.js",
                 "~/scripts/ui-bootstrap-tpls-0.10.0.js",
-                //"~/scripts/filters.js",
-                "~/App/services.js",
-                //"~/scripts/directives.js",
-                "~/App/controllers.js",
-                "~/App/app.js"
-                ));
+                "~/scripts/satellizer.js"
+                )
+                .IncludeDirectory("~/App", "*.js", true));
         }
     }
 }

@@ -1,0 +1,21 @@
+﻿<div ng-controller="linksController">
+    <br/><br/><br/><br/>
+    <h3>Linked Libraries</h3>
+    <div ng-if="!links.length">You currently are not linked to any libraries. Would you like to search for libraries to link to?</div>
+    <div>
+        Library name: <input type="text" ng-model="libraryName"/>
+        <button type="submit" ng-click="search(libraryName)">Search Libraries</button>
+    </div>
+    <div ng-if="links.length && !searchResults" >
+        <div ng-repeat="link in links">
+            
+        </div>
+    </div>
+    <div ng-if="searchResults">
+        <h4>Search Results</h4>
+        <div ng-repeat="result in searchResults">
+            <a href="#">{{result.name}}</a> <img src="{{result.picture}}"/> <button ng-click="requestLink(result.id)">Request Link</button>
+        </div>
+
+    </div>
+</div>

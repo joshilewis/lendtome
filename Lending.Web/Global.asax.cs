@@ -7,10 +7,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Joshilewis.Infrastructure.DI;
 using Lending.Web.App_Start;
 using Lending.Web.DependencyResolution;
 using log4net.Config;
-using ServiceStack.Logging;
+using Lending.Execution.DI;
 using StructureMap;
 
 namespace Lending.Web
@@ -22,13 +23,11 @@ namespace Lending.Web
         protected void Application_Start()
         {
             XmlConfigurator.Configure();
-            LogManager.LogFactory = new ServiceStack.Logging.Log4Net.Log4NetFactory(true);
+            //LogManager.LogFactory = new ServiceStack.Logging.Log4Net.Log4NetFactory(true);
 
-            var container = (IContainer)IoC.Initialize();
-            DependencyResolver.SetResolver(new SmDependencyResolver(container));
-            ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
+            IoC.Initialize<LendingContainer>(new WebRegistry());
 
-            AppHost.Start();
+            //AppHost.Start(new StructureMapContainerAdapter(Container));
             
             //AreaRegistration.RegisterAllAreas();
 
