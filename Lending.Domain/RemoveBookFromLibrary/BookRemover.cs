@@ -6,9 +6,9 @@ using Lending.Domain.Model;
 
 namespace Lending.Domain.RemoveBookFromLibrary
 {
-    public class RemoveBookFromLibraryHandler : AuthenticatedCommandHandler<RemoveBookFromLibrary>
+    public class BookRemover : AuthenticatedCommandHandler<RemoveBookFromLibrary>
     {
-        public RemoveBookFromLibraryHandler(Func<IEventRepository> eventRepositoryFunc)
+        public BookRemover(Func<IEventRepository> eventRepositoryFunc)
             : base(eventRepositoryFunc)
         {
         }

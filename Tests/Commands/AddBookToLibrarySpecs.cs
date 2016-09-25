@@ -18,12 +18,6 @@ namespace Tests.Commands
     /// </summary>
     public class AddBookToLibrarySpecs : Fixture
     {
-        /// <summary>
-        /// GIVEN Library1 is Open
-        /// WHEN Library1 Adds Book1
-        /// THEN HTTP201 is returned 
-        /// AND Book1 appears in Library1's Books
-        /// </summary>
         [Test]
         public void AddingNewBookToLibraryShouldSucceed()
         {
@@ -40,13 +34,6 @@ namespace Tests.Commands
                 new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982));
         }
 
-
-        /// <summary>
-        /// GIVEN Library1 is Open AND Book1 is Added to Library1
-        /// WHEN Library1 Adds Book1
-        /// THEN HTTP400 is returned because Book1 is already in Library1
-        /// AND Book1 appears only once in Library1's Books
-        /// </summary>
         [Test]
         public void AddingDuplicateBookToLibraryShouldFail()
         {
@@ -64,12 +51,6 @@ namespace Tests.Commands
                 new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982));
         }
 
-        /// <summary>
-        /// GIVEN Library1 is Open and Library1 Adds and Removes Book1 
-        /// WHEN Library Adds Book1
-        /// THEN HTTP201 is returned
-        /// AND Book1 appears only once in Library1's Books
-        /// </summary>
         [Test]
         public void AddingPreviouslyRemovedBookToLibraryShouldSucceed()
         {

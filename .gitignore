@@ -109,3 +109,4 @@ UpgradeLog*.XML
 /settings.config
 /.vs
 /_NCrunch_Lending
+/.vscode

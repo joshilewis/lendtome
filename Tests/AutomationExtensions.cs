@@ -54,7 +54,7 @@ namespace Tests
             command =
                 WhenCommand(new RemoveBookFromLibrary(transactionId, libraryId, userId, title, author, isbn,
                     publishYear));
-            command.IsPOSTedTo($"/libraries/{userId}/books/remove");
+            command.IsPOSTedTo($"/libraries/{libraryId}/books/remove");
         }
 
         public static void BookAddedSucccessfully()
@@ -78,6 +78,18 @@ namespace Tests
             });
         }
 
+        public static void BookRemovedSucccessfully()
+        {
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
+        }
+
+        public static void BookNotInLibrary()
+        {
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = Library.BookNotInLibrary
+            });
+        }
 
     }
 }

@@ -55,7 +55,7 @@
     <Compile Include="OpenLibrary\LibraryOpener.cs" />
     <Compile Include="RemoveBookFromLibrary\BookRemovedFromLibrary.cs" />
     <Compile Include="RemoveBookFromLibrary\RemoveBookFromLibrary.cs" />
-    <Compile Include="RemoveBookFromLibrary\RemoveBookFromLibraryHandler.cs" />
+    <Compile Include="RemoveBookFromLibrary\BookRemover.cs" />
     <Compile Include="RequestLink\LinkRequested.cs" />
     <Compile Include="RequestLink\LinkRequestReceived.cs" />
     <Compile Include="RequestLink\RequestLink.cs" />
