@@ -87,8 +87,8 @@
       <HintPath>..\packages\Npgsql.3.0.5\lib\net45\Npgsql.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
@@ -136,12 +136,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\OpenLibraryTests.cs" />
+    <Compile Include="AutomationExtensions.cs" />
+    <Compile Include="Commands\OpenLibrarySpecs.cs" />
     <Compile Include="Commands\AcceptLinkTests.cs" />
     <Compile Include="Commands\AddBookToLibraryTests.cs" />
     <Compile Include="Commands\RemoveBookFromLibraryTests.cs" />
     <Compile Include="Commands\RequestLinkTests.cs" />
     <Compile Include="Fixture.cs" />
+    <Compile Include="LendingPersistenceExtentions.cs" />
     <Compile Include="TestData.cs" />
     <Compile Include="Infra\AuthCallBack.cs" />
     <Compile Include="Infra\ContainerTests.cs" />
@@ -183,7 +185,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,7 @@ using NUnit.Framework;
 using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
+using Lending.Domain.OpenLibrary;
 
 namespace Tests.Commands
 {

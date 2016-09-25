@@ -46,6 +46,7 @@ namespace Lending.Execution.Auth
 
                 return null;
             };
+
         }
 
         public string ReturnToUrlParameterKey
@@ -256,4 +257,5 @@ namespace Lending.Execution.Auth
                        : returnUrl;
         }
     }
+
 }

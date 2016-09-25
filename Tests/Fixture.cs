@@ -40,6 +40,21 @@ namespace Tests
             TearDownOwinServer();
         }
 
+        protected virtual void Given(Action action)
+        {
+            action();
+        }
+
+        protected virtual void When(Action action)
+        {
+            action();
+        }
+
+        protected virtual void Then1(Action action)
+        {
+            action();
+        }
+
     }
 
 

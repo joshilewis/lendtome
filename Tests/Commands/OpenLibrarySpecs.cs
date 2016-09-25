@@ -14,21 +14,24 @@ using NUnit.Framework;
 using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
+using static Tests.LendingPersistenceExtentions;
+using static Tests.AutomationExtensions;
 
 namespace Tests.Commands
 {
     [TestFixture]
-    public class OpenLibraryTests : Fixture
+    public class OpenLibrarySpecs : Fixture
     {
         [Test]
         public void OpenLibraryForUserWithNoLibrariesShouldOpenNewLibrary()
         {
-            PersistenceExtensions.SaveEntities(User1);
-            //Given();
-            WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
-            Then(Http201Created);
-            AndGETTo("/libraries/").Returns(new LibrarySearchResult(Library1Id, Library1Name, Library1Picture));
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
+            var transactionId = Guid.Empty;
+            var userId = Guid.NewGuid();
+            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
+            When(() => OpenLibrary(transactionId, userId, "library1"));
+            Then1(() => LibraryCreatedSuccessfully());
+            AndGETTo("/libraries/").Returns(new LibrarySearchResult(userId, "library1", "user1Picture"));
+            AndEventsSavedForAggregate<Library>(userId, new LibraryOpened(transactionId, userId, "library1", userId));
         }
 
         [Test]
@@ -37,7 +40,7 @@ namespace Tests.Commands
             PersistenceExtensions.SaveEntities(User1);
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
             WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
-            Then(Http400Because(OpenLibraryHandler.UserAlreadyOpenedLibrary));
+            Then(Http400Because(LibraryOpener.UserAlreadyOpenedLibrary));
             AndGETTo("/libraries/").Returns(new LibrarySearchResult(Library1Id, Library1Name, Library1Picture));
             AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
         }

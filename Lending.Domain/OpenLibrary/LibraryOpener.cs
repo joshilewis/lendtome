@@ -6,13 +6,13 @@ using Lending.Domain.Model;
 
 namespace Lending.Domain.OpenLibrary
 {
-    public class OpenLibraryHandler : CommandHandler<OpenLibrary>, IAuthenticatedCommandHandler<OpenLibrary>
+    public class LibraryOpener : CommandHandler<OpenLibrary>, IAuthenticatedCommandHandler<OpenLibrary>
     {
         public const string UserAlreadyOpenedLibrary = "User has already opened a library";
 
         private readonly ICheckIfUserHasOpenedLibrary checkIfUserHasOpenedLibrary;
 
-        public OpenLibraryHandler(Func<IEventRepository> eventRepositoryFunc,
+        public LibraryOpener(Func<IEventRepository> eventRepositoryFunc,
             ICheckIfUserHasOpenedLibrary checkIfUserHasOpenedLibrary)
             : base(eventRepositoryFunc)
         {

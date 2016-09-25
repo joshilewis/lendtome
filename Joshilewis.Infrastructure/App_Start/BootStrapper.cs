@@ -43,6 +43,7 @@ namespace Joshilewis.Infrastructure
                     StatusCode = code
                 };
             });
+
         }
         private readonly Dictionary<Type, HttpStatusCode> exceptionStatusCodeMap = new Dictionary<Type, HttpStatusCode>()
         {
@@ -65,15 +66,6 @@ namespace Joshilewis.Infrastructure
                     new CustomUserIdentity(Guid.Parse(user.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value),
                         user.Identity.Name, user.Claims.Select(x => x.Value));
             }
-
-            pipelines.AfterRequest.AddItemToEndOfPipeline((ctx) =>
-            {
-                ctx.Response.WithHeader("Access-Control-Allow-Origin", "*")
-                                .WithHeader("Access-Control-Allow-Methods", "POST,GET")
-                                .WithHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type");
-
-            });
-
         }
 
         protected override NancyInternalConfiguration InternalConfiguration

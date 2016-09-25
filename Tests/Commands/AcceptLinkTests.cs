@@ -11,6 +11,7 @@ using NUnit.Framework;
 using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
+using static Tests.LendingPersistenceExtentions;
 
 namespace Tests.Commands
 {
@@ -36,7 +37,8 @@ namespace Tests.Commands
         [Test]
         public void AcceptLinkForUnconnectedLibrarysWithAPendingRequestShouldSucceed()
         {
-            PersistenceExtensions.SaveEntities(User1, User2);
+            Given(() => UserRegisters(Library1Id, "library1", "email1", "library1Picture"));
+            Given(() => UserRegisters(Library2Id, "library2", "email2", "library2Picture"));
             GivenCommand(OpenLibrary1).IsPOSTedTo($"/libraries");
             GivenCommand(OpenLibrary2).IsPOSTedTo($"/libraries");
             GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request");

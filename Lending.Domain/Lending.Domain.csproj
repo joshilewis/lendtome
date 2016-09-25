@@ -52,7 +52,7 @@
     <Compile Include="Model\Book.cs" />
     <Compile Include="OpenLibrary\ICheckIfUserHasOpenedLibrary.cs" />
     <Compile Include="OpenLibrary\OpenLibrary.cs" />
-    <Compile Include="OpenLibrary\OpenLibraryHandler.cs" />
+    <Compile Include="OpenLibrary\LibraryOpener.cs" />
     <Compile Include="RemoveBookFromLibrary\BookRemovedFromLibrary.cs" />
     <Compile Include="RemoveBookFromLibrary\RemoveBookFromLibrary.cs" />
     <Compile Include="RemoveBookFromLibrary\RemoveBookFromLibraryHandler.cs" />
@@ -70,7 +70,6 @@
       <Name>Joshishilewis.Cqrs</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
