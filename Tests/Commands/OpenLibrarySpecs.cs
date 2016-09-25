@@ -37,21 +37,31 @@ namespace Tests.Commands
         [Test]
         public void OpenLibraryForUserWithAnOpenLibraryShouldFailBecauseLibraryAlreadyOpened()
         {
-            PersistenceExtensions.SaveEntities(User1);
-            GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
-            WhenCommand(OpenLibrary1).IsPOSTedTo("/libraries");
-            Then(Http400Because(LibraryOpener.UserAlreadyOpenedLibrary));
-            AndGETTo("/libraries/").Returns(new LibrarySearchResult(Library1Id, Library1Name, Library1Picture));
-            AndEventsSavedForAggregate<Library>(Library1Id, Library1Opened);
+            var transactionId = Guid.Empty;
+            var userId = Guid.NewGuid();
+            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
+            Given(() => OpenLibrary(transactionId, userId, "library1"));
+            When(() => OpenLibrary(transactionId, userId, "library1"));
+            Then1(() => SecondLibraryNotCreated());
+            AndGETTo("/libraries/").Returns(new LibrarySearchResult(userId, "library1", "user1Picture"));
+            AndEventsSavedForAggregate<Library>(userId, new LibraryOpened(transactionId, userId, "library1", userId));
         }
 
         [Test]
         public void ListLibrariesShouldShowOnlyLibrariesAdministeredByUser()
         {
-            PersistenceExtensions.SaveEntities(User1, User2, User3);
-            GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3).ArePOSTedTo("/libraries");
-            WhenGetEndpoint("/libraries/").As(Library2Id);
-            ThenResponseIs(new LibrarySearchResult(Library2Id, Library2Name, Library2Picture));
+            var transactionId = Guid.Empty;
+            var userId = Guid.NewGuid();
+            var user2Id = Guid.NewGuid();
+            var user3Id = Guid.NewGuid();
+            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
+            Given(() => UserRegisters(user2Id, "user2", "email2", "user2Picture"));
+            Given(() => UserRegisters(user3Id, "user3", "email3", "user3Picture"));
+            Given(() => OpenLibrary(transactionId, userId, "library1"));
+            Given(() => OpenLibrary(transactionId, user2Id, "library2"));
+            Given(() => OpenLibrary(transactionId, user3Id, "library3"));
+            WhenGetEndpoint("/libraries/").As(user2Id);
+            ThenResponseIs(new LibrarySearchResult(user2Id, "library2", "user2Picture"));
         }
 
     }

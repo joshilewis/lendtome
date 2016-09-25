@@ -28,6 +28,12 @@ namespace Tests
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.Created));
         }
 
-
+        public static void SecondLibraryNotCreated()
+        {
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = LibraryOpener.UserAlreadyOpenedLibrary,
+            });
+        }
     }
 }
