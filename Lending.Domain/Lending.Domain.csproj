@@ -47,7 +47,7 @@
     <Compile Include="AcceptLink\LinkAccepted.cs" />
     <Compile Include="AcceptLink\LinkCompleted.cs" />
     <Compile Include="AddBookToLibrary\AddBookToLibrary.cs" />
-    <Compile Include="AddBookToLibrary\AddBookToLibraryHandler.cs" />
+    <Compile Include="AddBookToLibrary\BookAdder.cs" />
     <Compile Include="AddBookToLibrary\BookAddedToLibrary.cs" />
     <Compile Include="Model\Book.cs" />
     <Compile Include="OpenLibrary\ICheckIfUserHasOpenedLibrary.cs" />

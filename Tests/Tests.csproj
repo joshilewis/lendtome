@@ -139,7 +139,7 @@
     <Compile Include="AutomationExtensions.cs" />
     <Compile Include="Commands\OpenLibrarySpecs.cs" />
     <Compile Include="Commands\AcceptLinkTests.cs" />
-    <Compile Include="Commands\AddBookToLibraryTests.cs" />
+    <Compile Include="Commands\AddBookToLibrarySpecs.cs" />
     <Compile Include="Commands\RemoveBookFromLibraryTests.cs" />
     <Compile Include="Commands\RequestLinkTests.cs" />
     <Compile Include="Fixture.cs" />

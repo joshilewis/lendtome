@@ -6,10 +6,10 @@ using Lending.Domain.Model;
 
 namespace Lending.Domain.AddBookToLibrary
 {
-    public class AddBookToLibraryHandler : AuthenticatedCommandHandler<AddBookToLibrary>
+    public class BookAdder : AuthenticatedCommandHandler<AddBookToLibrary>
     {
  
-        public AddBookToLibraryHandler(Func<IEventRepository> repositoryFuncFunc)
+        public BookAdder(Func<IEventRepository> repositoryFuncFunc)
             : base(repositoryFuncFunc)
         {
         }
