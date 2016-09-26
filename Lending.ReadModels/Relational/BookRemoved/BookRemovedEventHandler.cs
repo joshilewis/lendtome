@@ -22,8 +22,7 @@ namespace Lending.ReadModels.Relational.BookRemoved
                 .Where(x => x.Title == @event.Title)
                 .Where(x => x.Author == @event.Author)
                 .Where(x => x.Isbn == @event.Isbn)
-                .JoinQueryOver(x => x.Library)
-                .Where(x => x.Id == @event.AggregateId)
+                .Where(x => x.LibraryId == @event.AggregateId)
                 .SingleOrDefault();
 
             Session.Delete(bookToRemove);

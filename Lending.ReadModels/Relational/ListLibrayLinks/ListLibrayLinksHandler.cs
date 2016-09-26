@@ -21,23 +21,15 @@ namespace Lending.ReadModels.Relational.ListLibrayLinks
 
         public override object Handle(ListLibraryLinks query)
         {
-            LibraryLink libraryLinkAlias = null;
-            OpenedLibrary acceptingLibraryAlias = null;
-            OpenedLibrary requestingLibraryAlias = null;
-
-            return Session.QueryOver<LibraryLink>(() => libraryLinkAlias)
-                .JoinAlias(x => x.AcceptingLibrary, () => acceptingLibraryAlias)
-                .JoinAlias(x => x.RequestingLibrary, () => requestingLibraryAlias)
-                .Where(
-                    () =>
-                        acceptingLibraryAlias.AdministratorId == query.UserId ||
-                        requestingLibraryAlias.AdministratorId == query.UserId)
+            return Session.QueryOver<LibraryLink>()
+                .Where(x => x.AcceptingAdministratorId == query.UserId ||
+                x.RequestingAdministratorId == query.UserId)
                 .List()
                 .Select(x =>
                 {
-                    if (x.AcceptingLibrary.Id == query.UserId)
-                        return new LibrarySearchResult(x.RequestingLibrary.Id, x.RequestingLibrary.Name, x.RequestingLibrary.AdministratorPicture);
-                    return new LibrarySearchResult(x.AcceptingLibrary.Id, x.AcceptingLibrary.Name, x.AcceptingLibrary.AdministratorPicture);
+                    if (x.AcceptingLibraryId == query.UserId)
+                        return new LibrarySearchResult(x.RequestingLibraryId, x.RequestingLibraryName, x.RequestingAdministratorPicture);
+                    return new LibrarySearchResult(x.AcceptingLibraryId, x.AcceptingLibraryName, x.AcceptingAdministratorPicture);
                 })
                 .ToArray();
         }

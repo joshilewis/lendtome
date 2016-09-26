@@ -16,13 +16,12 @@ namespace Lending.ReadModels.Relational.ListLibraryBooks
         public override object Handle(ListLibraryBooks query)
         {
             LibraryBook[] libraryBooks = Session.QueryOver<LibraryBook>()
-                .JoinQueryOver(x => x.Library)
-                .Where(x => x.AdministratorId == query.UserId)
+                .Where(x => x.LibraryAdminId == query.UserId)
                 .List()
                 .ToArray();
 
             return libraryBooks
-                .Select(x => new BookSearchResult(x.Library.Id, x.LibraryName, x.Title, x.Author, x.Isbn, x.PublishYear))
+                .Select(x => new BookSearchResult(x.LibraryId, x.LibraryName, x.Title, x.Author, x.Isbn, x.PublishYear))
                 .ToArray();
         }
     }

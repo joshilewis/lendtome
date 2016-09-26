@@ -8,14 +8,26 @@ namespace Lending.ReadModels.Relational.LinkAccepted
         {
             Id(x => x.Id)
                 .GeneratedBy.Native();
-
             Map(x => x.ProcessId);
-            References(x => x.RequestingLibrary)
-                .Column("RequestingLibraryId")
+
+            Map(x => x.AcceptingAdministratorId)
                 .UniqueKey("UK_RequestingLibraryId_AcceptingLibraryId");
-            References(x => x.AcceptingLibrary)
-                .Column("AcceptingLibraryId")
+            Map(x => x.AcceptingAdministratorPicture)
                 .UniqueKey("UK_RequestingLibraryId_AcceptingLibraryId");
+            Map(x => x.AcceptingLibraryId)
+                .UniqueKey("UK_RequestingLibraryId_AcceptingLibraryId");
+            Map(x => x.AcceptingLibraryName)
+                .UniqueKey("UK_RequestingLibraryId_AcceptingLibraryId");
+
+            Map(x => x.RequestingAdministratorId)
+                .UniqueKey("UK_RequestingLibraryId_AcceptingLibraryId");
+            Map(x => x.RequestingAdministratorPicture)
+                .UniqueKey("UK_RequestingLibraryId_AcceptingLibraryId");
+            Map(x => x.RequestingLibraryId)
+                .UniqueKey("UK_RequestingLibraryId_AcceptingLibraryId");
+            Map(x => x.RequestingLibraryName)
+                .UniqueKey("UK_RequestingLibraryId_AcceptingLibraryId");
+
         }
     }
 }

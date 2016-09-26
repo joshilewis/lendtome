@@ -17,11 +17,10 @@ namespace Lending.ReadModels.Relational.ListReceivedLinks
         public override object Handle(ListReceivedLinks query)
         {
             return Session.QueryOver<RequestedLink>()
-                .JoinQueryOver(x => x.TargetLibrary)
-                .Where(x => x.Id == query.UserId)
-                .Where(x => x.AdministratorId == query.UserId)
+                .Where(x => x.TargetLibraryId == query.UserId)
+                .Where(x => x.TargetAdministratorId == query.UserId)
                 .List()
-                .Select(x => new LibrarySearchResult(x.RequestingLibrary.Id, x.RequestingLibrary.Name, x.RequestingLibrary.AdministratorPicture))
+                .Select(x => new LibrarySearchResult(x.RequestingLibraryId, x.RequestingLibraryName, x.RequestingAdministratorPicture))
                 .ToArray();
         }
 
