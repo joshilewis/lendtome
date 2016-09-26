@@ -1,7 +1,9 @@
 ﻿using System;
 using Joshilewis.Testing.Helpers;
+using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
+using Lending.Domain.RequestLink;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
 using static Tests.TestData;
@@ -28,8 +30,10 @@ namespace Tests.Queries
             PersistenceExtensions.SaveEntities(User1, User2);
             GivenCommand(OpenLibrary1).IsPOSTedTo("/libraries/");
             GivenCommand(OpenLibrary2).IsPOSTedTo("/libraries/");
-            GivenCommand(Library1RequestsLinkToLibrary2).IsPOSTedTo($"/libraries/{Library1Id}/links/request/");
-            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept/");
+            GivenCommand(new RequestLink(ProcessId, Guid.Empty, 
+                Library1Id, Library2Id)).IsPOSTedTo($"/libraries/{Library1Id}/links/request/");
+            GivenCommand(new AcceptLink(ProcessId, Guid.Empty, Library2Id,
+                Library1Id)).IsPOSTedTo($"/libraries/{Library2Id}/links/accept/");
             WhenGetEndpoint("books/Extreme Programming Explained").As(Library1Id);
             ThenResponseIs(new BookSearchResult[] {});
         }
@@ -61,9 +65,11 @@ namespace Tests.Queries
         {
             PersistenceExtensions.SaveEntities(User1, User2, User3, User4);
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4).ArePOSTedTo("/libraries/");
-            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4)
+            GivenCommands(new RequestLink(ProcessId, Guid.Empty, 
+                    Library1Id, Library2Id), Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
-            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(new AcceptLink(ProcessId, Guid.Empty, Library2Id,
+                Library1Id)).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
             GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
             GivenCommand(Lib2AddsXpeByKb).IsPOSTedTo($"/libraries/{Library2Id}/books/add/");
@@ -92,10 +98,12 @@ namespace Tests.Queries
             PersistenceExtensions.SaveEntities(User1, User2, User3, User4, User5);
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
                 .ArePOSTedTo("/libraries/");
-            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+            GivenCommands(new RequestLink(ProcessId, Guid.Empty, 
+                        Library1Id, Library2Id), Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
                 Library1RequestsLinkToLibrary5)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
-            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(new AcceptLink(ProcessId, Guid.Empty, Library2Id,
+                Library1Id)).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
             GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
             GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
@@ -127,10 +135,12 @@ namespace Tests.Queries
             PersistenceExtensions.SaveEntities(User1, User2, User3, User4, User5);
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5)
                 .ArePOSTedTo("/libraries/");
-            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+            GivenCommands(new RequestLink(ProcessId, Guid.Empty, 
+                        Library1Id, Library2Id), Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
                 Library1RequestsLinkToLibrary5)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
-            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(new AcceptLink(ProcessId, Guid.Empty, Library2Id,
+                Library1Id)).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
             GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
             GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
@@ -162,10 +172,12 @@ namespace Tests.Queries
             PersistenceExtensions.SaveEntities(User1, User2, User3, User4, User5, User6);
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
                 .ArePOSTedTo("/libraries/");
-            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+            GivenCommands(new RequestLink(ProcessId, Guid.Empty, 
+                        Library1Id, Library2Id), Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
                 Library1RequestsLinkToLibrary5, Library1RequestsLinkToLibrary6)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
-            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(new AcceptLink(ProcessId, Guid.Empty, Library2Id,
+                Library1Id)).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
             GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
             GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
@@ -200,10 +212,12 @@ namespace Tests.Queries
             PersistenceExtensions.SaveEntities(User1, User2, User3, User4, User5, User6);
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
                 .ArePOSTedTo("/libraries/");
-            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
+            GivenCommands(new RequestLink(ProcessId, Guid.Empty, 
+                        Library1Id, Library2Id), Library1RequestsLinkToLibrary3, Library1RequestsLinkToLibrary4,
                 Library1RequestsLinkToLibrary5, Library1RequestsLinkToLibrary6)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
-            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(new AcceptLink(ProcessId, Guid.Empty, Library2Id,
+                Library1Id)).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
             GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");
             GivenCommand(Library6AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library6Id}/links/accept");
@@ -240,11 +254,13 @@ namespace Tests.Queries
             PersistenceExtensions.SaveEntities(User1, User2, User3, User4, User5, User6);
             GivenCommands(OpenLibrary1, OpenLibrary2, OpenLibrary3, OpenLibrary4, OpenLibrary5, OpenLibrary6)
                 .ArePOSTedTo("/libraries/");
-            GivenCommands(Library1RequestsLinkToLibrary2, Library1RequestsLinkToLibrary3,
+            GivenCommands(new RequestLink(ProcessId, Guid.Empty, 
+                        Library1Id, Library2Id), Library1RequestsLinkToLibrary3,
                 Library1RequestsLinkToLibrary4,
                 Library1RequestsLinkToLibrary5, Library1RequestsLinkToLibrary6)
                 .ArePOSTedTo($"/libraries/{Library1Id}/links/request");
-            GivenCommand(Library2AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
+            GivenCommand(new AcceptLink(ProcessId, Guid.Empty, Library2Id,
+                Library1Id)).IsPOSTedTo($"/libraries/{Library2Id}/links/accept");
             GivenCommand(Library3AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library3Id}/links/accept");
             GivenCommand(Library4AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library4Id}/links/accept");
             GivenCommand(Library5AcceptsLinkFromLibrary1).IsPOSTedTo($"/libraries/{Library5Id}/links/accept");

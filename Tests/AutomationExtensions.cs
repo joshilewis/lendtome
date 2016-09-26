@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 using Joshilewis.Testing;
 using Joshilewis.Testing.CallBuilders;
 using Joshilewis.Testing.Helpers;
+using Lending.Domain.AcceptLink;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
+using Lending.Domain.RequestLink;
 using Lending.ReadModels.Relational;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 
@@ -99,6 +101,71 @@ namespace Tests
                 ReasonPhrase = Library.BookNotInLibrary
             });
         }
+
+        public static void RequestLibraryLink(Guid transactionId, Guid libraryId, Guid userId,
+            Guid targetLibraryId)
+        {
+            command =
+                WhenCommand(new RequestLink(transactionId, libraryId, userId, targetLibraryId));
+            command.IsPOSTedTo($"/libraries/{libraryId}/links/request");
+        }
+
+        public static void LinkRequestCreated()
+        {
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
+        }
+
+        public static void DuplicateLinkRequestIgnored()
+        {
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = Library.LinkAlreadyRequested
+            });
+
+        }
+
+        public static void FailtNotFound()
+        {
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.NotFound)
+            {
+                ReasonPhrase = "Not Found"
+            });
+        }
+
+        public static void ReverseLinkRequestIgnored()
+        {
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = Library.ReverseLinkAlreadyRequested
+            });
+
+        }
+
+        public static void LinkRequestedToSelfIgnored()
+        {
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = LinkRequester.CantConnectToSelf
+            });
+
+        }
+
+        public static void AcceptLibraryLink(Guid transactionId, Guid libraryId, Guid userId, Guid requestingLibraryId)
+        {
+            command =
+                WhenCommand(new AcceptLink(transactionId, libraryId, userId, requestingLibraryId));
+            command.IsPOSTedTo($"/libraries/{libraryId}/links/accept");
+        }
+        public static void LinkRequestForLinkedLibrariesIgnored()
+        {
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = Library.LibrariesAlreadyLinked
+            });
+
+        }
+
+
 
     }
 }

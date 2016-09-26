@@ -59,7 +59,7 @@
     <Compile Include="RequestLink\LinkRequested.cs" />
     <Compile Include="RequestLink\LinkRequestReceived.cs" />
     <Compile Include="RequestLink\RequestLink.cs" />
-    <Compile Include="RequestLink\RequestLinkHandler.cs" />
+    <Compile Include="RequestLink\LinkRequester.cs" />
     <Compile Include="OpenLibrary\LibraryOpened.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Library.cs" />

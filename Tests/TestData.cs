@@ -75,9 +75,6 @@ namespace Tests
         public static OpenLibrary OpenLibrary5 = new OpenLibrary(ProcessId, Library5Id, Library5Id, Library5Name);
         public static OpenLibrary OpenLibrary6 = new OpenLibrary(ProcessId, Library6Id, Library6Id, Library6Name);
 
-        public static LibraryOpened Library1Opened = new LibraryOpened(ProcessId, Library1Id, OpenLibrary1.Name,
-            OpenLibrary1.UserId);
-
         public static string Title = "Title";
         public static string Author = "Author";
         public static string Isbnnumber = "isbn";
@@ -101,8 +98,6 @@ namespace Tests
         public static BookRemovedFromLibrary Book1RemovedFromLibrary = new BookRemovedFromLibrary(ProcessId, Library1Id,
             Title, Author, Isbnnumber, PublishYear);
 
-        public static RequestLink Library1RequestsLinkToLibrary2 = new RequestLink(ProcessId, Guid.Empty, 
-            Library1Id, Library2Id);
         public static RequestLink Library1RequestsLinkToLibrary3 = new RequestLink(ProcessId, Guid.Empty,
             Library1Id, Library3Id);
         public static RequestLink Library1RequestsLinkToLibrary4 = new RequestLink(ProcessId, Guid.Empty,
@@ -112,17 +107,6 @@ namespace Tests
         public static RequestLink Library1RequestsLinkToLibrary6 = new RequestLink(ProcessId, Guid.Empty,
             Library1Id, Library6Id);
 
-        public static LinkRequested LinkRequestedFrom1To2 = new LinkRequested(ProcessId, Library1Id,
-            Library2Id);
-
-        public static LibraryOpened Library2Opened = new LibraryOpened(ProcessId, Library2Id, OpenLibrary2.Name,
-            OpenLibrary2.UserId);
-
-        public static LinkRequestReceived LinkRequestFrom1To2Received =
-            new LinkRequestReceived(ProcessId, Library2Id, Library1Id);
-
-        public static AcceptLink Library2AcceptsLinkFromLibrary1 = new AcceptLink(ProcessId, Guid.Empty, Library2Id,
-            Library1Id);
         public static AcceptLink Library3AcceptsLinkFromLibrary1 = new AcceptLink(ProcessId, Guid.Empty, Library3Id,
             Library1Id);
         public static AcceptLink Library4AcceptsLinkFromLibrary1 = new AcceptLink(ProcessId, Guid.Empty, Library4Id,
