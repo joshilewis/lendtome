@@ -138,7 +138,7 @@
   <ItemGroup>
     <Compile Include="AutomationExtensions.cs" />
     <Compile Include="Commands\OpenLibrarySpecs.cs" />
-    <Compile Include="Commands\AcceptLinkTests.cs" />
+    <Compile Include="Commands\AcceptLinkSpecs.cs" />
     <Compile Include="Commands\AddBookToLibrarySpecs.cs" />
     <Compile Include="Commands\RemoveBookFromLibrarySpecs.cs" />
     <Compile Include="Commands\RequestLinkSpecs.cs" />

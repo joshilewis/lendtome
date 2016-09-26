@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Net;
-using Joshilewis.Testing.Helpers;
 using Lending.Domain.AcceptLink;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.Domain.RequestLink;
-using Lending.ReadModels.Relational.LinkAccepted;
-using Lending.ReadModels.Relational.LinkRequested;
 using Lending.ReadModels.Relational.ListLibrayLinks;
 using NUnit.Framework;
-using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
 using static Tests.AutomationExtensions;
@@ -22,8 +17,6 @@ namespace Tests.Commands
     [TestFixture]
     public class RequestLinkSpecs : Fixture
     {
-        private readonly LibrarySearchResult library1 = new LibrarySearchResult(Library1Id, Library1Name, Library1Picture);
-
         [Test]
         public void RequestLinkForUnlinkedLibrarysShouldSucceed()
         {
@@ -166,7 +159,7 @@ namespace Tests.Commands
             Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => RequestLibraryLink(transactionId, userId, Guid.Empty, Guid.Empty));
-            Then1(() => UnauthorisedCommandRejected(Guid.Empty, typeof(Library), userId));
+            Then1(() => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId));
             AndGETTo($"/libraries/{userId}/links/sent").As(userId).Returns(new LibrarySearchResult[] { });
             AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult[] { });
             AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult[] { });

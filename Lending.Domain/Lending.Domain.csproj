@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AcceptLink\AcceptLink.cs" />
-    <Compile Include="AcceptLink\AcceptLinkHandler.cs" />
+    <Compile Include="AcceptLink\LinkAccepter.cs" />
     <Compile Include="AcceptLink\LinkAccepted.cs" />
     <Compile Include="AcceptLink\LinkCompleted.cs" />
     <Compile Include="AddBookToLibrary\AddBookToLibrary.cs" />

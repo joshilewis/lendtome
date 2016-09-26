@@ -14,7 +14,7 @@ namespace Lending.Domain.Model
     public class Library : Aggregate
     {
         public const string LibrariesAlreadyLinked = "This library is already linked to the specified library";
-        public const string NoPendingLinkRequest = "This library did not receive a link request from the specified library";
+        public const string NoLinkRequested = "This library did not receive a link request from the specified library";
         public const string LinkAlreadyRequested = "A link request for these libraries already exists";
         public const string ReverseLinkAlreadyRequested = "A reverse link request for these libraries already exists";
         public const string LinkNotRequested = "This library did not request to link with the specified library";
@@ -139,7 +139,7 @@ namespace Lending.Domain.Model
         public void AcceptLink(Guid processId, Guid requestingLibraryId)
         {
             if (LinkedLibraries.Contains(requestingLibraryId)) Fail(LibrariesAlreadyLinked);
-            if (!ReceivedLinkRequests.Contains(requestingLibraryId)) Fail(NoPendingLinkRequest);
+            if (!ReceivedLinkRequests.Contains(requestingLibraryId)) Fail(NoLinkRequested);
 
             RaiseEvent(new LinkAccepted(processId, Id, requestingLibraryId));
         }

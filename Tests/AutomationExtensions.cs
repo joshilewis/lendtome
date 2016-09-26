@@ -81,7 +81,7 @@ namespace Tests
             });
         }
 
-        public static void UnauthorisedCommandRejected(Guid userId, Type aggregateType, Guid aggregateId)
+        public static void UnauthorisedCommandIgnored(Guid userId, Type aggregateType, Guid aggregateId)
         {
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.Forbidden)
             {
@@ -162,10 +162,28 @@ namespace Tests
             {
                 ReasonPhrase = Library.LibrariesAlreadyLinked
             });
-
         }
 
+        public static void LibrariesLinked()
+        {
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
+        }
 
+        public static void AcceptUnrequestedLinkIgnored()
+        {
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = Library.NoLinkRequested
+            });
+        }
+
+        public static void AcceptLinkForLinkedLibrariesIgnored()
+        {
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                ReasonPhrase = Library.LibrariesAlreadyLinked
+            });
+        }
 
     }
 }

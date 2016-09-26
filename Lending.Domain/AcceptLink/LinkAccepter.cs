@@ -6,9 +6,9 @@ using Lending.Domain.Model;
 
 namespace Lending.Domain.AcceptLink
 {
-    public class AcceptLinkHandler : AuthenticatedCommandHandler<AcceptLink>
+    public class LinkAccepter : AuthenticatedCommandHandler<AcceptLink>
     {
-        public AcceptLinkHandler(Func<IEventRepository> eventRepositoryFunc) 
+        public LinkAccepter(Func<IEventRepository> eventRepositoryFunc) 
             : base(eventRepositoryFunc)
         {
         }
