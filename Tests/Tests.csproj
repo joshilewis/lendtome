@@ -143,7 +143,6 @@
     <Compile Include="Commands\RemoveBookFromLibrarySpecs.cs" />
     <Compile Include="Commands\RequestLinkTests.cs" />
     <Compile Include="Fixture.cs" />
-    <Compile Include="LendingPersistenceExtentions.cs" />
     <Compile Include="TestData.cs" />
     <Compile Include="Infra\AuthCallBack.cs" />
     <Compile Include="Infra\ContainerTests.cs" />

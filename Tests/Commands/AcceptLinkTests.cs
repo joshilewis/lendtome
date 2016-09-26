@@ -11,7 +11,7 @@ using NUnit.Framework;
 using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
-using static Tests.LendingPersistenceExtentions;
+using static Tests.AutomationExtensions;
 
 namespace Tests.Commands
 {

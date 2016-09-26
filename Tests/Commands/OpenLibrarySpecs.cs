@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Joshilewis.Testing.Helpers;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
-using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.ListLibrayLinks;
 using NUnit.Framework;
-using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
-using static Tests.LendingPersistenceExtentions;
 using static Tests.AutomationExtensions;
 
 namespace Tests.Commands

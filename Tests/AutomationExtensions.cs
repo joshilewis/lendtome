@@ -7,10 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Joshilewis.Testing;
 using Joshilewis.Testing.CallBuilders;
+using Joshilewis.Testing.Helpers;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
+using Lending.ReadModels.Relational;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 
 
@@ -19,6 +21,13 @@ namespace Tests
     public static class AutomationExtensions
     {
         private static PostCallBuilder command;
+
+        public static void UserRegisters(Guid id, string name, string emailAddress, string picture)
+        {
+            PersistenceExtensions.OpenTransaction();
+            PersistenceExtensions.Repository.Save(new AuthenticatedUser(id, name, emailAddress, picture, new List<AuthenticationProvider>()));
+            PersistenceExtensions.CommitTransaction();
+        }
 
         public static void OpenLibrary(Guid processId, Guid userId, string name)
         {

@@ -1,16 +1,12 @@
 ﻿using System;
-using Joshilewis.Testing.Helpers;
 using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
-using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
-using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
-using static Tests.LendingPersistenceExtentions;
 using static Tests.AutomationExtensions;
 
 namespace Tests.Commands
@@ -18,8 +14,6 @@ namespace Tests.Commands
     [TestFixture]
     public class RemoveBookFromLibrarySpecs : Fixture
     {
-        private readonly BookSearchResult[] emptyLibraryBookCollection = { };
-
         [Test]
         public void RemoveBookInLibraryShouldSucceed()
         {
