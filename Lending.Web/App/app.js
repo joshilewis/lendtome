@@ -53,6 +53,10 @@ angular.module('lendtome', [
                 templateUrl: '/app/receivedRequests/receivedRequests.html',
                 controller: 'receivedRequestsController'
             })
+            .when('/searchbooks', {
+                templateUrl: '/app/searchBooks/searchBooks.html',
+                controller: 'searchBooksController'
+            })
             .when('/loading', {
                 templateUrl: '/app/loading.html'
             })

@@ -196,6 +196,12 @@
     <Content Include="App\MyItems.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="App\ReceivedRequests\receivedrequests.html" />
+    <Content Include="App\ReceivedRequests\receivedrequests.js" />
+    <Content Include="App\SearchBooks\searchbooks.html" />
+    <Content Include="App\SearchBooks\searchbooks.js" />
+    <Content Include="App\SentRequests\sentrequests.html" />
+    <Content Include="App\SentRequests\sentrequests.js" />
     <Content Include="App\services.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -680,6 +686,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

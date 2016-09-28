@@ -31,7 +31,7 @@ lendtomeControllers.controller('addByIsbnController', ['$scope', 'googleBookDeta
           var bookToAdd = {
               Title: $scope.bookDetails.items[0].volumeInfo.title,
               Author: $scope.bookDetails.items[0].volumeInfo.authors[0],
-              PublishYear: $scope.bookDetails.items[0].volumeInfo.publishedDate,
+              PublishYear: $scope.bookDetails.items[0].volumeInfo.publishedDate.substring(0,4),
               Isbn: $scope.bookDetails.items[0].volumeInfo.industryIdentifiers[1].identifier
           };
           addBook.save(bookToAdd);
