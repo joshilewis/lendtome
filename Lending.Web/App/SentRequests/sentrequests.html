@@ -1,0 +1,10 @@
+﻿<div ng-controller="sentRequestsController">
+    <br /><br /><br /><br />
+    <h3>Sent Library Link Requests</h3>
+    <div ng-if="!sentRequests.length">You currently have no sent Library Link Requests</div>
+    <div ng-if="sentRequests.length">
+        <div ng-repeat="sentRequest in sentRequests">
+            <img src="{{sentRequest.picture}}" /> <a href="#">{{sentRequest.name}}</a> 
+        </div>
+    </div>
+</div>

@@ -45,6 +45,14 @@ angular.module('lendtome', [
                 templateUrl: '/app/links/links.html',
                 controller: 'linksController'
             })
+            .when('/sentrequests', {
+                templateUrl: '/app/sentrequests/sentrequests.html',
+                controller: 'sentRequestsController'
+            })
+            .when('/receivedrequests', {
+                templateUrl: '/app/receivedRequests/receivedRequests.html',
+                controller: 'receivedRequestsController'
+            })
             .when('/loading', {
                 templateUrl: '/app/loading.html'
             })

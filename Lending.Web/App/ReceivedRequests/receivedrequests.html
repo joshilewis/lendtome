@@ -1,0 +1,10 @@
+﻿<div ng-controller="receivedRequestsController">
+    <br /><br /><br /><br />
+    <h3>Received Library Link Requests</h3>
+    <div ng-if="!receivedRequests.length">You currently have not received any Library Link Requests</div>
+    <div ng-if="receivedRequests.length">
+        <div ng-repeat="receivedRequest in receivedRequests">
+            <img src="{{receivedRequest.picture}}" /> <a href="#">{{receivedRequest.name}}</a> <button ng-click="acceptLink(receivedRequest.id)">Accept</button>
+        </div>
+    </div>
+</div>
