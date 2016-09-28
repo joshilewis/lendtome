@@ -27,7 +27,7 @@ namespace Tests.Commands
             When(() => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             Then1(() => BookAddedSucccessfully());
             AndGETTo($"/libraries/{userId}/books/")
-                .Returns(new BookSearchResult(userId, "library1", "Title", "Author", "isbn", 1982));
+                .Returns(new BookSearchResult(userId, "library1", "user1Picture", "Title", "Author", "isbn", 1982));
             AndEventsSavedForAggregate<Library>(userId, 
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982));
@@ -44,7 +44,7 @@ namespace Tests.Commands
             When(() => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             Then1(() => DuplicateBookNotAdded());
             AndGETTo($"/libraries/{userId}/books/")
-                .Returns(new BookSearchResult(userId, "library1", "Title", "Author", "isbn", 1982));
+                .Returns(new BookSearchResult(userId, "library1", "user1Picture", "Title", "Author", "isbn", 1982));
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982));
@@ -62,7 +62,7 @@ namespace Tests.Commands
             When(() => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             Then1(() => BookAddedSucccessfully());
             AndGETTo($"/libraries/{userId}/books/")
-                .Returns(new BookSearchResult(userId, "library1", "Title", "Author", "isbn", 1982));
+                .Returns(new BookSearchResult(userId, "library1", "user1Picture", "Title", "Author", "isbn", 1982));
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982),
