@@ -40,7 +40,7 @@ namespace Lending.ReadModels.Relational.SearchForBook
                 .WhereRestrictionOn(x => x.LibraryId).IsIn(connectedUserIds)
                 .List()
                 .Select(x =>
-                    new BookSearchResult(x.LibraryId, x.LibraryName, x.LibraryPicture, x.Title, x.Author, x.Isbn,
+                    new BookSearchResult(x.LibraryId, x.LibraryName, x.AdministratorPicture, x.Title, x.Author, x.Isbn,
                         x.PublishYear))
                 .ToArray();
 

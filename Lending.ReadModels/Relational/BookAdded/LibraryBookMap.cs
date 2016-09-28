@@ -16,7 +16,7 @@ namespace Lending.ReadModels.Relational.BookAdded
                 .UniqueKey("UK_Library_Book");
             Map(x => x.LibraryAdminId)
                 .UniqueKey("UK_Library_Book");
-            Map(x => x.LibraryPicture)
+            Map(x => x.AdministratorPicture)
                 .UniqueKey("UK_Library_Book");
             Map(x => x.Title)
                 .UniqueKey("UK_Library_Book");
