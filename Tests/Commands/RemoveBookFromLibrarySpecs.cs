@@ -15,7 +15,7 @@ namespace Tests.Commands
     public class RemoveBookFromLibrarySpecs : Fixture
     {
         [Test]
-        public void RemoveBookInLibraryShouldSucceed()
+        public void CanRemoveABookFromLibrary()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -33,7 +33,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void RemoveBookNotInLibraryShouldFail()
+        public void CantRemoveABookNotInLibrary()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -48,7 +48,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void UnauthorizedRemoveBookInLibraryShouldFail()
+        public void UnauthorizedUserCantRemoveBook()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();

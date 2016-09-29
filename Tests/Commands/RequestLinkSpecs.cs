@@ -18,7 +18,7 @@ namespace Tests.Commands
     public class RequestLinkSpecs : Fixture
     {
         [Test]
-        public void RequestLinkForUnlinkedLibrarysShouldSucceed()
+        public void CanRequestLinkForUnlinkedLibrary()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -42,7 +42,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void DuplicateLinkRequestShouldBeIgnored()
+        public void CantSendDuplicateLinkRequest()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -67,7 +67,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void RequestLinkToNonExistentLibraryShouldFail()
+        public void CantRequestLinkToNonExistentLibrary()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -83,7 +83,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void RequestLinkToLibraryWithPendingRequestShouldFail()
+        public void CantRequestLinkToLibraryWithReverseLinkRequest()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -108,7 +108,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void RequestLinkToLinkedLibrariesShouldBeIgnored()
+        public void CantRequestLinkToLinkedLibrary()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -136,7 +136,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void RequestLinkToSelfShouldFail()
+        public void CantRequestLinkToSelf()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -152,7 +152,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void UnauthorizedRequestLinkShouldFail()
+        public void UnauthorizedUserCantRequestLink()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();

@@ -13,7 +13,7 @@ namespace Tests.Commands
     public class OpenLibrarySpecs : Fixture
     {
         [Test]
-        public void OpenLibraryForUserWithNoLibrariesShouldOpenNewLibrary()
+        public void UserCanOpenALibrary()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -25,7 +25,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void OpenLibraryForUserWithAnOpenLibraryShouldFailBecauseLibraryAlreadyOpened()
+        public void UserCantOpenASecondLibrary()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();

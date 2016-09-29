@@ -19,7 +19,7 @@ namespace Tests.Commands
     public class AcceptLinkSpecs : Fixture
     {
         [Test]
-        public void AcceptLinkFromUnlinkedRequestingLibraryShouldSucceed()
+        public void CanAcceptLinkFromUnlinkedRequester()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -48,7 +48,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void AcceptLinkForUnrequestedLinkIgnored()
+        public void CantAcceptUnrequestedLink()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -70,7 +70,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void AcceptLinkForLinkedLibrariesShouldBeIgnored()
+        public void CantAcceptLinkForLinkedLibraries()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -98,7 +98,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void AcceptLinkByUnauthorizedUserShouldFail()
+        public void UnuathorizedUserCantAcceptLink()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();

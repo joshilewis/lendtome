@@ -18,7 +18,7 @@ namespace Tests.Commands
     public class AddBookToLibrarySpecs : Fixture
     {
         [Test]
-        public void AddingNewBookToLibraryShouldSucceed()
+        public void BookCanBeAddedToLibrary()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -34,7 +34,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void AddingDuplicateBookToLibraryShouldFail()
+        public void CantAddDuplicateBook()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -51,7 +51,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void AddingPreviouslyRemovedBookToLibraryShouldSucceed()
+        public void CanAddARemovedBook()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -72,7 +72,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void UnauthorizedAddBookAddBookShouldFail()
+        public void UnauthorizedUserCantAddBook()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
