@@ -152,6 +152,7 @@
     <Compile Include="Fixture.cs" />
     <Compile Include="MigrationExtensions.cs" />
     <Compile Include="Migrations\InitialCreation.cs" />
+    <Compile Include="Queries\ListLibrarySpecs.cs" />
     <Compile Include="TestData.cs" />
     <Compile Include="Infra\AuthCallBack.cs" />
     <Compile Include="Infra\ContainerTests.cs" />

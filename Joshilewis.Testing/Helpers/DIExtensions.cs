@@ -7,7 +7,7 @@ namespace Joshilewis.Testing.Helpers
     {
         private static IContainer container;
 
-        public static void SetUpDependcyProvision<TContainer>(Registry registry) where TContainer : Container, new()
+        public static void SetUpDependencyProvision<TContainer>(Registry registry) where TContainer : Container, new()
         {
             container = IoC.Initialize<TContainer>(registry);
         }
