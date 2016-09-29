@@ -29,6 +29,8 @@ namespace Tests.Infra
                 {
                     Id = "12345",
                     Name = "user1",
+                    Email = "email",
+                    Picture = "picture",
                 }
             };
             SaveEntities(authenticatedUser);
@@ -58,6 +60,8 @@ namespace Tests.Infra
                 {
                     Id = "12345",
                     Name = "user1",
+                    Email = "email",
+                    Picture = "picture",
                 }
             };
 

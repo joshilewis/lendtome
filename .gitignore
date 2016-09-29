@@ -110,3 +110,4 @@ UpgradeLog*.XML
 /.vs
 /_NCrunch_Lending
 /.vscode
+*nCrunchTemp_*

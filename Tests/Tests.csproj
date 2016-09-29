@@ -39,6 +39,13 @@
     <Reference Include="EventStore.ClientAPI.Embedded">
       <HintPath>..\packages\EventStore.Client.Embedded.3.2.1\lib\net40\EventStore.ClientAPI.Embedded.dll</HintPath>
     </Reference>
+    <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentMigrator.Runner">
+      <HintPath>..\packages\FluentMigrator.Tools.1.6.2\tools\AnyCPU\40\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
     <Reference Include="FluentNHibernate, Version=1.4.0.0, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
       <Private>True</Private>
@@ -143,6 +150,8 @@
     <Compile Include="Commands\RemoveBookFromLibrarySpecs.cs" />
     <Compile Include="Commands\RequestLinkSpecs.cs" />
     <Compile Include="Fixture.cs" />
+    <Compile Include="MigrationExtensions.cs" />
+    <Compile Include="Migrations\InitialCreation.cs" />
     <Compile Include="TestData.cs" />
     <Compile Include="Infra\AuthCallBack.cs" />
     <Compile Include="Infra\ContainerTests.cs" />
@@ -192,7 +201,6 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

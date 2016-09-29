@@ -17,6 +17,7 @@ using static Joshilewis.Testing.Helpers.DIExtensions;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
 using static Joshilewis.Testing.Helpers.PersistenceExtensions;
+using static Tests.MigrationExtensions;
 
 namespace Tests
 {
@@ -29,13 +30,15 @@ namespace Tests
             SetUpDependcyProvision<LendingContainer>(new TestRegistry());
             SetUpOwinServer<Startup>();
             SetUpEventStore();
-            SetUpPersistence();
+            //SetUpPersistence();
+            BuildSchema();
         }
 
         [TearDown]
         public virtual void TearDown()
         {
-            TearDownPersistence();
+            DropSchema();
+            //TearDownPersistence();
             TearDownEventStore();
             TearDownOwinServer();
         }
