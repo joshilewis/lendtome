@@ -18,14 +18,14 @@ namespace Lending.Domain.RequestLink
 
         public override object Handle(RequestLink command)
         {
-            if (command.TargetLibraryId == command.AggregateId) return Fail(CantConnectToSelf);
+            if (command.TargetLibraryId == command.AggregateId) return Success();
 
             Library library = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
             library.CheckUserAuthorized(command.UserId);
             library.RequestLink(command.ProcessId, command.TargetLibraryId);
 
             Library targetLibrary = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.TargetLibraryId));
-            targetLibrary.InitiateLinkAcceptance(command.ProcessId, command.AggregateId);
+            targetLibrary.ReceiveLinkRequest(command.ProcessId, command.AggregateId);
 
             EventRepository.Save(library);
             EventRepository.Save(targetLibrary);

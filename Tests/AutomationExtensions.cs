@@ -69,14 +69,6 @@ namespace Tests
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
-        public static void DuplicateBookNotAdded()
-        {
-            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
-            {
-                ReasonPhrase = Library.BookAlreadyInLibrary,
-            });
-        }
-
         public static void UnauthorisedCommandIgnored(Guid userId, Type aggregateType, Guid aggregateId)
         {
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.Forbidden)
@@ -110,11 +102,7 @@ namespace Tests
 
         public static void DuplicateLinkRequestIgnored()
         {
-            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
-            {
-                ReasonPhrase = Library.LinkAlreadyRequested
-            });
-
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
         public static void FailtNotFound()
@@ -127,10 +115,7 @@ namespace Tests
 
         public static void ReverseLinkRequestIgnored()
         {
-            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
-            {
-                ReasonPhrase = Library.ReverseLinkAlreadyRequested
-            });
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
 
         }
 
@@ -151,10 +136,7 @@ namespace Tests
         }
         public static void LinkRequestForLinkedLibrariesIgnored()
         {
-            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
-            {
-                ReasonPhrase = Library.LibrariesAlreadyLinked
-            });
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
         public static void LibrariesLinked()

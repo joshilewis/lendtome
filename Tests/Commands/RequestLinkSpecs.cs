@@ -36,7 +36,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void CantSendDuplicateLinkRequest()
+        public void SendingDuplicateLinkRequestIgnored()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -71,7 +71,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void CantRequestLinkToLibraryWithReverseLinkRequest()
+        public void RequestLinkToLibraryWithReverseLinkRequestIsIgnored()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -92,7 +92,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void CantRequestLinkToLinkedLibrary()
+        public void RequestLinkToLinkedLibraryIsIgnored()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();

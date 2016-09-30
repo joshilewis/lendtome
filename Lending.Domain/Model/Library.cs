@@ -22,7 +22,7 @@ namespace Lending.Domain.Model
         public string Name { get; protected set; }
         public List<Guid> Administrators { get; private set; }
 
-        public List<Guid> PendingLinkRequests { get; private set; }
+        public List<Guid> SentLinkRequests { get; private set; }
         public List<Guid> ReceivedLinkRequests { get; private set; }
         public List<Guid> LinkedLibraries { get; private set; }
         public List<Book> Books { get; private set; } 
@@ -36,7 +36,7 @@ namespace Lending.Domain.Model
         protected Library()
         {
             Administrators = new List<Guid>();
-            PendingLinkRequests = new List<Guid>();
+            SentLinkRequests = new List<Guid>();
             ReceivedLinkRequests = new List<Guid>();
             LinkedLibraries = new List<Guid>();
             Books = new List<Book>();
@@ -66,7 +66,7 @@ namespace Lending.Domain.Model
 
         protected virtual void When(LinkRequested @event)
         {
-            PendingLinkRequests.Add(@event.TargetLibraryId);
+            SentLinkRequests.Add(@event.TargetLibraryId);
         }
 
         protected virtual void When(LinkRequestReceived @event)
@@ -82,7 +82,7 @@ namespace Lending.Domain.Model
 
         protected virtual void When(LinkCompleted @event)
         {
-            PendingLinkRequests.Remove(@event.AcceptingLibraryId);
+            SentLinkRequests.Remove(@event.AcceptingLibraryId);
             LinkedLibraries.Add(@event.AcceptingLibraryId);
         }
 
@@ -118,18 +118,19 @@ namespace Lending.Domain.Model
         }
 
         public void RequestLink(Guid processId, Guid desinationLibraryId)
-        {
-            if (PendingLinkRequests.Contains(desinationLibraryId)) Fail(LinkAlreadyRequested);
-            if (ReceivedLinkRequests.Contains(desinationLibraryId)) Fail(ReverseLinkAlreadyRequested);
-            if(LinkedLibraries.Contains(desinationLibraryId)) Fail(LibrariesAlreadyLinked);
+        { 
+            if (SentLinkRequests.Contains(desinationLibraryId)) return;
+            if (ReceivedLinkRequests.Contains(desinationLibraryId)) return;
+            if(LinkedLibraries.Contains(desinationLibraryId)) return;
 
             RaiseEvent(new LinkRequested(processId, Id, desinationLibraryId));
         }
 
-        public void InitiateLinkAcceptance(Guid processId, Guid sourceLibraryId)
+        public void ReceiveLinkRequest(Guid processId, Guid sourceLibraryId)
         {
-            if (ReceivedLinkRequests.Contains(sourceLibraryId)) Fail(ReverseLinkAlreadyRequested);
-            if (LinkedLibraries.Contains(sourceLibraryId)) Fail(LibrariesAlreadyLinked);
+            if (ReceivedLinkRequests.Contains(sourceLibraryId)) return;
+            if (SentLinkRequests.Contains(sourceLibraryId)) return;
+            if (LinkedLibraries.Contains(sourceLibraryId)) return;
 
             RaiseEvent(new LinkRequestReceived(processId, Id, sourceLibraryId));
         }
@@ -145,7 +146,7 @@ namespace Lending.Domain.Model
         public void CompleteLink(Guid processId, Guid acceptingLibraryId)
         {
             if (LinkedLibraries.Contains(acceptingLibraryId)) Fail(LibrariesAlreadyLinked);
-            if (!PendingLinkRequests.Contains(acceptingLibraryId)) Fail(LinkNotRequested);
+            if (!SentLinkRequests.Contains(acceptingLibraryId)) Fail(LinkNotRequested);
 
             RaiseEvent(new LinkCompleted(processId, Id, acceptingLibraryId));
         }
