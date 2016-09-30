@@ -17,7 +17,6 @@ using Lending.Domain.RequestLink;
 using Lending.ReadModels.Relational;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 
-
 namespace Tests
 {
     public static class AutomationExtensions
@@ -67,7 +66,7 @@ namespace Tests
 
         public static void BookAddedSucccessfully()
         {
-            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.Created));
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
         public static void DuplicateBookNotAdded()
@@ -181,6 +180,5 @@ namespace Tests
                 ReasonPhrase = Library.LibrariesAlreadyLinked
             });
         }
-
     }
 }

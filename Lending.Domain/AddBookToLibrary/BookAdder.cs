@@ -22,7 +22,7 @@ namespace Lending.Domain.AddBookToLibrary
 
             EventRepository.Save(library);
 
-            return Created();
+            return Success();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void CantAddDuplicateBook()
+        public void AddingDuplicateBookIsIgnored()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -38,10 +38,11 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             Given(() => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             When(() => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
-            Then1(() => DuplicateBookNotAdded());
+            Then1(() => BookAddedSucccessfully());
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
-                new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982));
+                new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982)
+                );
         }
 
         [Test]

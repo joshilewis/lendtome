@@ -154,7 +154,7 @@ namespace Lending.Domain.Model
 
         public void AddBookToLibrary(Guid processId, string title, string author, string isbn, int publishYear)
         {
-            if (Books.Contains(new Book(title, author, isbn, publishYear))) Fail(BookAlreadyInLibrary);
+            if (Books.Contains(new Book(title, author, isbn, publishYear))) return;
             RaiseEvent(new BookAddedToLibrary(processId, Id, title, author, isbn, publishYear));
         }
 
