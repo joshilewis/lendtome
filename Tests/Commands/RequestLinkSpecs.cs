@@ -116,7 +116,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void CantRequestLinkToSelf()
+        public void RequestLinkToSelfIsIgnored()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();

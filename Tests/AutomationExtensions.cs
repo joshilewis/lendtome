@@ -121,10 +121,7 @@ namespace Tests
 
         public static void LinkRequestedToSelfIgnored()
         {
-            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
-            {
-                ReasonPhrase = LinkRequester.CantConnectToSelf
-            });
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
 
         }
 
@@ -146,18 +143,12 @@ namespace Tests
 
         public static void AcceptUnrequestedLinkIgnored()
         {
-            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
-            {
-                ReasonPhrase = Library.NoLinkRequested
-            });
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
         public static void AcceptLinkForLinkedLibrariesIgnored()
         {
-            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
-            {
-                ReasonPhrase = Library.LibrariesAlreadyLinked
-            });
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
     }
 }

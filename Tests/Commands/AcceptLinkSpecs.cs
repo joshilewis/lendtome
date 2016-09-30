@@ -42,7 +42,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void CantAcceptUnrequestedLink()
+        public void AcceptUnrequestedLinkIsIgnored()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
@@ -60,7 +60,7 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void CantAcceptLinkForLinkedLibraries()
+        public void AcceptLinkForLinkedLibrariesIsIgnored()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();

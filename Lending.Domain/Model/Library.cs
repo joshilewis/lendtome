@@ -137,16 +137,16 @@ namespace Lending.Domain.Model
 
         public void AcceptLink(Guid processId, Guid requestingLibraryId)
         {
-            if (LinkedLibraries.Contains(requestingLibraryId)) Fail(LibrariesAlreadyLinked);
-            if (!ReceivedLinkRequests.Contains(requestingLibraryId)) Fail(NoLinkRequested);
+            if (LinkedLibraries.Contains(requestingLibraryId)) return;
+            if (!ReceivedLinkRequests.Contains(requestingLibraryId)) return;
 
             RaiseEvent(new LinkAccepted(processId, Id, requestingLibraryId));
         }
 
         public void CompleteLink(Guid processId, Guid acceptingLibraryId)
         {
-            if (LinkedLibraries.Contains(acceptingLibraryId)) Fail(LibrariesAlreadyLinked);
-            if (!SentLinkRequests.Contains(acceptingLibraryId)) Fail(LinkNotRequested);
+            if (LinkedLibraries.Contains(acceptingLibraryId)) return;
+            if (!SentLinkRequests.Contains(acceptingLibraryId)) return;
 
             RaiseEvent(new LinkCompleted(processId, Id, acceptingLibraryId));
         }
