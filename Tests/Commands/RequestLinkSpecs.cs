@@ -3,9 +3,7 @@ using Lending.Domain.AcceptLink;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.Domain.RequestLink;
-using Lending.ReadModels.Relational.ListLibrayLinks;
 using NUnit.Framework;
-using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
 using static Tests.AutomationExtensions;
 
@@ -29,10 +27,6 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, user2Id, "library2"));
             When(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
             Then1(() => LinkRequestCreated());
-            AndGETTo($"/libraries/{userId}/links/sent").As(userId).Returns(new LibrarySearchResult(user2Id, "library2", "user2Picture"));
-            AndGETTo($"/libraries/{userId}/links/received").As(user2Id).Returns(new LibrarySearchResult(userId, "library1", "user1Picture"));
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult[] {});
-            AndGETTo($"/libraries/{userId}/links/").As(user2Id).Returns(new LibrarySearchResult[] { });
             AndEventsSavedForAggregate<Library>(userId, 
                 new LibraryOpened(transactionId, userId, "library1", userId), 
                 new LinkRequested(transactionId, userId, user2Id));
@@ -54,10 +48,6 @@ namespace Tests.Commands
             Given(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
             When(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
             Then1(() => DuplicateLinkRequestIgnored());
-            AndGETTo($"/libraries/{userId}/links/sent").As(userId).Returns(new LibrarySearchResult(user2Id, "library2", "user2Picture"));
-            AndGETTo($"/libraries/{userId}/links/received").As(user2Id).Returns(new LibrarySearchResult(userId, "library1", "user1Picture"));
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/").As(user2Id).Returns(new LibrarySearchResult[] { });
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new LinkRequested(transactionId, userId, user2Id));
@@ -76,8 +66,6 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
             Then1(() => FailtNotFound());
-            AndGETTo($"/libraries/{userId}/links/sent").As(userId).Returns(new LibrarySearchResult[] {});
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult[] { });
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId));
         }
@@ -95,10 +83,6 @@ namespace Tests.Commands
             Given(() => RequestLibraryLink(transactionId, user2Id, user2Id, userId));
             When(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
             Then1(() => ReverseLinkRequestIgnored());
-            AndGETTo($"/libraries/{userId}/links/received").As(userId).Returns(new LibrarySearchResult(user2Id, "library2", "user2Picture"));
-            AndGETTo($"/libraries/{userId}/links/sent").As(user2Id).Returns(new LibrarySearchResult(userId, "library1", "user1Picture"));
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/").As(user2Id).Returns(new LibrarySearchResult[] { });
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new LinkRequestReceived(transactionId, userId, user2Id));
@@ -121,10 +105,6 @@ namespace Tests.Commands
             Given(() => AcceptLibraryLink(transactionId, user2Id, user2Id, userId));
             When(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
             Then1(() => LinkRequestForLinkedLibrariesIgnored());
-            AndGETTo($"/libraries/{userId}/links/sent").As(userId).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/received").As(user2Id).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult(user2Id, "library2", "user2Picture"));
-            AndGETTo($"/libraries/{userId}/links/").As(user2Id).Returns(new LibrarySearchResult(userId, "library1", "user1Picture"));
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new LinkRequested(transactionId, userId, user2Id),
@@ -144,9 +124,6 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => RequestLibraryLink(transactionId, userId, userId, userId));
             Then1(() => LinkRequestedToSelfIgnored());
-            AndGETTo($"/libraries/{userId}/links/sent").As(userId).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult[] { });
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId));
         }
@@ -160,9 +137,6 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => RequestLibraryLink(transactionId, userId, Guid.Empty, Guid.Empty));
             Then1(() => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId));
-            AndGETTo($"/libraries/{userId}/links/sent").As(userId).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult[] { });
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId));
         }

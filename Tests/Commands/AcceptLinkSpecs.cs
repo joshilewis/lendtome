@@ -3,9 +3,7 @@ using Lending.Domain.AcceptLink;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.Domain.RequestLink;
-using Lending.ReadModels.Relational.ListLibrayLinks;
 using NUnit.Framework;
-using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
 using static Tests.AutomationExtensions;
 
@@ -33,10 +31,6 @@ namespace Tests.Commands
             When(() => AcceptLibraryLink(transactionId, user2Id, user2Id, userId));
             Then1(() => LibrariesLinked());
 
-            AndGETTo($"/libraries/{userId}/links/sent").As(userId).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/received").As(user2Id).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult(user2Id, "library2", "user2Picture"));
-            AndGETTo($"/libraries/{userId}/links/").As(user2Id).Returns(new LibrarySearchResult(userId, "library1", "user1Picture"));
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new LinkRequested(transactionId, userId, user2Id),
@@ -61,10 +55,6 @@ namespace Tests.Commands
             When(() => AcceptLibraryLink(transactionId, user2Id, user2Id, userId));
             Then1(() => AcceptUnrequestedLinkIgnored());
 
-            AndGETTo($"/libraries/{userId}/links/sent").As(userId).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/received").As(user2Id).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{user2Id}/links/").As(user2Id).Returns(new LibrarySearchResult[] { });
             AndEventsSavedForAggregate<Library>(userId, new LibraryOpened(transactionId, userId, "library1", userId));
             AndEventsSavedForAggregate<Library>(user2Id, new LibraryOpened(transactionId, user2Id, "library2", user2Id));
         }
@@ -83,10 +73,6 @@ namespace Tests.Commands
             Given(() => AcceptLibraryLink(transactionId, user2Id, user2Id, userId));
             When(() => AcceptLibraryLink(transactionId, user2Id, user2Id, userId));
             Then1(() => AcceptLinkForLinkedLibrariesIgnored());
-            AndGETTo($"/libraries/{userId}/links/sent").As(userId).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/received").As(user2Id).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult(user2Id, "library2", "user2Picture"));
-            AndGETTo($"/libraries/{userId}/links/").As(user2Id).Returns(new LibrarySearchResult(userId, "library1", "user1Picture"));
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new LinkRequested(transactionId, userId, user2Id),
@@ -112,10 +98,6 @@ namespace Tests.Commands
             When(() => AcceptLibraryLink(transactionId, user2Id, Guid.Empty, userId));
             Then1(() => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), user2Id));
 
-            AndGETTo($"/libraries/{userId}/links/sent").As(userId).Returns(new LibrarySearchResult(user2Id, "library2", "user2Picture"));
-            AndGETTo($"/libraries/{userId}/links/received").As(user2Id).Returns(new LibrarySearchResult(userId, "library1", "user1Picture"));
-            AndGETTo($"/libraries/{userId}/links/").As(userId).Returns(new LibrarySearchResult[] { });
-            AndGETTo($"/libraries/{userId}/links/").As(user2Id).Returns(new LibrarySearchResult[] { });
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new LinkRequested(transactionId, userId, user2Id));

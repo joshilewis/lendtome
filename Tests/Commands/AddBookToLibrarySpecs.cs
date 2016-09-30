@@ -3,9 +3,7 @@ using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
-using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
-using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
 using static Tests.AutomationExtensions;
 
@@ -26,8 +24,6 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             Then1(() => BookAddedSucccessfully());
-            AndGETTo($"/libraries/{userId}/books/")
-                .Returns(new BookSearchResult(userId, "library1", "user1Picture", "Title", "Author", "isbn", 1982));
             AndEventsSavedForAggregate<Library>(userId, 
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982));
@@ -43,8 +39,6 @@ namespace Tests.Commands
             Given(() => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             When(() => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             Then1(() => DuplicateBookNotAdded());
-            AndGETTo($"/libraries/{userId}/books/")
-                .Returns(new BookSearchResult(userId, "library1", "user1Picture", "Title", "Author", "isbn", 1982));
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982));
@@ -61,8 +55,6 @@ namespace Tests.Commands
             Given(() => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             When(() => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             Then1(() => BookAddedSucccessfully());
-            AndGETTo($"/libraries/{userId}/books/")
-                .Returns(new BookSearchResult(userId, "library1", "user1Picture", "Title", "Author", "isbn", 1982));
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982),
@@ -80,7 +72,6 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => AddBookToLibrary1(transactionId, userId, Guid.Empty, "Title", "Author", "isbn", 1982));
             Then1(() => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId));
-            AndGETTo($"/libraries/{userId}/books/").Returns(new BookSearchResult[] { });
             AndEventsSavedForAggregate<Library>(userId, 
                 new LibraryOpened(transactionId, userId, "library1", userId));
         }

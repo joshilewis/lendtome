@@ -3,9 +3,7 @@ using Lending.Domain.AddBookToLibrary;
 using Lending.Domain.Model;
 using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
-using Lending.ReadModels.Relational.SearchForBook;
 using NUnit.Framework;
-using static Joshilewis.Testing.Helpers.ApiExtensions;
 using static Joshilewis.Testing.Helpers.EventStoreExtensions;
 using static Tests.AutomationExtensions;
 
@@ -24,7 +22,6 @@ namespace Tests.Commands
             Given(() => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             When(() => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             Then1(() => BookRemovedSucccessfully());
-            AndGETTo($"/libraries/{userId}/books/").Returns(new BookSearchResult[] { });
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982),
@@ -41,7 +38,6 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             Then1(() => BookNotInLibrary());
-            AndGETTo($"/libraries/{userId}/books/").Returns(new BookSearchResult[] { });
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId)
             );
@@ -56,7 +52,6 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => RemoveBookFromLibrary(transactionId, userId, Guid.Empty, "Title", "Author", "isbn", 1982));
             Then1(() => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId));
-            AndGETTo($"/libraries/{userId}/books/").Returns(new BookSearchResult[] { });
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId)
             );
