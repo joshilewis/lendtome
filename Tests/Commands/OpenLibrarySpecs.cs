@@ -17,20 +17,22 @@ namespace Tests.Commands
             var userId = Guid.NewGuid();
             Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
             When(() => OpenLibrary(transactionId, userId, "library1"));
-            Then1(() => LibraryCreatedSuccessfully());
+            Then1(() => LibraryOpenedSuccessfully());
             AndEventsSavedForAggregate<Library>(userId, new LibraryOpened(transactionId, userId, "library1", userId));
         }
 
         [Test]
-        public void UserCantOpenASecondLibrary()
+        public void UserCanOpenASecondLibrary()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
             Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => OpenLibrary(transactionId, userId, "library1"));
-            Then1(() => SecondLibraryNotCreated());
-            AndEventsSavedForAggregate<Library>(userId, new LibraryOpened(transactionId, userId, "library1", userId));
+            Then1(() => LibraryOpenedSuccessfully());
+            AndEventsSavedForAggregate<Library>(userId, 
+                new LibraryOpened(transactionId, userId, "library1", userId),
+                new LibraryOpened(transactionId, userId, "library1", userId));
         }
 
 

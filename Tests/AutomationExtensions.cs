@@ -42,12 +42,9 @@ namespace Tests
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.Created));
         }
 
-        public static void SecondLibraryNotCreated()
+        public static void DuplicateEventIgnored()
         {
-            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
-            {
-                ReasonPhrase = LibraryOpener.UserAlreadyOpenedLibrary,
-            });
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
         public static void AddBookToLibrary1(Guid transactionId, Guid libraryId, Guid userId, string title, string author,

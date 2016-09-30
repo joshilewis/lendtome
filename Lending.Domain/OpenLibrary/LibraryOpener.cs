@@ -21,9 +21,6 @@ namespace Lending.Domain.OpenLibrary
 
         public override object Handle(OpenLibrary command)
         {
-            if (checkIfUserHasOpenedLibrary.UserHasOpenedLibrary(command.UserId))
-                Fail(UserAlreadyOpenedLibrary);
-
             Library library = Library.Open(command.ProcessId, command.UserId, command.Name, command.UserId);
             EventRepository.Save(library);
 
