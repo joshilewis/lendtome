@@ -30,14 +30,14 @@ namespace Tests.Commands
         }
 
         [Test]
-        public void CantRemoveABookNotInLibrary()
+        public void RemovingBookNotInLibraryIgnored()
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
             Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
-            Then1(() => BookNotInLibrary());
+            Then1(() => IgnoreBecauseBookNotInLibrary());
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId)
             );

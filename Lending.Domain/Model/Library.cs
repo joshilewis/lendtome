@@ -18,8 +18,6 @@ namespace Lending.Domain.Model
         public const string LinkAlreadyRequested = "A link request for these libraries already exists";
         public const string ReverseLinkAlreadyRequested = "A reverse link request for these libraries already exists";
         public const string LinkNotRequested = "This library did not request to link with the specified library";
-        public const string BookAlreadyInLibrary = "This book already exists in this library";
-        public const string BookNotInLibrary = "This book is not in this library";
 
         public string Name { get; protected set; }
         public List<Guid> Administrators { get; private set; }
@@ -160,7 +158,7 @@ namespace Lending.Domain.Model
 
         public void RemoveBookFromLibrary(Guid processId, string title, string author, string isbn, int publishYear)
         {
-            if (!Books.Contains(new Book(title, author, isbn, publishYear))) Fail(BookNotInLibrary);
+            if (!Books.Contains(new Book(title, author, isbn, publishYear))) return;
             RaiseEvent(new BookRemovedFromLibrary(processId, Id, title, author, isbn, publishYear));
         }
     }

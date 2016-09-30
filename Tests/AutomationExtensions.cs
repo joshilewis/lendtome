@@ -90,12 +90,9 @@ namespace Tests
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
-        public static void BookNotInLibrary()
+        public static void IgnoreBecauseBookNotInLibrary()
         {
-            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.BadRequest)
-            {
-                ReasonPhrase = Library.BookNotInLibrary
-            });
+            command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
         public static void RequestLibraryLink(Guid transactionId, Guid libraryId, Guid userId,
