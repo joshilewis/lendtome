@@ -37,7 +37,7 @@ namespace Tests
             command.IsPOSTedTo("/libraries");
         }
 
-        public static void LibraryCreatedSuccessfully()
+        public static void LibraryOpenedSuccessfully()
         {
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.Created));
         }
