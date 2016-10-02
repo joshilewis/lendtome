@@ -86,6 +86,7 @@
     <Compile Include="Relational\ListReceivedLinks\ListReceivedLinksHandler.cs" />
     <Compile Include="Relational\ListRequestedLinks\ListRequestedLinks.cs" />
     <Compile Include="Relational\ListRequestedLinks\ListRequestedLinksHandler.cs" />
+    <Compile Include="Relational\Migrations\InitialCreation.cs" />
     <Compile Include="Relational\NHibernateEventHandler.cs" />
     <Compile Include="Relational\NHibernateQueryHandler.cs" />
     <Compile Include="Relational\SearchForBook\BookSearchResult.cs" />

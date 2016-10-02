@@ -26,6 +26,7 @@ namespace Lending.Web
             //LogManager.LogFactory = new ServiceStack.Logging.Log4Net.Log4NetFactory(true);
 
             IoC.Initialize<LendingContainer>(new WebRegistry());
+            new StartupMigrator().InitialiseAndMigrate();
 
             //AppHost.Start(new StructureMapContainerAdapter(Container));
             
