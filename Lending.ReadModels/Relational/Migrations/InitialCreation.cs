@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using FluentMigrator;
 
-namespace Tests.Migrations
+namespace Lending.ReadModels.Relational.Migrations
 {
     [Migration(20160929)]
     public class InitialCreation : Migration

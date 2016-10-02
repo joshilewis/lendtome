@@ -1,52 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using FluentMigrator;
-using FluentMigrator.Runner;
-using FluentMigrator.Runner.Announcers;
-using FluentMigrator.Runner.Initialization;
-using FluentMigrator.Runner.Processors.Postgres;
+﻿using System.Configuration;
+using Joshilewis.Infrastructure.Migrations;
+using Lending.ReadModels.Relational.Migrations;
 
 namespace Tests
 {
     public static class MigrationExtensions
     {
-        private static readonly MigrationRunner runner;
+        private static readonly Migrator Migrator;
 
         static MigrationExtensions()
         {
-            var announcer = new TextWriterAnnouncer(Console.WriteLine);
-
-            Assembly assembly = Assembly.GetExecutingAssembly();
-
-            var migrationContext = new RunnerContext(announcer);
-
-            var options = new MigrationOptions {PreviewOnly = false, Timeout = 60};
-            PostgresProcessorFactory factory = new PostgresProcessorFactory();
-            string connectionString = ConfigurationManager.ConnectionStrings["lender_db"].ConnectionString;
-            IMigrationProcessor processor = factory.Create(connectionString, announcer, options);
-            runner = new MigrationRunner(assembly, migrationContext, processor);
-
+            Migrator = new Migrator(
+                ConfigurationManager.ConnectionStrings["lender_db"].ConnectionString,
+                typeof(InitialCreation).Assembly);
         }
 
         public static void BuildSchema()
         {
-            runner.MigrateUp(true);
+            Migrator.BuildSchema();
         }
 
         public static void DropSchema()
         {
-            runner.MigrateDown(0);
+            Migrator.DropSchema();
         }
-    }
-    public class MigrationOptions : IMigrationProcessorOptions
-    {
-        public bool PreviewOnly { get; set; }
-        public string ProviderSwitches { get; set; }
-        public int Timeout { get; set; }
     }
 }

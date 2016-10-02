@@ -39,6 +39,13 @@
       <HintPath>..\packages\EventStore.Client.3.3.1\lib\net40\EventStore.ClientAPI.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentMigrator.Runner">
+      <HintPath>..\packages\FluentMigrator.Tools.1.6.2\tools\AnyCPU\40\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
@@ -116,6 +123,8 @@
     <Compile Include="EventRouting\InMemoryEventConsumer.cs" />
     <Compile Include="EventRouting\InMemoryEventEmitter.cs" />
     <Compile Include="EventStore\EventStoreEventRepository.cs" />
+    <Compile Include="Migrations\MigrationOptions.cs" />
+    <Compile Include="Migrations\Migrator.cs" />
     <Compile Include="Nancy\AuthenticatedGetModule.cs" />
     <Compile Include="Nancy\GetModule.cs" />
     <Compile Include="Nancy\PostModule.cs" />
