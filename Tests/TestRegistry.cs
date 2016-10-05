@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Embedded;
 using EventStore.Core;
+using Joshilewis.Cqrs;
 using Joshilewis.Infrastructure.EventRouting;
 using Joshilewis.Infrastructure.UnitOfWork;
 using Lending.Execution;
@@ -37,16 +38,20 @@ namespace Tests
                 .Singleton()
                 .Use(connection);
 
-            For<IUnitOfWork>()
+            For<EventStoreUnitOfWork>()
                 .HybridHttpOrThreadLocalScoped()
                 .Use<TestUnitOfWork>()
-                .Ctor<ISessionFactory>()
-                .Is(c => c.GetInstance<ISessionFactory>())
                 .Ctor<IEventEmitter>()
                 .Is(c => c.GetInstance<IEventEmitter>())
-                .Ctor<EventDispatcher>()
-                .Is(c => c.GetInstance<EventDispatcher>())
                 ;
+
+            //For<IEventRepository>()
+            //    .Use(c => c.GetInstance<TestUnitOfWork>().EventRepository)
+            //    ;
+            For<NHibernateUnitOfWork>()
+                .HybridHttpOrThreadLocalScoped()
+                .Use<NHibernateUnitOfWork>();
+
         }
     }
 }

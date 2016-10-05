@@ -1,6 +1,7 @@
 ﻿using Joshilewis.Cqrs;
 using Joshilewis.Cqrs.Command;
 using Joshilewis.Cqrs.Query;
+using Joshilewis.Infrastructure.EventRouting;
 using Joshilewis.Infrastructure.Nancy;
 using Joshilewis.Infrastructure.UnitOfWork;
 using Lending.Domain.AcceptLink;
@@ -22,7 +23,7 @@ namespace Lending.Execution.Modules
 {
     public class SearchForLibraryModule : GetModule<SearchForLibrary>
     {
-        public SearchForLibraryModule(IUnitOfWork unitOfWork, IMessageHandler<SearchForLibrary> messageHandler)
+        public SearchForLibraryModule(NHibernateUnitOfWork unitOfWork, IMessageHandler<SearchForLibrary> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/{searchstring}")
         {
         }
@@ -30,8 +31,10 @@ namespace Lending.Execution.Modules
 
     public class RequestLinkModule: PostModule<RequestLink>
     {
-        public RequestLinkModule(IUnitOfWork unitOfWork, ICommandHandler<RequestLink> commandHandler)
-            : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/links/request/")
+        public RequestLinkModule(EventStoreUnitOfWork unitOfWork, ICommandHandler<RequestLink> commandHandler,
+            NHibernateUnitOfWork relationalUnitOfWork, EventDispatcher eventDispatcher)
+            : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/links/request/", relationalUnitOfWork,
+                eventDispatcher)
         {
         }
 
@@ -39,8 +42,10 @@ namespace Lending.Execution.Modules
 
     public class AcceptLinkModule : PostModule<AcceptLink>
     {
-        public AcceptLinkModule(IUnitOfWork unitOfWork, ICommandHandler<AcceptLink> commandHandler)
-            : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/links/accept/")
+        public AcceptLinkModule(EventStoreUnitOfWork unitOfWork, ICommandHandler<AcceptLink> commandHandler,
+            NHibernateUnitOfWork relationalUnitOfWork, EventDispatcher eventDispatcher)
+            : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/links/accept/", relationalUnitOfWork,
+                eventDispatcher)
         {
         }
 
@@ -48,8 +53,10 @@ namespace Lending.Execution.Modules
 
     public class AddBookModule : PostModule<AddBookToLibrary>
     {
-        public AddBookModule(IUnitOfWork unitOfWork, ICommandHandler<AddBookToLibrary> commandHandler)
-            : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/books/add")
+        public AddBookModule(EventStoreUnitOfWork unitOfWork, ICommandHandler<AddBookToLibrary> commandHandler,
+            NHibernateUnitOfWork relationalUnitOfWork, EventDispatcher eventDispatcher)
+            : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/books/add", relationalUnitOfWork,
+                eventDispatcher)
         {
         }
 
@@ -57,16 +64,20 @@ namespace Lending.Execution.Modules
 
     public class RemoveBookModule : PostModule<RemoveBookFromLibrary>
     {
-        public RemoveBookModule(IUnitOfWork unitOfWork, ICommandHandler<RemoveBookFromLibrary> commandHandler)
-            : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/books/remove")
+        public RemoveBookModule(EventStoreUnitOfWork unitOfWork, ICommandHandler<RemoveBookFromLibrary> commandHandler,
+            NHibernateUnitOfWork relationalUnitOfWork, EventDispatcher eventDispatcher)
+            : base(unitOfWork, commandHandler, "/libraries/{AggregateId}/books/remove", relationalUnitOfWork,
+                eventDispatcher)
         {
         }
 
     }
     public class OpenLibraryModule : PostModule<OpenLibrary>
     {
-        public OpenLibraryModule(IUnitOfWork unitOfWork, ICommandHandler<OpenLibrary> commandHandler)
-            : base(unitOfWork, commandHandler, "/libraries/")
+        public OpenLibraryModule(EventStoreUnitOfWork unitOfWork, ICommandHandler<OpenLibrary> commandHandler,
+            NHibernateUnitOfWork relationalUnitOfWork, EventDispatcher eventDispatcher)
+            : base(unitOfWork, commandHandler, "/libraries/", relationalUnitOfWork,
+                eventDispatcher)
         {
         }
 
@@ -74,7 +85,7 @@ namespace Lending.Execution.Modules
 
     public class ListLibrariesModule : AuthenticatedGetModule<ListLibraries>
     {
-        public ListLibrariesModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraries> messageHandler)
+        public ListLibrariesModule(NHibernateUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraries> messageHandler)
             : base(unitOfWork, messageHandler, "/libraries/")
         {
         }
@@ -82,7 +93,7 @@ namespace Lending.Execution.Modules
 
     public class SearchForBookModule : AuthenticatedGetModule<SearchForBook>
     {
-        public SearchForBookModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<SearchForBook> queryHandler)
+        public SearchForBookModule(NHibernateUnitOfWork unitOfWork, IAuthenticatedQueryHandler<SearchForBook> queryHandler)
             : base(unitOfWork, queryHandler, "/books/{SearchString}")
         {
         }
@@ -90,7 +101,7 @@ namespace Lending.Execution.Modules
 
     public class ListRequestedLinksModule : AuthenticatedGetModule<ListRequestedLinks>
     {
-        public ListRequestedLinksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListRequestedLinks> queryHandler)
+        public ListRequestedLinksModule(NHibernateUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListRequestedLinks> queryHandler)
             : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/links/sent")
         {
         }
@@ -98,7 +109,7 @@ namespace Lending.Execution.Modules
 
     public class ListReceivedLinksModule : AuthenticatedGetModule<ListReceivedLinks>
     {
-        public ListReceivedLinksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListReceivedLinks> queryHandler)
+        public ListReceivedLinksModule(NHibernateUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListReceivedLinks> queryHandler)
             : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/links/received")
         {
         }
@@ -106,7 +117,7 @@ namespace Lending.Execution.Modules
 
     public class ListLibraryLinksModule : AuthenticatedGetModule<ListLibraryLinks>
     {
-        public ListLibraryLinksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraryLinks> queryHandler)
+        public ListLibraryLinksModule(NHibernateUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraryLinks> queryHandler)
             : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/links/")
         {
         }
@@ -114,7 +125,7 @@ namespace Lending.Execution.Modules
 
     public class ListLibraryBooksModule : AuthenticatedGetModule<ListLibraryBooks>
     {
-        public ListLibraryBooksModule(IUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraryBooks> queryHandler)
+        public ListLibraryBooksModule(NHibernateUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraryBooks> queryHandler)
             : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/books/")
         {
         }

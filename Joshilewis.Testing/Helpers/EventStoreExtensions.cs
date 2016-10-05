@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EventStore.ClientAPI;
 using EventStore.Core;
 using Joshilewis.Cqrs;
+using Joshilewis.Infrastructure.UnitOfWork;
 using NUnit.Framework;
 
 namespace Joshilewis.Testing.Helpers
@@ -26,8 +27,14 @@ namespace Joshilewis.Testing.Helpers
 
         public static void AndEventsSavedForAggregate<TAggregate>(Guid aggregateId, params Event[] expectedEvents) where TAggregate : Aggregate
         {
-            IEventRepository eventRepository = DIExtensions.Container.GetInstance<IEventRepository>();
-            IEnumerable<Event> actualEvents = eventRepository.GetEventsForAggregate<TAggregate>(aggregateId);
+            IEnumerable<Event> actualEvents = new Event[] {};
+            EventStoreUnitOfWork unitOfWork = DIExtensions.Container.GetInstance<EventStoreUnitOfWork>();
+            unitOfWork.DoInTransaction(() =>
+            {
+                IEventRepository eventRepository = unitOfWork.EventRepository;
+                actualEvents = eventRepository.GetEventsForAggregate<TAggregate>(aggregateId);
+            });
+
             foreach (Event @event in actualEvents)
             {
                 @event.ProcessId = Guid.Empty;

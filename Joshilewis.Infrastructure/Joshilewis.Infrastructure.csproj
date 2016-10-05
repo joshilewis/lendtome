@@ -131,7 +131,8 @@
     <Compile Include="Persistence\NHibernateRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
-    <Compile Include="UnitOfWork\UnitOfWork.cs" />
+    <Compile Include="UnitOfWork\NHibernateUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\EventStoreUnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkHelpers.cs" />
   </ItemGroup>
   <ItemGroup>

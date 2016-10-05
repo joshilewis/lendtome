@@ -15,7 +15,7 @@ namespace Joshilewis.Infrastructure.Migrations
 
         public Migrator(string connectionString, params Assembly[] assemblies)
         {
-            var announcer = new TextWriterAnnouncer(Console.WriteLine);
+            var announcer = new TextWriterAnnouncer(Console.Write);
 
             IAssemblyCollection assemblyCollection = new AssemblyCollection(assemblies);
 

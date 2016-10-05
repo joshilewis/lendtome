@@ -9,8 +9,9 @@ namespace Joshilewis.Infrastructure.UnitOfWork
         void Begin();
         void Commit();
         void RollBack();
-
-        ISession CurrentSession { get; }
-        IEventRepository EventRepository { get; }
     }
+
+
+
+
 }

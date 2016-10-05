@@ -30,12 +30,12 @@ namespace Joshilewis.Testing.Helpers
 
         public static void OpenTransaction()
         {
-            DIExtensions.Container.GetInstance<IUnitOfWork>().Begin();
+            DIExtensions.Container.GetInstance<NHibernateUnitOfWork>().Begin();
         }
 
         public static void CommitTransaction()
         {
-            DIExtensions.Container.GetInstance<IUnitOfWork>().Commit();
+            DIExtensions.Container.GetInstance<NHibernateUnitOfWork>().Commit();
         }
 
         public static void SaveEntities(params object[] entitiesToSave)

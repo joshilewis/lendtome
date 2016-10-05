@@ -56,7 +56,7 @@ namespace Lending.Execution.DI
                 ;
 
             For<NHibernate.ISession>()
-                .Use(c => c.GetInstance<IUnitOfWork>().CurrentSession)
+                .Use(c => c.GetInstance<NHibernateUnitOfWork>().CurrentSession)
                 ;
 
             For<IRepository>()
@@ -80,13 +80,12 @@ namespace Lending.Execution.DI
             });
 
             For<IEventRepository>()
-                .AlwaysUnique()
-                .Use(c => c.GetInstance<IUnitOfWork>().EventRepository)
+                .Use(c => c.GetInstance<EventStoreUnitOfWork>().EventRepository)
                 ;
 
             For<Func<Guid>>()
                 .Use(new Func<Guid>(SequentialGuid.NewGuid));
-            
+
             var eventEmitter = new InMemoryEventEmitter();
 
             For<IEventEmitter>()

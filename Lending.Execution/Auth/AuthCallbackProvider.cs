@@ -14,7 +14,7 @@ namespace Lending.Execution.Auth
         private readonly IUserMapper userMapper;
         private readonly IUnitOfWork unitOfWork;
 
-        public AuthCallbackProvider(IUserMapper userMapper, IUnitOfWork unitOfWork, Tokeniser tokeniser)
+        public AuthCallbackProvider(IUserMapper userMapper, NHibernateUnitOfWork unitOfWork, Tokeniser tokeniser)
         {
             this.userMapper = userMapper;
             this.unitOfWork = unitOfWork;

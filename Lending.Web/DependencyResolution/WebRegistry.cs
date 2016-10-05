@@ -18,11 +18,15 @@ namespace Lending.Web.DependencyResolution
         {
             string eventStoreIpAddress = ConfigurationManager.AppSettings["EventStore:IPAddress"];
 
-            For<IUnitOfWork>()
+            For<EventStoreUnitOfWork>()
                 .HybridHttpOrThreadLocalScoped()
-                .Use<UnitOfWork>()
+                .Use<EventStoreUnitOfWork>()
                 .Ctor<string>()
                 .Is(eventStoreIpAddress);
+
+            For<NHibernateUnitOfWork>()
+                .HybridHttpOrThreadLocalScoped()
+                .Use<NHibernateUnitOfWork>();
 
         }
     }

@@ -11,7 +11,7 @@ namespace Shell
             string eventStoreIpAddress = ConfigurationManager.AppSettings["EventStore:IPAddress"];
 
             For<IUnitOfWork>()
-                .Use<UnitOfWork>()
+                .Use<EventStoreUnitOfWork>()
                 .Ctor<string>()
                 .Is(eventStoreIpAddress);
 

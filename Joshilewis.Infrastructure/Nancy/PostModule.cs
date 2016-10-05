@@ -3,6 +3,7 @@ using Joshilewis.Cqrs;
 using Joshilewis.Cqrs.Command;
 using Joshilewis.Cqrs.Query;
 using Joshilewis.Infrastructure.Auth;
+using Joshilewis.Infrastructure.EventRouting;
 using Joshilewis.Infrastructure.UnitOfWork;
 using Nancy;
 using Nancy.ModelBinding;
@@ -13,12 +14,17 @@ namespace Joshilewis.Infrastructure.Nancy
     public abstract class PostModule<TMessage> : NancyModule where TMessage : AuthenticatedCommand
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly NHibernateUnitOfWork relationalUnitOfWork;
         private readonly ICommandHandler<TMessage> commandHandler;
+        private readonly EventDispatcher eventDispatcher;
 
-        protected PostModule(IUnitOfWork unitOfWork, ICommandHandler<TMessage> commandHandler, string path)
+        protected PostModule(IUnitOfWork unitOfWork, ICommandHandler<TMessage> commandHandler, string path,
+            NHibernateUnitOfWork relationalUnitOfWork, EventDispatcher eventDispatcher)
         {
             this.unitOfWork = unitOfWork;
             this.commandHandler = commandHandler;
+            this.relationalUnitOfWork = relationalUnitOfWork;
+            this.eventDispatcher = eventDispatcher;
 
             this.RequiresAuthentication();
             this.RequiresHttps();
@@ -37,6 +43,9 @@ namespace Joshilewis.Infrastructure.Nancy
                     resultCode = (EResultCode) commandHandler.Handle(message);
                 });
 
+                relationalUnitOfWork.DoInTransaction(eventDispatcher.DispatchEvents);
+
+
                 return new Response()
                 {
                     StatusCode = (HttpStatusCode) resultCode,
@@ -44,5 +53,6 @@ namespace Joshilewis.Infrastructure.Nancy
 
             };
         }
+
     }
 }

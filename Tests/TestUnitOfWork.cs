@@ -6,11 +6,10 @@ using NHibernate;
 
 namespace Tests
 {
-    public class TestUnitOfWork : UnitOfWork
+    public class TestUnitOfWork : EventStoreUnitOfWork
     {
-        public TestUnitOfWork(ISessionFactory sessionFactory, IEventStoreConnection eventStoreConnection,
-            IEventEmitter eventEmitter, EventDispatcher eventDispatcher)
-            : base(sessionFactory, eventStoreConnection, eventEmitter, eventDispatcher)
+        public TestUnitOfWork(IEventStoreConnection eventStoreConnection, IEventEmitter eventEmitter)
+            : base(eventStoreConnection, eventEmitter)
         {
         }
     }
