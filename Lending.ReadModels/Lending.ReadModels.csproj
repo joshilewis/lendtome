@@ -67,7 +67,6 @@
     <Compile Include="Relational\BookAdded\LibraryBookMap.cs" />
     <Compile Include="Relational\BookRemoved\BookRemovedEventHandler.cs" />
     <Compile Include="Relational\LibraryOpened\OpenedLibrary.cs" />
-    <Compile Include="Relational\LibraryOpened\UserHasOpenedLibraryQuery.cs" />
     <Compile Include="Relational\LinkAccepted\LinkAcceptedEventHandler.cs" />
     <Compile Include="Relational\LinkAccepted\LibraryLink.cs" />
     <Compile Include="Relational\LinkAccepted\LibrayLinkMap.cs" />

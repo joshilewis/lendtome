@@ -132,9 +132,6 @@ namespace Lending.Execution.DI
                 .AlwaysUnique()
                 .Use<UserMapper>();
 
-            For<ICheckIfUserHasOpenedLibrary>()
-                .AlwaysUnique()
-                .Use<UserHasOpenedLibraryQuery>();
         }
 
         private static IEnumerable<IEventHandler> GetEventHandlers(IContext context, Type eventType)

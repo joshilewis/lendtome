@@ -10,13 +10,9 @@ namespace Lending.Domain.OpenLibrary
     {
         public const string UserAlreadyOpenedLibrary = "User has already opened a library";
 
-        private readonly ICheckIfUserHasOpenedLibrary checkIfUserHasOpenedLibrary;
-
-        public LibraryOpener(Func<IEventRepository> eventRepositoryFunc,
-            ICheckIfUserHasOpenedLibrary checkIfUserHasOpenedLibrary)
+        public LibraryOpener(Func<IEventRepository> eventRepositoryFunc)
             : base(eventRepositoryFunc)
         {
-            this.checkIfUserHasOpenedLibrary = checkIfUserHasOpenedLibrary;
         }
 
         public override object Handle(OpenLibrary command)
