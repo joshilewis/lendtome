@@ -496,6 +496,7 @@
     <Content Include="Scripts\jasmine\jasmine.js" />
     <Content Include="Scripts\less-1.5.1.js" />
     <Content Include="Scripts\less-1.5.1.min.js" />
+    <None Include="Properties\PublishProfiles\deploy.pubxml" />
     <None Include="Views\Web.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -710,7 +711,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>62773</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://lend-to.me</IISUrl>
+          <IISUrl>https://dev.lend-to.me</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
