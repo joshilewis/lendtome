@@ -16,8 +16,8 @@ namespace Joshilewis.Infrastructure.UnitOfWork
         private readonly IEventEmitter eventEmitter;
         private EventStoreEventRepository eventRepository;
 
-        public EventStoreUnitOfWork(string eventStoreIpAddress, IEventEmitter eventEmitter)
-            : this(EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), 1113)), eventEmitter)
+        public EventStoreUnitOfWork(string eventStoreIpAddress, int port, IEventEmitter eventEmitter)
+            : this(EventStoreConnection.Create(new IPEndPoint(IPAddress.Parse(eventStoreIpAddress), port)), eventEmitter)
         {
         }
 

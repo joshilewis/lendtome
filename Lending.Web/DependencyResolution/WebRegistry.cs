@@ -17,12 +17,15 @@ namespace Lending.Web.DependencyResolution
         public WebRegistry()
         {
             string eventStoreIpAddress = ConfigurationManager.AppSettings["EventStore:IPAddress"];
+            int eventStorePort = int.Parse(ConfigurationManager.AppSettings["EventStore:Port"]);
 
             For<EventStoreUnitOfWork>()
                 .HybridHttpOrThreadLocalScoped()
                 .Use<EventStoreUnitOfWork>()
                 .Ctor<string>()
-                .Is(eventStoreIpAddress);
+                .Is(eventStoreIpAddress)
+                .Ctor<int>()
+                .Is(eventStorePort);
 
             For<NHibernateUnitOfWork>()
                 .HybridHttpOrThreadLocalScoped()
