@@ -17,16 +17,8 @@ namespace Lending.ReadModels.Relational.BookAdded
         {
             OpenedLibrary library = Session.Get<OpenedLibrary>(@event.AggregateId);
 
-            try
-            {
-                Session.Save(new LibraryBook(@event.ProcessId, library, @event.Title, @event.Author,
-                    @event.Isbn, @event.PublishYear));
-            }
-            catch (Exception ex)
-            {
-                
-                throw;
-            }
+            Session.Save(new LibraryBook(@event.ProcessId, library, @event.Title, @event.Author,
+                @event.Isbn, @event.PublishYear));
         }
     }
 }

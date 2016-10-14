@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Joshilewis.Cqrs;
+using Joshilewis.Infrastructure.EventRouting;
 using Joshilewis.Testing;
 using Joshilewis.Testing.CallBuilders;
 using Joshilewis.Testing.Helpers;
@@ -149,6 +151,43 @@ namespace Tests
         public static void AcceptLinkForLinkedLibrariesIgnored()
         {
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
+        }
+
+        public static void LibraryOpened(Guid processId, Guid userId, string name)
+        {
+            HandleEvent(new LibraryOpened(processId, userId, name, userId));
+        }
+
+        public static void LinkRequested(Guid processId, Guid aggregateId, Guid targetLibraryId)
+        {
+            HandleEvent(new LinkRequested(processId, aggregateId, targetLibraryId));
+        }
+
+        public static void LinkAccepted(Guid processId, Guid aggregateId, Guid requestingLibraryId)
+        {
+            HandleEvent(new LinkAccepted(processId, aggregateId, requestingLibraryId));
+        }
+
+        public static void BookAddedToLibrary(Guid processId, Guid aggregateId, string title, string author, string isbn,
+            int publishYear)
+        {
+            HandleEvent(new BookAddedToLibrary(processId, aggregateId, title, author, isbn, publishYear));
+        }
+
+        public static void BookRemovedFromLibrary(Guid processId, Guid aggregateId, string title, string author, string isbn,
+            int publishYear)
+        {
+            HandleEvent(new BookRemovedFromLibrary(processId, aggregateId, title, author, isbn, publishYear));
+        }
+
+        public static void HandleEvent(Event @event)
+        {
+            IEventEmitter eventEmitter = DIExtensions.Container.GetInstance<IEventEmitter>();
+            eventEmitter.EmitEvent(@event);
+
+            PersistenceExtensions.OpenTransaction();
+            DIExtensions.Container.GetInstance<EventDispatcher>().DispatchEvents();
+            PersistenceExtensions.CommitTransaction();
         }
     }
 }
