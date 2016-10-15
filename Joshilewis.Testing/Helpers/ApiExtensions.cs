@@ -29,34 +29,11 @@ namespace Joshilewis.Testing.Helpers
             return DIExtensions.Container.GetInstance<Tokeniser>();
         }
 
-        public static PostCallBuilder GivenCommand(AuthenticatedCommand command)
-        {
-            return new PostCallBuilder(client, GetTokeniser(), command, true);
-        }
-
-        public static MultiPostCallBuilder GivenCommands(params AuthenticatedCommand[] commands)
-        {
-            return new MultiPostCallBuilder(client, GetTokeniser(), commands);
-        }
-
         private static PostCallBuilder whenPostCallBuilder;
         public static PostCallBuilder WhenCommand(AuthenticatedCommand command)
         {
             whenPostCallBuilder = new PostCallBuilder(client, GetTokeniser(), command, false);
             return whenPostCallBuilder;
-        }
-
-        public static void Then(HttpResponseMessage expectedResponseMessage)
-        {
-            whenPostCallBuilder.Response.ShouldEqual(expectedResponseMessage);
-        }
-
-        public static HttpResponseMessage Http403BecauseUnauthorized(Guid userId, Guid aggregateId, Type aggregateType)
-        {
-            return new HttpResponseMessage(HttpStatusCode.Forbidden)
-            {
-                ReasonPhrase = $"User {userId} is not authorized for {aggregateType} {aggregateId}"
-            };
         }
 
         private static GetCallBuilder whenGetCallBuilder;
@@ -72,18 +49,5 @@ namespace Joshilewis.Testing.Helpers
             whenGetCallBuilder.Returns(expected);
         }
 
-        public static GetCallBuilder AndGETTo(string url)
-        {
-            return new GetCallBuilder(client, GetTokeniser(), url);
-        }
-
-        public static HttpResponseMessage Http400Because(string reasonPhrase)
-        {
-
-            return new HttpResponseMessage(HttpStatusCode.BadRequest)
-            {
-                ReasonPhrase = reasonPhrase
-            };
-        }
     }
 }
