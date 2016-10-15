@@ -17,7 +17,7 @@ namespace Tests.Commands
             var userId = Guid.NewGuid();
             Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
             When(() => OpenLibrary(transactionId, userId, "library1"));
-            Then1(() => LibraryOpenedSuccessfully());
+            Then(() => LibraryOpenedSuccessfully());
             AndEventsSavedForAggregate<Library>(userId, new LibraryOpened(transactionId, userId, "library1", userId));
         }
 
@@ -29,7 +29,7 @@ namespace Tests.Commands
             Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => OpenLibrary(transactionId, userId, "library1"));
-            Then1(() => LibraryOpenedSuccessfully());
+            Then(() => LibraryOpenedSuccessfully());
             AndEventsSavedForAggregate<Library>(userId, 
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new LibraryOpened(transactionId, userId, "library1", userId));

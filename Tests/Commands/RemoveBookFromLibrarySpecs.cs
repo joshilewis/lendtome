@@ -21,7 +21,7 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             Given(() => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
             When(() => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
-            Then1(() => BookRemovedSucccessfully());
+            Then(() => BookRemovedSucccessfully());
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982),
@@ -37,7 +37,7 @@ namespace Tests.Commands
             Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
-            Then1(() => IgnoreBecauseBookNotInLibrary());
+            Then(() => IgnoreBecauseBookNotInLibrary());
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId)
             );
@@ -51,7 +51,7 @@ namespace Tests.Commands
             Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => RemoveBookFromLibrary(transactionId, userId, Guid.Empty, "Title", "Author", "isbn", 1982));
-            Then1(() => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId));
+            Then(() => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId));
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId)
             );

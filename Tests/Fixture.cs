@@ -39,7 +39,7 @@ namespace Tests
             action();
         }
 
-        protected virtual void Then1(Action action)
+        protected virtual void Then(Action action)
         {
             action();
         }

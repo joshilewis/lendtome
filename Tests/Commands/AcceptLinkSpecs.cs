@@ -29,7 +29,7 @@ namespace Tests.Commands
             Given(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
 
             When(() => AcceptLibraryLink(transactionId, user2Id, user2Id, userId));
-            Then1(() => LibrariesLinked());
+            Then(() => LibrariesLinked());
 
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
@@ -53,7 +53,7 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, user2Id, "library2"));
 
             When(() => AcceptLibraryLink(transactionId, user2Id, user2Id, userId));
-            Then1(() => AcceptUnrequestedLinkIgnored());
+            Then(() => AcceptUnrequestedLinkIgnored());
 
             AndEventsSavedForAggregate<Library>(userId, new LibraryOpened(transactionId, userId, "library1", userId));
             AndEventsSavedForAggregate<Library>(user2Id, new LibraryOpened(transactionId, user2Id, "library2", user2Id));
@@ -72,7 +72,7 @@ namespace Tests.Commands
             Given(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
             Given(() => AcceptLibraryLink(transactionId, user2Id, user2Id, userId));
             When(() => AcceptLibraryLink(transactionId, user2Id, user2Id, userId));
-            Then1(() => AcceptLinkForLinkedLibrariesIgnored());
+            Then(() => AcceptLinkForLinkedLibrariesIgnored());
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new LinkRequested(transactionId, userId, user2Id),
@@ -96,7 +96,7 @@ namespace Tests.Commands
             Given(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
 
             When(() => AcceptLibraryLink(transactionId, user2Id, Guid.Empty, userId));
-            Then1(() => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), user2Id));
+            Then(() => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), user2Id));
 
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),

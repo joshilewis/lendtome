@@ -26,7 +26,7 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             Given(() => OpenLibrary(transactionId, user2Id, "library2"));
             When(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
-            Then1(() => LinkRequestCreated());
+            Then(() => LinkRequestCreated());
             AndEventsSavedForAggregate<Library>(userId, 
                 new LibraryOpened(transactionId, userId, "library1", userId), 
                 new LinkRequested(transactionId, userId, user2Id));
@@ -47,7 +47,7 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, user2Id, "library2"));
             Given(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
             When(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
-            Then1(() => DuplicateLinkRequestIgnored());
+            Then(() => DuplicateLinkRequestIgnored());
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new LinkRequested(transactionId, userId, user2Id));
@@ -65,7 +65,7 @@ namespace Tests.Commands
             Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
-            Then1(() => FailtNotFound());
+            Then(() => FailtNotFound());
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId));
         }
@@ -82,7 +82,7 @@ namespace Tests.Commands
             Given(() => OpenLibrary(transactionId, user2Id, "library2"));
             Given(() => RequestLibraryLink(transactionId, user2Id, user2Id, userId));
             When(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
-            Then1(() => ReverseLinkRequestIgnored());
+            Then(() => ReverseLinkRequestIgnored());
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new LinkRequestReceived(transactionId, userId, user2Id));
@@ -104,7 +104,7 @@ namespace Tests.Commands
             Given(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
             Given(() => AcceptLibraryLink(transactionId, user2Id, user2Id, userId));
             When(() => RequestLibraryLink(transactionId, userId, userId, user2Id));
-            Then1(() => LinkRequestForLinkedLibrariesIgnored());
+            Then(() => LinkRequestForLinkedLibrariesIgnored());
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId),
                 new LinkRequested(transactionId, userId, user2Id),
@@ -123,7 +123,7 @@ namespace Tests.Commands
             Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => RequestLibraryLink(transactionId, userId, userId, userId));
-            Then1(() => LinkRequestedToSelfIgnored());
+            Then(() => LinkRequestedToSelfIgnored());
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId));
         }
@@ -136,7 +136,7 @@ namespace Tests.Commands
             Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
             Given(() => OpenLibrary(transactionId, userId, "library1"));
             When(() => RequestLibraryLink(transactionId, userId, Guid.Empty, Guid.Empty));
-            Then1(() => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId));
+            Then(() => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId));
             AndEventsSavedForAggregate<Library>(userId,
                 new LibraryOpened(transactionId, userId, "library1", userId));
         }
