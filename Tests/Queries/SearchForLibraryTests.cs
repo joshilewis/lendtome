@@ -1,129 +1,92 @@
 using System;
-using Joshilewis.Testing.Helpers;
-using Lending.Domain.Model;
-using Lending.Domain.OpenLibrary;
-using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.ListLibrayLinks;
-using Lending.ReadModels.Relational.SearchForLibrary;
 using NUnit.Framework;
-using static Tests.TestData;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
-using static Joshilewis.Testing.Helpers.EventStoreExtensions;
+using static Tests.AutomationExtensions;
 
 namespace Tests.Queries
 {
     [TestFixture]
     public class SearchForLibraryTests: Fixture
     {
-        private readonly LibrarySearchResult joshuaLewisLibraryResult = new LibrarySearchResult(Library1Id, JoshuaLewisLibraryOpened.Name, Library1Picture);
+        private Guid transactionId;
+        private Guid userId;
+        private Guid user2Id;
+        private Guid user3Id;
+        private Guid user4Id;
 
-        /// <summary>
-        /// GIVEN Libraries with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have been Opened 
-        /// WHEN I Search for Libraries with the search string 'Lew' 
-        /// THEN Lbrary 'Joshua Lewis' gets returned
-        /// </summary>
+        public override void SetUp()
+        {
+            base.SetUp();
+            transactionId = Guid.Empty;
+            userId = Guid.NewGuid();
+            user2Id = Guid.NewGuid();
+            user3Id = Guid.NewGuid();
+            user4Id = Guid.NewGuid();
+        }
+
         [Test]
         public void SearchingForLibraryWithSingleMatchShouldReturnThatUser()
         {
-            PersistenceExtensions.SaveEntities(User1, User2, User3, User4);
-            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            WhenGetEndpoint("libraries/Lew");
-            ThenResponseIs(joshuaLewisLibraryResult);
-            AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library4Id, AudreyHepburnLibraryOpened);
+            Given(() => UsersRegistered());
+            Given(() => LibrariesOpened());
+            When(() => SearchForLibraries("Lew"));
+            ThenResponseIs(new LibrarySearchResult(userId, "Joshua Lewis", "user1Picture"));
         }
 
-        /// <summary>
-        /// GIVEN Libraries with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have been Opened 
-        /// WHEN I Search for Libraries with the search string 'lEw' 
-        /// THEN Library 'Joshua Lewis' gets returned
-        /// </summary>
         [Test]
         public void SearchingForLibraryWithSingleMatchWithWrongCaseShouldReturnThatUser()
         {
-            PersistenceExtensions.SaveEntities(User1, User2, User3, User4);
-            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            WhenGetEndpoint("libraries/lEw");
-            ThenResponseIs(joshuaLewisLibraryResult);
-            AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library4Id, AudreyHepburnLibraryOpened);
+            Given(() => UsersRegistered());
+            Given(() => LibrariesOpened());
+            When(() => SearchForLibraries("lEw"));
+            ThenResponseIs(new LibrarySearchResult(userId, "Joshua Lewis", "user1Picture"));
         }
 
-        /// <summary>
-        /// GIVEN Libraries with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have been Opened 
-        /// WHEN I Search for Libraries with the search string 'Pet'
-        /// THEN no Libraries get returned
-        /// </summary>
         [Test]
         public void SearchingForLibraryWithNoMatchesShouldReturnEmptyList()
         {
-            PersistenceExtensions.SaveEntities(User1, User2, User3, User4);
-            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            WhenGetEndpoint("libraries/Pet");
+            Given(() => UsersRegistered());
+            Given(() => LibrariesOpened());
+            When(() => SearchForLibraries("Pet"));
             ThenResponseIs(new LibrarySearchResult[] {});
-            AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library4Id, AudreyHepburnLibraryOpened);
 
         }
 
-        /// <summary>
-        /// GIVEN Libraries with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have been Opened 
-        /// WHEN I Search for Libraries with the search string 'Jos'
-        /// THEN Libraries 'Joshua Lewis' and 'Josie Doe' get returned
-        /// </summary>
         [Test]
         public void SearchingForLibraryWithTwoMatchsShouldReturnTwoLibraries()
         {
-            PersistenceExtensions.SaveEntities(User1, User2, User3, User4);
-            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
+            Given(() => UsersRegistered());
+            Given(() => LibrariesOpened());
             WhenGetEndpoint("libraries/Jos");
-            ThenResponseIs(
-                joshuaLewisLibraryResult,
-                new LibrarySearchResult(Library3Id, JosieDoeLibraryOpened.Name, Library3Picture));
-            AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library4Id, AudreyHepburnLibraryOpened);
+            ThenResponseIs(new LibrarySearchResult(userId, "Joshua Lewis", "user1Picture"),
+                new LibrarySearchResult(user3Id, "Josie Doe", "user3Picture"));
         }
 
-        /// <summary>
-        /// GIVEN Libraries with the following names 'Joshua Lewis', 'Suzaan Hepburn', 'Joshua Doe', 'Audrey Hepburn' have been Opened 
-        /// WHEN I Search for Libraries with the search string 'Jos'
-        /// THEN Libraries 'Joshua Lewis' and 'Josie Doe' get returned
-        /// </summary>
         [Test]
         public void SearchingForLibraryThatMatchesSelfShouldExcludeSelfFromResults()
         {
-            PersistenceExtensions.SaveEntities(User1, User2, User3, User4);
-            GivenCommand(JoshuaLewisOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(SuzaanHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(JosieDoeOpensLibrary).IsPOSTedTo("/libraries");
-            GivenCommand(AudreyHepburnOpensLibrary).IsPOSTedTo("/libraries");
-            WhenGetEndpoint("libraries/Jos").As(Library1Id);
-            ThenResponseIs(
-                new LibrarySearchResult(Library3Id, JosieDoeLibraryOpened.Name, Library3Picture));
-            AndEventsSavedForAggregate<Library>(Library1Id, JoshuaLewisLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library2Id, SuzaanHepburnLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library3Id, JosieDoeLibraryOpened);
-            AndEventsSavedForAggregate<Library>(Library4Id, AudreyHepburnLibraryOpened);
+            Given(() => UsersRegistered());
+            Given(() => LibrariesOpened());
+            When(() => SearchForLibraries("Lew"));
+            WhenGetEndpoint("libraries/Jos").As(userId);
+            ThenResponseIs(new LibrarySearchResult(user3Id, "Josie Doe", "user3Picture"));
+        }
+
+        private void UsersRegistered()
+        {
+            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
+            Given(() => UserRegisters(user2Id, "user2", "email2", "user2Picture"));
+            Given(() => UserRegisters(user3Id, "user3", "email3", "user3Picture"));
+            Given(() => UserRegisters(user4Id, "user4", "email4", "user4Picture"));
+        }
+
+        private void LibrariesOpened()
+        {
+            Given(() => LibraryOpened(transactionId, userId, "Joshua Lewis"));
+            Given(() => LibraryOpened(transactionId, user2Id, "Suzaan Hepburn"));
+            Given(() => LibraryOpened(transactionId, user3Id, "Josie Doe"));
+            Given(() => LibraryOpened(transactionId, user4Id, "Audrey Hepburn"));
         }
 
     }

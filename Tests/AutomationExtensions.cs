@@ -189,5 +189,11 @@ namespace Tests
             DIExtensions.Container.GetInstance<EventDispatcher>().DispatchEvents();
             PersistenceExtensions.CommitTransaction();
         }
+
+        public static void SearchForLibraries(string searchTerm)
+        {
+            WhenGetEndpoint("libraries/" + searchTerm);
+        }
+
     }
 }
