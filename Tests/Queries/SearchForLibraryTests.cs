@@ -7,7 +7,7 @@ using static Tests.AutomationExtensions;
 namespace Tests.Queries
 {
     [TestFixture]
-    public class SearchForLibraryTests: Fixture
+    public class SearchForLibraryTests : Fixture
     {
         private Guid transactionId;
         private Guid userId;
@@ -28,65 +28,74 @@ namespace Tests.Queries
         [Test]
         public void SearchingForLibraryWithSingleMatchShouldReturnThatUser()
         {
-            Given(() => UsersRegistered());
-            Given(() => LibrariesOpened());
-            When(() => SearchForLibraries("Lew"));
-            ThenResponseIs(new LibrarySearchResult(userId, "Joshua Lewis", "user1Picture"));
+            Runner.RunScenario(
+                given => UsersRegistered(),
+                and => LibrariesOpened(),
+
+                when => SearchForLibraries("Lew"),
+                then => ResponseIs(new LibrarySearchResult(userId, "Joshua Lewis", "user1Picture")));
         }
 
         [Test]
         public void SearchingForLibraryWithSingleMatchWithWrongCaseShouldReturnThatUser()
         {
-            Given(() => UsersRegistered());
-            Given(() => LibrariesOpened());
-            When(() => SearchForLibraries("lEw"));
-            ThenResponseIs(new LibrarySearchResult(userId, "Joshua Lewis", "user1Picture"));
+            Runner.RunScenario(
+                given => UsersRegistered(),
+                and => LibrariesOpened(),
+
+                when => SearchForLibraries("lEw"),
+                then => ResponseIs(new LibrarySearchResult(userId, "Joshua Lewis", "user1Picture")));
         }
 
         [Test]
         public void SearchingForLibraryWithNoMatchesShouldReturnEmptyList()
         {
-            Given(() => UsersRegistered());
-            Given(() => LibrariesOpened());
-            When(() => SearchForLibraries("Pet"));
-            ThenResponseIs(new LibrarySearchResult[] {});
+            Runner.RunScenario(
+                given => UsersRegistered(),
+                and => LibrariesOpened(),
 
+                when => SearchForLibraries("Pet"),
+                then => ResponseIs(new LibrarySearchResult[] {}));
         }
 
         [Test]
         public void SearchingForLibraryWithTwoMatchsShouldReturnTwoLibraries()
         {
-            Given(() => UsersRegistered());
-            Given(() => LibrariesOpened());
-            WhenGetEndpoint("libraries/Jos");
-            ThenResponseIs(new LibrarySearchResult(userId, "Joshua Lewis", "user1Picture"),
-                new LibrarySearchResult(user3Id, "Josie Doe", "user3Picture"));
+            Runner.RunScenario(
+                given => UsersRegistered(),
+                and => LibrariesOpened(),
+
+                when => SearchForLibraries("Jos"),
+                then => ResponseIs(
+                    new LibrarySearchResult(userId, "Joshua Lewis", "user1Picture"),
+                    new LibrarySearchResult(user3Id, "Josie Doe", "user3Picture")));
         }
 
         [Test]
         public void SearchingForLibraryThatMatchesSelfShouldExcludeSelfFromResults()
         {
-            Given(() => UsersRegistered());
-            Given(() => LibrariesOpened());
-            When(() => SearchForLibraries("Lew"));
-            WhenGetEndpoint("libraries/Jos").As(userId);
-            ThenResponseIs(new LibrarySearchResult(user3Id, "Josie Doe", "user3Picture"));
+            Runner.RunScenario(
+                given => UsersRegistered(),
+                and => LibrariesOpened(),
+
+                when => SearchForLibrariesAsUser("Jos", userId),
+                then => ResponseIs(new LibrarySearchResult(user3Id, "Josie Doe", "user3Picture")));
         }
 
         private void UsersRegistered()
         {
-            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
-            Given(() => UserRegisters(user2Id, "user2", "email2", "user2Picture"));
-            Given(() => UserRegisters(user3Id, "user3", "email3", "user3Picture"));
-            Given(() => UserRegisters(user4Id, "user4", "email4", "user4Picture"));
+            UserRegisters(userId, "user1", "email1", "user1Picture");
+            UserRegisters(user2Id, "user2", "email2", "user2Picture");
+            UserRegisters(user3Id, "user3", "email3", "user3Picture");
+            UserRegisters(user4Id, "user4", "email4", "user4Picture");
         }
 
         private void LibrariesOpened()
         {
-            Given(() => LibraryOpened(transactionId, userId, "Joshua Lewis"));
-            Given(() => LibraryOpened(transactionId, user2Id, "Suzaan Hepburn"));
-            Given(() => LibraryOpened(transactionId, user3Id, "Josie Doe"));
-            Given(() => LibraryOpened(transactionId, user4Id, "Audrey Hepburn"));
+            LibraryOpened(transactionId, userId, "Joshua Lewis");
+            LibraryOpened(transactionId, user2Id, "Suzaan Hepburn");
+            LibraryOpened(transactionId, user3Id, "Josie Doe");
+            LibraryOpened(transactionId, user4Id, "Audrey Hepburn");
         }
 
     }

@@ -31,198 +31,201 @@ namespace Tests.Queries
         [Test]
         public void SearchingForBookNotOwnedByAnyConnection()
         {
-            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
-            Given(() => UserRegisters(user2Id, "user2", "email2", "user2Picture"));
-            Given(() => LibraryOpened(transactionId, userId, "library1"));
-            Given(() => LibraryOpened(transactionId, user2Id, "library2"));
-            Given(() => LinkRequested(transactionId, userId, user2Id));
-            Given(() => LinkAccepted(transactionId, user2Id, userId));
+            Runner.RunScenario(
+            given => UserRegisters(userId, "user1", "email1", "user1Picture"),
+            and => UserRegisters(user2Id, "user2", "email2", "user2Picture"),
+            and => LibraryOpened(transactionId, userId, "library1"),
+            and => LibraryOpened(transactionId, user2Id, "library2"),
+            and => LinkRequested(transactionId, userId, user2Id),
+            and => LinkAccepted(transactionId, user2Id, userId),
 
-            WhenGetEndpoint("books/Extreme Programming Explained").As(userId);
-            ThenResponseIs(new BookSearchResult[] {});
+            when => GetEndpoint("books/Extreme Programming Explained").As(userId),
+            then => ResponseIs(new BookSearchResult[] {}));
         }
 
         [Test]
         public void SearchingForBookWithNoLinks()
         {
-            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
-            Given(() => LibraryOpened(transactionId, userId, "library1"));
-            WhenGetEndpoint("books/Extreme Programming Explained").As(userId);
-            ThenResponseIs(new BookSearchResult[] {});
+            Runner.RunScenario(
+            given => UserRegisters(userId, "user1", "email1", "user1Picture"),
+            and => LibraryOpened(transactionId, userId, "library1"),
+
+            when => GetEndpoint("books/Extreme Programming Explained").As(userId),
+            then => ResponseIs(new BookSearchResult[] {}));
         }
 
         [Test]
         public void SearchingForBookWithSingleMatchingTitleInManyLibrariesShouldReturnAllOwners()
         {
-            Given(() => Users1To6Registered());
-            Given(() => Libraries1To6Opened());
-            Given(() => Library1RequestedLinksToOtherLibraries());
-            Given(() => LibrariesAcceptedLinkToLinkToLibrary1());
+            Runner.RunScenario(
+            given => Users1To6Registered(),
+            and => Libraries1To6Opened(),
+            and => Library1RequestedLinksToOtherLibraries(),
+            and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
-            Given(() => BookAddedToLibrary(transactionId, user2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
+            and => BookAddedToLibrary(transactionId, user2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
 
-            WhenGetEndpoint("books/Extreme Programming Explained").As(userId);
-            ThenResponseIs(
+            when => GetEndpoint("books/Extreme Programming Explained").As(userId),
+            then => ResponseIs(
                 new BookSearchResult(user2Id, "library2", "user2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(user4Id, "library4", "user4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-
+                new BookSearchResult(user4Id, "library4", "user4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000)));
         }
 
         [Test]
         public void SearchingForBookWithManyMatchingTitlesInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
-            Given(() => Users1To6Registered());
-            Given(() => Libraries1To6Opened());
-            Given(() => Library1RequestedLinksToOtherLibraries());
-            Given(() => LibrariesAcceptedLinkToLinkToLibrary1());
+            Runner.RunScenario(
+            given => Users1To6Registered(),
+            and => Libraries1To6Opened(),
+            and => Library1RequestedLinksToOtherLibraries(),
+            and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
-            Given(() => BookAddedToLibrary(transactionId, user2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000));
+            and => BookAddedToLibrary(transactionId, user2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000),
 
-            WhenGetEndpoint("books/Extreme").As(userId);
-            ThenResponseIs(
+            when => GetEndpoint("books/Extreme").As(userId),
+            then => ResponseIs(
                 new BookSearchResult(user2Id, "library2", "user2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
                 new BookSearchResult(user4Id, "library4", "user4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(user5Id, "library5", "user5Picture", "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000));
-
+                new BookSearchResult(user5Id, "library5", "user5Picture", "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000)));
         }
 
         [Test]
         public void SearchingForBookWithSingleMatchingAuthorInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
-            Given(() => Users1To6Registered());
-            Given(() => Libraries1To6Opened());
-            Given(() => Library1RequestedLinksToOtherLibraries());
-            Given(() => LibrariesAcceptedLinkToLinkToLibrary1());
+            Runner.RunScenario(
+            given => Users1To6Registered(),
+            and => Libraries1To6Opened(),
+            and => Library1RequestedLinksToOtherLibraries(),
+            and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
-            Given(() => BookAddedToLibrary(transactionId, user2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000));
+            and => BookAddedToLibrary(transactionId, user2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000),
 
-            WhenGetEndpoint("books/Kent Beck").As(userId);
-            ThenResponseIs(
+            when => GetEndpoint("books/Kent Beck").As(userId),
+            then => ResponseIs(
                 new BookSearchResult(user2Id, "library2", "user2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
                 new BookSearchResult(user3Id, "library3", "user3Picture", "Test-Driven Development", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(user4Id, "library4", "user4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-
+                new BookSearchResult(user4Id, "library4", "user4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000)));
         }
 
         [Test]
         public void SearchingForBookWithManyMatchingTitlesAndAuthorsInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
-            Given(() => Users1To6Registered());
-            Given(() => Libraries1To6Opened());
-            Given(() => Library1RequestedLinksToOtherLibraries());
-            Given(() => LibrariesAcceptedLinkToLinkToLibrary1());
+            Runner.RunScenario(
+            given => Users1To6Registered(),
+            and => Libraries1To6Opened(),
+            and => Library1RequestedLinksToOtherLibraries(),
+            and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
-            Given(() => BookAddedToLibrary(transactionId, user2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user6Id, "Beck: A Musical Maestro", "Some Author", "ISBN", 2000));
+            and => BookAddedToLibrary(transactionId, user2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user6Id, "Beck: A Musical Maestro", "Some Author", "ISBN", 2000),
 
-            WhenGetEndpoint("books/Beck").As(userId);
-            ThenResponseIs(
+            when => GetEndpoint("books/Beck").As(userId),
+            then => ResponseIs(
                 new BookSearchResult(user2Id, "library2", "user2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
                 new BookSearchResult(user3Id, "library3", "user3Picture", "Test-Driven Development", "Kent Beck", "ISBN", 2000),
                 new BookSearchResult(user4Id, "library4", "user4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
                 new BookSearchResult(user6Id, "library6", "user6Picture", "Beck: A Musical Maestro", "Some Author", "ISBN", 2000)
-                );
-
+                ));
         }
 
         [Test]
         public void ExcludeUnlinkedLibrariesInSearch()
         {
-            Given(() => Users1To6Registered());
-            Given(() => Libraries1To6Opened());
-            Given(() => Library1RequestedLinksToOtherLibraries());
+            Runner.RunScenario(
+            given => Users1To6Registered(),
+            and => Libraries1To6Opened(),
+            and => Library1RequestedLinksToOtherLibraries(),
 
-            Given(() => LinkAccepted(transactionId, user2Id, userId));
-            Given(() => LinkAccepted(transactionId, user3Id, userId));
-            Given(() => LinkAccepted(transactionId, user5Id, userId));
-            Given(() => LinkAccepted(transactionId, user6Id, userId));
+            and => LinkAccepted(transactionId, user2Id, userId),
+            and => LinkAccepted(transactionId, user3Id, userId),
+            and => LinkAccepted(transactionId, user5Id, userId),
+            and => LinkAccepted(transactionId, user6Id, userId),
 
-            Given(() => BookAddedToLibrary(transactionId, user2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user6Id, "Beck: A Musical Maestro", "Some Author", "ISBN", 2000));
+            and => BookAddedToLibrary(transactionId, user2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user6Id, "Beck: A Musical Maestro", "Some Author", "ISBN", 2000),
 
-            WhenGetEndpoint("books/Beck").As(userId);
-            ThenResponseIs(
+            when => GetEndpoint("books/Beck").As(userId),
+            then => ResponseIs(
                 new BookSearchResult(user2Id, "library2", "user2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
                 new BookSearchResult(user3Id, "library3", "user3Picture", "Test-Driven Development", "Kent Beck", "ISBN", 2000),
                 new BookSearchResult(user6Id, "library6", "user6Picture", "Beck: A Musical Maestro", "Some Author", "ISBN", 2000)
-                );
-
+                ));
         }
 
         [Test]
         public void ExcludeRemovedBooksFromSearchResults()
         {
-            Given(() => Users1To6Registered());
-            Given(() => Libraries1To6Opened());
-            Given(() => Library1RequestedLinksToOtherLibraries());
-            Given(() => LibrariesAcceptedLinkToLinkToLibrary1());
+            Runner.RunScenario(
+            given => Users1To6Registered(),
+            and => Libraries1To6Opened(),
+            and => Library1RequestedLinksToOtherLibraries(),
+            and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
-            Given(() => BookAddedToLibrary(transactionId, user2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000));
-            Given(() => BookAddedToLibrary(transactionId, user6Id, "Beck: A Musical Maestro", "Some Author", "ISBN", 2000));
-            Given(() => BookRemovedFromLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000));
+            and => BookAddedToLibrary(transactionId, user2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, user6Id, "Beck: A Musical Maestro", "Some Author", "ISBN", 2000),
+            and => BookRemovedFromLibrary(transactionId, user4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
 
-            WhenGetEndpoint("books/Beck").As(userId);
-            ThenResponseIs(
+            when => GetEndpoint("books/Beck").As(userId),
+            then => ResponseIs(
                 new BookSearchResult(user2Id, "library2", "user2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
                 new BookSearchResult(user3Id, "library3", "user3Picture", "Test-Driven Development", "Kent Beck", "ISBN", 2000),
                 new BookSearchResult(user6Id, "library6", "user6Picture", "Beck: A Musical Maestro", "Some Author", "ISBN", 2000)
-                );
-
+                ));
         }
 
         private void Users1To6Registered()
         {
-            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
-            Given(() => UserRegisters(user2Id, "user2", "email2", "user2Picture"));
-            Given(() => UserRegisters(user3Id, "user3", "email3", "user3Picture"));
-            Given(() => UserRegisters(user4Id, "user4", "email4", "user4Picture"));
-            Given(() => UserRegisters(user5Id, "user5", "email5", "user5Picture"));
-            Given(() => UserRegisters(user6Id, "user6", "email6", "user6Picture"));
+            UserRegisters(userId, "user1", "email1", "user1Picture");
+            UserRegisters(user2Id, "user2", "email2", "user2Picture");
+            UserRegisters(user3Id, "user3", "email3", "user3Picture");
+            UserRegisters(user4Id, "user4", "email4", "user4Picture");
+            UserRegisters(user5Id, "user5", "email5", "user5Picture");
+            UserRegisters(user6Id, "user6", "email6", "user6Picture");
         }
 
         private void Libraries1To6Opened()
         {
-            Given(() => LibraryOpened(transactionId, userId, "library1"));
-            Given(() => LibraryOpened(transactionId, user2Id, "library2"));
-            Given(() => LibraryOpened(transactionId, user3Id, "library3"));
-            Given(() => LibraryOpened(transactionId, user4Id, "library4"));
-            Given(() => LibraryOpened(transactionId, user5Id, "library5"));
-            Given(() => LibraryOpened(transactionId, user6Id, "library6"));
+             LibraryOpened(transactionId, userId, "library1");
+             LibraryOpened(transactionId, user2Id, "library2");
+             LibraryOpened(transactionId, user3Id, "library3");
+             LibraryOpened(transactionId, user4Id, "library4");
+             LibraryOpened(transactionId, user5Id, "library5");
+             LibraryOpened(transactionId, user6Id, "library6");
         }
 
         private void Library1RequestedLinksToOtherLibraries()
         {
-            Given(() => LinkRequested(transactionId, userId, user2Id));
-            Given(() => LinkRequested(transactionId, userId, user3Id));
-            Given(() => LinkRequested(transactionId, userId, user4Id));
-            Given(() => LinkRequested(transactionId, userId, user5Id));
-            Given(() => LinkRequested(transactionId, userId, user6Id));
+             LinkRequested(transactionId, userId, user2Id);
+             LinkRequested(transactionId, userId, user3Id);
+             LinkRequested(transactionId, userId, user4Id);
+             LinkRequested(transactionId, userId, user5Id);
+             LinkRequested(transactionId, userId, user6Id);
         }
 
         private void LibrariesAcceptedLinkToLinkToLibrary1()
         {
-            Given(() => LinkAccepted(transactionId, user2Id, userId));
-            Given(() => LinkAccepted(transactionId, user3Id, userId));
-            Given(() => LinkAccepted(transactionId, user4Id, userId));
-            Given(() => LinkAccepted(transactionId, user5Id, userId));
-            Given(() => LinkAccepted(transactionId, user6Id, userId));
+             LinkAccepted(transactionId, user2Id, userId);
+             LinkAccepted(transactionId, user3Id, userId);
+             LinkAccepted(transactionId, user4Id, userId);
+             LinkAccepted(transactionId, user5Id, userId);
+             LinkAccepted(transactionId, user6Id, userId);
         }
 
     }

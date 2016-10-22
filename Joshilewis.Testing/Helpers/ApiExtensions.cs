@@ -38,13 +38,13 @@ namespace Joshilewis.Testing.Helpers
 
         private static GetCallBuilder whenGetCallBuilder;
 
-        public static GetCallBuilder WhenGetEndpoint(string uri)
+        public static GetCallBuilder GetEndpoint(string uri)
         {
             whenGetCallBuilder = new GetCallBuilder(client, GetTokeniser(), uri);
             return whenGetCallBuilder;
         }
 
-        public static void ThenResponseIs<TPayload>(params TPayload[] expected)
+        public static void ResponseIs<TPayload>(params TPayload[] expected)
         {
             whenGetCallBuilder.Returns(expected);
         }

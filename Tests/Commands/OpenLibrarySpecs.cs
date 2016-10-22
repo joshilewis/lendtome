@@ -15,10 +15,11 @@ namespace Tests.Commands
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
-            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
-            When(() => OpenLibrary(transactionId, userId, "library1"));
-            Then(() => LibraryOpenedSuccessfully());
-            AndEventsSavedForAggregate<Library>(userId, new LibraryOpened(transactionId, userId, "library1", userId));
+            Runner.RunScenario(
+            given => UserRegisters(userId, "user1", "email1", "user1Picture"),
+            when => OpenLibrary(transactionId, userId, "library1"),
+            then => LibraryOpenedSuccessfully(),
+            and => EventsSavedForAggregate<Library>(userId, new LibraryOpened(transactionId, userId, "library1", userId)));
         }
 
         [Test]
@@ -26,13 +27,16 @@ namespace Tests.Commands
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
-            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
-            Given(() => OpenLibrary(transactionId, userId, "library1"));
-            When(() => OpenLibrary(transactionId, userId, "library1"));
-            Then(() => LibraryOpenedSuccessfully());
-            AndEventsSavedForAggregate<Library>(userId, 
+            Runner.RunScenario(
+            given => UserRegisters(userId, "user1", "email1", "user1Picture"),
+            and => OpenLibrary(transactionId, userId, "library1"),
+
+            when => OpenLibrary(transactionId, userId, "library1"),
+
+            then => LibraryOpenedSuccessfully(),
+            and => EventsSavedForAggregate<Library>(userId, 
                 new LibraryOpened(transactionId, userId, "library1", userId),
-                new LibraryOpened(transactionId, userId, "library1", userId));
+                new LibraryOpened(transactionId, userId, "library1", userId)));
         }
 
 

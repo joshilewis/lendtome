@@ -17,16 +17,19 @@ namespace Tests.Commands
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
-            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
-            Given(() => OpenLibrary(transactionId, userId, "library1"));
-            Given(() => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
-            When(() => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
-            Then(() => BookRemovedSucccessfully());
-            AndEventsSavedForAggregate<Library>(userId,
-                new LibraryOpened(transactionId, userId, "library1", userId),
-                new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982),
-                new BookRemovedFromLibrary(transactionId, userId, "Title", "Author", "isbn", 1982)
-            );
+            Runner.RunScenario(
+                given => UserRegisters(userId, "user1", "email1", "user1Picture"),
+                and => OpenLibrary(transactionId, userId, "library1"),
+                and => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
+
+                when => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
+
+                then => BookRemovedSucccessfully(),
+                and => EventsSavedForAggregate<Library>(userId,
+                    new LibraryOpened(transactionId, userId, "library1", userId),
+                    new BookAddedToLibrary(transactionId, userId, "Title", "Author", "isbn", 1982),
+                    new BookRemovedFromLibrary(transactionId, userId, "Title", "Author", "isbn", 1982)
+                ));
         }
 
         [Test]
@@ -34,13 +37,16 @@ namespace Tests.Commands
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
-            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
-            Given(() => OpenLibrary(transactionId, userId, "library1"));
-            When(() => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982));
-            Then(() => IgnoreBecauseBookNotInLibrary());
-            AndEventsSavedForAggregate<Library>(userId,
-                new LibraryOpened(transactionId, userId, "library1", userId)
-            );
+            Runner.RunScenario(
+                given => UserRegisters(userId, "user1", "email1", "user1Picture"),
+                and => OpenLibrary(transactionId, userId, "library1"),
+
+                when => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
+
+                then => IgnoreBecauseBookNotInLibrary(),
+                and => EventsSavedForAggregate<Library>(userId,
+                    new LibraryOpened(transactionId, userId, "library1", userId)
+                ));
         }
 
         [Test]
@@ -48,13 +54,16 @@ namespace Tests.Commands
         {
             var transactionId = Guid.Empty;
             var userId = Guid.NewGuid();
-            Given(() => UserRegisters(userId, "user1", "email1", "user1Picture"));
-            Given(() => OpenLibrary(transactionId, userId, "library1"));
-            When(() => RemoveBookFromLibrary(transactionId, userId, Guid.Empty, "Title", "Author", "isbn", 1982));
-            Then(() => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId));
-            AndEventsSavedForAggregate<Library>(userId,
-                new LibraryOpened(transactionId, userId, "library1", userId)
-            );
+            Runner.RunScenario(
+                given => UserRegisters(userId, "user1", "email1", "user1Picture"),
+                and => OpenLibrary(transactionId, userId, "library1"),
+
+                when => RemoveBookFromLibrary(transactionId, userId, Guid.Empty, "Title", "Author", "isbn", 1982),
+
+                then => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId),
+                and => EventsSavedForAggregate<Library>(userId,
+                    new LibraryOpened(transactionId, userId, "library1", userId)
+                ));
         }
 
     }

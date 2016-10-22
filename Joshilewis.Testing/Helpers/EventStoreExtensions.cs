@@ -25,7 +25,7 @@ namespace Joshilewis.Testing.Helpers
 
         }
 
-        public static void AndEventsSavedForAggregate<TAggregate>(Guid aggregateId, params Event[] expectedEvents) where TAggregate : Aggregate
+        public static void EventsSavedForAggregate<TAggregate>(Guid aggregateId, params Event[] expectedEvents) where TAggregate : Aggregate
         {
             IEnumerable<Event> actualEvents = new Event[] {};
             EventStoreUnitOfWork unitOfWork = DIExtensions.Container.GetInstance<EventStoreUnitOfWork>();

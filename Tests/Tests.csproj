@@ -58,6 +58,14 @@
       <HintPath>..\packages\JWT.1.3.4\lib\3.5\JWT.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="LightBDD, Version=1.7.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LightBDD.Core.1.7.2.0\lib\net40\LightBDD.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LightBDD.NUnit3, Version=1.7.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LightBDD.NUnit3.1.7.2.0\lib\net40\LightBDD.NUnit3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
@@ -111,6 +119,10 @@
     </Reference>
     <Reference Include="ServiceStack.Authentication.NHibernate">
       <HintPath>..\lib\ServiceStack.Authentication.NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Shouldly, Version=2.8.2.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shouldly.2.8.2\lib\net451\Shouldly.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SimpleAuthentication.Core, Version=0.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SimpleAuthentication.Core.0.6\lib\net40\SimpleAuthentication.Core.dll</HintPath>

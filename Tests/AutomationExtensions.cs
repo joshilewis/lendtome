@@ -192,7 +192,12 @@ namespace Tests
 
         public static void SearchForLibraries(string searchTerm)
         {
-            WhenGetEndpoint("libraries/" + searchTerm);
+            GetEndpoint("libraries/" + searchTerm);
+        }
+
+        public static void SearchForLibrariesAsUser(string searchTerm, Guid userId)
+        {
+            GetEndpoint("libraries/" + searchTerm).As(userId);
         }
 
     }
