@@ -50,6 +50,8 @@
     <Compile Include="AddBookToLibrary\BookAdder.cs" />
     <Compile Include="AddBookToLibrary\BookAddedToLibrary.cs" />
     <Compile Include="Model\Book.cs" />
+    <Compile Include="Model\AdministratorId.cs" />
+    <Compile Include="Model\LibraryId.cs" />
     <Compile Include="OpenLibrary\OpenLibrary.cs" />
     <Compile Include="OpenLibrary\LibraryOpener.cs" />
     <Compile Include="RemoveBookFromLibrary\BookRemovedFromLibrary.cs" />

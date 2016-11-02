@@ -16,7 +16,7 @@ namespace Lending.Domain.RemoveBookFromLibrary
         public override object Handle(RemoveBookFromLibrary command)
         {
             Library library = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
-            library.CheckUserAuthorized(command.UserId);
+            library.CheckUserAuthorized(new AdministratorId(command.UserId));
             library.RemoveBookFromLibrary(command.ProcessId, command.Title, command.Author, command.Isbn, command.PublishYear);
 
             EventRepository.Save(library);

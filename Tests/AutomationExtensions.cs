@@ -32,7 +32,7 @@ namespace Tests
             PersistenceExtensions.CommitTransaction();
         }
 
-        public static void OpenLibrary(Guid processId, Guid userId, string name)
+        public static void OpensLibrary(Guid processId, Guid userId, string name)
         {
             command = WhenCommand(new OpenLibrary(processId, userId, userId, name));
             command.IsPOSTedTo("/libraries");
@@ -48,7 +48,7 @@ namespace Tests
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
-        public static void AddBookToLibrary1(Guid transactionId, Guid libraryId, Guid userId, string title, string author,
+        public static void AddsBookToLibrary(Guid transactionId, Guid libraryId, Guid userId, string title, string author,
             string isbn, int publishYear)
         {
             command =
@@ -57,7 +57,7 @@ namespace Tests
             command.IsPOSTedTo($"/libraries/{libraryId}/books/add");
         }
 
-        public static void RemoveBookFromLibrary(Guid transactionId, Guid libraryId, Guid userId, string title, string author,
+        public static void RemovesBookFromLibrary(Guid transactionId, Guid libraryId, Guid userId, string title, string author,
             string isbn, int publishYear)
         {
             command =
@@ -89,7 +89,7 @@ namespace Tests
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
-        public static void RequestLibraryLink(Guid transactionId, Guid libraryId, Guid userId,
+        public static void RequestsLibraryLink(Guid transactionId, Guid libraryId, Guid userId,
             Guid targetLibraryId)
         {
             command =
@@ -127,7 +127,7 @@ namespace Tests
 
         }
 
-        public static void AcceptLibraryLink(Guid transactionId, Guid libraryId, Guid userId, Guid requestingLibraryId)
+        public static void AcceptsLibraryLink(Guid transactionId, Guid libraryId, Guid userId, Guid requestingLibraryId)
         {
             command =
                 WhenCommand(new AcceptLink(transactionId, libraryId, userId, requestingLibraryId));

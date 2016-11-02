@@ -16,13 +16,13 @@ namespace Lending.Domain.AcceptLink
         public override object Handle(AcceptLink command)
         {
             Library acceptingLibrary = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
-            acceptingLibrary.CheckUserAuthorized(command.UserId);
+            acceptingLibrary.CheckUserAuthorized(new AdministratorId(command.UserId));
 
-            acceptingLibrary.AcceptLink(command.ProcessId, command.RequestingLibraryId);
+            acceptingLibrary.AcceptLink(command.ProcessId, new LibraryId(command.RequestingLibraryId));
 
             Library requestingLibrary = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.RequestingLibraryId));
 
-            requestingLibrary.CompleteLink(command.ProcessId, command.AggregateId);
+            requestingLibrary.CompleteLink(command.ProcessId, new LibraryId(command.AggregateId));
 
             EventRepository.Save(acceptingLibrary);
             EventRepository.Save(requestingLibrary);

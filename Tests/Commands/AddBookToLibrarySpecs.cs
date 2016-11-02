@@ -22,9 +22,9 @@ namespace Tests.Commands
             var userId = Guid.NewGuid();
             Runner.RunScenario(
                 given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => OpenLibrary(transactionId, userId, "library1"),
+                and => OpensLibrary(transactionId, userId, "library1"),
 
-                when => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
+                when => AddsBookToLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
 
                 then => BookAddedSucccessfully(),
                 and => EventsSavedForAggregate<Library>(userId,
@@ -39,10 +39,10 @@ namespace Tests.Commands
             var userId = Guid.NewGuid();
             Runner.RunScenario(
                 given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => OpenLibrary(transactionId, userId, "library1"),
-                and => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
+                and => OpensLibrary(transactionId, userId, "library1"),
+                and => AddsBookToLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
 
-                when => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
+                when => AddsBookToLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
 
                 then => BookAddedSucccessfully(),
                 and => EventsSavedForAggregate<Library>(userId,
@@ -58,11 +58,11 @@ namespace Tests.Commands
             var userId = Guid.NewGuid();
             Runner.RunScenario(
                 given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => OpenLibrary(transactionId, userId, "library1"),
-                and => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
-                and => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
+                and => OpensLibrary(transactionId, userId, "library1"),
+                and => AddsBookToLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
+                and => RemovesBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
 
-                when => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
+                when => AddsBookToLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
 
                 then => BookAddedSucccessfully(),
                 and => EventsSavedForAggregate<Library>(userId,
@@ -80,9 +80,9 @@ namespace Tests.Commands
             var userId = Guid.NewGuid();
             Runner.RunScenario(
                 given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => OpenLibrary(transactionId, userId, "library1"),
+                and => OpensLibrary(transactionId, userId, "library1"),
 
-                when => AddBookToLibrary1(transactionId, userId, Guid.Empty, "Title", "Author", "isbn", 1982),
+                when => AddsBookToLibrary(transactionId, userId, Guid.Empty, "Title", "Author", "isbn", 1982),
 
                 then => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId),
                 and => EventsSavedForAggregate<Library>(userId,

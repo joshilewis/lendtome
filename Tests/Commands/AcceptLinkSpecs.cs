@@ -25,11 +25,11 @@ namespace Tests.Commands
             Runner.RunScenario(
                 given => UserRegisters(userId, "user1", "email1", "user1Picture"),
                 and => UserRegisters(user2Id, "user2", "email2", "user2Picture"),
-                and => OpenLibrary(transactionId, userId, "library1"),
-                and => OpenLibrary(transactionId, user2Id, "library2"),
-                and => RequestLibraryLink(transactionId, userId, userId, user2Id),
+                and => OpensLibrary(transactionId, userId, "library1"),
+                and => OpensLibrary(transactionId, user2Id, "library2"),
+                and => RequestsLibraryLink(transactionId, userId, userId, user2Id),
 
-                when => AcceptLibraryLink(transactionId, user2Id, user2Id, userId),
+                when => AcceptsLibraryLink(transactionId, user2Id, user2Id, userId),
 
                 then => LibrariesLinked(),
                 and => EventsSavedForAggregate<Library>(userId,
@@ -51,10 +51,10 @@ namespace Tests.Commands
             Runner.RunScenario(
                 given => UserRegisters(userId, "user1", "email1", "user1Picture"),
                 and => UserRegisters(user2Id, "user2", "email2", "user2Picture"),
-                and => OpenLibrary(transactionId, userId, "library1"),
-                and => OpenLibrary(transactionId, user2Id, "library2"),
+                and => OpensLibrary(transactionId, userId, "library1"),
+                and => OpensLibrary(transactionId, user2Id, "library2"),
 
-                when => AcceptLibraryLink(transactionId, user2Id, user2Id, userId),
+                when => AcceptsLibraryLink(transactionId, user2Id, user2Id, userId),
                 
                 then => AcceptUnrequestedLinkIgnored(),
                 and =>
@@ -74,12 +74,12 @@ namespace Tests.Commands
             Runner.RunScenario(
                 given => UserRegisters(userId, "user1", "email1", "user1Picture"),
                 and => UserRegisters(user2Id, "user2", "email2", "user2Picture"),
-                and => OpenLibrary(transactionId, userId, "library1"),
-                and => OpenLibrary(transactionId, user2Id, "library2"),
-                and => RequestLibraryLink(transactionId, userId, userId, user2Id),
-                and => AcceptLibraryLink(transactionId, user2Id, user2Id, userId),
+                and => OpensLibrary(transactionId, userId, "library1"),
+                and => OpensLibrary(transactionId, user2Id, "library2"),
+                and => RequestsLibraryLink(transactionId, userId, userId, user2Id),
+                and => AcceptsLibraryLink(transactionId, user2Id, user2Id, userId),
 
-                when => AcceptLibraryLink(transactionId, user2Id, user2Id, userId),
+                when => AcceptsLibraryLink(transactionId, user2Id, user2Id, userId),
 
                 then => AcceptLinkForLinkedLibrariesIgnored(),
                 and => EventsSavedForAggregate<Library>(userId,
@@ -101,11 +101,11 @@ namespace Tests.Commands
             Runner.RunScenario(
                 given => UserRegisters(userId, "user1", "email1", "user1Picture"),
                 and => UserRegisters(user2Id, "user2", "email2", "user2Picture"),
-                and => OpenLibrary(transactionId, userId, "library1"),
-                and => OpenLibrary(transactionId, user2Id, "library2"),
-                and => RequestLibraryLink(transactionId, userId, userId, user2Id),
+                and => OpensLibrary(transactionId, userId, "library1"),
+                and => OpensLibrary(transactionId, user2Id, "library2"),
+                and => RequestsLibraryLink(transactionId, userId, userId, user2Id),
 
-                when => AcceptLibraryLink(transactionId, user2Id, Guid.Empty, userId),
+                when => AcceptsLibraryLink(transactionId, user2Id, Guid.Empty, userId),
 
                 then => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), user2Id),
                 and => EventsSavedForAggregate<Library>(userId,

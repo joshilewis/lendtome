@@ -19,10 +19,10 @@ namespace Tests.Commands
             var userId = Guid.NewGuid();
             Runner.RunScenario(
                 given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => OpenLibrary(transactionId, userId, "library1"),
-                and => AddBookToLibrary1(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
+                and => OpensLibrary(transactionId, userId, "library1"),
+                and => AddsBookToLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
 
-                when => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
+                when => RemovesBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
 
                 then => BookRemovedSucccessfully(),
                 and => EventsSavedForAggregate<Library>(userId,
@@ -39,9 +39,9 @@ namespace Tests.Commands
             var userId = Guid.NewGuid();
             Runner.RunScenario(
                 given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => OpenLibrary(transactionId, userId, "library1"),
+                and => OpensLibrary(transactionId, userId, "library1"),
 
-                when => RemoveBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
+                when => RemovesBookFromLibrary(transactionId, userId, userId, "Title", "Author", "isbn", 1982),
 
                 then => IgnoreBecauseBookNotInLibrary(),
                 and => EventsSavedForAggregate<Library>(userId,
@@ -56,9 +56,9 @@ namespace Tests.Commands
             var userId = Guid.NewGuid();
             Runner.RunScenario(
                 given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => OpenLibrary(transactionId, userId, "library1"),
+                and => OpensLibrary(transactionId, userId, "library1"),
 
-                when => RemoveBookFromLibrary(transactionId, userId, Guid.Empty, "Title", "Author", "isbn", 1982),
+                when => RemovesBookFromLibrary(transactionId, userId, Guid.Empty, "Title", "Author", "isbn", 1982),
 
                 then => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId),
                 and => EventsSavedForAggregate<Library>(userId,

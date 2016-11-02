@@ -21,11 +21,11 @@ namespace Lending.Domain.RequestLink
             if (command.TargetLibraryId == command.AggregateId) return Success();
 
             Library library = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.AggregateId));
-            library.CheckUserAuthorized(command.UserId);
-            library.RequestLink(command.ProcessId, command.TargetLibraryId);
+            library.CheckUserAuthorized(new AdministratorId(command.UserId));
+            library.RequestLink(command.ProcessId, new LibraryId(command.TargetLibraryId));
 
             Library targetLibrary = Library.CreateFromHistory(EventRepository.GetEventsForAggregate<Library>(command.TargetLibraryId));
-            targetLibrary.ReceiveLinkRequest(command.ProcessId, command.AggregateId);
+            targetLibrary.ReceiveLinkRequest(command.ProcessId, new LibraryId(command.AggregateId));
 
             EventRepository.Save(library);
             EventRepository.Save(targetLibrary);

@@ -17,7 +17,7 @@ namespace Tests.Commands
             var userId = Guid.NewGuid();
             Runner.RunScenario(
             given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-            when => OpenLibrary(transactionId, userId, "library1"),
+            when => OpensLibrary(transactionId, userId, "library1"),
             then => LibraryOpenedSuccessfully(),
             and => EventsSavedForAggregate<Library>(userId, new LibraryOpened(transactionId, userId, "library1", userId)));
         }
@@ -29,9 +29,9 @@ namespace Tests.Commands
             var userId = Guid.NewGuid();
             Runner.RunScenario(
             given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-            and => OpenLibrary(transactionId, userId, "library1"),
+            and => OpensLibrary(transactionId, userId, "library1"),
 
-            when => OpenLibrary(transactionId, userId, "library1"),
+            when => OpensLibrary(transactionId, userId, "library1"),
 
             then => LibraryOpenedSuccessfully(),
             and => EventsSavedForAggregate<Library>(userId, 

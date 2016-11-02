@@ -17,7 +17,8 @@ namespace Lending.Domain.OpenLibrary
 
         public override object Handle(OpenLibrary command)
         {
-            Library library = Library.Open(command.ProcessId, command.UserId, command.Name, command.UserId);
+            Library library = Library.Open(command.ProcessId, new LibraryId(command.UserId), command.Name,
+                new AdministratorId(command.UserId));
             EventRepository.Save(library);
 
             return Created();
