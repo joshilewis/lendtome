@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,5 +21,6 @@ namespace Lending.ReadModels.Relational
         }
 
         protected ISession Session => getSession();
+        protected IDbConnection Connection => Session.Connection;
     }
 }

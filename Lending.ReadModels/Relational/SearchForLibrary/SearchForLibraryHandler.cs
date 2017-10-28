@@ -1,7 +1,7 @@
 using System;
+using System.Data;
 using System.Linq;
-using Joshilewis.Cqrs.Query;
-using Lending.Domain.OpenLibrary;
+using Dapper;
 using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.ListLibrayLinks;
 using NHibernate;
@@ -17,18 +17,15 @@ namespace Lending.ReadModels.Relational.SearchForLibrary
 
         public override object Handle(SearchForLibrary query)
         {
-            var queryOver = Session.QueryOver<OpenedLibrary>()
-                .WhereRestrictionOn(x => x.Name).IsInsensitiveLike("%" + query.SearchString.ToLower() + "%");
-
+            string sqlQuery =
+                $"SELECT * FROM \"OpenedLibrary\" WHERE LOWER(Name) LIKE '%{query.SearchString.ToLower()}%'";
 
             if (query.UserId.HasValue) //Authenticated so exclude own Library in result
             {
-                queryOver = queryOver
-                    .Where(x => x.Id != query.UserId.Value);
+                sqlQuery += $" AND Id != '{query.UserId.Value}'";
             }
 
-            LibrarySearchResult[] libraries = queryOver
-                .List()
+            LibrarySearchResult[] libraries = Connection.Query<OpenedLibrary>(sqlQuery)
                 .Select(x => new LibrarySearchResult(x.Id, x.Name, x.AdministratorPicture))
                 .ToArray();
             return libraries;
