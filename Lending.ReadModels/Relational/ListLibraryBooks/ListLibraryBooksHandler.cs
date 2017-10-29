@@ -4,6 +4,7 @@ using Joshilewis.Cqrs.Query;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.SearchForBook;
 using NHibernate;
+using Dapper;
 
 namespace Lending.ReadModels.Relational.ListLibraryBooks
 {
@@ -15,15 +16,11 @@ namespace Lending.ReadModels.Relational.ListLibraryBooks
 
         public override object Handle(ListLibraryBooks query)
         {
-            LibraryBook[] libraryBooks = Session.QueryOver<LibraryBook>()
-                .Where(x => x.LibraryAdminId == query.UserId)
-                .List()
-                .ToArray();
-
-            return libraryBooks
+            return Connection
+                .Query<LibraryBook>($"SELECT * FROM \"LibraryBook\" WHERE LibraryAdminId = '{query.UserId}'")
                 .Select(x =>
-                        new BookSearchResult(x.LibraryId, x.LibraryName, x.AdministratorPicture, x.Title, x.Author, x.Isbn,
-                            x.PublishYear))
+                    new BookSearchResult(x.LibraryId, x.LibraryName, x.AdministratorPicture, x.Title, x.Author, x.Isbn,
+                        x.PublishYear))
                 .ToArray();
         }
     }
