@@ -163,6 +163,7 @@
     <Compile Include="Commands\RequestLinkSpecs.cs" />
     <Compile Include="Fixture.cs" />
     <Compile Include="MigrationExtensions.cs" />
+    <Compile Include="Queries\LinkRequestSpecs.cs" />
     <Compile Include="Queries\ListLibrarySpecs.cs" />
     <Compile Include="Infra\AuthCallBack.cs" />
     <Compile Include="Infra\ContainerTests.cs" />
