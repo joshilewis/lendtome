@@ -22,8 +22,9 @@ namespace Tests.Queries
         private Guid user6Id;
 
         [SetUp]
-        public void SetUp()
+        public override void SetUp()
         {
+            base.SetUp();
             transactionId = Guid.Empty;
             user1Id = Guid.NewGuid();
             user2Id = Guid.NewGuid();
@@ -55,10 +56,16 @@ namespace Tests.Queries
             RequestsLibraryLink(transactionId, user5Id, user5Id, user2Id);
         }
 
+        private void LinksAreAccepted()
+        {
+            AcceptsLibraryLink(transactionId, user3Id, user3Id, user1Id);
+            AcceptsLibraryLink(transactionId, user2Id, user2Id, user1Id);
+            AcceptsLibraryLink(transactionId, user2Id, user2Id, user5Id);
+        }
+
         [Test]
         public void CorrectSentLinksReturnedForUser1()
         {
-
             Runner.RunScenario(
                 given => LinksAreRequested(),
 
@@ -146,6 +153,49 @@ namespace Tests.Queries
             );
         }
 
+        [Test]
+        public void LinksReturnedForUser1()
+        {
+            Runner.RunScenario(
+                given => LinksAreRequested(),
+                and => LinksAreAccepted(),
+
+                when => GetEndpoint($"/libraries/{user1Id}/links/").As(user1Id),
+
+                then => ResponseIs(
+                    new LibrarySearchResult(user2Id, "library2", "user2Picture"),
+                    new LibrarySearchResult(user3Id, "library3", "user3Picture")
+                )
+            );
+        }
+
+        [Test]
+        public void LinksReturnedForUser4()
+        {
+            Runner.RunScenario(
+                given => LinksAreRequested(),
+                and => LinksAreAccepted(),
+
+                when => GetEndpoint($"/libraries/{user4Id}/links/").As(user4Id),
+
+                then => ResponseIs(new LibrarySearchResult[] { })
+            );
+        }
+
+        [Test]
+        public void LinksReturnedForUser5()
+        {
+            Runner.RunScenario(
+                given => LinksAreRequested(),
+                and => LinksAreAccepted(),
+
+                when => GetEndpoint($"/libraries/{user5Id}/links/").As(user5Id),
+
+                then => ResponseIs(
+                    new LibrarySearchResult(user2Id, "library2", "user2Picture")
+                )
+            );
+        }
 
     }
 }
