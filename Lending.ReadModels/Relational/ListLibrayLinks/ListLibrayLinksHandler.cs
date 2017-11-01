@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 using Joshilewis.Cqrs.Query;
 using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.LinkAccepted;
@@ -21,10 +22,7 @@ namespace Lending.ReadModels.Relational.ListLibrayLinks
 
         public override object Handle(ListLibraryLinks query)
         {
-            return Session.QueryOver<LibraryLink>()
-                .Where(x => x.AcceptingAdministratorId == query.UserId ||
-                x.RequestingAdministratorId == query.UserId)
-                .List()
+            return Connection.Query<LibraryLink>($"SELECT * FROM \"LibraryLink\" WHERE acceptingadministratorid = '{query.UserId}' OR requestingadministratorid = '{query.UserId}'")
                 .Select(x =>
                 {
                     if (x.AcceptingLibraryId == query.UserId)

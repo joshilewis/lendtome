@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Dapper;
 using Joshilewis.Cqrs.Query;
 using Lending.ReadModels.Relational.LinkRequested;
 using Lending.ReadModels.Relational.ListLibrayLinks;
@@ -16,11 +17,11 @@ namespace Lending.ReadModels.Relational.ListRequestedLinks
 
         public override object Handle(ListRequestedLinks query)
         {
-            return Session.QueryOver<RequestedLink>()
-                .Where(x => x.RequestingLibraryId == query.UserId)
-                .Where(x => x.RequestingAdministratorId == query.UserId)
-                .List()
-                .Select(x => new LibrarySearchResult(x.TargetLibraryId, x.TargetLibraryName, x.TargetAdministratorPicture))
+            return Connection
+                .Query<RequestedLink>(
+                    $"SELECT * FROM \"RequestedLink\" WHERE requestinglibraryid = '{query.UserId}' AND requestingadministratorid = '{query.UserId}'")
+                .Select(x => new LibrarySearchResult(x.TargetLibraryId, x.TargetLibraryName,
+                    x.TargetAdministratorPicture))
                 .ToArray();
         }
 
