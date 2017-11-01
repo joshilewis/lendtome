@@ -19,13 +19,13 @@ namespace Tests.Queries
         public override void SetUp()
         {
             base.SetUp();
-        transactionId = Guid.Empty;
-        userId = Guid.NewGuid();
-        user2Id = Guid.NewGuid();
-        user3Id = Guid.NewGuid();
-        user4Id = Guid.NewGuid();
-        user5Id = Guid.NewGuid();
-        user6Id = Guid.NewGuid();
+            transactionId = Guid.Empty;
+            userId = Guid.NewGuid();
+            user2Id = Guid.NewGuid();
+            user3Id = Guid.NewGuid();
+            user4Id = Guid.NewGuid();
+            user5Id = Guid.NewGuid();
+            user6Id = Guid.NewGuid();
         }
 
         [Test]
