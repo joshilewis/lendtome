@@ -1,7 +1,9 @@
 ﻿using System;
+using Dapper.Contrib.Extensions;
 
 namespace Lending.ReadModels.Relational.LibraryOpened
 {
+    [Table("\"OpenedLibrary\"")]
     public class OpenedLibrary
     {
         public virtual Guid Id { get; protected set; }

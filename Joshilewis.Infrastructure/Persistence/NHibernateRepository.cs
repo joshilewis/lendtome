@@ -1,4 +1,5 @@
 ﻿using System;
+using Dapper.Contrib.Extensions;
 using Joshilewis.Cqrs;
 using NHibernate;
 
@@ -18,9 +19,9 @@ namespace Joshilewis.Infrastructure.Persistence
             getSession().Save(obj);
         }
 
-        public T Get<T>(object identifier)
+        public T Get<T>(object identifier) where T : class
         {
-            return getSession().Get<T>(identifier);
+            return getSession().Connection.Get<T>(identifier);
         }
     }
 }

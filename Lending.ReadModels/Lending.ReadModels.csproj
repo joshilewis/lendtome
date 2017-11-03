@@ -35,6 +35,10 @@
       <HintPath>..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Dapper.Contrib, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.Contrib.1.50.0\lib\net45\Dapper.Contrib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
       <Private>True</Private>
@@ -53,6 +57,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -89,6 +94,7 @@
     <Compile Include="Relational\ListReceivedLinks\ListReceivedLinksHandler.cs" />
     <Compile Include="Relational\ListRequestedLinks\ListRequestedLinks.cs" />
     <Compile Include="Relational\ListRequestedLinks\ListRequestedLinksHandler.cs" />
+    <Compile Include="Relational\Migrations\NameChanges.cs" />
     <Compile Include="Relational\Migrations\InitialCreation.cs" />
     <Compile Include="Relational\NHibernateEventHandler.cs" />
     <Compile Include="Relational\NHibernateQueryHandler.cs" />

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Dapper.Contrib.Extensions;
 
 namespace Lending.ReadModels.Relational
 {
+    [Table("\"AuthenticatedUser\"")]
     public class AuthenticatedUser
     {
         public virtual Guid Id { get; protected set; }
