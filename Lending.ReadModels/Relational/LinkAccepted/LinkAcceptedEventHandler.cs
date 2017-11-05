@@ -1,4 +1,6 @@
 using System;
+using Dapper;
+using Dapper.Contrib.Extensions;
 using Lending.ReadModels.Relational.LibraryOpened;
 using Lending.ReadModels.Relational.LinkRequested;
 using NHibernate;
@@ -14,16 +16,12 @@ namespace Lending.ReadModels.Relational.LinkAccepted
 
         public override void When(Domain.AcceptLink.LinkAccepted @event)
         {
-            RequestedLink requestedLink = Session.QueryOver<RequestedLink>()
-                .Where(x => x.RequestingLibraryId == @event.RequestingLibraryId)
-                .Where(x => x.TargetLibraryId == @event.AggregateId)
-                .SingleOrDefault();
-            Session.Delete(requestedLink);
-
-            OpenedLibrary requestingLibrary = Session.Get<OpenedLibrary>(@event.RequestingLibraryId);
-            OpenedLibrary acceptingLibrary = Session.Get<OpenedLibrary>(@event.AggregateId);
-
-            Session.Save(new LibraryLink(@event.ProcessId, requestingLibrary, acceptingLibrary));
+            OpenedLibrary requestingLibrary = Connection.GetOpenedLibrary(@event.RequestingLibraryId);
+            OpenedLibrary acceptingLibrary = Connection.GetOpenedLibrary(@event.AggregateId);
+            Connection.Insert(new LibraryLink(@event.ProcessId, requestingLibrary, acceptingLibrary));
+            Connection.Execute(
+                "DELETE FROM \"RequestedLink\" WHERE \"RequestingLibraryId\" = @RequestingLibraryId AND \"TargetLibraryId\" = @TargetLibraryId",
+                new { @event.RequestingLibraryId, TargetLibraryId = @event.AggregateId });
         }
     }
 }

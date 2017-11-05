@@ -18,11 +18,11 @@ namespace Lending.ReadModels.Relational.SearchForLibrary
         public override object Handle(SearchForLibrary query)
         {
             string sqlQuery =
-                $"SELECT * FROM \"OpenedLibrary\" WHERE LOWER(Name) LIKE '%{query.SearchString.ToLower()}%'";
+                $"SELECT * FROM \"OpenedLibrary\" WHERE LOWER(\"Name\") LIKE '%{query.SearchString.ToLower()}%'";
 
             if (query.UserId.HasValue) //Authenticated so exclude own Library in result
             {
-                sqlQuery += $" AND Id != '{query.UserId.Value}'";
+                sqlQuery += $" AND \"Id\" != '{query.UserId.Value}'";
             }
 
             LibrarySearchResult[] libraries = Connection.Query<OpenedLibrary>(sqlQuery)

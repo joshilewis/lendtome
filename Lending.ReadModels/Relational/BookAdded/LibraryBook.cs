@@ -1,10 +1,13 @@
 using System;
+using Dapper.Contrib.Extensions;
 using Lending.ReadModels.Relational.LibraryOpened;
 
 namespace Lending.ReadModels.Relational.BookAdded
 {
+    [Table("\"LibraryBook\"")]
     public class LibraryBook
     {
+        [ExplicitKey]
         public virtual long Id { get; protected set; }
         public virtual Guid ProcessId { get; protected set; }
         public virtual Guid LibraryId { get; protected set; }

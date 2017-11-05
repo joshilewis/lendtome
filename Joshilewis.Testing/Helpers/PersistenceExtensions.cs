@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using Joshilewis.Cqrs;
 using Joshilewis.Infrastructure.UnitOfWork;
 using NHibernate;
@@ -10,9 +11,11 @@ namespace Joshilewis.Testing.Helpers
 {
     public static class PersistenceExtensions
     {
+
         private static Configuration Configuration => DIExtensions.Container.GetInstance<Configuration>();
         public static IRepository Repository => DIExtensions.Container.GetInstance<IRepository>();
         public static ISession Session => DIExtensions.Container.GetInstance<ISession>();
+        public static IDbConnection Connection => DIExtensions.Container.GetInstance<ISession>().Connection;
 
         public static void SetUpPersistence()
         {

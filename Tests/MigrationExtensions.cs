@@ -1,28 +1,36 @@
 ﻿using System.Configuration;
 using Joshilewis.Infrastructure.Migrations;
 using Lending.ReadModels.Relational.Migrations;
+using Npgsql.Logging;
 
 namespace Tests
 {
     public static class MigrationExtensions
     {
-        private static readonly Migrator Migrator;
+        private static Migrator instance;
 
-        static MigrationExtensions()
+        private static Migrator Instance
         {
-            Migrator = new Migrator(
-                ConfigurationManager.ConnectionStrings["lender_db"].ConnectionString,
-                typeof(InitialCreation).Assembly);
+            get
+            {
+                if (instance== null)
+                {
+                    instance = new Migrator(
+                        ConfigurationManager.ConnectionStrings["lender_db"].ConnectionString,
+                        typeof(InitialCreation).Assembly);
+                }
+                return instance;
+            }
         }
 
         public static void BuildSchema()
         {
-            Migrator.BuildSchema();
+            Instance.BuildSchema();
         }
 
         public static void DropSchema()
         {
-            Migrator.DropSchema();
+            Instance.DropSchema();
         }
     }
 }

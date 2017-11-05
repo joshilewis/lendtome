@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper.Contrib.Extensions;
 using Lending.ReadModels.Relational.LibraryOpened;
 using NHibernate;
 
@@ -17,10 +18,10 @@ namespace Lending.ReadModels.Relational.LinkRequested
 
         public override void When(Domain.RequestLink.LinkRequested @event)
         {
-            OpenedLibrary requestingLibrary = Session.Get<OpenedLibrary>(@event.AggregateId);
-            OpenedLibrary targetLibrary = Session.Get<OpenedLibrary>(@event.TargetLibraryId);
+            OpenedLibrary requestingLibrary = Connection.GetOpenedLibrary(@event.AggregateId);
+            OpenedLibrary targetLibrary = Connection.GetOpenedLibrary(@event.TargetLibraryId);
 
-            Session.Save(new RequestedLink(@event.ProcessId, requestingLibrary, targetLibrary));
+            Connection.Insert(new RequestedLink(@event.ProcessId, requestingLibrary, targetLibrary));
         }
 
     }

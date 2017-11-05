@@ -21,7 +21,7 @@ namespace Lending.ReadModels.Relational.ListLibraries
         public override object Handle(ListLibraries query)
         {
             return Connection
-                .Query<OpenedLibrary>($"SELECT * FROM \"OpenedLibrary\" WHERE AdministratorId = '{query.UserId}'")
+                .Query<OpenedLibrary>($"SELECT * FROM \"OpenedLibrary\" WHERE \"AdministratorId\" = '{query.UserId}'")
                 .Select(x => new LibrarySearchResult(x.Id, x.Name, x.AdministratorPicture))
                 .ToArray();
         }

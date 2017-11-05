@@ -19,7 +19,7 @@ namespace Lending.ReadModels.Relational.ListRequestedLinks
         {
             return Connection
                 .Query<RequestedLink>(
-                    $"SELECT * FROM \"RequestedLink\" WHERE requestinglibraryid = '{query.UserId}' AND requestingadministratorid = '{query.UserId}'")
+                    $" SELECT * FROM \"RequestedLink\" WHERE \"RequestingLibraryId\" = '{query.UserId}' AND \"RequestingAdministratorId\" = '{query.UserId}'")
                 .Select(x => new LibrarySearchResult(x.TargetLibraryId, x.TargetLibraryName,
                     x.TargetAdministratorPicture))
                 .ToArray();

@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper.Contrib.Extensions;
 using Lending.ReadModels.Relational.LibraryOpened;
 
 namespace Lending.ReadModels.Relational.LinkRequested
 {
+    [Table("\"RequestedLink\"")]
     public class RequestedLink
     {
+        [Key]
         public virtual long Id { get; protected set; }
         public virtual Guid ProcessId { get; protected set; }
         public virtual Guid RequestingLibraryId { get; protected set; }

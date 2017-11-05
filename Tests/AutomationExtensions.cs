@@ -17,6 +17,7 @@ using Lending.Domain.OpenLibrary;
 using Lending.Domain.RemoveBookFromLibrary;
 using Lending.Domain.RequestLink;
 using Lending.ReadModels.Relational;
+using Dapper.Contrib.Extensions;
 using static Joshilewis.Testing.Helpers.ApiExtensions;
 
 namespace Tests
@@ -28,7 +29,7 @@ namespace Tests
         public static void UserRegisters(Guid id, string name, string emailAddress, string picture)
         {
             PersistenceExtensions.OpenTransaction();
-            PersistenceExtensions.Repository.Save(new AuthenticatedUser(id, name, emailAddress, picture, new List<AuthenticationProvider>()));
+            PersistenceExtensions.Connection.Insert(new AuthenticatedUser(id, name, emailAddress, picture, new List<AuthenticationProvider>()));
             PersistenceExtensions.CommitTransaction();
         }
 

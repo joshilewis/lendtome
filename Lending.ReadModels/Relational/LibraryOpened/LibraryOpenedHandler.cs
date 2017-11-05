@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Linq;
+using Dapper;
 using Dapper.Contrib.Extensions;
-using Lending.Domain.OpenLibrary;
 using NHibernate;
 
 namespace Lending.ReadModels.Relational.LibraryOpened
@@ -14,12 +15,12 @@ namespace Lending.ReadModels.Relational.LibraryOpened
 
         public override void When(Domain.OpenLibrary.LibraryOpened @event)
         {
-            AuthenticatedUser user = Session.Connection.Get<AuthenticatedUser>(@event.AdministratorId);
-            OpenedLibrary existingLibrary = Session.Connection.Get<OpenedLibrary>(@event.AggregateId);
+            OpenedLibrary existingLibrary = Connection.GetOpenedLibrary(@event.AggregateId);
             if (existingLibrary != null) return;
+            AuthenticatedUser user = Connection.GetAuthenticatedUser(@event.AdministratorId);
 
             OpenedLibrary openedLibrary = new OpenedLibrary(@event.AggregateId, @event.Name, user.Id, user.Picture);
-            Session.Save(openedLibrary);
+            Connection.Insert(openedLibrary);
 
         }
     }

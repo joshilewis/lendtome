@@ -6,6 +6,7 @@ namespace Lending.ReadModels.Relational.LibraryOpened
     [Table("\"OpenedLibrary\"")]
     public class OpenedLibrary
     {
+        [ExplicitKey]
         public virtual Guid Id { get; protected set; }
         public virtual string Name { get; protected set; }
         public virtual Guid AdministratorId { get; protected set; }

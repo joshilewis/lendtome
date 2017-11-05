@@ -22,7 +22,7 @@ namespace Lending.ReadModels.Relational.ListLibrayLinks
 
         public override object Handle(ListLibraryLinks query)
         {
-            return Connection.Query<LibraryLink>($"SELECT * FROM \"LibraryLink\" WHERE acceptingadministratorid = '{query.UserId}' OR requestingadministratorid = '{query.UserId}'")
+            return Connection.Query<LibraryLink>($"SELECT * FROM \"LibraryLink\" WHERE \"AcceptingAdministratorId\" = '{query.UserId}' OR RequestingAdministratorId = '{query.UserId}'")
                 .Select(x =>
                 {
                     if (x.AcceptingLibraryId == query.UserId)

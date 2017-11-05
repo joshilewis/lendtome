@@ -4,6 +4,7 @@ using Lending.Execution.DI;
 using LightBDD;
 using LightBDD.Coordination;
 using LightBDD.Notification;
+using Npgsql.Logging;
 using NUnit.Framework;
 using Tests;
 using static Joshilewis.Testing.Helpers.DIExtensions;
@@ -16,23 +17,23 @@ namespace Tests
     [TestFixture]
     public abstract class Fixture
     {
+        static Fixture()
+        {
+            NpgsqlLogManager.Provider = new ConsoleLoggingProvider(NpgsqlLogLevel.Debug, true, true);
+        }
+
         protected BDDRunner Runner { get; private set; }
 
         [OneTimeSetUp]
         public void FixtureSetUp()
         {
-            Runner = new BDDRunner(this.GetType(), CreateProgressNotifier());
+            Runner = new BDDRunner(this.GetType(), new ConsoleProgressNotifier());
         }
 
         [OneTimeTearDown]
         public void FixtureTearDown()
         {
             FeatureCoordinator.Instance.AddFeature(Runner.Result);
-        }
-
-        protected virtual IProgressNotifier CreateProgressNotifier()
-        {
-            return new ConsoleProgressNotifier();
         }
 
         [SetUp]

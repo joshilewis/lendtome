@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using Dapper.Contrib.Extensions;
 using Lending.ReadModels.Relational.LibraryOpened;
 
 namespace Lending.ReadModels.Relational.LinkAccepted
 {
+    [Table("\"LibraryLink\"")]
     public class LibraryLink
     {
+        [ExplicitKey]
         public virtual long Id { get; protected set; }
         public virtual Guid ProcessId { get; protected set; }
         public virtual Guid RequestingLibraryId { get; protected set; }

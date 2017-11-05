@@ -2,7 +2,7 @@
 {
     public interface IRepository
     {
-        void Save(object obj);
+        void Save<T>(T obj) where T : class;
         T Get<T>(object identifier) where T : class;
     }
 }

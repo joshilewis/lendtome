@@ -14,9 +14,9 @@ namespace Joshilewis.Infrastructure.Persistence
             this.getSession = sessionFunc;
         }
 
-        public void Save(object obj)
+        public void Save<T>(T obj) where T : class
         {
-            getSession().Save(obj);
+            getSession().Connection.Insert(obj);
         }
 
         public T Get<T>(object identifier) where T : class
