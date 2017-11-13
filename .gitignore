@@ -111,3 +111,4 @@ UpgradeLog*.XML
 /_NCrunch_Lending
 /.vscode
 *nCrunchTemp_*
+node_modules/
