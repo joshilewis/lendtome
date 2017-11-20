@@ -42,18 +42,12 @@ namespace Tests.Queries
 
         private void LinksAreRequested()
         {
-            UserRegisters(user1Id, "user1", "email1", "user1Picture");
-            UserRegisters(user2Id, "user2", "email2", "user2Picture");
-            UserRegisters(user3Id, "user3", "email3", "user3Picture");
-            UserRegisters(user4Id, "user4", "email4", "user4Picture");
-            UserRegisters(user5Id, "user5", "email5", "user5Picture");
-            UserRegisters(user6Id, "user6", "email6", "user6Picture");
-            library1Id = OpenLibrary(transactionId, user1Id, "library1");
-            library2Id = OpenLibrary(transactionId, user2Id, "library2");
-            library3Id = OpenLibrary(transactionId, user3Id, "library3");
-            library4Id = OpenLibrary(transactionId, user4Id, "library4");
-            library5Id = OpenLibrary(transactionId, user5Id, "library5");
-            library6Id = OpenLibrary(transactionId, user6Id, "library6");
+            library1Id = OpenLibrary(transactionId, user1Id, "library1", "library1Picture");
+            library2Id = OpenLibrary(transactionId, user2Id, "library2", "library2Picture");
+            library3Id = OpenLibrary(transactionId, user3Id, "library3", "library3Picture");
+            library4Id = OpenLibrary(transactionId, user4Id, "library4", "library4Picture");
+            library5Id = OpenLibrary(transactionId, user5Id, "library5", "library5Picture");
+            library6Id = OpenLibrary(transactionId, user6Id, "library6", "library6Picture");
             RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
             RequestsLibraryLink(transactionId, library1Id, user1Id, library3Id);
             RequestsLibraryLink(transactionId, library1Id, user1Id, library4Id);
@@ -76,9 +70,9 @@ namespace Tests.Queries
             GetEndpoint($"/libraries/{library1Id}/links/sent").As(user1Id);
 
             ResponseIs(
-                new LibrarySearchResult(library2Id, "library2", "user2Picture"),
-                new LibrarySearchResult(library3Id, "library3", "user3Picture"),
-                new LibrarySearchResult(library4Id, "library4", "user4Picture")
+                new LibrarySearchResult(library2Id, "library2", "library2Picture"),
+                new LibrarySearchResult(library3Id, "library3", "library3Picture"),
+                new LibrarySearchResult(library4Id, "library4", "library4Picture")
             );
         }
 
@@ -102,8 +96,8 @@ namespace Tests.Queries
             GetEndpoint($"/libraries/{library5Id}/links/sent").As(user5Id);
 
             ResponseIs(
-                new LibrarySearchResult(library1Id, "library1", "user1Picture"),
-                new LibrarySearchResult(library2Id, "library2", "user2Picture")
+                new LibrarySearchResult(library1Id, "library1", "library1Picture"),
+                new LibrarySearchResult(library2Id, "library2", "library2Picture")
             );
         }
 
@@ -114,7 +108,7 @@ namespace Tests.Queries
 
             GetEndpoint($"/libraries/{library1Id}/links/received").As(user1Id);
 
-            ResponseIs(new LibrarySearchResult(library5Id, "library5", "user5Picture"));
+            ResponseIs(new LibrarySearchResult(library5Id, "library5", "library5Picture"));
         }
 
         [Test]
@@ -126,8 +120,8 @@ namespace Tests.Queries
             GetEndpoint($"/libraries/{library2Id}/links/received").As(user2Id);
 
             ResponseIs(
-                new LibrarySearchResult(library1Id, "library1", "user1Picture"),
-                new LibrarySearchResult(library5Id, "library5", "user5Picture")
+                new LibrarySearchResult(library1Id, "library1", "library1Picture"),
+                new LibrarySearchResult(library5Id, "library5", "library5Picture")
             );
         }
 
@@ -150,8 +144,8 @@ namespace Tests.Queries
             GetEndpoint($"/libraries/{library1Id}/links/").As(user1Id);
 
             ResponseIs(
-                new LibrarySearchResult(library2Id, "library2", "user2Picture"),
-                new LibrarySearchResult(library3Id, "library3", "user3Picture")
+                new LibrarySearchResult(library2Id, "library2", "library2Picture"),
+                new LibrarySearchResult(library3Id, "library3", "library3Picture")
             );
         }
 
@@ -174,7 +168,7 @@ namespace Tests.Queries
 
             GetEndpoint($"/libraries/{library5Id}/links/").As(user5Id);
 
-            ResponseIs(new LibrarySearchResult(library2Id, "library2", "user2Picture"));
+            ResponseIs(new LibrarySearchResult(library2Id, "library2", "library2Picture"));
         }
 
     }

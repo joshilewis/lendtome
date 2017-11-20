@@ -7,12 +7,14 @@ namespace Lending.Domain.OpenLibrary
     {
         public string Name { get; set; }
         public string AdministratorId { get; set; }
+        public string Picture { get; set; }
 
-        public LibraryOpened(Guid processId, Guid aggregateId, string name, string adminId)
+        public LibraryOpened(Guid processId, Guid aggregateId, string name, string adminId, string picture = "picture1")
             : base(processId, aggregateId)
         {
             Name = name;
             AdministratorId = adminId;
+            Picture = picture;
         }
 
         // override object.Equals
@@ -26,7 +28,8 @@ namespace Lending.Domain.OpenLibrary
             if (!base.Equals(obj)) return false;
             var other = (LibraryOpened)obj;
             return Name.Equals(other.Name) &&
-                   AdministratorId.Equals(other.AdministratorId);
+                   AdministratorId.Equals(other.AdministratorId) &&
+                   Picture.Equals(other.Picture);
         }
 
         public override int GetHashCode()

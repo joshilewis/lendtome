@@ -18,15 +18,14 @@ namespace Tests.Commands
             var transactionId = Guid.Empty;
             var userId = "userId";
 
-            UserRegisters(userId, "user1", "email1", "user1Picture");
-            var libraryId = OpenLibrary(transactionId, userId, "library1");
+            var libraryId = OpenLibrary(transactionId, userId, "library1", "library1Picture");
             AddsBookToLibrary(transactionId, libraryId, userId, "Title", "Author", "isbn", 1982);
 
             RemovesBookFromLibrary(transactionId, libraryId, userId, "Title", "Author", "isbn", 1982);
 
             BookRemovedSucccessfully();
             EventsSavedForAggregate<Library>(libraryId,
-                new LibraryOpened(transactionId, libraryId, "library1", userId),
+                new LibraryOpened(transactionId, libraryId, "library1", userId, "library1Picture"),
                 new BookAddedToLibrary(transactionId, libraryId, "Title", "Author", "isbn", 1982),
                 new BookRemovedFromLibrary(transactionId, libraryId, "Title", "Author", "isbn", 1982)
             );
@@ -38,14 +37,13 @@ namespace Tests.Commands
             var transactionId = Guid.Empty;
             var userId = "userId";
 
-            UserRegisters(userId, "user1", "email1", "user1Picture");
-            var libraryId = OpenLibrary(transactionId, userId, "library1");
+            var libraryId = OpenLibrary(transactionId, userId, "library1", "library1Picture");
 
             RemovesBookFromLibrary(transactionId, libraryId, userId, "Title", "Author", "isbn", 1982);
 
             IgnoreBecauseBookNotInLibrary();
             EventsSavedForAggregate<Library>(libraryId,
-                new LibraryOpened(transactionId, libraryId, "library1", userId)
+                new LibraryOpened(transactionId, libraryId, "library1", userId, "library1Picture")
             );
         }
 
@@ -55,15 +53,14 @@ namespace Tests.Commands
             var transactionId = Guid.Empty;
             var userId = "userId";
 
-            UserRegisters(userId, "user1", "email1", "user1Picture");
-            var libraryId = OpenLibrary(transactionId, userId, "library1");
+            var libraryId = OpenLibrary(transactionId, userId, "library1", "library1Picture");
 
             RemovesBookFromLibrary(transactionId, libraryId, "Unauthorised user", "Title", "Author", "isbn",
                 1982);
 
             UnauthorisedCommandIgnored("Unauthorised user", typeof(Library), libraryId);
             EventsSavedForAggregate<Library>(libraryId,
-                new LibraryOpened(transactionId, libraryId, "library1", userId)
+                new LibraryOpened(transactionId, libraryId, "library1", userId, "library1Picture")
             );
         }
 

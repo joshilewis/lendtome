@@ -19,7 +19,7 @@ namespace Lending.Domain.OpenLibrary
         {
             var libraryId = Guid.NewGuid();
             Library library = Library.Open(command.ProcessId, new LibraryId(libraryId), command.Name,
-                new AdministratorId(command.UserId));
+                new AdministratorId(command.UserId), command.Picture);
             EventRepository.Save(library);
             return Created(libraryId.ToString());
         }

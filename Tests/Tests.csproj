@@ -169,7 +169,6 @@
     <Compile Include="MigrationExtensions.cs" />
     <Compile Include="Queries\LinkRequestSpecs.cs" />
     <Compile Include="Queries\ListLibrarySpecs.cs" />
-    <Compile Include="Infra\AuthCallBack.cs" />
     <Compile Include="Infra\ContainerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\SearchForBookTests.cs" />

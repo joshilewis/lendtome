@@ -25,16 +25,9 @@ namespace Tests
     {
         private static PostCallBuilder command;
 
-        public static void UserRegisters(string id, string name, string emailAddress, string picture)
+        public static Guid OpenLibrary(Guid processId, string userId, string name, string picture)
         {
-            PersistenceExtensions.OpenTransaction();
-            PersistenceExtensions.Repository.Save(new AuthenticatedUser(id, name, emailAddress, picture, new List<AuthenticationProvider>()));
-            PersistenceExtensions.CommitTransaction();
-        }
-
-        public static Guid OpenLibrary(Guid processId, string userId, string name)
-        {
-            command = WhenCommand(new OpenLibrary(processId, userId, name));
+            command = WhenCommand(new OpenLibrary(processId, userId, name, picture));
             return Guid.Parse(command.IsPOSTedTo<string>("/libraries"));
         }
 
@@ -153,9 +146,9 @@ namespace Tests
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
-        public static void LibraryOpened(Guid processId, string userId, Guid libraryId, string name)
+        public static void LibraryOpened(Guid processId, string userId, Guid libraryId, string name, string picture)
         {
-            HandleEvent(new LibraryOpened(processId, libraryId, name, userId));
+            HandleEvent(new LibraryOpened(processId, libraryId, name, userId, picture));
         }
 
         public static void LinkRequested(Guid processId, Guid aggregateId, Guid targetLibraryId)

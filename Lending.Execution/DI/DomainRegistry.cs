@@ -13,12 +13,9 @@ using Joshilewis.Infrastructure.EventRouting;
 using Joshilewis.Infrastructure.Persistence;
 using Joshilewis.Infrastructure.UnitOfWork;
 using Lending.Domain.AddBookToLibrary;
-using Lending.Domain.OpenLibrary;
-using Lending.Execution.Auth;
 using Lending.ReadModels.Relational;
 using Lending.ReadModels.Relational.BookAdded;
 using Lending.ReadModels.Relational.LibraryOpened;
-using Lending.ReadModels.Relational.ListLibrayLinks;
 using Lending.ReadModels.Relational.SearchForLibrary;
 using NHibernate.Context;
 using StructureMap;
@@ -123,15 +120,6 @@ namespace Lending.Execution.DI
                 .Use<Tokeniser>()
                 .Ctor<string>()
                 .Is(jwtSecret);
-
-            For<IAuthenticationCallbackProvider>()
-                .AlwaysUnique()
-                .Use<AuthCallbackProvider>();
-
-            For<IUserMapper>()
-                .AlwaysUnique()
-                .Use<UserMapper>();
-
         }
 
         private static IEnumerable<IEventHandler> GetEventHandlers(IContext context, Type eventType)

@@ -139,17 +139,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auth\AuthCallbackProvider.cs" />
-    <Compile Include="Auth\AuthenticateCallbackData.cs" />
     <Compile Include="Auth\Caching\CookieCache.cs" />
     <Compile Include="Auth\Caching\SessionCache.cs" />
-    <Compile Include="Auth\Code.cs" />
-    <Compile Include="Auth\EnableSessions.cs" />
-    <Compile Include="Auth\IAuthenticationCallbackProvider.cs" />
-    <Compile Include="Auth\IUserMapper.cs" />
-    <Compile Include="Auth\ProcessResult.cs" />
-    <Compile Include="Auth\SimpleAuthenticationModule.cs" />
-    <Compile Include="Auth\UserMapper.cs" />
     <Compile Include="DI\DomainRegistry.cs" />
     <Compile Include="DI\LendingContainer.cs" />
     <Compile Include="Modules\Modules.cs" />
@@ -178,7 +169,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Auth\Caching\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

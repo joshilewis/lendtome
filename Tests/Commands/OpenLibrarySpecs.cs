@@ -18,13 +18,12 @@ namespace Tests.Commands
             var userId = "userId";
             Guid libraryId = Guid.NewGuid();
             //Given
-            UserRegisters(userId, "user1", "email1", "user1Picture");
             //When
-            libraryId = OpenLibrary(transactionId, userId, "library1");
+            libraryId = OpenLibrary(transactionId, userId, "library1", "library1Picture");
             //Then
             LibraryOpenedSuccessfully();
                 EventsSavedForAggregate<Library>(libraryId,
-                    new LibraryOpened(transactionId, libraryId, "library1", userId));
+                    new LibraryOpened(transactionId, libraryId, "library1", userId, "library1Picture"));
         }
 
         [Test]
@@ -34,16 +33,15 @@ namespace Tests.Commands
             var userId = "userId";
             Guid libraryId = Guid.Empty;
             //Given
-            UserRegisters(userId, "user1", "email1", "user1Picture");
-            libraryId = OpenLibrary(transactionId, userId, "library1");
+            libraryId = OpenLibrary(transactionId, userId, "library1", "library1Picture");
             //When
-            Guid libraryId2 = OpenLibrary(transactionId, userId, "library1");
+            Guid libraryId2 = OpenLibrary(transactionId, userId, "library1", "library1Picture");
             //Then
             LibraryOpenedSuccessfully();
             EventsSavedForAggregate<Library>(libraryId, 
-                new LibraryOpened(transactionId, libraryId, "library1", userId));
+                new LibraryOpened(transactionId, libraryId, "library1", userId, "library1Picture"));
             EventsSavedForAggregate<Library>(libraryId2,
-                new LibraryOpened(transactionId, libraryId2, "library1", userId));
+                new LibraryOpened(transactionId, libraryId2, "library1", userId, "library1Picture"));
         }
 
 

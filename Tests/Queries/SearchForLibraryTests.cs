@@ -33,30 +33,27 @@ namespace Tests.Queries
         public void SearchingForLibraryWithSingleMatchShouldReturnThatUser()
         {
             Runner.RunScenario(
-                given => UsersRegistered(),
-                and => LibrariesOpened(),
+                given => LibrariesOpened(),
 
                 when => SearchForLibraries("Lew"),
-                then => ResponseIs(new LibrarySearchResult(library1Id, "Joshua Lewis", "user1Picture")));
+                then => ResponseIs(new LibrarySearchResult(library1Id, "Joshua Lewis", "library1Picture")));
         }
 
         [Test]
         public void SearchingForLibraryWithSingleMatchWithWrongCaseShouldReturnThatUser()
         {
             Runner.RunScenario(
-                given => UsersRegistered(),
-                and => LibrariesOpened(),
+                given => LibrariesOpened(),
 
                 when => SearchForLibraries("lEw"),
-                then => ResponseIs(new LibrarySearchResult(library1Id, "Joshua Lewis", "user1Picture")));
+                then => ResponseIs(new LibrarySearchResult(library1Id, "Joshua Lewis", "library1Picture")));
         }
 
         [Test]
         public void SearchingForLibraryWithNoMatchesShouldReturnEmptyList()
         {
             Runner.RunScenario(
-                given => UsersRegistered(),
-                and => LibrariesOpened(),
+                given => LibrariesOpened(),
 
                 when => SearchForLibraries("Pet"),
                 then => ResponseIs(new LibrarySearchResult[] { }));
@@ -66,40 +63,30 @@ namespace Tests.Queries
         public void SearchingForLibraryWithTwoMatchsShouldReturnTwoLibraries()
         {
             Runner.RunScenario(
-                given => UsersRegistered(),
-                and => LibrariesOpened(),
+                given => LibrariesOpened(),
 
                 when => SearchForLibraries("Jos"),
                 then => ResponseIs(
-                    new LibrarySearchResult(library1Id, "Joshua Lewis", "user1Picture"),
-                    new LibrarySearchResult(library3Id, "Josie Doe", "user3Picture")));
+                    new LibrarySearchResult(library1Id, "Joshua Lewis", "library1Picture"),
+                    new LibrarySearchResult(library3Id, "Josie Doe", "library3Picture")));
         }
 
         [Test]
         public void SearchingForLibraryThatMatchesSelfShouldExcludeSelfFromResults()
         {
             Runner.RunScenario(
-                given => UsersRegistered(),
-                and => LibrariesOpened(),
+                given => LibrariesOpened(),
 
                 when => SearchForLibrariesAsUser("Jos", user1Id),
-                then => ResponseIs(new LibrarySearchResult(library3Id, "Josie Doe", "user3Picture")));
-        }
-
-        private void UsersRegistered()
-        {
-            UserRegisters(user1Id, "user1", "email1", "user1Picture");
-            UserRegisters(user2Id, "user2", "email2", "user2Picture");
-            UserRegisters(user3Id, "user3", "email3", "user3Picture");
-            UserRegisters(user4Id, "user4", "email4", "user4Picture");
+                then => ResponseIs(new LibrarySearchResult(library3Id, "Josie Doe", "library3Picture")));
         }
 
         private void LibrariesOpened()
         {
-            LibraryOpened(transactionId, user1Id, library1Id, "Joshua Lewis");
-            LibraryOpened(transactionId, user2Id, library2Id, "Suzaan Hepburn");
-            LibraryOpened(transactionId, user3Id, library3Id, "Josie Doe");
-            LibraryOpened(transactionId, user4Id, library4Id, "Audrey Hepburn");
+            LibraryOpened(transactionId, user1Id, library1Id, "Joshua Lewis", "library1Picture");
+            LibraryOpened(transactionId, user2Id, library2Id, "Suzaan Hepburn", "library2Picture");
+            LibraryOpened(transactionId, user3Id, library3Id, "Josie Doe", "library3Picture");
+            LibraryOpened(transactionId, user4Id, library4Id, "Audrey Hepburn", "library4Picture");
         }
 
     }

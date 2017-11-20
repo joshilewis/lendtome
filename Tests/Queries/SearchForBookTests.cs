@@ -38,10 +38,8 @@ namespace Tests.Queries
         public void SearchingForBookNotOwnedByAnyConnection()
         {
             Runner.RunScenario(
-            given => UserRegisters(user1Id, "user1", "email1", "user1Picture"),
-            and => UserRegisters(user2Id, "user2", "email2", "user2Picture"),
-            and => LibraryOpened(transactionId, user1Id, library1Id, "library1"),
-            and => LibraryOpened(transactionId, user2Id, library2Id, "library2"),
+            given => LibraryOpened(transactionId, user1Id, library1Id, "library1", "library1Picture"),
+            and => LibraryOpened(transactionId, user2Id, library2Id, "library2", "library1Picture"),
             and => LinkRequested(transactionId, library1Id, library2Id),
             and => LinkAccepted(transactionId, library2Id, library1Id),
 
@@ -53,8 +51,7 @@ namespace Tests.Queries
         public void SearchingForBookWithNoLinks()
         {
             Runner.RunScenario(
-            given => UserRegisters(user1Id, "user1", "email1", "user1Picture"),
-            and => LibraryOpened(transactionId, user1Id, library1Id, "library1"),
+            given => LibraryOpened(transactionId, user1Id, library1Id, "library1", "library1Picture"),
 
             when => GetEndpoint("books/Extreme Programming Explained").As(user1Id),
             then => ResponseIs(new BookSearchResult[] {}));
@@ -64,8 +61,7 @@ namespace Tests.Queries
         public void SearchingForBookWithSingleMatchingTitleInManyLibrariesShouldReturnAllOwners()
         {
             Runner.RunScenario(
-            given => Users1To6Registered(),
-            and => Libraries1To6Opened(),
+            given => Libraries1To6Opened(),
             and => Library1RequestedLinksToOtherLibraries(),
             and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
@@ -83,8 +79,7 @@ namespace Tests.Queries
         public void SearchingForBookWithManyMatchingTitlesInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
             Runner.RunScenario(
-            given => Users1To6Registered(),
-            and => Libraries1To6Opened(),
+            given => Libraries1To6Opened(),
             and => Library1RequestedLinksToOtherLibraries(),
             and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
@@ -104,8 +99,7 @@ namespace Tests.Queries
         public void SearchingForBookWithSingleMatchingAuthorInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
             Runner.RunScenario(
-            given => Users1To6Registered(),
-            and => Libraries1To6Opened(),
+            given => Libraries1To6Opened(),
             and => Library1RequestedLinksToOtherLibraries(),
             and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
@@ -125,8 +119,7 @@ namespace Tests.Queries
         public void SearchingForBookWithManyMatchingTitlesAndAuthorsInManyLibrariesShouldReturnAllOwnersAndBooks()
         {
             Runner.RunScenario(
-            given => Users1To6Registered(),
-            and => Libraries1To6Opened(),
+            given => Libraries1To6Opened(),
             and => Library1RequestedLinksToOtherLibraries(),
             and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
@@ -149,8 +142,7 @@ namespace Tests.Queries
         public void ExcludeUnlinkedLibrariesInSearch()
         {
             Runner.RunScenario(
-            given => Users1To6Registered(),
-            and => Libraries1To6Opened(),
+            given => Libraries1To6Opened(),
             and => Library1RequestedLinksToOtherLibraries(),
 
             and => LinkAccepted(transactionId, library2Id, library1Id),
@@ -176,8 +168,7 @@ namespace Tests.Queries
         public void ExcludeRemovedBooksFromSearchResults()
         {
             Runner.RunScenario(
-            given => Users1To6Registered(),
-            and => Libraries1To6Opened(),
+            given => Libraries1To6Opened(),
             and => Library1RequestedLinksToOtherLibraries(),
             and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
@@ -196,24 +187,14 @@ namespace Tests.Queries
                 ));
         }
 
-        private void Users1To6Registered()
-        {
-            UserRegisters(user1Id, "user1", "email1", "library1Picture");
-            UserRegisters(user2Id, "user2", "email2", "library2Picture");
-            UserRegisters(user3Id, "user3", "email3", "library3Picture");
-            UserRegisters(user4Id, "user4", "email4", "library4Picture");
-            UserRegisters(user5Id, "user5", "email5", "library5Picture");
-            UserRegisters(user6Id, "user6", "email6", "library6Picture");
-        }
-
         private void Libraries1To6Opened()
         {
-             LibraryOpened(transactionId, user1Id, library1Id, "library1");
-             LibraryOpened(transactionId, user2Id, library2Id, "library2");
-             LibraryOpened(transactionId, user3Id, library3Id, "library3");
-             LibraryOpened(transactionId, user4Id, library4Id, "library4");
-             LibraryOpened(transactionId, user5Id, library5Id, "library5");
-             LibraryOpened(transactionId, user6Id, library6Id, "library6");
+             LibraryOpened(transactionId, user1Id, library1Id, "library1", "library1Picture");
+             LibraryOpened(transactionId, user2Id, library2Id, "library2", "library2Picture");
+             LibraryOpened(transactionId, user3Id, library3Id, "library3", "library3Picture");
+             LibraryOpened(transactionId, user4Id, library4Id, "library4", "library4Picture");
+             LibraryOpened(transactionId, user5Id, library5Id, "library5", "library5Picture");
+             LibraryOpened(transactionId, user6Id, library6Id, "library6", "library6Picture");
         }
 
         private void Library1RequestedLinksToOtherLibraries()

@@ -27,10 +27,10 @@ namespace Lending.Domain.Model
         public List<LibraryId> LinkedLibraries { get; }
         public List<Book> Books { get; } 
 
-        protected Library(Guid processId, LibraryId id, string name, AdministratorId administratorId)
+        protected Library(Guid processId, LibraryId id, string name, AdministratorId administratorId, string picture)
             : this()
         {
-            RaiseEvent(new LibraryOpened(processId, id.Id, name, administratorId.Id));
+            RaiseEvent(new LibraryOpened(processId, id.Id, name, administratorId.Id, picture));
         }
 
         protected Library()
@@ -42,9 +42,9 @@ namespace Lending.Domain.Model
             Books = new List<Book>();
         }
 
-        public static Library Open(Guid processId, LibraryId id, string name, AdministratorId adminId)
+        public static Library Open(Guid processId, LibraryId id, string name, AdministratorId adminId, string picture)
         {
-            return new Library(processId, id, name, adminId);
+            return new Library(processId, id, name, adminId, picture);
         }
 
         public static Library CreateFromHistory(IEnumerable<Event> events)

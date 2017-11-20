@@ -22,19 +22,17 @@ namespace Tests.Commands
             var user1Id = "user1Id";
             var user2Id = "user2Id";
 
-            UserRegisters(user1Id, "user1", "email1", "user1Picture");
-            UserRegisters(user2Id, "user2", "email2", "user2Picture");
-            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
-            var library2Id = OpenLibrary(transactionId, user2Id, "library2");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1", "library1Picture");
+            var library2Id = OpenLibrary(transactionId, user2Id, "library2", "library2Picture");
 
             RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
 
             LinkRequestCreated();
             EventsSavedForAggregate<Library>(library1Id,
-                new LibraryOpened(transactionId, library1Id, "library1", user1Id),
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id, "library1Picture"),
                 new LinkRequested(transactionId, library1Id, library2Id));
             EventsSavedForAggregate<Library>(library2Id,
-                new LibraryOpened(transactionId, library2Id, "library2", user2Id),
+                new LibraryOpened(transactionId, library2Id, "library2", user2Id, "library2Picture"),
                 new LinkRequestReceived(transactionId, library2Id, library1Id));
         }
 
@@ -45,20 +43,18 @@ namespace Tests.Commands
             var user1Id = "user1Id";
             var user2Id = "user2Id";
 
-            UserRegisters(user1Id, "user1", "email1", "user1Picture");
-            UserRegisters(user2Id, "user2", "email2", "user2Picture");
-            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
-            var library2Id = OpenLibrary(transactionId, user2Id, "library2");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1", "library1Picture");
+            var library2Id = OpenLibrary(transactionId, user2Id, "library2", "library2Picture");
             RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
 
             RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
 
             DuplicateLinkRequestIgnored();
             EventsSavedForAggregate<Library>(library1Id,
-                new LibraryOpened(transactionId, library1Id, "library1", user1Id),
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id, "library1Picture"),
                 new LinkRequested(transactionId, library1Id, library2Id));
             EventsSavedForAggregate<Library>(library2Id,
-                new LibraryOpened(transactionId, library2Id, "library2", user2Id),
+                new LibraryOpened(transactionId, library2Id, "library2", user2Id, "library2Picture"),
                 new LinkRequestReceived(transactionId, library2Id, library1Id));
         }
 
@@ -69,14 +65,13 @@ namespace Tests.Commands
             var user1Id = "user1Id";
             var library2Id = Guid.NewGuid();
 
-            UserRegisters(user1Id, "user1", "email1", "user1Picture");
-            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1", "library1Picture");
 
             RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
 
             FailtNotFound();
             EventsSavedForAggregate<Library>(library1Id,
-                new LibraryOpened(transactionId, library1Id, "library1", user1Id));
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id, "library1Picture"));
         }
 
         [Test]
@@ -86,20 +81,18 @@ namespace Tests.Commands
             var user1Id = "user1Id";
             var user2Id = "user2Id";
 
-            UserRegisters(user1Id, "user1", "email1", "user1Picture");
-            UserRegisters(user2Id, "user2", "email2", "user2Picture");
-            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
-            var library2Id = OpenLibrary(transactionId, user2Id, "library2");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1", "library1Picture");
+            var library2Id = OpenLibrary(transactionId, user2Id, "library2", "library2Picture");
             RequestsLibraryLink(transactionId, library2Id, user2Id, library1Id);
 
             RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
 
             ReverseLinkRequestIgnored();
             EventsSavedForAggregate<Library>(library1Id,
-                new LibraryOpened(transactionId, library1Id, "library1", user1Id),
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id, "library1Picture"),
                 new LinkRequestReceived(transactionId, library1Id, library2Id));
             EventsSavedForAggregate<Library>(library2Id,
-                new LibraryOpened(transactionId, library2Id, "library2", user2Id),
+                new LibraryOpened(transactionId, library2Id, "library2", user2Id, "library2Picture"),
                 new LinkRequested(transactionId, library2Id, library1Id));
         }
 
@@ -110,10 +103,8 @@ namespace Tests.Commands
             var user1Id = "user1Id";
             var user2Id = "user2Id";
 
-            UserRegisters(user1Id, "user1", "email1", "user1Picture");
-            UserRegisters(user2Id, "user2", "email2", "user2Picture");
-            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
-            var library2Id = OpenLibrary(transactionId, user2Id, "library2");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1", "library1Picture");
+            var library2Id = OpenLibrary(transactionId, user2Id, "library2", "library2Picture");
             RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
             AcceptsLibraryLink(transactionId, library2Id, user2Id, library1Id);
 
@@ -121,11 +112,11 @@ namespace Tests.Commands
 
             LinkRequestForLinkedLibrariesIgnored();
             EventsSavedForAggregate<Library>(library1Id,
-                new LibraryOpened(transactionId, library1Id, "library1", user1Id),
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id, "library1Picture"),
                 new LinkRequested(transactionId, library1Id, library2Id),
                 new LinkCompleted(transactionId, library1Id, library2Id));
             EventsSavedForAggregate<Library>(library2Id,
-                new LibraryOpened(transactionId, library2Id, "library2", user2Id),
+                new LibraryOpened(transactionId, library2Id, "library2", user2Id, "library2Picture"),
                 new LinkRequestReceived(transactionId, library2Id, library1Id),
                 new LinkAccepted(transactionId, library2Id, library1Id));
         }
@@ -136,14 +127,13 @@ namespace Tests.Commands
             var transactionId = Guid.Empty;
             var user1Id = "user1Id";
 
-            UserRegisters(user1Id, "user1", "email1", "user1Picture");
-            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1", "library1Picture");
 
             RequestsLibraryLink(transactionId, library1Id, user1Id, library1Id);
 
             LinkRequestedToSelfIgnored();
             EventsSavedForAggregate<Library>(library1Id,
-                new LibraryOpened(transactionId, library1Id, "library1", user1Id));
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id, "library1Picture"));
         }
 
         [Test]
@@ -152,14 +142,13 @@ namespace Tests.Commands
             var transactionId = Guid.Empty;
             var user1Id = "user1Id";
 
-            UserRegisters(user1Id, "user1", "email1", "user1Picture");
-            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1", "library1Picture");
 
             RequestsLibraryLink(transactionId, library1Id, "Unauthorised User", Guid.Empty);
 
             UnauthorisedCommandIgnored("Unauthorised User", typeof(Library), library1Id);
             EventsSavedForAggregate<Library>(library1Id,
-                new LibraryOpened(transactionId, library1Id, "library1", user1Id));
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id, "library1Picture"));
         }
     }
 
