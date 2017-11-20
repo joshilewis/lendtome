@@ -37,7 +37,6 @@ namespace Lending.Execution.DI
                     m.FluentMappings
                         .AddFromAssemblyOf<OpenedLibraryMap>()
                         .AddFromAssemblyOf<LibraryBookMap>()
-                        .AddFromAssemblyOf<AuthenticatedUserMap>()
                 )
                 .BuildConfiguration()
                 ;
