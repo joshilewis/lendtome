@@ -4,9 +4,9 @@ namespace Joshilewis.Cqrs.Query
 {
     public class Query : Message
     {
-        public Guid? UserId { get; set; }
+        public string UserId { get; set; }
 
-        public Query(Guid? userId)
+        public Query(string userId)
         {
             UserId = userId;
         }

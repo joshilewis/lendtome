@@ -6,11 +6,11 @@ namespace Joshilewis.Infrastructure.Auth
 {
     public class CustomUserIdentity : IUserIdentity
     {
-        public Guid Id { get; }  
+        public string Id { get; }  
         public string UserName { get; }
         public IEnumerable<string> Claims { get; }
 
-        public CustomUserIdentity(Guid id, string userName, IEnumerable<string> claims)
+        public CustomUserIdentity(string id, string userName, IEnumerable<string> claims)
         {
             Id = id;
             UserName = userName;

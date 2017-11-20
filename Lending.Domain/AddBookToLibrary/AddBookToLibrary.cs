@@ -10,7 +10,7 @@ namespace Lending.Domain.AddBookToLibrary
         public string Isbn { get; set; }
         public int PublishYear { get; set; }
 
-        public AddBookToLibrary(Guid processId, Guid aggregateId, Guid userId, string title, string author, string isbnnumber, int publishYear)
+        public AddBookToLibrary(Guid processId, Guid aggregateId, string userId, string title, string author, string isbnnumber, int publishYear)
             : base(processId, aggregateId, userId)
         {
             Title = title;

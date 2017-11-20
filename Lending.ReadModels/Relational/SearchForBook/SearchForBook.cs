@@ -7,7 +7,7 @@ namespace Lending.ReadModels.Relational.SearchForBook
     {
         public string SearchString { get; set; }
 
-        public SearchForBook(Guid userId, string searchString)
+        public SearchForBook(string userId, string searchString)
             : base(userId)
         {
             SearchString = searchString;

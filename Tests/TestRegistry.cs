@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -8,10 +9,12 @@ using EventStore.ClientAPI;
 using EventStore.ClientAPI.Embedded;
 using EventStore.Core;
 using Joshilewis.Cqrs;
+using Joshilewis.Infrastructure.Auth;
 using Joshilewis.Infrastructure.EventRouting;
 using Joshilewis.Infrastructure.UnitOfWork;
 using Lending.Execution;
 using NHibernate;
+using Owin.StatelessAuth;
 using StructureMap;
 using StructureMap.Web;
 
@@ -51,6 +54,9 @@ namespace Tests
             For<NHibernateUnitOfWork>()
                 .HybridHttpOrThreadLocalScoped()
                 .Use<NHibernateUnitOfWork>();
+
+            For<ITokenValidator>()
+                .Use(new SecureTokenValidator(ConfigurationManager.AppSettings["jwt_secret"]));
 
         }
     }

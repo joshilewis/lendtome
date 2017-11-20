@@ -27,7 +27,7 @@ namespace Lending.Execution.Auth
 
             if (user != null) return user;
 
-            user = new AuthenticatedUser(SequentialGuid.NewGuid(), client.UserInformation.Name, client.UserInformation.Email, client.UserInformation.Picture,
+            user = new AuthenticatedUser(SequentialGuid.NewGuid().ToString(), client.UserInformation.Name, client.UserInformation.Email, client.UserInformation.Picture,
                 new List<AuthenticationProvider>()
                 {
                     new AuthenticationProvider(SequentialGuid.NewGuid(), client.ProviderName, client.UserInformation.Id),

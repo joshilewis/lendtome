@@ -7,8 +7,8 @@ namespace Lending.Domain.OpenLibrary
     {
         public string Name { get; set; }
 
-        public OpenLibrary(Guid processId, Guid userId, Guid newLibraryId, string name)
-            : base(processId, newLibraryId, userId)
+        public OpenLibrary(Guid processId, string userId, string name)
+            : base(processId, Guid.Empty, userId)
         {
             Name = name;
         }

@@ -15,14 +15,24 @@ namespace Joshilewis.Cqrs.Command
 
         protected IEventRepository EventRepository => getEventRepository();
 
-        protected virtual EResultCode Success()
+        protected virtual Result Success()
         {
-            return EResultCode.Ok;
+            return new Result(EResultCode.Ok);
         }
 
-        protected virtual EResultCode Created()
+        protected virtual Result Success(object payload)
         {
-            return EResultCode.Created;
+            return new Result(EResultCode.Ok, payload);
+        }
+
+        protected virtual Result Created()
+        {
+            return new Result(EResultCode.Created);
+        }
+
+        protected virtual Result Created(object payload)
+        {
+            return new Result(EResultCode.Created, payload);
         }
 
         protected virtual EResultCode Fail(string reason)

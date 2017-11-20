@@ -15,6 +15,7 @@ angular.module('lendtome', [
     'lendtomeServices',
     //'app.directives',
     'lendtomeControllers',
+    'firebase',
     'satellizer',
     'ui.bootstrap',
     'ui.bootstrap.collapse', 

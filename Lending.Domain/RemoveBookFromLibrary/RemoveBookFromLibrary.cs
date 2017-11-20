@@ -10,7 +10,7 @@ namespace Lending.Domain.RemoveBookFromLibrary
         public string Isbn { get; set; }
         public int PublishYear { get; set; }
 
-        public RemoveBookFromLibrary(Guid processId, Guid aggregateId, Guid userId, string title, string author,
+        public RemoveBookFromLibrary(Guid processId, Guid aggregateId, string userId, string title, string author,
             string isbn, int publishYear) : base(processId, aggregateId, userId)
         {
             Title = title;

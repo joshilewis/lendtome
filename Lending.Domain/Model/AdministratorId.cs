@@ -8,12 +8,12 @@ namespace Lending.Domain.Model
 {
     public class AdministratorId
     {
-        public AdministratorId(Guid id)
+        public AdministratorId(string id)
         {
             this.Id = id;
         }
 
-        public Guid Id { get; }
+        public string Id { get; }
 
         public override string ToString()
         {

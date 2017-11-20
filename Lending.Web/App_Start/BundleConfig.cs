@@ -14,19 +14,21 @@ namespace Lending.Web.App_Start
             bundles.Add(new StyleBundle("~/content/css/app").Include(
                 "~/content/bootstrap.css",
                 "~/content/font-awesome.css"
-                ));
+            ));
 
             bundles.Add(new ScriptBundle("~/js/jquery").Include("~/scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/js/app").Include(
-                "~/scripts/angular.js",
-                "~/scripts/angular-resource.js",
-                "~/scripts/angular-route.js",
-                "~/scripts/angular-ui-router.js",
-                "~/scripts/AngularUI/ui-router.js",
-                "~/scripts/ui-bootstrap-0.10.0.js",
-                "~/scripts/ui-bootstrap-tpls-0.10.0.js",
-                "~/scripts/satellizer.js"
+                    "~/scripts/angular.js",
+                    "~/scripts/angular-resource.js",
+                    "~/scripts/angular-route.js",
+                    "~/scripts/angular-ui-router.js",
+                    "~/scripts/AngularUI/ui-router.js",
+                    "~/scripts/angularfire.js",
+                    "~/scripts/firebase.js",
+                    "~/scripts/ui-bootstrap-0.10.0.js",
+                    "~/scripts/ui-bootstrap-tpls-0.10.0.js",
+                    "~/scripts/satellizer.js"
                 )
                 .IncludeDirectory("~/App", "*.js", true));
         }

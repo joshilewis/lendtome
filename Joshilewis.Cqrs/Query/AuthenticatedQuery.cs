@@ -4,9 +4,9 @@ namespace Joshilewis.Cqrs.Query
 {
     public abstract class AuthenticatedQuery : Query, IAuthenticated
     {
-        public new Guid UserId { get; set; }
+        public new string UserId { get; set; }
 
-        protected AuthenticatedQuery(Guid userId)
+        protected AuthenticatedQuery(string userId)
         {
             UserId = userId;
         }

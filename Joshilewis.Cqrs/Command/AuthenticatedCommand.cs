@@ -4,9 +4,9 @@ namespace Joshilewis.Cqrs.Command
 {
     public abstract class AuthenticatedCommand : Command, IAuthenticated
     {
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
-        protected AuthenticatedCommand(Guid processId, Guid aggregateId, Guid userId)
+        protected AuthenticatedCommand(Guid processId, Guid aggregateId, string userId)
             : base(processId, aggregateId)
         {
             UserId = userId;

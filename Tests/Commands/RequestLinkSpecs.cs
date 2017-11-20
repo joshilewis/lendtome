@@ -19,147 +19,147 @@ namespace Tests.Commands
         public void CanRequestLinkForUnlinkedLibrary()
         {
             var transactionId = Guid.Empty;
-            var userId = Guid.NewGuid();
-            var user2Id = Guid.NewGuid();
-            Runner.RunScenario(
-                given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => UserRegisters(user2Id, "user2", "email2", "user2Picture"),
-                and => OpensLibrary(transactionId, userId, "library1"),
-                and => OpensLibrary(transactionId, user2Id, "library2"),
+            var user1Id = "user1Id";
+            var user2Id = "user2Id";
 
-                when => RequestsLibraryLink(transactionId, userId, userId, user2Id),
+            UserRegisters(user1Id, "user1", "email1", "user1Picture");
+            UserRegisters(user2Id, "user2", "email2", "user2Picture");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
+            var library2Id = OpenLibrary(transactionId, user2Id, "library2");
 
-                then => LinkRequestCreated(),
-                and => EventsSavedForAggregate<Library>(userId,
-                    new LibraryOpened(transactionId, userId, "library1", userId),
-                    new LinkRequested(transactionId, userId, user2Id)),
-                and => EventsSavedForAggregate<Library>(user2Id,
-                    new LibraryOpened(transactionId, user2Id, "library2", user2Id),
-                    new LinkRequestReceived(transactionId, user2Id, userId)));
+            RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
+
+            LinkRequestCreated();
+            EventsSavedForAggregate<Library>(library1Id,
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id),
+                new LinkRequested(transactionId, library1Id, library2Id));
+            EventsSavedForAggregate<Library>(library2Id,
+                new LibraryOpened(transactionId, library2Id, "library2", user2Id),
+                new LinkRequestReceived(transactionId, library2Id, library1Id));
         }
 
         [Test]
         public void SendingDuplicateLinkRequestIgnored()
         {
             var transactionId = Guid.Empty;
-            var userId = Guid.NewGuid();
-            var user2Id = Guid.NewGuid();
-            Runner.RunScenario(
-                given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                given => UserRegisters(user2Id, "user2", "email2", "user2Picture"),
-                given => OpensLibrary(transactionId, userId, "library1"),
-                given => OpensLibrary(transactionId, user2Id, "library2"),
-                given => RequestsLibraryLink(transactionId, userId, userId, user2Id),
+            var user1Id = "user1Id";
+            var user2Id = "user2Id";
 
-                when => RequestsLibraryLink(transactionId, userId, userId, user2Id),
+            UserRegisters(user1Id, "user1", "email1", "user1Picture");
+            UserRegisters(user2Id, "user2", "email2", "user2Picture");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
+            var library2Id = OpenLibrary(transactionId, user2Id, "library2");
+            RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
 
-                then => DuplicateLinkRequestIgnored(),
-                and => EventsSavedForAggregate<Library>(userId,
-                    new LibraryOpened(transactionId, userId, "library1", userId),
-                    new LinkRequested(transactionId, userId, user2Id)),
-                and => EventsSavedForAggregate<Library>(user2Id,
-                    new LibraryOpened(transactionId, user2Id, "library2", user2Id),
-                    new LinkRequestReceived(transactionId, user2Id, userId)));
+            RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
+
+            DuplicateLinkRequestIgnored();
+            EventsSavedForAggregate<Library>(library1Id,
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id),
+                new LinkRequested(transactionId, library1Id, library2Id));
+            EventsSavedForAggregate<Library>(library2Id,
+                new LibraryOpened(transactionId, library2Id, "library2", user2Id),
+                new LinkRequestReceived(transactionId, library2Id, library1Id));
         }
 
         [Test]
         public void CantRequestLinkToNonExistentLibrary()
         {
             var transactionId = Guid.Empty;
-            var userId = Guid.NewGuid();
-            var user2Id = Guid.NewGuid();
-            Runner.RunScenario(
-                given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => OpensLibrary(transactionId, userId, "library1"),
+            var user1Id = "user1Id";
+            var library2Id = Guid.NewGuid();
 
-                when => RequestsLibraryLink(transactionId, userId, userId, user2Id),
+            UserRegisters(user1Id, "user1", "email1", "user1Picture");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
 
-                then => FailtNotFound(),
-                and => EventsSavedForAggregate<Library>(userId,
-                    new LibraryOpened(transactionId, userId, "library1", userId)));
+            RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
+
+            FailtNotFound();
+            EventsSavedForAggregate<Library>(library1Id,
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id));
         }
 
         [Test]
         public void RequestLinkToLibraryWithReverseLinkRequestIsIgnored()
         {
             var transactionId = Guid.Empty;
-            var userId = Guid.NewGuid();
-            var user2Id = Guid.NewGuid();
-            Runner.RunScenario(
-                given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => UserRegisters(user2Id, "user2", "email2", "user2Picture"),
-                and => OpensLibrary(transactionId, userId, "library1"),
-                and => OpensLibrary(transactionId, user2Id, "library2"),
-                and => RequestsLibraryLink(transactionId, user2Id, user2Id, userId),
+            var user1Id = "user1Id";
+            var user2Id = "user2Id";
 
-                when => RequestsLibraryLink(transactionId, userId, userId, user2Id),
+            UserRegisters(user1Id, "user1", "email1", "user1Picture");
+            UserRegisters(user2Id, "user2", "email2", "user2Picture");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
+            var library2Id = OpenLibrary(transactionId, user2Id, "library2");
+            RequestsLibraryLink(transactionId, library2Id, user2Id, library1Id);
 
-                then => ReverseLinkRequestIgnored(),
-                and => EventsSavedForAggregate<Library>(userId,
-                    new LibraryOpened(transactionId, userId, "library1", userId),
-                    new LinkRequestReceived(transactionId, userId, user2Id)),
-                and => EventsSavedForAggregate<Library>(user2Id,
-                    new LibraryOpened(transactionId, user2Id, "library2", user2Id),
-                    new LinkRequested(transactionId, user2Id, userId)));
+            RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
+
+            ReverseLinkRequestIgnored();
+            EventsSavedForAggregate<Library>(library1Id,
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id),
+                new LinkRequestReceived(transactionId, library1Id, library2Id));
+            EventsSavedForAggregate<Library>(library2Id,
+                new LibraryOpened(transactionId, library2Id, "library2", user2Id),
+                new LinkRequested(transactionId, library2Id, library1Id));
         }
 
         [Test]
         public void RequestLinkToLinkedLibraryIsIgnored()
         {
             var transactionId = Guid.Empty;
-            var userId = Guid.NewGuid();
-            var user2Id = Guid.NewGuid();
-            Runner.RunScenario(
-                given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => UserRegisters(user2Id, "user2", "email2", "user2Picture"),
-                and => OpensLibrary(transactionId, userId, "library1"),
-                and => OpensLibrary(transactionId, user2Id, "library2"),
-                and => RequestsLibraryLink(transactionId, userId, userId, user2Id),
-                and => AcceptsLibraryLink(transactionId, user2Id, user2Id, userId),
+            var user1Id = "user1Id";
+            var user2Id = "user2Id";
 
-                when => RequestsLibraryLink(transactionId, userId, userId, user2Id),
+            UserRegisters(user1Id, "user1", "email1", "user1Picture");
+            UserRegisters(user2Id, "user2", "email2", "user2Picture");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
+            var library2Id = OpenLibrary(transactionId, user2Id, "library2");
+            RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
+            AcceptsLibraryLink(transactionId, library2Id, user2Id, library1Id);
 
-                then => LinkRequestForLinkedLibrariesIgnored(),
-                and => EventsSavedForAggregate<Library>(userId,
-                    new LibraryOpened(transactionId, userId, "library1", userId),
-                    new LinkRequested(transactionId, userId, user2Id),
-                    new LinkCompleted(transactionId, userId, user2Id)),
-                and => EventsSavedForAggregate<Library>(user2Id,
-                    new LibraryOpened(transactionId, user2Id, "library2", user2Id),
-                    new LinkRequestReceived(transactionId, user2Id, userId),
-                    new LinkAccepted(transactionId, user2Id, userId)));
+            RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
+
+            LinkRequestForLinkedLibrariesIgnored();
+            EventsSavedForAggregate<Library>(library1Id,
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id),
+                new LinkRequested(transactionId, library1Id, library2Id),
+                new LinkCompleted(transactionId, library1Id, library2Id));
+            EventsSavedForAggregate<Library>(library2Id,
+                new LibraryOpened(transactionId, library2Id, "library2", user2Id),
+                new LinkRequestReceived(transactionId, library2Id, library1Id),
+                new LinkAccepted(transactionId, library2Id, library1Id));
         }
 
         [Test]
         public void RequestLinkToSelfIsIgnored()
         {
             var transactionId = Guid.Empty;
-            var userId = Guid.NewGuid();
-            Runner.RunScenario(
-                given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => OpensLibrary(transactionId, userId, "library1"),
+            var user1Id = "user1Id";
 
-                when => RequestsLibraryLink(transactionId, userId, userId, userId),
+            UserRegisters(user1Id, "user1", "email1", "user1Picture");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
 
-                then => LinkRequestedToSelfIgnored(),
-                and => EventsSavedForAggregate<Library>(userId,
-                    new LibraryOpened(transactionId, userId, "library1", userId)));
+            RequestsLibraryLink(transactionId, library1Id, user1Id, library1Id);
+
+            LinkRequestedToSelfIgnored();
+            EventsSavedForAggregate<Library>(library1Id,
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id));
         }
 
         [Test]
         public void UnauthorizedUserCantRequestLink()
         {
             var transactionId = Guid.Empty;
-            var userId = Guid.NewGuid();
-            Runner.RunScenario(
-                given => UserRegisters(userId, "user1", "email1", "user1Picture"),
-                and => OpensLibrary(transactionId, userId, "library1"),
+            var user1Id = "user1Id";
 
-                when => RequestsLibraryLink(transactionId, userId, Guid.Empty, Guid.Empty),
+            UserRegisters(user1Id, "user1", "email1", "user1Picture");
+            var library1Id = OpenLibrary(transactionId, user1Id, "library1");
 
-                then => UnauthorisedCommandIgnored(Guid.Empty, typeof(Library), userId),
-                and => EventsSavedForAggregate<Library>(userId,
-                    new LibraryOpened(transactionId, userId, "library1", userId)));
+            RequestsLibraryLink(transactionId, library1Id, "Unauthorised User", Guid.Empty);
+
+            UnauthorisedCommandIgnored("Unauthorised User", typeof(Library), library1Id);
+            EventsSavedForAggregate<Library>(library1Id,
+                new LibraryOpened(transactionId, library1Id, "library1", user1Id));
         }
     }
 

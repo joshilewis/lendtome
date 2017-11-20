@@ -11,7 +11,7 @@ namespace Joshilewis.Testing.CallBuilders
     public class GetCallBuilder : CallBuilder
     {
         public string Url { get; private set; }
-        public Guid? UserId { get; private set; }
+        public string UserId { get; private set; }
 
         public GetCallBuilder(HttpClient client, Tokeniser tokeniser, string url)
             : base(client, tokeniser)
@@ -20,7 +20,7 @@ namespace Joshilewis.Testing.CallBuilders
             UserId = null;
         }
 
-        public GetCallBuilder As(Guid userId)
+        public GetCallBuilder As(string userId)
         {
             UserId = userId;
             return this;
@@ -28,10 +28,10 @@ namespace Joshilewis.Testing.CallBuilders
 
         public void Returns<TResult>(params TResult[] expected)
         {
-            if (UserId.HasValue)
+            if (!string.IsNullOrEmpty(UserId))
             {
                 Client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue(Tokeniser.CreateToken("username", UserId.Value));
+                    new AuthenticationHeaderValue(Tokeniser.CreateToken("username", UserId));
             }
 
             var response = Client.GetAsync($"https://localhost/api/{Url}").Result;

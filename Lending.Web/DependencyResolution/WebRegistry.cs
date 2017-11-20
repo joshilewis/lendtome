@@ -4,7 +4,9 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Joshilewis.Infrastructure.Auth;
 using Joshilewis.Infrastructure.UnitOfWork;
+using Owin.StatelessAuth;
 using StructureMap;
 using StructureMap.Configuration.DSL;
 using StructureMap.Graph;
@@ -31,6 +33,9 @@ namespace Lending.Web.DependencyResolution
                 .HybridHttpOrThreadLocalScoped()
                 .Use<NHibernateUnitOfWork>();
 
+            For<ITokenValidator>()
+                .AlwaysUnique()
+                .Use<FirebaseTokenValidator>();
         }
     }
 }

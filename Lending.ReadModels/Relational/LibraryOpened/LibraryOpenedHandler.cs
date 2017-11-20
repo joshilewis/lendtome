@@ -18,7 +18,8 @@ namespace Lending.ReadModels.Relational.LibraryOpened
             OpenedLibrary existingLibrary = Session.Connection.Get<OpenedLibrary>(@event.AggregateId);
             if (existingLibrary != null) return;
 
-            OpenedLibrary openedLibrary = new OpenedLibrary(@event.AggregateId, @event.Name, user.Id, user.Picture);
+            OpenedLibrary openedLibrary =
+                new OpenedLibrary(@event.AggregateId, @event.Name, @event.AdministratorId, user.Picture);
             Session.Save(openedLibrary);
 
         }

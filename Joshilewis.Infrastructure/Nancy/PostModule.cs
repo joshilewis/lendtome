@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.Remoting.Messaging;
 using Joshilewis.Cqrs;
 using Joshilewis.Cqrs.Command;
 using Joshilewis.Cqrs.Query;
@@ -37,20 +39,16 @@ namespace Joshilewis.Infrastructure.Nancy
                 message.UserId = user.Id;
                 message.ProcessId = Guid.NewGuid();
 
-                EResultCode resultCode = default(EResultCode);
+                Result result = null;
+                //EResultCode resultCode = default(EResultCode);
                 unitOfWork.DoInTransaction(() =>
                 {
-                    resultCode = (EResultCode) commandHandler.Handle(message);
+                    result = (Result) commandHandler.Handle(message);
                 });
 
                 relationalUnitOfWork.DoInTransaction(eventDispatcher.DispatchEvents);
 
-
-                return new Response()
-                {
-                    StatusCode = (HttpStatusCode) resultCode,
-                };
-
+                return Response.AsJson(result.Payload, (HttpStatusCode)result.Code);
             };
         }
 

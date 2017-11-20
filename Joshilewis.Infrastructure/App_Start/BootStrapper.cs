@@ -63,8 +63,9 @@ namespace Joshilewis.Infrastructure
             if (user != null && user.Identity.IsAuthenticated)
             {
                 context.CurrentUser =
-                    new CustomUserIdentity(Guid.Parse(user.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value),
-                        user.Identity.Name, user.Claims.Select(x => x.Value));
+                    new CustomUserIdentity(user.Claims.Single(x => x.Type == "user_id").Value,
+                        user.Claims.Single(x => x.Type == "name").Value, 
+                        user.Claims.Select(x => x.Value));
             }
         }
 

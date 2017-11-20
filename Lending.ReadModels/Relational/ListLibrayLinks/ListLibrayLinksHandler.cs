@@ -25,7 +25,7 @@ namespace Lending.ReadModels.Relational.ListLibrayLinks
             return Connection.Query<LibraryLink>($"SELECT * FROM \"LibraryLink\" WHERE acceptingadministratorid = '{query.UserId}' OR requestingadministratorid = '{query.UserId}'")
                 .Select(x =>
                 {
-                    if (x.AcceptingLibraryId == query.UserId)
+                    if (x.AcceptingAdministratorId == query.UserId)
                         return new LibrarySearchResult(x.RequestingLibraryId, x.RequestingLibraryName, x.RequestingAdministratorPicture);
                     return new LibrarySearchResult(x.AcceptingLibraryId, x.AcceptingLibraryName, x.AcceptingAdministratorPicture);
                 })

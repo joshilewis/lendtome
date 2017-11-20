@@ -6,9 +6,9 @@ namespace Lending.Domain.OpenLibrary
     public class LibraryOpened : Event
     {
         public string Name { get; set; }
-        public Guid AdministratorId { get; set; }
+        public string AdministratorId { get; set; }
 
-        public LibraryOpened(Guid processId, Guid aggregateId, string name, Guid adminId)
+        public LibraryOpened(Guid processId, Guid aggregateId, string name, string adminId)
             : base(processId, aggregateId)
         {
             Name = name;

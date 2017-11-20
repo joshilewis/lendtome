@@ -10,19 +10,23 @@ namespace Tests.Queries
     public class SearchForLibraryTests : Fixture
     {
         private Guid transactionId;
-        private Guid userId;
-        private Guid user2Id;
-        private Guid user3Id;
-        private Guid user4Id;
+        private string user1Id = "user1";
+        private string user2Id = "user2";
+        private string user3Id = "user3";
+        private string user4Id = "user4";
+        private Guid library1Id;
+        private Guid library2Id;
+        private Guid library3Id;
+        private Guid library4Id;
 
         public override void SetUp()
         {
             base.SetUp();
             transactionId = Guid.Empty;
-            userId = Guid.NewGuid();
-            user2Id = Guid.NewGuid();
-            user3Id = Guid.NewGuid();
-            user4Id = Guid.NewGuid();
+            library1Id = Guid.NewGuid();
+            library2Id = Guid.NewGuid();
+            library3Id = Guid.NewGuid();
+            library4Id = Guid.NewGuid();
         }
 
         [Test]
@@ -33,7 +37,7 @@ namespace Tests.Queries
                 and => LibrariesOpened(),
 
                 when => SearchForLibraries("Lew"),
-                then => ResponseIs(new LibrarySearchResult(userId, "Joshua Lewis", "user1Picture")));
+                then => ResponseIs(new LibrarySearchResult(library1Id, "Joshua Lewis", "user1Picture")));
         }
 
         [Test]
@@ -44,7 +48,7 @@ namespace Tests.Queries
                 and => LibrariesOpened(),
 
                 when => SearchForLibraries("lEw"),
-                then => ResponseIs(new LibrarySearchResult(userId, "Joshua Lewis", "user1Picture")));
+                then => ResponseIs(new LibrarySearchResult(library1Id, "Joshua Lewis", "user1Picture")));
         }
 
         [Test]
@@ -55,7 +59,7 @@ namespace Tests.Queries
                 and => LibrariesOpened(),
 
                 when => SearchForLibraries("Pet"),
-                then => ResponseIs(new LibrarySearchResult[] {}));
+                then => ResponseIs(new LibrarySearchResult[] { }));
         }
 
         [Test]
@@ -67,8 +71,8 @@ namespace Tests.Queries
 
                 when => SearchForLibraries("Jos"),
                 then => ResponseIs(
-                    new LibrarySearchResult(userId, "Joshua Lewis", "user1Picture"),
-                    new LibrarySearchResult(user3Id, "Josie Doe", "user3Picture")));
+                    new LibrarySearchResult(library1Id, "Joshua Lewis", "user1Picture"),
+                    new LibrarySearchResult(library3Id, "Josie Doe", "user3Picture")));
         }
 
         [Test]
@@ -78,13 +82,13 @@ namespace Tests.Queries
                 given => UsersRegistered(),
                 and => LibrariesOpened(),
 
-                when => SearchForLibrariesAsUser("Jos", userId),
-                then => ResponseIs(new LibrarySearchResult(user3Id, "Josie Doe", "user3Picture")));
+                when => SearchForLibrariesAsUser("Jos", user1Id),
+                then => ResponseIs(new LibrarySearchResult(library3Id, "Josie Doe", "user3Picture")));
         }
 
         private void UsersRegistered()
         {
-            UserRegisters(userId, "user1", "email1", "user1Picture");
+            UserRegisters(user1Id, "user1", "email1", "user1Picture");
             UserRegisters(user2Id, "user2", "email2", "user2Picture");
             UserRegisters(user3Id, "user3", "email3", "user3Picture");
             UserRegisters(user4Id, "user4", "email4", "user4Picture");
@@ -92,10 +96,10 @@ namespace Tests.Queries
 
         private void LibrariesOpened()
         {
-            LibraryOpened(transactionId, userId, "Joshua Lewis");
-            LibraryOpened(transactionId, user2Id, "Suzaan Hepburn");
-            LibraryOpened(transactionId, user3Id, "Josie Doe");
-            LibraryOpened(transactionId, user4Id, "Audrey Hepburn");
+            LibraryOpened(transactionId, user1Id, library1Id, "Joshua Lewis");
+            LibraryOpened(transactionId, user2Id, library2Id, "Suzaan Hepburn");
+            LibraryOpened(transactionId, user3Id, library3Id, "Josie Doe");
+            LibraryOpened(transactionId, user4Id, library4Id, "Audrey Hepburn");
         }
 
     }

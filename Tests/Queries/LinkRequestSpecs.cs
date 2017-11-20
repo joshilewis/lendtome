@@ -14,25 +14,30 @@ namespace Tests.Queries
     public class LinkRequestSpecs : Fixture
     {
         private Guid transactionId;
-        private Guid user1Id;
-        private Guid user2Id;
-        private Guid user3Id;
-        private Guid user4Id;
-        private Guid user5Id;
-        private Guid user6Id;
+        private string user1Id;
+        private string user2Id;
+        private string user3Id;
+        private string user4Id;
+        private string user5Id;
+        private string user6Id;
+        private Guid library1Id;
+        private Guid library2Id;
+        private Guid library3Id;
+        private Guid library4Id;
+        private Guid library5Id;
+        private Guid library6Id;
 
         [SetUp]
         public override void SetUp()
         {
             base.SetUp();
             transactionId = Guid.Empty;
-            user1Id = Guid.NewGuid();
-            user2Id = Guid.NewGuid();
-            user3Id = Guid.NewGuid();
-            user4Id = Guid.NewGuid();
-            user5Id = Guid.NewGuid();
-            user6Id = Guid.NewGuid();
-
+            user1Id = "user1Id";
+            user2Id = "user2Id";
+            user3Id = "user3Id";
+            user4Id = "user4Id";
+            user5Id = "user5Id";
+            user6Id = "user6Id";
         }
 
         private void LinksAreRequested()
@@ -43,158 +48,133 @@ namespace Tests.Queries
             UserRegisters(user4Id, "user4", "email4", "user4Picture");
             UserRegisters(user5Id, "user5", "email5", "user5Picture");
             UserRegisters(user6Id, "user6", "email6", "user6Picture");
-            OpensLibrary(transactionId, user1Id, "library1");
-            OpensLibrary(transactionId, user2Id, "library2");
-            OpensLibrary(transactionId, user3Id, "library3");
-            OpensLibrary(transactionId, user4Id, "library4");
-            OpensLibrary(transactionId, user5Id, "library5");
-            OpensLibrary(transactionId, user6Id, "library6");
-            RequestsLibraryLink(transactionId, user1Id, user1Id, user2Id);
-            RequestsLibraryLink(transactionId, user1Id, user1Id, user3Id);
-            RequestsLibraryLink(transactionId, user1Id, user1Id, user4Id);
-            RequestsLibraryLink(transactionId, user5Id, user5Id, user1Id);
-            RequestsLibraryLink(transactionId, user5Id, user5Id, user2Id);
+            library1Id = OpenLibrary(transactionId, user1Id, "library1");
+            library2Id = OpenLibrary(transactionId, user2Id, "library2");
+            library3Id = OpenLibrary(transactionId, user3Id, "library3");
+            library4Id = OpenLibrary(transactionId, user4Id, "library4");
+            library5Id = OpenLibrary(transactionId, user5Id, "library5");
+            library6Id = OpenLibrary(transactionId, user6Id, "library6");
+            RequestsLibraryLink(transactionId, library1Id, user1Id, library2Id);
+            RequestsLibraryLink(transactionId, library1Id, user1Id, library3Id);
+            RequestsLibraryLink(transactionId, library1Id, user1Id, library4Id);
+            RequestsLibraryLink(transactionId, library5Id, user5Id, library1Id);
+            RequestsLibraryLink(transactionId, library5Id, user5Id, library2Id);
         }
 
         private void LinksAreAccepted()
         {
-            AcceptsLibraryLink(transactionId, user3Id, user3Id, user1Id);
-            AcceptsLibraryLink(transactionId, user2Id, user2Id, user1Id);
-            AcceptsLibraryLink(transactionId, user2Id, user2Id, user5Id);
+            AcceptsLibraryLink(transactionId, library3Id, user3Id, library1Id);
+            AcceptsLibraryLink(transactionId, library2Id, user2Id, library1Id);
+            AcceptsLibraryLink(transactionId, library2Id, user2Id, library5Id);
         }
 
         [Test]
         public void CorrectSentLinksReturnedForUser1()
         {
-            Runner.RunScenario(
-                given => LinksAreRequested(),
+            LinksAreRequested();
 
-                when => GetEndpoint($"/libraries/{user1Id}/links/sent").As(user1Id),
+            GetEndpoint($"/libraries/{library1Id}/links/sent").As(user1Id);
 
-                then => ResponseIs(
-                    new LibrarySearchResult(user2Id, "library2", "user2Picture"),
-                    new LibrarySearchResult(user3Id, "library3", "user3Picture"),
-                    new LibrarySearchResult(user4Id, "library4", "user4Picture")
-                    )
-                );
+            ResponseIs(
+                new LibrarySearchResult(library2Id, "library2", "user2Picture"),
+                new LibrarySearchResult(library3Id, "library3", "user3Picture"),
+                new LibrarySearchResult(library4Id, "library4", "user4Picture")
+            );
         }
 
         [Test]
         public void CorrectSentLinksReturnedForUser2()
         {
 
-            Runner.RunScenario(
-                given => LinksAreRequested(),
+            LinksAreRequested();
 
-                when => GetEndpoint($"/libraries/{user2Id}/links/sent").As(user2Id),
+            GetEndpoint($"/libraries/{library2Id}/links/sent").As(user2Id);
 
-                then => ResponseIs(new LibrarySearchResult[] { })
-            );
+            ResponseIs(new LibrarySearchResult[] { });
 
         }
 
         [Test]
         public void CorrectSentLinksReturnedForUser5()
         {
+            LinksAreRequested();
 
-            Runner.RunScenario(
-                given => LinksAreRequested(),
+            GetEndpoint($"/libraries/{library5Id}/links/sent").As(user5Id);
 
-                when => GetEndpoint($"/libraries/{user5Id}/links/sent").As(user5Id),
-
-                then => ResponseIs(
-                    new LibrarySearchResult(user1Id, "library1", "user1Picture"),
-                    new LibrarySearchResult(user2Id, "library2", "user2Picture")
-                )
+            ResponseIs(
+                new LibrarySearchResult(library1Id, "library1", "user1Picture"),
+                new LibrarySearchResult(library2Id, "library2", "user2Picture")
             );
         }
 
         [Test]
         public void CorrectRecievedLinksReturnedForUser1()
         {
+            LinksAreRequested();
 
-            Runner.RunScenario(
-                given => LinksAreRequested(),
+            GetEndpoint($"/libraries/{library1Id}/links/received").As(user1Id);
 
-                when => GetEndpoint($"/libraries/{user1Id}/links/received").As(user1Id),
-
-                then => ResponseIs(
-                    new LibrarySearchResult(user5Id, "library5", "user5Picture")
-                )
-            );
+            ResponseIs(new LibrarySearchResult(library5Id, "library5", "user5Picture"));
         }
 
         [Test]
         public void CorrectRecievedLinksReturnedForUser2()
         {
 
-            Runner.RunScenario(
-                given => LinksAreRequested(),
+            LinksAreRequested();
 
-                when => GetEndpoint($"/libraries/{user2Id}/links/received").As(user2Id),
+            GetEndpoint($"/libraries/{library2Id}/links/received").As(user2Id);
 
-                then => ResponseIs(
-                    new LibrarySearchResult(user1Id, "library1", "user1Picture"),
-                    new LibrarySearchResult(user5Id, "library5", "user5Picture")
-                )
+            ResponseIs(
+                new LibrarySearchResult(library1Id, "library1", "user1Picture"),
+                new LibrarySearchResult(library5Id, "library5", "user5Picture")
             );
         }
 
         [Test]
         public void CorrectRecievedLinksReturnedForUser5()
         {
+            LinksAreRequested();
 
-            Runner.RunScenario(
-                given => LinksAreRequested(),
+            GetEndpoint($"/libraries/{library5Id}/links/received").As(user5Id);
 
-                when => GetEndpoint($"/libraries/{user5Id}/links/received").As(user5Id),
-
-                then => ResponseIs(new LibrarySearchResult[] { })
-            );
+            ResponseIs(new LibrarySearchResult[] { });
         }
 
         [Test]
         public void LinksReturnedForUser1()
         {
-            Runner.RunScenario(
-                given => LinksAreRequested(),
-                and => LinksAreAccepted(),
+            LinksAreRequested();
+            LinksAreAccepted();
 
-                when => GetEndpoint($"/libraries/{user1Id}/links/").As(user1Id),
+            GetEndpoint($"/libraries/{library1Id}/links/").As(user1Id);
 
-                then => ResponseIs(
-                    new LibrarySearchResult(user2Id, "library2", "user2Picture"),
-                    new LibrarySearchResult(user3Id, "library3", "user3Picture")
-                )
+            ResponseIs(
+                new LibrarySearchResult(library2Id, "library2", "user2Picture"),
+                new LibrarySearchResult(library3Id, "library3", "user3Picture")
             );
         }
 
         [Test]
         public void LinksReturnedForUser4()
         {
-            Runner.RunScenario(
-                given => LinksAreRequested(),
-                and => LinksAreAccepted(),
+            LinksAreRequested();
+            LinksAreAccepted();
 
-                when => GetEndpoint($"/libraries/{user4Id}/links/").As(user4Id),
+            GetEndpoint($"/libraries/{library4Id}/links/").As(user4Id);
 
-                then => ResponseIs(new LibrarySearchResult[] { })
-            );
+            ResponseIs(new LibrarySearchResult[] { });
         }
 
         [Test]
         public void LinksReturnedForUser5()
         {
-            Runner.RunScenario(
-                given => LinksAreRequested(),
-                and => LinksAreAccepted(),
+            LinksAreRequested();
+            LinksAreAccepted();
 
-                when => GetEndpoint($"/libraries/{user5Id}/links/").As(user5Id),
+            GetEndpoint($"/libraries/{library5Id}/links/").As(user5Id);
 
-                then => ResponseIs(
-                    new LibrarySearchResult(user2Id, "library2", "user2Picture")
-                )
-            );
+            ResponseIs(new LibrarySearchResult(library2Id, "library2", "user2Picture"));
         }
 
     }

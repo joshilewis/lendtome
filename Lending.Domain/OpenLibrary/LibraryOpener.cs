@@ -17,11 +17,11 @@ namespace Lending.Domain.OpenLibrary
 
         public override object Handle(OpenLibrary command)
         {
-            Library library = Library.Open(command.ProcessId, new LibraryId(command.UserId), command.Name,
+            var libraryId = Guid.NewGuid();
+            Library library = Library.Open(command.ProcessId, new LibraryId(libraryId), command.Name,
                 new AdministratorId(command.UserId));
             EventRepository.Save(library);
-
-            return Created();
+            return Created(libraryId.ToString());
         }
     }
 }

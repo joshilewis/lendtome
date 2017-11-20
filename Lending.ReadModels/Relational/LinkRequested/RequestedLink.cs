@@ -14,11 +14,11 @@ namespace Lending.ReadModels.Relational.LinkRequested
         public virtual Guid ProcessId { get; protected set; }
         public virtual Guid RequestingLibraryId { get; protected set; }
         public virtual string RequestingLibraryName { get; protected set; }
-        public virtual Guid RequestingAdministratorId { get; protected set; }
+        public virtual string RequestingAdministratorId { get; protected set; }
         public virtual string RequestingAdministratorPicture { get; protected set; }
         public virtual Guid TargetLibraryId { get; protected set; }
         public virtual string TargetLibraryName { get; protected set; }
-        public virtual Guid TargetAdministratorId { get; protected set; }
+        public virtual string TargetAdministratorId { get; protected set; }
         public virtual string TargetAdministratorPicture { get; protected set; }
 
         public RequestedLink(Guid processId, OpenedLibrary requestingLibrary, OpenedLibrary targetLibrary)

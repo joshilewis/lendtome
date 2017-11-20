@@ -25,17 +25,17 @@ namespace Tests
     {
         private static PostCallBuilder command;
 
-        public static void UserRegisters(Guid id, string name, string emailAddress, string picture)
+        public static void UserRegisters(string id, string name, string emailAddress, string picture)
         {
             PersistenceExtensions.OpenTransaction();
             PersistenceExtensions.Repository.Save(new AuthenticatedUser(id, name, emailAddress, picture, new List<AuthenticationProvider>()));
             PersistenceExtensions.CommitTransaction();
         }
 
-        public static void OpensLibrary(Guid processId, Guid userId, string name)
+        public static Guid OpenLibrary(Guid processId, string userId, string name)
         {
-            command = WhenCommand(new OpenLibrary(processId, userId, userId, name));
-            command.IsPOSTedTo("/libraries");
+            command = WhenCommand(new OpenLibrary(processId, userId, name));
+            return Guid.Parse(command.IsPOSTedTo<string>("/libraries"));
         }
 
         public static void LibraryOpenedSuccessfully()
@@ -48,7 +48,7 @@ namespace Tests
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
-        public static void AddsBookToLibrary(Guid transactionId, Guid libraryId, Guid userId, string title, string author,
+        public static void AddsBookToLibrary(Guid transactionId, Guid libraryId, string userId, string title, string author,
             string isbn, int publishYear)
         {
             command =
@@ -57,7 +57,7 @@ namespace Tests
             command.IsPOSTedTo($"/libraries/{libraryId}/books/add");
         }
 
-        public static void RemovesBookFromLibrary(Guid transactionId, Guid libraryId, Guid userId, string title, string author,
+        public static void RemovesBookFromLibrary(Guid transactionId, Guid libraryId, string userId, string title, string author,
             string isbn, int publishYear)
         {
             command =
@@ -71,7 +71,7 @@ namespace Tests
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
-        public static void UnauthorisedCommandIgnored(Guid userId, Type aggregateType, Guid aggregateId)
+        public static void UnauthorisedCommandIgnored(string userId, Type aggregateType, Guid aggregateId)
         {
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.Forbidden)
             {
@@ -89,7 +89,7 @@ namespace Tests
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
-        public static void RequestsLibraryLink(Guid transactionId, Guid libraryId, Guid userId,
+        public static void RequestsLibraryLink(Guid transactionId, Guid libraryId, string userId,
             Guid targetLibraryId)
         {
             command =
@@ -127,7 +127,7 @@ namespace Tests
 
         }
 
-        public static void AcceptsLibraryLink(Guid transactionId, Guid libraryId, Guid userId, Guid requestingLibraryId)
+        public static void AcceptsLibraryLink(Guid transactionId, Guid libraryId, string userId, Guid requestingLibraryId)
         {
             command =
                 WhenCommand(new AcceptLink(transactionId, libraryId, userId, requestingLibraryId));
@@ -153,9 +153,9 @@ namespace Tests
             command.Response.ShouldEqual(new HttpResponseMessage(HttpStatusCode.OK));
         }
 
-        public static void LibraryOpened(Guid processId, Guid userId, string name)
+        public static void LibraryOpened(Guid processId, string userId, Guid libraryId, string name)
         {
-            HandleEvent(new LibraryOpened(processId, userId, name, userId));
+            HandleEvent(new LibraryOpened(processId, libraryId, name, userId));
         }
 
         public static void LinkRequested(Guid processId, Guid aggregateId, Guid targetLibraryId)
@@ -195,7 +195,7 @@ namespace Tests
             GetEndpoint("libraries/" + searchTerm);
         }
 
-        public static void SearchForLibrariesAsUser(string searchTerm, Guid userId)
+        public static void SearchForLibrariesAsUser(string searchTerm, string userId)
         {
             GetEndpoint("libraries/" + searchTerm).As(userId);
         }

@@ -14,7 +14,7 @@ namespace Joshilewis.Infrastructure.Auth
             this.secretKey = secretKey;
         }
 
-        public string CreateToken(string userName, Guid userId)
+        public string CreateToken(string userName, string userId)
         {
             var payload = new Dictionary<string, object>
             {
@@ -22,8 +22,8 @@ namespace Joshilewis.Infrastructure.Auth
                 {
                     "Claims", new[]
                     {
-                        new Claim(ClaimTypes.Name, userName),
-                        new Claim(ClaimTypes.NameIdentifier, userId.ToString())
+                        new Claim("name", userName),
+                        new Claim("user_id", userId)
                     }
                 }
             };

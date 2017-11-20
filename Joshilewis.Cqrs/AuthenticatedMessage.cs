@@ -4,9 +4,9 @@ namespace Joshilewis.Cqrs
 {
     public abstract class AuthenticatedMessage : Message, IAuthenticated
     {
-        public Guid UserId { get; }
+        public string UserId { get; }
 
-        protected AuthenticatedMessage(Guid userId)
+        protected AuthenticatedMessage(string userId)
         {
             UserId = userId;
         }

@@ -9,7 +9,7 @@ namespace Lending.ReadModels.Relational.BookAdded
         public virtual Guid ProcessId { get; protected set; }
         public virtual Guid LibraryId { get; protected set; }
         public virtual string LibraryName { get; protected set; }
-        public virtual Guid LibraryAdminId { get; protected set; }
+        public virtual string LibraryAdminId { get; protected set; }
         public virtual string AdministratorPicture { get; protected set; }
         public virtual string Title { get; protected set; }
         public virtual string Author { get; protected set; }

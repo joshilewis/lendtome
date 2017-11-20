@@ -20,9 +20,9 @@ namespace Lending.ReadModels.Relational.SearchForLibrary
             string sqlQuery =
                 $"SELECT * FROM \"OpenedLibrary\" WHERE LOWER(Name) LIKE '%{query.SearchString.ToLower()}%'";
 
-            if (query.UserId.HasValue) //Authenticated so exclude own Library in result
+            if (!string.IsNullOrEmpty(query.UserId)) //Authenticated so exclude own Library in result
             {
-                sqlQuery += $" AND Id != '{query.UserId.Value}'";
+                sqlQuery += $" AND AdministratorId != '{query.UserId}'";
             }
 
             LibrarySearchResult[] libraries = Connection.Query<OpenedLibrary>(sqlQuery)

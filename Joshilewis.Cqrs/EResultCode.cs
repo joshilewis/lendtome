@@ -1,4 +1,4 @@
-﻿namespace Joshilewis.Cqrs.Query
+﻿namespace Joshilewis.Cqrs
 {
     public enum EResultCode
     {

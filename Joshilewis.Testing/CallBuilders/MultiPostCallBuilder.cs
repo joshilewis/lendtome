@@ -25,7 +25,8 @@ namespace Joshilewis.Testing.CallBuilders
 
             foreach (var command in CommandsToPost)
             {
-                Client.DefaultRequestHeaders.Authorization =new AuthenticationHeaderValue(Tokeniser.CreateToken("username", command.UserId));
+                Client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue(Tokeniser.CreateToken("username", command.UserId));
                 HttpResponseMessage response = Client.PostAsJsonAsync(Url, command).Result;
                 Console.WriteLine("POST to {0} with body {1} returned status {2} with reason {3}", url,
                     Serialize(new JsonMediaTypeFormatter(), command), response.StatusCode, response.ReasonPhrase);

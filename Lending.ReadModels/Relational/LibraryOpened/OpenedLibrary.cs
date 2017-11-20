@@ -8,10 +8,10 @@ namespace Lending.ReadModels.Relational.LibraryOpened
     {
         public virtual Guid Id { get; protected set; }
         public virtual string Name { get; protected set; }
-        public virtual Guid AdministratorId { get; protected set; }
+        public virtual string AdministratorId { get; protected set; }
         public virtual string AdministratorPicture { get; set; }
 
-        public OpenedLibrary(Guid id, string name, Guid administratorId, string administratorPicture)
+        public OpenedLibrary(Guid id, string name, string administratorId, string administratorPicture)
         {
             Id = id;
             Name = name;
