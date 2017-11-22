@@ -54,17 +54,5 @@ namespace Tests.Smoke
             Assert.That(content, Is.Empty);
         }
 
-        [Test]
-        public void AuthenticationRedirect()
-        {
-            var expectedRedirectPath = "redirect_uri=" + baseUri +
-                                          "api/authentication/authenticatecallback?providerkey=facebook";
-            var result = client.GetAsync(baseUri + "api/authentication/redirect/facebook").Result;
-            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.RedirectMethod));
-            Assert.That(result.Headers.Location.AbsoluteUri, Does.StartWith("https://www.facebook.com"));
-            Assert.That(result.Headers.Location.Query, Does.Contain(expectedRedirectPath));
-        }
-
-
     }
 }
