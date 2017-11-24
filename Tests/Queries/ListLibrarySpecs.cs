@@ -27,7 +27,22 @@ namespace Tests.Queries
                 when => GetEndpoint("/libraries/").As(user2Id),
                 then => ResponseIs(new LibrarySearchResult(library2Id, "library2", "library2Picture")
                 ));
-            ;
+        }
+
+        [Test]
+        public void SecondOpenedLibraryWillBeIgnored()
+        {
+            var transactionId = Guid.Empty;
+            var user1Id = "user1";
+            var library1Id = Guid.NewGuid();
+            Runner.RunScenario(
+                given => LibraryOpened(transactionId, user1Id, library1Id, "library1", "library1Picture"),
+
+                when => LibraryOpened(transactionId, user1Id, Guid.NewGuid(), "library1", "library1Picture"),
+                and => GetEndpoint("/libraries/").As(user1Id),
+
+                then => ResponseIs(new LibrarySearchResult(library1Id, "library1", "library1Picture")
+                ));
         }
     }
 }
