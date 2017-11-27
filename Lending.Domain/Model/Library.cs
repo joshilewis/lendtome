@@ -88,12 +88,12 @@ namespace Lending.Domain.Model
 
         protected virtual void When(BookAddedToLibrary @event)
         {
-            Books.Add(new Book(@event.Title, @event.Author, @event.Isbn, @event.PublishYear));
+            Books.Add(new Book(@event.Title, @event.Author, @event.Isbn, @event.PublishYear, @event.CoverPicture));
         }
 
         protected virtual void When(BookRemovedFromLibrary @event)
         {
-            Books.Remove(new Book(@event.Title, @event.Author, @event.Isbn, @event.PublishYear));
+            Books.Remove(new Book(@event.Title, @event.Author, @event.Isbn, @event.PublishYear, @event.CoverPicture));
         }
 
         protected override List<IEventRoute> EventRoutes => new List<IEventRoute>()
@@ -151,16 +151,16 @@ namespace Lending.Domain.Model
             RaiseEvent(new LinkCompleted(processId, Id, acceptingLibraryId.Id));
         }
 
-        public void AddBookToLibrary(Guid processId, string title, string author, string isbn, int publishYear)
+        public void AddBookToLibrary(Guid processId, string title, string author, string isbn, int publishYear, string coverPicture)
         {
-            if (Books.Contains(new Book(title, author, isbn, publishYear))) return;
-            RaiseEvent(new BookAddedToLibrary(processId, Id, title, author, isbn, publishYear));
+            if (Books.Contains(new Book(title, author, isbn, publishYear, coverPicture))) return;
+            RaiseEvent(new BookAddedToLibrary(processId, Id, title, author, isbn, publishYear, coverPicture));
         }
 
-        public void RemoveBookFromLibrary(Guid processId, string title, string author, string isbn, int publishYear)
+        public void RemoveBookFromLibrary(Guid processId, string title, string author, string isbn, int publishYear, string coverPicture)
         {
-            if (!Books.Contains(new Book(title, author, isbn, publishYear))) return;
-            RaiseEvent(new BookRemovedFromLibrary(processId, Id, title, author, isbn, publishYear));
+            if (!Books.Contains(new Book(title, author, isbn, publishYear, coverPicture))) return;
+            RaiseEvent(new BookRemovedFromLibrary(processId, Id, title, author, isbn, publishYear, coverPicture));
         }
     }
 }

@@ -90,6 +90,7 @@
     <Compile Include="Relational\ListReceivedLinks\ListReceivedLinksHandler.cs" />
     <Compile Include="Relational\ListRequestedLinks\ListRequestedLinks.cs" />
     <Compile Include="Relational\ListRequestedLinks\ListRequestedLinksHandler.cs" />
+    <Compile Include="Relational\Migrations\BookCoverPicture.cs" />
     <Compile Include="Relational\Migrations\AdminIdType.cs" />
     <Compile Include="Relational\Migrations\RemovalOfAuth.cs" />
     <Compile Include="Relational\Migrations\InitialCreation.cs" />

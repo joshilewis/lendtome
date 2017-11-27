@@ -9,14 +9,16 @@ namespace Lending.Domain.AddBookToLibrary
         public string Author { get; protected set; }
         public string Isbn { get; protected set; }
         public int PublishYear { get; set; }
+        public string CoverPicture { get; set; }
 
-        public BookAddedToLibrary(Guid processId, Guid aggregateId, string title, string author, string isbn, int publishYear)
+        public BookAddedToLibrary(Guid processId, Guid aggregateId, string title, string author, string isbn, int publishYear, string coverPicture)
             : base(processId, aggregateId)
         {
             Title = title;
             Author = author;
             Isbn = isbn;
             PublishYear = publishYear;
+            CoverPicture = coverPicture;
         }
     }
 }

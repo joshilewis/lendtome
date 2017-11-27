@@ -65,14 +65,14 @@ namespace Tests.Queries
             and => Library1RequestedLinksToOtherLibraries(),
             and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
-            and => BookAddedToLibrary(transactionId, library2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, library2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
 
             when => GetEndpoint("books/Extreme Programming Explained").As(user1Id),
             then => ResponseIs(
-                new BookSearchResult(library2Id, "library2", "library2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(library4Id, "library4", "library4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000)));
+                new BookSearchResult(library2Id, "library2", "library2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+                new BookSearchResult(library4Id, "library4", "library4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture")));
         }
 
         [Test]
@@ -83,16 +83,16 @@ namespace Tests.Queries
             and => Library1RequestedLinksToOtherLibraries(),
             and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
-            and => BookAddedToLibrary(transactionId, library2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, library2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000, "picture"),
 
             when => GetEndpoint("books/Extreme").As(user1Id),
             then => ResponseIs(
-                new BookSearchResult(library2Id, "library2", "library2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(library4Id, "library4", "library4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(library5Id, "library5", "library5Picture", "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000)));
+                new BookSearchResult(library2Id, "library2", "library2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+                new BookSearchResult(library4Id, "library4", "library4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+                new BookSearchResult(library5Id, "library5", "library5Picture", "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000, "picture")));
         }
 
         [Test]
@@ -103,16 +103,16 @@ namespace Tests.Queries
             and => Library1RequestedLinksToOtherLibraries(),
             and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
-            and => BookAddedToLibrary(transactionId, library2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, library2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000, "picture"),
 
             when => GetEndpoint("books/Kent Beck").As(user1Id),
             then => ResponseIs(
-                new BookSearchResult(library2Id, "library2", "library2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(library3Id, "library3", "library3Picture", "Test-Driven Development", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(library4Id, "library4", "library4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000)));
+                new BookSearchResult(library2Id, "library2", "library2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+                new BookSearchResult(library3Id, "library3", "library3Picture", "Test-Driven Development", "Kent Beck", "ISBN", 2000, "picture"),
+                new BookSearchResult(library4Id, "library4", "library4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture")));
         }
 
         [Test]
@@ -123,18 +123,18 @@ namespace Tests.Queries
             and => Library1RequestedLinksToOtherLibraries(),
             and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
-            and => BookAddedToLibrary(transactionId, library2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library6Id, "Beck: A Musical Maestro", "Some Author", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, library2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library6Id, "Beck: A Musical Maestro", "Some Author", "ISBN", 2000, "picture"),
 
             when => GetEndpoint("books/Beck").As(user1Id),
             then => ResponseIs(
-                new BookSearchResult(library2Id, "library2", "library2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(library3Id, "library3", "library3Picture", "Test-Driven Development", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(library4Id, "library4", "library4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(library6Id, "library6", "library6Picture", "Beck: A Musical Maestro", "Some Author", "ISBN", 2000)
+                new BookSearchResult(library2Id, "library2", "library2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+                new BookSearchResult(library3Id, "library3", "library3Picture", "Test-Driven Development", "Kent Beck", "ISBN", 2000, "picture"),
+                new BookSearchResult(library4Id, "library4", "library4Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+                new BookSearchResult(library6Id, "library6", "library6Picture", "Beck: A Musical Maestro", "Some Author", "ISBN", 2000, "picture")
                 ));
         }
 
@@ -150,17 +150,17 @@ namespace Tests.Queries
             and => LinkAccepted(transactionId, library5Id, library1Id),
             and => LinkAccepted(transactionId, library6Id, library1Id),
 
-            and => BookAddedToLibrary(transactionId, library2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library6Id, "Beck: A Musical Maestro", "Some Author", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, library2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library6Id, "Beck: A Musical Maestro", "Some Author", "ISBN", 2000, "picture"),
 
             when => GetEndpoint("books/Beck").As(user1Id),
             then => ResponseIs(
-                new BookSearchResult(library2Id, "library2", "library2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(library3Id, "library3", "library3Picture", "Test-Driven Development", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(library6Id, "library6", "library6Picture", "Beck: A Musical Maestro", "Some Author", "ISBN", 2000)
+                new BookSearchResult(library2Id, "library2", "library2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+                new BookSearchResult(library3Id, "library3", "library3Picture", "Test-Driven Development", "Kent Beck", "ISBN", 2000, "picture"),
+                new BookSearchResult(library6Id, "library6", "library6Picture", "Beck: A Musical Maestro", "Some Author", "ISBN", 2000, "picture")
                 ));
         }
 
@@ -172,18 +172,18 @@ namespace Tests.Queries
             and => Library1RequestedLinksToOtherLibraries(),
             and => LibrariesAcceptedLinkToLinkToLibrary1(),
 
-            and => BookAddedToLibrary(transactionId, library2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000),
-            and => BookAddedToLibrary(transactionId, library6Id, "Beck: A Musical Maestro", "Some Author", "ISBN", 2000),
-            and => BookRemovedFromLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
+            and => BookAddedToLibrary(transactionId, library2Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library3Id, "Test-Driven Development", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library5Id, "Extreme Snowboard Stunts", "Some Skiier", "ISBN", 2000, "picture"),
+            and => BookAddedToLibrary(transactionId, library6Id, "Beck: A Musical Maestro", "Some Author", "ISBN", 2000, "picture"),
+            and => BookRemovedFromLibrary(transactionId, library4Id, "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
 
             when => GetEndpoint("books/Beck").As(user1Id),
             then => ResponseIs(
-                new BookSearchResult(library2Id, "library2", "library2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(library3Id, "library3", "library3Picture", "Test-Driven Development", "Kent Beck", "ISBN", 2000),
-                new BookSearchResult(library6Id, "library6", "library6Picture", "Beck: A Musical Maestro", "Some Author", "ISBN", 2000)
+                new BookSearchResult(library2Id, "library2", "library2Picture", "Extreme Programming Explained", "Kent Beck", "ISBN", 2000, "picture"),
+                new BookSearchResult(library3Id, "library3", "library3Picture", "Test-Driven Development", "Kent Beck", "ISBN", 2000, "picture"),
+                new BookSearchResult(library6Id, "library6", "library6Picture", "Beck: A Musical Maestro", "Some Author", "ISBN", 2000, "picture")
                 ));
         }
 

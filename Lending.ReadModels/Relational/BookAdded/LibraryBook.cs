@@ -14,9 +14,11 @@ namespace Lending.ReadModels.Relational.BookAdded
         public virtual string Title { get; protected set; }
         public virtual string Author { get; protected set; }
         public virtual string Isbn { get; protected set; }
-        public virtual int PublishYear { get; protected set; }
+        public virtual int PublishYear { get; protected set; }  
+        public virtual string CoverPicture { get; protected set; }
 
-        public LibraryBook(Guid processId, OpenedLibrary library, string title, string author, string isbn, int publishYear)
+        public LibraryBook(Guid processId, OpenedLibrary library, string title, string author, string isbn,
+            int publishYear, string coverPicture)
         {
             ProcessId = processId;
             LibraryId = library.Id;
@@ -27,6 +29,7 @@ namespace Lending.ReadModels.Relational.BookAdded
             Author = author;
             Isbn = isbn;
             PublishYear = publishYear;
+            CoverPicture = coverPicture;
         }
 
         protected LibraryBook()

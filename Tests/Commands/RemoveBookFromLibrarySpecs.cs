@@ -19,15 +19,15 @@ namespace Tests.Commands
             var userId = "userId";
 
             var libraryId = OpenLibrary(transactionId, userId, "library1", "library1Picture");
-            AddsBookToLibrary(transactionId, libraryId, userId, "Title", "Author", "isbn", 1982);
+            AddsBookToLibrary(transactionId, libraryId, userId, "Title", "Author", "isbn", 1982, "picture");
 
-            RemovesBookFromLibrary(transactionId, libraryId, userId, "Title", "Author", "isbn", 1982);
+            RemovesBookFromLibrary(transactionId, libraryId, userId, "Title", "Author", "isbn", 1982, "picture");
 
             BookRemovedSucccessfully();
             EventsSavedForAggregate<Library>(libraryId,
                 new LibraryOpened(transactionId, libraryId, "library1", userId, "library1Picture"),
-                new BookAddedToLibrary(transactionId, libraryId, "Title", "Author", "isbn", 1982),
-                new BookRemovedFromLibrary(transactionId, libraryId, "Title", "Author", "isbn", 1982)
+                new BookAddedToLibrary(transactionId, libraryId, "Title", "Author", "isbn", 1982, "picture"),
+                new BookRemovedFromLibrary(transactionId, libraryId, "Title", "Author", "isbn", 1982, "picture")
             );
         }
 
@@ -39,7 +39,7 @@ namespace Tests.Commands
 
             var libraryId = OpenLibrary(transactionId, userId, "library1", "library1Picture");
 
-            RemovesBookFromLibrary(transactionId, libraryId, userId, "Title", "Author", "isbn", 1982);
+            RemovesBookFromLibrary(transactionId, libraryId, userId, "Title", "Author", "isbn", 1982, "picture");
 
             IgnoreBecauseBookNotInLibrary();
             EventsSavedForAggregate<Library>(libraryId,
@@ -56,7 +56,7 @@ namespace Tests.Commands
             var libraryId = OpenLibrary(transactionId, userId, "library1", "library1Picture");
 
             RemovesBookFromLibrary(transactionId, libraryId, "Unauthorised user", "Title", "Author", "isbn",
-                1982);
+                1982, "picture");
 
             UnauthorisedCommandIgnored("Unauthorised user", typeof(Library), libraryId);
             EventsSavedForAggregate<Library>(libraryId,

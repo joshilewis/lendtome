@@ -42,20 +42,20 @@ namespace Tests
         }
 
         public static void AddsBookToLibrary(Guid transactionId, Guid libraryId, string userId, string title, string author,
-            string isbn, int publishYear)
+            string isbn, int publishYear, string coverPicture)
         {
             command =
                 WhenCommand(new AddBookToLibrary(transactionId, libraryId, userId, title, author, isbn,
-                    publishYear));
+                    publishYear, coverPicture));
             command.IsPOSTedTo($"/libraries/{libraryId}/books/add");
         }
 
         public static void RemovesBookFromLibrary(Guid transactionId, Guid libraryId, string userId, string title, string author,
-            string isbn, int publishYear)
+            string isbn, int publishYear, string coverPicture)
         {
             command =
                 WhenCommand(new RemoveBookFromLibrary(transactionId, libraryId, userId, title, author, isbn,
-                    publishYear));
+                    publishYear, coverPicture));
             command.IsPOSTedTo($"/libraries/{libraryId}/books/remove");
         }
 
@@ -162,15 +162,15 @@ namespace Tests
         }
 
         public static void BookAddedToLibrary(Guid processId, Guid aggregateId, string title, string author, string isbn,
-            int publishYear)
+            int publishYear, string coverPicture)
         {
-            HandleEvent(new BookAddedToLibrary(processId, aggregateId, title, author, isbn, publishYear));
+            HandleEvent(new BookAddedToLibrary(processId, aggregateId, title, author, isbn, publishYear, coverPicture));
         }
 
         public static void BookRemovedFromLibrary(Guid processId, Guid aggregateId, string title, string author, string isbn,
-            int publishYear)
+            int publishYear, string coverPicture)
         {
-            HandleEvent(new BookRemovedFromLibrary(processId, aggregateId, title, author, isbn, publishYear));
+            HandleEvent(new BookRemovedFromLibrary(processId, aggregateId, title, author, isbn, publishYear, coverPicture));
         }
 
         public static void HandleEvent(Event @event)

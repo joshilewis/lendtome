@@ -20,7 +20,7 @@ namespace Lending.ReadModels.Relational.ListLibraryBooks
                 .Query<LibraryBook>($"SELECT * FROM \"LibraryBook\" WHERE LibraryAdminId = '{query.UserId}'")
                 .Select(x =>
                     new BookSearchResult(x.LibraryId, x.LibraryName, x.AdministratorPicture, x.Title, x.Author, x.Isbn,
-                        x.PublishYear))
+                        x.PublishYear, x.CoverPicture))
                 .ToArray();
         }
     }

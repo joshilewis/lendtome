@@ -11,10 +11,10 @@ namespace Lending.ReadModels.Relational.SearchForBook
         public string Author { get; set; }
         public string Isbn { get; set; }
         public int PublishYear { get; set; }
-
+        public string CoverPicture { get; set; }
 
         public BookSearchResult(Guid libraryId, string libraryName, string libraryPicture, string title, string author,
-            string isbn, int publishYear)
+            string isbn, int publishYear,string coverPicture)
         {
             LibraryId = libraryId;
             LibraryName = libraryName;
@@ -23,6 +23,7 @@ namespace Lending.ReadModels.Relational.SearchForBook
             Author = author;
             Isbn = isbn;
             PublishYear = publishYear;
+            CoverPicture = coverPicture;
         }
 
         public override bool Equals(object obj)
@@ -39,7 +40,8 @@ namespace Lending.ReadModels.Relational.SearchForBook
                    Title.Equals(other.Title) &&
                    Author.Equals(other.Author) &&
                    PublishYear.Equals(other.PublishYear) &&
-                   Isbn.Equals(other.Isbn);
+                   Isbn.Equals(other.Isbn) &&
+                   CoverPicture.Equals(other.CoverPicture);
         }
         public override int GetHashCode()
         {

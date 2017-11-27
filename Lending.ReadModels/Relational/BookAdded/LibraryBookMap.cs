@@ -26,6 +26,8 @@ namespace Lending.ReadModels.Relational.BookAdded
                 .UniqueKey("UK_Library_Book");
             Map(x => x.PublishYear)
                 .UniqueKey("UK_Library_Book");
+            Map(x => x.CoverPicture)
+                .UniqueKey("UK_Library_Book");
         }
     }
 }
