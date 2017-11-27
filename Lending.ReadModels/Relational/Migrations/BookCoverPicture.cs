@@ -8,7 +8,7 @@ namespace Lending.ReadModels.Relational.Migrations
     {
         public override void Up()
         {
-            Alter.Table("LibraryBook").AddColumn("coverpicture").AsString();
+            Alter.Table("LibraryBook").AddColumn("coverpicture").AsString().WithDefaultValue("");
         }
 
         public override void Down()
