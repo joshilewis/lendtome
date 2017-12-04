@@ -83,6 +83,9 @@
     <Compile Include="Relational\ListLibraryBooks\ListLibraryBooksHandler.cs" />
     <Compile Include="Relational\ListLibraries\ListLibrariesHandler.cs" />
     <Compile Include="Relational\ListLibraries\ListLibraries.cs" />
+    <Compile Include="Relational\ListLibraryStatus\LibraryStatusResult.cs" />
+    <Compile Include="Relational\ListLibraryStatus\ListLibraryStatus.cs" />
+    <Compile Include="Relational\ListLibraryStatus\ListLibraryStatusHandler.cs" />
     <Compile Include="Relational\ListLibrayLinks\LibrarySearchResult.cs" />
     <Compile Include="Relational\ListLibrayLinks\ListLibraryLinks.cs" />
     <Compile Include="Relational\ListLibrayLinks\ListLibrayLinksHandler.cs" />

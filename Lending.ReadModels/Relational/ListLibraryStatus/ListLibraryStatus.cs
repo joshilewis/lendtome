@@ -5,19 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Joshilewis.Cqrs.Query;
 
-namespace Lending.ReadModels.Relational.ListLibrayLinks
+namespace Lending.ReadModels.Relational.ListLibraryStatus
 {
-    public class ListLibraryLinks : AuthenticatedQuery
+    public class ListLibraryStatus : AuthenticatedQuery
     {
         public Guid AggregateId { get; set; }
 
-        public ListLibraryLinks(string userId, Guid aggregateId)
+        public ListLibraryStatus(string userId, Guid aggregateId)
             : base(userId)
         {
             AggregateId = aggregateId;
         }
 
-        protected ListLibraryLinks()
+        protected ListLibraryStatus()
         {
         }
     }

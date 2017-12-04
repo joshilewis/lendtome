@@ -12,6 +12,7 @@ using Lending.Domain.RequestLink;
 using Lending.ReadModels.Relational.LinkRequested;
 using Lending.ReadModels.Relational.ListLibraries;
 using Lending.ReadModels.Relational.ListLibraryBooks;
+using Lending.ReadModels.Relational.ListLibraryStatus;
 using Lending.ReadModels.Relational.ListLibrayLinks;
 using Lending.ReadModels.Relational.ListReceivedLinks;
 using Lending.ReadModels.Relational.ListRequestedLinks;
@@ -127,6 +128,14 @@ namespace Lending.Execution.Modules
     {
         public ListLibraryBooksModule(NHibernateUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraryBooks> queryHandler)
             : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/books/")
+        {
+        }
+    }
+
+    public class ListLibraryStatusModule : AuthenticatedGetModule<ListLibraryStatus>
+    {
+        public ListLibraryStatusModule(NHibernateUnitOfWork unitOfWork, IAuthenticatedQueryHandler<ListLibraryStatus> queryHandler)
+            : base(unitOfWork, queryHandler, "/libraries/{AggregateId}/status/")
         {
         }
     }
